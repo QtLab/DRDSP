@@ -1,0 +1,6 @@
+bin/
+lib/
+
+# Visual Studio 2012 stuff
+/build/vs2012/DRDSP/x64
+/build/vs2012/DRDSP/Win32
