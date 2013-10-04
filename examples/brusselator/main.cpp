@@ -1,0 +1,54 @@
+#include <DRDSP/data/data_set.h>
+#include <DRDSP/data/secants.h>
+#include <DRDSP/projection/proj_secant.h>
+#include <DRDSP/dynamics/model_rbf_producer.h>
+
+#include "brusselator.h"
+
+using namespace DRDSP;
+
+int main() {
+
+	// Create a new data set
+	DataSet data;
+	data.Create(127,2048);
+
+	// Load data from file
+	// todo
+
+	// Pre-compute secants if less than 128 MB
+	Secants secants;
+	secants.ComputeFromData( data, 1 << 27 );
+
+	// Find a projection
+	ProjSecant projSecant;
+	projSecant.targetDimension = 2;
+	projSecant.targetMinProjectedLength = 0.7;
+
+	// Compute initial condition
+	projSecant.GetInitial(data);
+
+	// Optimize over Grassmannian
+	MatrixXd W = projSecant.Find(secants);
+
+	// Print some statistics
+	projSecant.AnalyseSecants(secants);
+
+	// Dynamics
+	Brusselator brusselator;
+	VectorXd parameter(1);
+	parameter(0) = 2.0;
+
+	// Compute projected data
+	ReducedData reducedData;
+	reducedData.ComputeData(brusselator,data,parameter,W);
+
+	// Obtain the reduced model
+	ModelRBFProducer producer;
+	producer.ComputeScales(reducedData);
+
+	// Find a reduced model for the projected data using 100 radial basis functions
+	ModelRBF reducedModel = producer.ComputeModelRBF(reducedData,100);
+
+	return 0;
+}

@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\optimization">
+      <UniqueIdentifier>{54d7e40c-c882-4857-9aaf-0a2de1794f88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry">
+      <UniqueIdentifier>{466ab82d-a6f6-41d5-9538-208bae038d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry">
+      <UniqueIdentifier>{2ecba0f3-dccb-4ee7-90aa-988936bec490}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dynamics">
+      <UniqueIdentifier>{3c43d003-5733-4607-b71c-154c1420fade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\projection">
+      <UniqueIdentifier>{1b5349a3-51a2-4bca-ac61-c50644503c3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dynamics">
+      <UniqueIdentifier>{ce1d7cd2-5443-4481-b695-50bcce9dc081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\projection">
+      <UniqueIdentifier>{7dfaf463-0957-44cd-a741-3a3f6dc67f9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\data">
+      <UniqueIdentifier>{76ff18fd-a399-411a-89af-01007de2e6ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\data">
+      <UniqueIdentifier>{291e56ce-0f65-44a4-a673-f7f5f9e809a1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\data\secants.cpp">
+      <Filter>Source Files\data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\model_reduced.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\geometry\grassmannian.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\projection\proj_pod.cpp">
+      <Filter>Source Files\projection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\projection\proj_secant.cpp">
+      <Filter>Source Files\projection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\data\data_set.cpp">
+      <Filter>Source Files\data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\data\data_typed.cpp">
+      <Filter>Source Files\data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\radial_basis.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\model_rbf.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\reduced_data.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\reduced_data_system.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\model_rbf_producer.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\model_reduced_producer.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\DRDSP\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\data\secants.h">
+      <Filter>Header Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_orig.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\grassmannian.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\metric.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\optimization\linesearch.h">
+      <Filter>Header Files\optimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\optimization\optimization.h">
+      <Filter>Header Files\optimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\projection\proj_pod.h">
+      <Filter>Header Files\projection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\projection\proj_secant.h">
+      <Filter>Header Files\projection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\data\data_set.h">
+      <Filter>Header Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\data\data_typed.h">
+      <Filter>Header Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\radial_basis.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\vector.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf_producer.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h">
+      <Filter>Header Files\optimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h">
+      <Filter>Header Files\optimization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\inner_product.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
