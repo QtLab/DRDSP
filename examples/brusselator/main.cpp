@@ -20,6 +20,9 @@ int main() {
 	Secants secants;
 	secants.ComputeFromData( data, 1 << 27 );
 
+	// Secant culling
+	Secants newSecants = secants.CullSecantsDegrees( 10.0 );
+
 	// Find a projection
 	ProjSecant projSecant;
 	projSecant.targetDimension = 2;
@@ -29,10 +32,10 @@ int main() {
 	projSecant.GetInitial(data);
 
 	// Optimize over Grassmannian
-	MatrixXd W = projSecant.Find(secants);
+	projSecant.Find(newSecants);
 
 	// Print some statistics
-	projSecant.AnalyseSecants(secants);
+	projSecant.AnalyseSecants(newSecants);
 
 	// Dynamics
 	Brusselator brusselator;
@@ -41,7 +44,7 @@ int main() {
 
 	// Compute projected data
 	ReducedData reducedData;
-	reducedData.ComputeData(brusselator,data,parameter,W);
+	reducedData.ComputeData(brusselator,data,parameter,projSecant.W);
 
 	// Obtain the reduced model
 	ModelRBFProducer producer;

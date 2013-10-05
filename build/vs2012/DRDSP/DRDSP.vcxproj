@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\..\src\data\data_set.cpp" />
     <ClCompile Include="..\..\..\src\data\data_typed.cpp" />
     <ClCompile Include="..\..\..\src\data\secants.cpp" />
+    <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_rbf_producer.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_rbf.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_reduced.cpp" />

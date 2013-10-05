@@ -6,7 +6,7 @@ namespace DRDSP {
 	template<typename TGeo,typename TMet>
 	struct GradientDescent : Optimization<TGeo,TMet> {
 		bool Step( TVec &X ) {
-			L.gradSx = lineSearch.gradS(X,lineSearch.obj);
+			lineSearch.gradSx = lineSearch.gradS(X,lineSearch.obj);
 			geodesic.Set(X,-lineSearch.gradSx);
 
 			double alpha = lineSearch.Search();

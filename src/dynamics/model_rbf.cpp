@@ -1,5 +1,7 @@
+#include <fstream>
 #include <DRDSP/dynamics/model_rbf.h>
 
+using namespace std;
 using namespace DRDSP;
 
 ModelRBF::ModelRBF() : weights(nullptr), rbfs(nullptr), dimension(0), numRBFs(0) {}
@@ -60,6 +62,25 @@ void ModelRBF::SetCentresRandom( const VectorXd& minBounds, const VectorXd& maxB
 			rnd = (double)rand()/RAND_MAX;
 			rbfs[i].centre(j) = minBounds(j) + diff(j) * rnd;
 		}
+}
+
+void ModelRBF::LoadCentresText( const char* filename ) {
+	ifstream in(filename);
+	if( !in ) return;
+
+	for(uint k=0;k<numRBFs;k++)
+		for(uint j=0;j<dimension;j++)
+			in >> rbfs[k].centre(j);
+	in.close();
+}
+
+void ModelRBF::LoadCentresBinary( const char* filename ) {
+	ifstream in(filename);
+	if( !in ) return;
+
+	for(uint32_t k=0;k<numRBFs;k++)
+		in.read( (char*)&rbfs[k].centre(0), sizeof(double)*dimension );
+	in.close();
 }
 
 

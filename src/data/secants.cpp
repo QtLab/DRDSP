@@ -91,22 +91,22 @@ void Secants::PreCompute() {
 	}
 }
 
-Secants SecantCulling::CullSecants( const Secants& input ) const {
+Secants Secants::CullSecants( double tolerance ) const {
 	cout << "Culling Secants..." << endl;
 	uint32_t culled = 0;
 	VectorXd si;
 	double dot;
 	double tolerance2 = tolerance * tolerance;
 	
-	weightType* weights = new weightType [input.count];
-	memset(weights,0,sizeof(weightType)*input.count);
+	weightType* weights = new weightType [count];
+	memset(weights,0,sizeof(weightType)*count);
 
-	for(uint32_t i=0;i<input.count;i++) {
+	for(uint32_t i=0;i<count;i++) {
 		if( weights[i] == 0 ) continue;
-		si = input.GetSecant(i);
-		for(uint32_t j=i+1;j<input.count;j++) {
+		si = GetSecant(i);
+		for(uint32_t j=i+1;j<count;j++) {
 			if( weights[j] == 0 ) continue;
-			dot = si.dot(input.GetSecant(j));
+			dot = si.dot(GetSecant(j));
 			if( dot*dot >= tolerance2 ) {
 				if( weights[i] == numeric_limits<weightType>::max() ) {
 					cout << "CullSecants: Overflow" << endl;
@@ -118,25 +118,29 @@ Secants SecantCulling::CullSecants( const Secants& input ) const {
 			}
 		}
 	}
-	uint32_t remain = input.count - culled;
+	uint32_t remain = count - culled;
 
 	Secants culledSecants;
 	culledSecants.count = remain;
 	culledSecants.secants = new VectorXd [remain];
 	culledSecants.weights = new weightType [remain];
 	culledSecants.preComputed = true;
-	culledSecants.dimension = input.dimension;
+	culledSecants.dimension = dimension;
 
 	uint32_t j=0;
-	for(uint32_t i=0;i<input.count;i++) {
+	for(uint32_t i=0;i<count;i++) {
 		if( weights[i] ) {
-			culledSecants.secants[j] = input.GetSecant(i);
+			culledSecants.secants[j] = GetSecant(i);
 			culledSecants.weights[j] = weights[i];
 			j++;
 		}
 	}
 	
-	cout << "Culled " << culled << " secants. " << remain << " remain ( " << double(100*remain)/input.count << "% )" << endl;
-	return culledSecants;
+	cout << "Culled " << culled << " secants. " << remain << " remain ( " << double(100*remain)/count << "% )" << endl;
+	return std::move(culledSecants);
+}
+
+Secants Secants::CullSecantsDegrees( double degrees ) const {
+	return CullSecants( cos( degrees * (M_PI/180.0) ) );
 }
 

@@ -20,8 +20,8 @@ namespace DRDSP {
 		ProjSecant();
 		void GetInitial( const DataSet& data );
 		void GetInitial( const DataSystem& data );
-		MatrixXd Find( const Secants& secants );
-		MatrixXd Find( const Secants* secants, uint32_t N );
+		void Find( const Secants& secants );
+		void Find( const Secants* secants, uint32_t N );
 		void AnalyseSecants( const Secants* secants, uint32_t N ) const;
 		void AnalyseSecants( const Secants& secants ) const;
 		void Write();

@@ -12,7 +12,7 @@ ProjSecant::ProjSecant() : targetMinProjectedLength(0.5),
 						   maxIterations(30) {
 }
 
-MatrixXd ProjSecant::Find( const Secants& secants ) {
+void ProjSecant::Find( const Secants& secants ) {
 	W.setIdentity(secants.dimension,targetDimension);
 
 	GradientDescent<Grassmannian,MetricFrobenius> optimiziation;
@@ -26,11 +26,9 @@ MatrixXd ProjSecant::Find( const Secants& secants ) {
 	optimiziation.lineSearch.alpha = 2.0;
 
 	optimiziation.Optimize( W );
-	
-	return W;
 }
 
-MatrixXd ProjSecant::Find( const Secants* secants, uint32_t N ) {
+void ProjSecant::Find( const Secants* secants, uint32_t N ) {
 	W.setIdentity(secants[0].dimension,targetDimension);
 	
 	SecantsSystem ss;
@@ -48,8 +46,6 @@ MatrixXd ProjSecant::Find( const Secants* secants, uint32_t N ) {
 	optimiziation.lineSearch.alpha = 2.0;
 
 	optimiziation.Optimize( W );
-	
-	return W;
 }
 
 void ProjSecant::GetInitial( const DataSet& data ) {
@@ -293,34 +289,22 @@ void ProjSecant::Write() {
 bool ProjSecant::Read( const char* filename ) {
 	ifstream in(filename,ios::binary);
 	if( !in ) {
-		cout << "ProjSystem::Read : file error" << endl;
+		cout << "ProjSecant::Read : file error" << endl;
 		return false;
 	}
 
 	in.seekg(0, ios::end);
-	if( in.tellg() < sizeof(double)*n*d ) {
-		cout << "ProjSystem::Read : insufficient data" << endl;
+	if( in.tellg() < sizeof(double)*W.size() ) {
+		cout << "ProjSecant::Read : insufficient data" << endl;
 		return false;
 	}
 	in.seekg(0, ios::beg);
 
-	for(uint i=0;i<n;i++)
-		for(uint j=0;j<d;j++)
+	for(uint i=0;i<W.rows();i++)
+		for(uint j=0;j<W.cols();j++)
 			in.read((char*)&W(i,j),sizeof(double));
 
 	in.close();
-
-	const bool printCost = false;
-
-	if( printCost ) {
-		double mpl = -1.0;
-		for(uint i=0;i<data->numFiles;i++) {
-			Proj[i]->doCulling = false;
-			Proj[i]->Init();
-		}
-		double c = CostBasic(W,mpl);
-		cout << "cost = " << c << ", minPLen = " << mpl << endl;
-	}
 
 	return true;
 }

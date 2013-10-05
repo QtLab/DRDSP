@@ -12,18 +12,16 @@ namespace DRDSP {
 
 	struct ModelReduced {
 		AffineParameterMap affine;
-		uint32_t dimension, numRBFs;
+		RadialFunction* rbfs;
+		uint32_t dimension, parameterDimension, numRBFs;
 
 		ModelReduced();
 		~ModelReduced();
-		VectorXd Evaluate( const VectorXd &x, const VectorXd &b ) const;
-		
-		void LoadCentres(char *name);
-		void Output(char *name);
-		void Create( uint32_t numRB );
+		void Create( uint32_t dim, uint32_t paramDim, uint32_t nRBFs );
 		void Destroy();
+		VectorXd Evaluate( const VectorXd &x, const VectorXd &parameter ) const;
+		void OutputText( const char *filename ) const;
 	};
-
 }
 
 #endif

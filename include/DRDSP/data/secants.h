@@ -22,7 +22,8 @@ namespace DRDSP {
 		~Secants();
 		void ComputeFromData( const DataSet& dataSet, size_t preComputeSize = 0 );
 		VectorXd GetSecant( uint32_t k ) const;
-	
+		Secants CullSecants( double tolerance ) const;
+		Secants CullSecantsDegrees( double degrees ) const;
 	protected:
 		void PreCompute();
 
@@ -30,20 +31,6 @@ namespace DRDSP {
 		const DataSet* data;
 		static uint32_t GetIndexI( uint32_t k, uint32_t N );
 		static uint32_t GetIndexJ( uint32_t k, uint32_t i, uint32_t N );
-	};
-
-	struct SecantCulling {
-		double tolerance;
-
-		void SetAngularTolerance( double angle ) {
-			tolerance = cos( angle );
-		}
-	
-		void SetAngularToleranceDegrees( double angle ) {
-			tolerance = cos( angle * (M_PI/180.0) );
-		}
-
-		Secants CullSecants( const Secants& input )  const;
 	};
 
 }

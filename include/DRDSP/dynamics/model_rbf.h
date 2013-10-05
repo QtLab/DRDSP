@@ -20,6 +20,8 @@ namespace DRDSP {
 		MatrixXd VectorFieldDerivative( const VectorXd &x ) const;
 		void SetCentresRandom( const VectorXd& minBounds, const VectorXd& maxBounds );
 		void SetRBFType( const Function& f );
+		void LoadCentresText( const char* filename );
+		void LoadCentresBinary( const char* filename );
 	};
 
 }
