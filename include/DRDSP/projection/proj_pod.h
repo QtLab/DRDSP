@@ -13,7 +13,7 @@ namespace DRDSP {
 		ProjPOD();
 		void Find( const DataSet& data );
 		void Find( const DataSystem& data );
-		void Write();
+		void Write( const char* filename ) const;
 
 	protected:
 		MatrixXd dataMatrix;

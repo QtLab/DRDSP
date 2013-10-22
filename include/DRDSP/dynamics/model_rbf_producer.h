@@ -6,16 +6,14 @@
 namespace DRDSP {
 
 	struct ModelRBFProducer {
-		double costScale[2];
 		double fitWeight[2];
 	
 		ModelRBFProducer();
-		double GetTotalCost( const ModelRBF& model, const ReducedData& data ) const;
-		void ComputeScales( const ReducedData& data );
+		double ComputeTotalCost( const ModelRBF& model, const ReducedData& data ) const;
 
-		ModelRBF ComputeModelRBF( const ReducedData& data, uint32_t numRadialBasis );
+		ModelRBF ComputeModelRBF( const ReducedData& data, uint16_t numRadialBasis );
 		void Fit( ModelRBF& model, const ReducedData& data ) const;
-		ModelRBF FitBruteForce( const ReducedData& data, uint32_t numRBFs, uint32_t numInitial ) const;
+		ModelRBF FitBruteForce( const ReducedData& data, uint16_t numRBFs, uint32_t numInitial ) const;
 
 	};
 

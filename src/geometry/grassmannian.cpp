@@ -41,4 +41,11 @@ MatrixXd Grassmannian::ParallelTranslate( const MatrixXd &V, double t ) {
 	return Vt;
 }
 
+MatrixXd Grassmannian::HorizontalComponent( const MatrixXd& W, const MatrixXd& V ) {
+	return V - W * (W.adjoint() * V);
+}
+
+MatrixXd Grassmannian::VerticalComponent( const MatrixXd& W, const MatrixXd& V ) {
+	return W * (W.adjoint() * V);
+}
 

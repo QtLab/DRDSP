@@ -84,6 +84,9 @@
     <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\data\aabb.cpp">
+      <Filter>Source Files\data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\DRDSP\types.h">
@@ -157,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h">
       <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h">
+      <Filter>Header Files\data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

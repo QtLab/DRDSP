@@ -9,7 +9,7 @@ using namespace DRDSP;
 DataSetTyped::DataSetTyped() {
 }
 
-void DataSetTyped::Create(uint32_t numPoints, uint32_t dim) {
+void DataSetTyped::Create( uint32_t numPoints, uint32_t dim ) {
 	DataSet::Create(numPoints,dim);
 	types = new uint16_t [count];
 	for(uint32_t i=0;i<count;i++)
@@ -25,28 +25,49 @@ DataSetTyped::~DataSetTyped() {
 	Destroy();
 }
 
+void DataSystemTyped::Create( uint32_t dim, uint16_t numParams, uint8_t paramDim ) {
+	numParameters = numParams;
+	dimension = dim;
+	parameterDimension = paramDim;
+	dataSets = new DataSetTyped [numParameters];
+	parameters = new VectorXd [numParameters];
+	for(uint16_t i=0;i<numParameters;i++) {
+		parameters[i].setZero(parameterDimension);
+	}
+}
+
+void DataSystemTyped::Destroy() {
+	delete[] dataSets;
+	delete[] parameters;
+	dataSets = nullptr;
+	parameters = nullptr;
+	numParameters = 0;
+}
+
 bool DataSystemTyped::Load( const char* filename ) {
 	ifstream in(filename);
-	if( !in )
+	if( !in ) {
+		cout << "File not found" << endl;
 		return false;
+	}
+	cout << "Loading system " << filename << endl << endl;
 	numParameters = 0;
 	uint16_t dt;
 	bool binary;
 	in >> binary >> dt >> numParameters >> dimension >> parameterDimension;
 	if( !numParameters )
 		return false;
-	cout << "Loading system " << filename << endl << endl;
-	dataSets = new DataSetTyped[numParameters];
-	parameters = new VectorXd[numParameters];
+	
+	cout << "State Dimension: " << dimension << endl;
+	cout << "Parameter Samples: " << numParameters << endl;
+	cout << "Parameter Dimension: " << parameterDimension << endl << endl;
 
-	char* setPath = new char[256];
-	stringstream fn;
-	for(uint32_t i=0;i<numParameters;i++) {
+	dataSets = new DataSetTyped [numParameters];
+	parameters = new VectorXd [numParameters];
+
+	char* setPath = new char [256];
+	for(uint16_t i=0;i<numParameters;i++) {
 		in >> setPath;
-		fn.str("");
-		fn << "data/" << setPath;
-		ifstream inset(setPath);
-
 		if(binary) LoadSetBinary(setPath,i);
 		else LoadSetText(setPath,i);
 	}
@@ -58,8 +79,10 @@ bool DataSystemTyped::Load( const char* filename ) {
 bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i ) {
 	ifstream in;
 	in.open(filename,ios::binary);
-	if( !in )
+	if( !in ) {
+		cout << "File not found" << endl;
 		return false;
+	}
 
 	cout << "Loading data file " << filename << endl << endl;
 
@@ -69,7 +92,7 @@ bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i ) {
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 	
 	parameters[i].setZero(parameterDimension);
-	for( uint32_t j=0;j<parameterDimension;j++) {
+	for(uint16_t j=0;j<parameterDimension;j++) {
 		in.read((char*)&parameters[i](j),sizeof(double));
 	}
 	
@@ -92,8 +115,10 @@ bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i ) {
 bool DataSystemTyped::LoadSetText( const char* filename, uint32_t i ) {
 	ifstream in;
 	in.open(filename);
-	if( !in )
+	if( !in ) {
+		cout << "File not found" << endl;
 		return false;
+	}
 
 	cout << "Loading data file " << filename << endl << endl;
 
@@ -103,7 +128,7 @@ bool DataSystemTyped::LoadSetText( const char* filename, uint32_t i ) {
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 	
 	parameters[i].setZero(parameterDimension);
-	for( uint32_t j=0;j<parameterDimension;j++) {
+	for(uint16_t j=0;j<parameterDimension;j++) {
 		in >> parameters[i](j);
 	}
 	

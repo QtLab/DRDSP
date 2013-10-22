@@ -28,7 +28,7 @@ void ProjSecant::Find( const Secants& secants ) {
 	optimiziation.Optimize( W );
 }
 
-void ProjSecant::Find( const Secants* secants, uint32_t N ) {
+void ProjSecant::Find( const Secants* secants, uint16_t N ) {
 	W.setIdentity(secants[0].dimension,targetDimension);
 	
 	SecantsSystem ss;
@@ -41,8 +41,8 @@ void ProjSecant::Find( const Secants* secants, uint32_t N ) {
 	optimiziation.maxSteps = maxIterations;
 	optimiziation.lineSearch.obj = &ss;
 	optimiziation.lineSearch.metric = &M;
-	optimiziation.lineSearch.S = ProjSecant::Cost;
-	optimiziation.lineSearch.gradS = ProjSecant::GradCost;
+	optimiziation.lineSearch.S = ProjSecant::CostN;
+	optimiziation.lineSearch.gradS = ProjSecant::GradCostN;
 	optimiziation.lineSearch.alpha = 2.0;
 
 	optimiziation.Optimize( W );
@@ -83,7 +83,7 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 
 	cout << "Initial Condition: ( ";
 
-	for(uint i=0;i<targetDimension;i++) {
+	for(uint16_t i=0;i<targetDimension;i++) {
 		bigVal = 0.0;
 		bigAxis = 0;
 		for(uint32_t k=0;k<n;k++) {
@@ -116,7 +116,7 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 		minVal[k] = 0.0;
 	}
 
-	for(uint32_t i=0;i<data.numParameters;i++)
+	for(uint16_t i=0;i<data.numParameters;i++)
 		for(uint32_t j=0;j<data.dataSets[i].count;j++)
 			for(uint32_t k=0;k<n;k++) {
 				val = data.dataSets[i].points[j](k);
@@ -138,7 +138,7 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 
 	cout << "Initial Condition: ( ";
 
-	for(uint i=0;i<targetDimension;i++) {
+	for(uint16_t i=0;i<targetDimension;i++) {
 		bigVal = 0.0;
 		bigAxis = 0;
 		for(uint32_t k=0;k<n;k++) {
@@ -157,10 +157,10 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 	delete[] spread;
 }
 
-void ProjSecant::AnalyseSecants( const Secants* secants, uint32_t N ) const {
+void ProjSecant::AnalyseSecants( const Secants* secants, uint16_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
 	uint32_t numSecants = 0;
-	for(uint32_t i=0;i<N;i++) {
+	for(uint16_t i=0;i<N;i++) {
 		for(uint32_t j=0;j<secants[i].count;j++) {
 			len = ( W.adjoint() * secants[i].GetSecant(j) ).norm();
 			if( len < xMin ) xMin = len;
@@ -197,11 +197,11 @@ double ProjSecant::CostFunction( const Secants& secants, const MatrixXd &X ) {
 	return sum;
 }
 
-double ProjSecant::CostFunction( const Secants* secants, uint32_t N, const MatrixXd &X ) {
+double ProjSecant::CostFunction( const Secants* secants, uint16_t N, const MatrixXd &X ) {
 	
 	double sum = 0.0;
 
-	for(uint32_t i=0;i<N;i++)
+	for(uint16_t i=0;i<N;i++)
 		sum += CostFunction(secants[i],X);
 
 	return sum / N;
@@ -236,11 +236,11 @@ MatrixXd ProjSecant::CostFunctionDerivative( const Secants& secants, const Matri
 	return -sum;
 }
 
-MatrixXd ProjSecant::CostFunctionDerivative( const Secants* secants, uint32_t N, const MatrixXd &X ) {
+MatrixXd ProjSecant::CostFunctionDerivative( const Secants* secants, uint16_t N, const MatrixXd &X ) {
 	
 	MatrixXd sum = CostFunctionDerivative(secants[0],X);
 
-	for(uint32_t i=1;i<N;i++)
+	for(uint16_t i=1;i<N;i++)
 		sum += CostFunctionDerivative(secants[i],X);
 
 	return sum / N;
@@ -256,37 +256,36 @@ double ProjSecant::CostN( const MatrixXd &X, const void* obj ) {
 }
 
 MatrixXd ProjSecant::GradCost( const MatrixXd &X, const void* obj ) {
-	return HorizontalComponent( X, CostFunctionDerivative( *(const Secants*)obj, X ) );
+	return Grassmannian::HorizontalComponent( X, CostFunctionDerivative( *(const Secants*)obj, X ) );
 }
 
 MatrixXd ProjSecant::GradCostN( const MatrixXd &X, const void* obj ) {
 	SecantsSystem* ss = (SecantsSystem*)obj;
-	return HorizontalComponent( X, CostFunctionDerivative( ss->secants, ss->N, X ) );
+	return Grassmannian::HorizontalComponent( X, CostFunctionDerivative( ss->secants, ss->N, X ) );
 }
 
-
-void ProjSecant::Write() {
+void ProjSecant::WriteText( const char* filename ) const {
 	ofstream out;
-	stringstream outfn;
-
-	out.open("../Output/projection.csv");
+	out.open(filename);
 	out.precision(16);
-	for(uint i=0;i<W.rows();i++) {
-		for(uint j=0;j<W.cols();j++)
+	for(int i=0;i<W.rows();i++) {
+		for(int j=0;j<W.cols();j++)
 			out << W(i,j) << ",";
 		out << endl;
 	}
 	out.close();
-
-	out.open("../Output/projection.bin",ios::binary);
-	for(uint i=0;i<W.rows();i++)
-		for(uint j=0;j<W.cols();j++)
-			out.write((char*)&W(i,j),sizeof(double));
-	out.close();
-
 }
 
-bool ProjSecant::Read( const char* filename ) {
+void ProjSecant::WriteBinary( const char* filename ) const {
+	ofstream out;
+	out.open(filename,ios::binary);
+	for(int i=0;i<W.rows();i++)
+		for(int j=0;j<W.cols();j++)
+			out.write((char*)&W(i,j),sizeof(double));
+	out.close();
+}
+
+bool ProjSecant::ReadBinary( const char* filename ) {
 	ifstream in(filename,ios::binary);
 	if( !in ) {
 		cout << "ProjSecant::Read : file error" << endl;
@@ -294,14 +293,14 @@ bool ProjSecant::Read( const char* filename ) {
 	}
 
 	in.seekg(0, ios::end);
-	if( in.tellg() < sizeof(double)*W.size() ) {
+	if( (size_t)in.tellg() < sizeof(double)*W.size() ) {
 		cout << "ProjSecant::Read : insufficient data" << endl;
 		return false;
 	}
 	in.seekg(0, ios::beg);
 
-	for(uint i=0;i<W.rows();i++)
-		for(uint j=0;j<W.cols();j++)
+	for(int i=0;i<W.rows();i++)
+		for(int j=0;j<W.cols();j++)
 			in.read((char*)&W(i,j),sizeof(double));
 
 	in.close();

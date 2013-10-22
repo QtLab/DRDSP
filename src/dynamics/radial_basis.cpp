@@ -3,6 +3,8 @@
 
 using namespace DRDSP;
 
+ThinPlateSpline RadialFunction::thinPlateSpline;
+
 RadialFunction::RadialFunction() : function(&thinPlateSpline) {
 }
 

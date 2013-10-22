@@ -45,7 +45,7 @@ void DataSet::Destroy() {
 DataSet DataSet::ProjectData( const MatrixXd& W ) const {
 	DataSet projectedData;
 
-	projectedData.Create(count,W.cols());
+	projectedData.Create(count,(uint32_t)W.cols());
 
 	for(uint32_t i=0;i<count;i++) {
 		projectedData.points[i] = W.adjoint() * points[i];
@@ -54,11 +54,72 @@ DataSet DataSet::ProjectData( const MatrixXd& W ) const {
 	return std::move(projectedData);
 }
 
-DataSystem::DataSystem() : numParameters(0), dimension(0), parameterDimension(0) {
+bool DataSet::LoadSetBinary( const char* filename ) {
+	ifstream in;
+	in.open(filename,ios::binary);
+	if( !in ) {
+		cout << "File not found: " << filename << endl;
+		return false;
+	}
+
+	cout << "Loading data file: " << filename;
+
+	uint32_t numPoints;
+	in.read((char*)&numPoints,sizeof(numPoints));
+	cout << " - " << numPoints << " points" << endl << endl;
+
+	in.seekg(sizeof(double),ios::cur);
+
+	Create(numPoints,dimension);
+	uint32_t k=0, j=0;
+	while( !in.eof() ) {
+		if( k >= count ) break;
+		j=0;
+		while( !in.eof() ) {
+			if( j >= dimension ) break;
+			in.read((char*)&points[k](j++),sizeof(double));
+		}
+		k++;
+	}
+	in.close();
+	return true;
+}
+
+bool DataSet::LoadSetText( const char* filename ) {
+	ifstream in;
+	in.open(filename);
+	if( !in ) {
+		cout << "File not found: " << filename << endl;
+		return false;
+	}
+
+	cout << "Loading data file: " << filename;
+
+	uint32_t numPoints;
+	in >> numPoints;
+	cout << " - " << numPoints << " points" << endl << endl;
+
+	Create(numPoints,dimension);
+	uint32_t k=0, j=0;
+	while( !in.eof() ) {
+		if ( k >= count ) break;
+		j=0;
+		while( !in.eof() ) {
+			if( j >= dimension ) break;
+			in >> points[k](j++);
+		}
+		k++;
+	}
+	in.close();
+	return true;
+}
+
+DataSystem::DataSystem() : dimension(0), numParameters(0), parameterDimension(0), maxPoints(0) {
 }
 
 DataSystem::DataSystem( const DataSystem& rhs ) {
-	Create(rhs.numParameters,rhs.parameterDimension,rhs.dimension);
+	Create(rhs.dimension,rhs.numParameters,rhs.parameterDimension);
+	maxPoints = rhs.maxPoints;
 	for(uint32_t i=0;i<numParameters;i++)
 		dataSets[i] = rhs.dataSets[i];
 }
@@ -71,6 +132,7 @@ DataSystem::DataSystem( DataSystem&& rhs ) {
 	dimension = rhs.dimension;
 	numParameters = rhs.numParameters;
 	parameterDimension = rhs.parameterDimension;
+	maxPoints = rhs.maxPoints;
 	rhs.dataSets = nullptr;
 	rhs.parameters = nullptr;
 	rhs.numParameters = 0;
@@ -80,13 +142,13 @@ DataSystem::~DataSystem() {
 	Destroy();
 }
 
-void DataSystem::Create( uint32_t numParams, uint32_t paramDim, uint32_t dim ) {
+void DataSystem::Create( uint32_t dim, uint16_t numParams, uint8_t paramDim ) {
 	numParameters = numParams;
 	dimension = dim;
 	parameterDimension = paramDim;
 	dataSets = new DataSet [numParameters];
 	parameters = new VectorXd [numParameters];
-	for(uint32_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;i++) {
 		parameters[i].setZero(parameterDimension);
 	}
 
@@ -102,25 +164,28 @@ void DataSystem::Destroy() {
 
 bool DataSystem::Load( const char* filename ) {
 	ifstream in(filename);
-	if( !in )
+	if( !in ) {
+		cout << "File not found" << endl;
 		return false;
+	}
+	cout << "Loading system " << filename << endl << endl;
 	numParameters = 0;
 	uint16_t dt;
 	bool binary;
 	in >> binary >> dt >> numParameters >> dimension >> parameterDimension;
 	if( !numParameters )
 		return false;
-	cout << "Loading system " << filename << endl << endl;
-	dataSets = new DataSet[numParameters];
-	parameters = new VectorXd[numParameters];
+	
+	cout << "State Dimension: " << dimension << endl;
+	cout << "Parameter Samples: " << numParameters << endl;
+	cout << "Parameter Dimension: " << parameterDimension << endl << endl;
 
-	char* setPath = new char[256];
-	stringstream fn;
-	for(uint32_t i=0;i<numParameters;i++) {
+	dataSets = new DataSet [numParameters];
+	parameters = new VectorXd [numParameters];
+
+	char* setPath = new char [256];
+	for(uint16_t i=0;i<numParameters;i++) {
 		in >> setPath;
-		fn.str("");
-		fn << "data/" << setPath;
-
 		if(binary) LoadSetBinary(setPath,i);
 		else LoadSetText(setPath,i);
 	}
@@ -133,30 +198,28 @@ bool DataSystem::Load( const char* filename ) {
 bool DataSystem::LoadSetBinary( const char* filename, uint32_t i ) {
 	ifstream in;
 	in.open(filename,ios::binary);
-	if( !in )
+	if( !in ) {
+		cout << "File not found" << endl;
 		return false;
+	}
 
-	cout << "Loading data file " << filename << endl << endl;
+	cout << "Loading data file " << filename;
 
 	uint32_t numPoints;
 	in.read((char*)&numPoints,sizeof(numPoints));
 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
-	
+
+	cout << " - " << numPoints << " points" << endl << endl;
+
 	parameters[i].setZero(parameterDimension);
-	for( uint32_t j=0;j<parameterDimension;j++) {
-		in.read((char*)&parameters[i](j),sizeof(double));
-	}
+	in.read((char*)&parameters[i](0),sizeof(double)*parameterDimension);
 	
 	dataSets[i].Create(numPoints,dimension);
-	uint32_t k=0, j=0;
+	uint32_t k=0;
 	while( !in.eof() ) {
 		if( k >= dataSets[i].count ) break;
-		j=0;
-		while( !in.eof() ) {
-			if( j >= dimension ) break;
-			in.read((char*)&dataSets[i].points[k](j++),sizeof(double));
-		}
+		in.read((char*)&dataSets[i].points[k](0),sizeof(double)*dimension);
 		k++;
 	}
 	in.close();
@@ -166,18 +229,22 @@ bool DataSystem::LoadSetBinary( const char* filename, uint32_t i ) {
 bool DataSystem::LoadSetText( const char* filename, uint32_t i ) {
 	ifstream in;
 	in.open(filename);
-	if( !in )
+	if( !in ) {
+		cout << "File not found" << endl;
 		return false;
+	}
 
-	cout << "Loading data file " << filename << endl << endl;
+	cout << "Loading data file " << filename;
 
 	uint32_t numPoints;
 	in >> numPoints;
 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
-	
+
+	cout << " - " << numPoints << " points" << endl << endl;
+
 	parameters[i].setZero(parameterDimension);
-	for(uint32_t j=0;j<parameterDimension;j++) {
+	for(uint16_t j=0;j<parameterDimension;j++) {
 		in >> parameters[i](j);
 	}
 	
@@ -199,9 +266,9 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i ) {
 DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
 	DataSystem projectedData;
 
-	projectedData.Create(numParameters,parameterDimension,W.cols());
+	projectedData.Create((uint32_t)W.cols(),numParameters,parameterDimension);
 
-	for(uint32_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;i++) {
 		projectedData.parameters[i] = parameters[i];
 		projectedData.dataSets[i].Create(dataSets[i].count,projectedData.dimension);
 
@@ -213,5 +280,3 @@ DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
 
 	return std::move(projectedData);
 }
-
-

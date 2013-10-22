@@ -9,35 +9,40 @@
 using namespace std;
 using namespace DRDSP;
 
-ModelReduced::ModelReduced() : dimension(0), parameterDimension(0), numRBFs(0), rbfs(nullptr) {
+ModelReduced::ModelReduced() : dimension(0), parameterDimension(0) {
 }
 
 ModelReduced::~ModelReduced() {
 }
 
-void ModelReduced::Create( uint32_t dim, uint32_t paramDim, uint32_t nRBFs ) {
+void ModelReduced::Create( uint16_t dim, uint8_t paramDim, uint16_t nRBFs ) {
 	dimension = dim;
 	parameterDimension = paramDim;
-	numRBFs = nRBFs;
-	rbfs = new RadialFunction [numRBFs];
-	affine.Init(dimension,numRBFs,parameterDimension);
+	model.Create(dim,nRBFs);
+	affine.Init(dimension,nRBFs,parameterDimension);
 }
 
 void ModelReduced::Destroy() {
-	delete[] rbfs;
-	rbfs = nullptr;
 }
 
-
-VectorXd ModelReduced::Evaluate( const VectorXd &x, const VectorXd &parameter ) const {
+ModelRBF ModelReduced::ComputeModelRBF( const VectorXd& parameter ) {
 	MatrixXd z = affine.Evaluate(parameter);
-	
-	ModelRBF model( dimension, numRBFs );
+
 	model.linear = z.block(0,0,dimension,dimension);
 
-	for(uint32_t i=0;i<numRBFs;i++) {
+	for(uint16_t i=0;i<model.numRBFs;i++) {
 		model.weights[i] = z.col(dimension+i);
-		model.rbfs[i].centre = rbfs[i].centre;
+	}
+	return model;
+}
+
+VectorXd ModelReduced::Evaluate( const VectorXd &x, const VectorXd &parameter ) {
+	MatrixXd z = affine.Evaluate(parameter);
+
+	model.linear = z.block(0,0,dimension,dimension);
+
+	for(uint16_t i=0;i<model.numRBFs;i++) {
+		model.weights[i] = z.col(dimension+i);
 	}
 	return model.VectorField(x);
 }
@@ -45,23 +50,17 @@ VectorXd ModelReduced::Evaluate( const VectorXd &x, const VectorXd &parameter ) 
 void ModelReduced::OutputText( const char *filename ) const {
 	
 	ofstream out;
-	stringstream outfn;
-
-	// Output results
-	outfn.str("");
-	outfn << "output/" << filename << "-reducedModel.csv";
-	//cout << outfn.str().c_str() << endl;
-	out.open(outfn.str().c_str());
+	out.open(filename);
 	out.precision(16);
-	out << dimension << " " << numRBFs << " " << parameterDimension << endl;
+	out << dimension << " " << model.numRBFs << " " << parameterDimension << endl;
 	for(int i=0;i<affine.coeffs.rows();i++) {	
 		for(int j=0;j<affine.coeffs.cols();j++)
 			out << affine.coeffs(i,j) << " ";
 		out << endl;
 	}
-	for(uint k=0;k<numRBFs;k++) {
-		for(uint j=0;j<dimension;j++)
-			out << rbfs[k].centre(j) << " ";
+	for(uint16_t k=0;k<model.numRBFs;k++) {
+		for(uint16_t j=0;j<dimension;j++)
+			out << model.rbfs[k].centre(j) << " ";
 		out << endl;
 	}
 	out.close();

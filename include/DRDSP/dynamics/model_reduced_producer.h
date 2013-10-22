@@ -7,15 +7,14 @@
 namespace DRDSP {
 
 	struct ModelReducedProducer {
-		double costScale[2];
 		double fitWeight[2];
+		uint16_t numRBFs;
 	
-		ModelReducedProducer();
-		double GetTotalCost( const ModelReduced& model, const ReducedDataSystem& data ) const;
-		void ComputeScales( const ReducedDataSystem& data );
-
-		ModelReduced ComputeModelRBF( const ReducedDataSystem& data, uint32_t numRadialBasis );
-		
+		double ComputeTotalCost( ModelReduced& model, const ReducedDataSystem& data, const VectorXd* parameters ) const;
+		ModelReduced ComputeModelReduced( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const;
+	
+	protected:
+		void ComputeMatrices( const ModelRBF& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const;
 	};
 
 }

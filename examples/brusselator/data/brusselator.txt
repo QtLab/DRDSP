@@ -1,0 +1,12 @@
+1 0 1 2048 1
+data/p2.5.bin
+data/p2.51.bin
+data/p2.52.bin
+data/p2.53.bin
+data/p2.54.bin
+data/p2.55.bin
+data/p2.56.bin
+data/p2.57.bin
+data/p2.58.bin
+data/p2.59.bin
+data/p2.6.bin

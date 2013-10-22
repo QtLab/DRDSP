@@ -20,6 +20,8 @@ namespace DRDSP {
 		Secants( const Secants& rhs );
 		Secants( Secants&& rhs );
 		~Secants();
+		Secants& operator=( const Secants& rhs );
+		Secants& operator=( Secants&& rhs );
 		void ComputeFromData( const DataSet& dataSet, size_t preComputeSize = 0 );
 		VectorXd GetSecant( uint32_t k ) const;
 		Secants CullSecants( double tolerance ) const;

@@ -39,18 +39,23 @@ void ProjPOD::Find( const DataSystem& data ) {
 	W = svd.matrixU().block(0,0,data.dimension,targetDimension);
 }
 
-void ProjPOD::Write() {
+void ProjPOD::Write( const char* filename ) const {
 	ofstream out;
 	stringstream outfn;
 
-	out.open("Output/singularValuesPOD.csv");
+	outfn.str("");
+	outfn << filename << "-singularValues.csv";
+
+	out.open(outfn.str());
 	out.precision(16);
 	for(int i=0;i<svd.nonzeroSingularValues();i++) {
 		out << svd.singularValues()[i] << endl;
 	}
 	out.close();
 
-	out.open("Output/projectionPOD.csv");
+	outfn.str("");
+	outfn << filename << "-W.csv";
+	out.open(outfn.str());
 	out.precision(16);
 	for(int i=0;i<W.rows();i++) {
 		for(int j=0;j<W.cols();j++)
@@ -59,11 +64,11 @@ void ProjPOD::Write() {
 	}
 	out.close();
 
-	out.open("Output/projectionPOD.bin",ios::binary);
-	for(uint i=0;i<W.rows();i++)
-		for(uint j=0;j<W.cols();j++)
+	outfn.str("");
+	outfn << filename << "-W.bin";
+	out.open(outfn.str(),ios::binary);
+	for(int i=0;i<W.rows();i++)
+		for(int j=0;j<W.cols();j++)
 			out.write((char*)&W(i,j),sizeof(double));
 	out.close();
-
-
 }

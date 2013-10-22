@@ -5,7 +5,7 @@ using namespace DRDSP;
 ReducedDataSystem::ReducedDataSystem() : reducedData(nullptr), numParameters(0) {
 }
 
-ReducedDataSystem::ReducedDataSystem( uint32_t N ) : reducedData(nullptr), numParameters(0) {
+ReducedDataSystem::ReducedDataSystem( uint16_t N ) : reducedData(nullptr), numParameters(0) {
 	Create(N);
 }
 
@@ -26,7 +26,7 @@ ReducedDataSystem::~ReducedDataSystem() {
 
 ReducedDataSystem& ReducedDataSystem::operator=( const ReducedDataSystem& rhs ) {
 	Create(rhs.numParameters);
-	for(uint32_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;i++) {
 		reducedData[i] = rhs.reducedData[i];
 	}
 	return *this;
@@ -43,7 +43,7 @@ ReducedDataSystem& ReducedDataSystem::operator=( ReducedDataSystem&& rhs ) {
 	return *this;
 }
 
-void ReducedDataSystem::Create( uint32_t N ) {
+void ReducedDataSystem::Create( uint16_t N ) {
 	if( numParameters != N ) {
 		Destroy();
 		reducedData = new ReducedData [N];
@@ -59,21 +59,21 @@ void ReducedDataSystem::Destroy() {
 
 void ReducedDataSystem::ComputeData( ModelOriginal& original, const DataSystem& data, const MatrixXd& W ) {
 	Create( data.numParameters );
-	for(uint32_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;i++) {
 		reducedData[i].ComputeData(original,data.dataSets[i],data.parameters[i],W);
 	}
 }
 
-void ReducedDataSystem::ComputeBoundingBox( VectorXd& bMin, VectorXd& bMax ) const {
-	reducedData[0].ComputeBoundingBox(bMin,bMax);
-	VectorXd bMin2, bMax2;
-	uint32_t d = bMin.size();
-	for(uint32_t i=1;i<numParameters;i++) {
-		reducedData[i].ComputeBoundingBox(bMin2,bMax2);
-		for(uint32_t j=0;j<d;j++) {
-			if( bMin2(j) < bMin(j) ) bMin(j) = bMin2(j);
-			if( bMax2(j) > bMax(j) ) bMax(j) = bMax2(j);
+AABB ReducedDataSystem::ComputeBoundingBox() const {
+	AABB box = reducedData[0].ComputeBoundingBox();
+	uint32_t d = reducedData[0].dimension;
+	for(uint16_t i=1;i<numParameters;i++) {
+		AABB box2 = reducedData[i].ComputeBoundingBox();
+		for(uint16_t j=0;j<d;j++) {
+			if( box2.bMin(j) < box.bMin(j) ) box.bMin(j) = box2.bMin(j);
+			if( box2.bMax(j) > box.bMax(j) ) box.bMax(j) = box2.bMax(j);
 		}
 	}
+	return std::move(box);
 }
 

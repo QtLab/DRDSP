@@ -16,7 +16,7 @@ static double eps( double x ) {
 ReducedData::ReducedData() : points(nullptr), vectors(nullptr), derivatives(nullptr), dimension(0), count(0) {
 }
 
-ReducedData::ReducedData( uint32_t dim, uint32_t numPoints ) : points(nullptr), vectors(nullptr), derivatives(nullptr), dimension(0), count(0) {
+ReducedData::ReducedData( uint16_t dim, uint32_t numPoints ) : points(nullptr), vectors(nullptr), derivatives(nullptr), dimension(0), count(0) {
 	Create(dim,numPoints);
 }
 
@@ -68,7 +68,7 @@ ReducedData& ReducedData::operator=( ReducedData&& rhs ) {
 	return *this;
 }
 
-void ReducedData::Create( uint32_t dim, uint32_t numPoints ) {
+void ReducedData::Create( uint16_t dim, uint32_t numPoints ) {
 	if( count != numPoints ) {
 		Destroy();
 		points = new VectorXd [numPoints];
@@ -95,11 +95,11 @@ void ReducedData::Destroy() {
 }
 
 void ReducedData::ComputeData( ModelOriginal& original, const DataSet& data, const VectorXd& parameter, const MatrixXd& W ) {
-	Create( W.cols(), data.count );
+	Create( (uint16_t)W.cols(), data.count );
 
 	static double stabilityFactor = 1.0;
 
-	MatrixXd Ar, ArArT, I;
+	MatrixXd A;
 
 	for(uint32_t i=0;i<count;i++) {
 		original.PrepareOptimizations( data.points[i], parameter );
@@ -113,8 +113,8 @@ void ReducedData::ComputeData( ModelOriginal& original, const DataSet& data, con
 					for(uint32_t c2=0;c2<original.oDim;c2++) {
 						double temp = original.VectorFieldDCW( data.points[i], parameter, c1, c2 );
 						if( temp != 0.0 ) {
-							for(uint32_t k=0;k<dimension;k++)
-								for(uint32_t j=0;j<dimension;j++)
+							for(uint16_t k=0;k<dimension;k++)
+								for(uint16_t j=0;j<dimension;j++)
 									derivatives[i](j,k) += W.adjoint()(j,c1) * temp * W(c2,k);
 						}
 					}
@@ -131,33 +131,46 @@ void ReducedData::ComputeData( ModelOriginal& original, const DataSet& data, con
 						rank++;
 					else break;
 				}
-				Ar = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();
-				I.setIdentity(Ar.rows(),Ar.cols());
-				derivatives[i] = W.adjoint() * original.VectorFieldD( data.points[i], parameter ) * W * Ar - stabilityFactor*(I-Ar);
+				A = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();
+				derivatives[i] = W.adjoint() * original.VectorFieldD( data.points[i], parameter ) * W * A - stabilityFactor * ( MatrixXd::Identity(A.rows(),A.cols()) - A );
 			}
 
 		}
 
 	}
+
+	scales[0] = ComputeVectorScale();
+	scales[1] = ComputeDerivativeScale();
 }
 
-void ReducedData::ComputeBoundingBox( VectorXd& bMin, VectorXd& bMax ) const {
-	static double bboxScale = 1.0;
-	bMin.setZero(dimension);
-	bMax.setZero(dimension);
+AABB ReducedData::ComputeBoundingBox() const {
+	AABB box(dimension);
+	box.SetZero();
 	for(uint32_t k=0;k<count;k++) {
-		for(uint32_t j=0;j<dimension;j++) {
-			if( points[k](j) > bMax(j) )
-				bMax(j) = points[k](j);
-			if( points[k](j) < bMin(j) )
-				bMin(j) = points[k](j);
+		for(uint16_t j=0;j<dimension;j++) {
+			if( points[k](j) > box.bMax(j) )
+				box.bMax(j) = points[k](j);
+			if( points[k](j) < box.bMin(j) )
+				box.bMin(j) = points[k](j);
 		}
 	}
-	// Scale it a bit
-	VectorXd middle = (bMax + bMin) * 0.5;
-	VectorXd halfDiff = (bMax - bMin) * 0.5;
-	bMin = middle - halfDiff * bboxScale;
-	bMax = middle + halfDiff * bboxScale;
+	return std::move(box);
+}
+
+double ReducedData::ComputeVectorScale() {
+	double S1 = 0.0;
+	for(uint32_t i=0;i<count;i++) {
+		S1 += vectors[i].squaredNorm();
+	}
+	return S1 / count;
+}
+
+double ReducedData::ComputeDerivativeScale() {
+	double S2 = 0.0;
+	for(uint32_t i=0;i<count;i++) {
+		S2 += derivatives[i].squaredNorm();
+	}
+	return S2 / count;
 }
 
 bool ReducedData::ReadData( const char* filename ) {
@@ -168,7 +181,7 @@ bool ReducedData::ReadData( const char* filename ) {
 	}
 
 	in.seekg(0, ios::end);
-	if( in.tellg() < sizeof(double) * count * dimension * ( dimension + 2 ) ) {
+	if( (size_t)in.tellg() < sizeof(double) * (size_t)count * (size_t)dimension * (size_t)( dimension + 2 ) ) {
 		cout << "ReducedData::ReadData : insufficient data in file " << filename << endl;
 		return false;
 	}
@@ -200,3 +213,30 @@ void ReducedData::WriteData( const char* filename ) const {
 	out.close();
 }
 
+void ReducedData::WritePointsText( const char* filename ) const {
+	ofstream out(filename);
+	if( !out ) {
+		cout << "ReducedData::WritePointsText : file error" << endl;
+		return;
+	}
+	for(uint32_t i=0;i<count;i++) {
+		for(uint16_t j=0;j<dimension;j++)
+			out << points[i](j) << ",";
+		out << endl;
+	}
+	out.close();
+}
+
+void ReducedData::WriteVectorsText( const char* filename ) const {
+	ofstream out(filename);
+	if( !out ) {
+		cout << "ReducedData::WriteVectorsText : file error" << endl;
+		return;
+	}
+	for(uint32_t i=0;i<count;i++) {
+		for(uint16_t j=0;j<dimension;j++)
+			out << vectors[i](j) << ",";
+		out << endl;
+	}
+	out.close();
+}

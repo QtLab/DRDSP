@@ -3,27 +3,34 @@
 #include "../types.h"
 #include "model_orig.h"
 #include "../data/data_set.h"
+#include "../data/aabb.h"
 
 namespace DRDSP {
 
 	struct ReducedData {
 		VectorXd *points, *vectors;
 		MatrixXd *derivatives;
-		uint32_t dimension, count;
+		double scales[2];
+		uint32_t count;
+		uint16_t dimension;
 
 		ReducedData();
-		ReducedData( uint32_t dim, uint32_t numPoints );
+		ReducedData( uint16_t dim, uint32_t numPoints );
 		ReducedData( const ReducedData& rhs );
 		ReducedData( ReducedData&& rhs );
 		~ReducedData();
 		ReducedData& operator=( const ReducedData& rhs );
 		ReducedData& operator=( ReducedData&& rhs );
-		void Create( uint32_t dim, uint32_t numPoints );
+		void Create( uint16_t dim, uint32_t numPoints );
 		void Destroy();
 		void ComputeData( ModelOriginal& model, const DataSet& data, const VectorXd& parameter, const MatrixXd& W );
-		void ComputeBoundingBox( VectorXd& bMin, VectorXd& bMax ) const;
+		AABB ComputeBoundingBox() const;
+		double ComputeVectorScale();
+		double ComputeDerivativeScale();
 		void WriteData( const char* filename ) const;
 		bool ReadData( const char* filename );
+		void WritePointsText( const char* filename ) const;
+		void WriteVectorsText( const char* filename ) const;
 	};
 
 }

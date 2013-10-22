@@ -6,11 +6,11 @@ using namespace DRDSP;
 
 ModelRBF::ModelRBF() : weights(nullptr), rbfs(nullptr), dimension(0), numRBFs(0) {}
 
-ModelRBF::ModelRBF( uint32_t dim, uint32_t nRBFs ) : weights(nullptr), rbfs(nullptr), dimension(0), numRBFs(0) {
+ModelRBF::ModelRBF( uint16_t dim, uint16_t nRBFs ) : weights(nullptr), rbfs(nullptr), dimension(0), numRBFs(0) {
 	Create(dim,nRBFs);
 }
 
-void ModelRBF::Create( uint32_t dim, uint32_t nRBFs ) {
+void ModelRBF::Create( uint16_t dim, uint16_t nRBFs ) {
 	dimension = dim;
 	numRBFs = nRBFs;
 	weights = new VectorXd [numRBFs];
@@ -49,18 +49,18 @@ VectorXd ModelRBF::VectorField( const VectorXd& x ) const {
 
 MatrixXd ModelRBF::VectorFieldDerivative( const VectorXd &x ) const {
 	MatrixXd sum = linear;
-	for(uint32_t i=0;i<numRBFs;i++)
+	for(uint16_t i=0;i<numRBFs;i++)
 		sum += weights[i] * rbfs[i].Derivative(x).transpose();
 	return sum;
 }
 
-void ModelRBF::SetCentresRandom( const VectorXd& minBounds, const VectorXd& maxBounds ) {
+void ModelRBF::SetCentresRandom( const AABB& box ) {
 	double rnd;
-	VectorXd diff = maxBounds - minBounds;
-	for(uint32_t i=0;i<numRBFs;i++)
-		for(uint32_t j=0;j<dimension;j++) {
+	VectorXd diff = box.bMax - box.bMin;
+	for(uint16_t i=0;i<numRBFs;i++)
+		for(uint16_t j=0;j<dimension;j++) {
 			rnd = (double)rand()/RAND_MAX;
-			rbfs[i].centre(j) = minBounds(j) + diff(j) * rnd;
+			rbfs[i].centre(j) = box.bMin(j) + diff(j) * rnd;
 		}
 }
 
@@ -68,8 +68,8 @@ void ModelRBF::LoadCentresText( const char* filename ) {
 	ifstream in(filename);
 	if( !in ) return;
 
-	for(uint k=0;k<numRBFs;k++)
-		for(uint j=0;j<dimension;j++)
+	for(uint16_t k=0;k<numRBFs;k++)
+		for(uint16_t j=0;j<dimension;j++)
 			in >> rbfs[k].centre(j);
 	in.close();
 }
@@ -78,9 +78,35 @@ void ModelRBF::LoadCentresBinary( const char* filename ) {
 	ifstream in(filename);
 	if( !in ) return;
 
-	for(uint32_t k=0;k<numRBFs;k++)
+	for(uint16_t k=0;k<numRBFs;k++)
 		in.read( (char*)&rbfs[k].centre(0), sizeof(double)*dimension );
 	in.close();
 }
 
+void ModelRBF::OutputText( const char *filename ) const {
+	
+	ofstream out;
+	out.open(filename);
+	out.precision(16);
+	out << dimension << "," << numRBFs << endl;
+	for(uint16_t i=0;i<dimension;i++) {	
+		for(uint16_t j=0;j<dimension;j++)
+			out << linear(i,j) << ",";
+		out << endl;
+	}
+	out << endl;
+	for(uint16_t i=0;i<dimension;i++) {	
+		for(uint16_t j=0;j<numRBFs;j++)
+			out << weights[j](i) << ",";
+		out << endl;
+	}
+	out << endl;
+	for(uint16_t i=0;i<dimension;i++) {	
+		for(uint16_t j=0;j<numRBFs;j++)
+			out << rbfs[j].centre(i) << ",";
+		out << endl;
+	}
+	out.close();
+	
+}
 
