@@ -8,7 +8,7 @@
 using namespace std;
 using namespace DRDSP;
 
-ModelRBFProducer::ModelRBFProducer() {
+ModelRBFProducer::ModelRBFProducer() : numRBFs(30) {
 	fitWeight[0] = 1.0;
 	fitWeight[1] = 1.0;
 }
@@ -22,7 +22,7 @@ double ModelRBFProducer::ComputeTotalCost( const ModelRBF& model, const ReducedD
 	return (fitWeight[0]/data.scales[0]) * S1 + (fitWeight[1]/data.scales[1]) * S2;
 }
 
-ModelRBF ModelRBFProducer::ComputeModelRBF( const ReducedData& data, uint16_t numRBFs ) {
+ModelRBF ModelRBFProducer::ComputeModelRBF( const ReducedData& data ) {
 
 	ModelRBF model(data.dimension,numRBFs);
 	model.SetCentresRandom( data.ComputeBoundingBox() );
@@ -71,7 +71,7 @@ void ModelRBFProducer::Fit( ModelRBF& model, const ReducedData& data ) const {
 		model.weights[a] = z.col(data.dimension+a);
 }
 
-ModelRBF ModelRBFProducer::FitBruteForce( const ReducedData& data, uint16_t numRBFs, uint32_t numIterations ) const {
+ModelRBF ModelRBFProducer::BruteForce( const ReducedData& data, uint32_t numIterations ) const {
 	double Sft = 0.0, Sf = -1.0;
 
 	ModelRBF model( data.dimension, numRBFs );

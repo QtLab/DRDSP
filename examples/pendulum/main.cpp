@@ -47,9 +47,10 @@ int main() {
 
 	// Obtain the reduced model
 	ModelRBFProducer producer;
+	//producer.numRBFs = numRBFs;
 
 	// Find a reduced model for the projected data using 100 radial basis functions
-	ModelRBF reducedModel = producer.ComputeModelRBF(reducedData,100);
+	ModelRBF reducedModel = producer.BruteForce(reducedData,100);
 
 
 	return 0;

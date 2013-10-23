@@ -10,6 +10,53 @@ ModelRBF::ModelRBF( uint16_t dim, uint16_t nRBFs ) : weights(nullptr), rbfs(null
 	Create(dim,nRBFs);
 }
 
+ModelRBF::ModelRBF( const ModelRBF& rhs ) {
+	Create(rhs.dimension,rhs.numRBFs);
+	linear = rhs.linear;
+	for(uint16_t i=0;i<numRBFs;i++) {
+		weights[i] = rhs.weights[i];
+		rbfs[i] = rhs.rbfs[i];
+	}
+}
+
+ModelRBF::ModelRBF( ModelRBF&& rhs ) {
+	Destroy();
+	dimension = rhs.dimension;
+	numRBFs = rhs.numRBFs;
+	linear = rhs.linear;
+	weights = rhs.weights;
+	rbfs = rhs.rbfs;
+	rhs.numRBFs = 0;
+	rhs.weights = nullptr;
+	rhs.rbfs = nullptr;
+}
+
+ModelRBF& ModelRBF::operator=( const ModelRBF& rhs ) {
+	Destroy();
+	Create(rhs.dimension,rhs.numRBFs);
+	linear = rhs.linear;
+	for(uint16_t i=0;i<numRBFs;i++) {
+		weights[i] = rhs.weights[i];
+		rbfs[i] = rhs.rbfs[i];
+	}
+	return *this;
+}
+
+ModelRBF& ModelRBF::operator=( ModelRBF&& rhs ) {
+	if( this != &rhs ) {
+		Destroy();
+		dimension = rhs.dimension;
+		numRBFs = rhs.numRBFs;
+		linear = rhs.linear;
+		weights = rhs.weights;
+		rbfs = rhs.rbfs;
+		rhs.numRBFs = 0;
+		rhs.weights = nullptr;
+		rhs.rbfs = nullptr;
+	}
+	return *this;
+}
+
 void ModelRBF::Create( uint16_t dim, uint16_t nRBFs ) {
 	dimension = dim;
 	numRBFs = nRBFs;
@@ -19,12 +66,6 @@ void ModelRBF::Create( uint16_t dim, uint16_t nRBFs ) {
 	for(uint16_t i=0;i<numRBFs;i++) {
 		weights[i].setZero(dimension);
 		rbfs[i].centre.setZero(dimension);
-	}
-}
-
-void ModelRBF::SetRBFType( const Function& f ) {
-	for(uint16_t i=0;i<numRBFs;i++) {
-		rbfs[i].function = &f;
 	}
 }
 
@@ -38,6 +79,12 @@ void ModelRBF::Destroy() {
 		rbfs = nullptr;
 	}
 	numRBFs = 0;
+}
+
+void ModelRBF::SetRBFType( const Function& f ) {
+	for(uint16_t i=0;i<numRBFs;i++) {
+		rbfs[i].function = &f;
+	}
 }
 
 VectorXd ModelRBF::VectorField( const VectorXd& x ) const {

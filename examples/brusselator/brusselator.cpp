@@ -72,6 +72,8 @@ MatrixXd Brusselator::VectorFieldD( const VectorXd &x, const VectorXd &beta ) {
 					r(m,n++) = dXXDot(x,beta,i,j,mu,nu);
 					r(m,n++) = dYXDot(x,i,j,mu,nu);
 				}
+			m++;
+			n = 0;
 			for(uint32_t nu=0;nu<nY;nu++)
 				for(uint32_t mu=0;mu<nX;mu++) {
 					r(m,n++) = dXYDot(x,beta,i,j,mu,nu);

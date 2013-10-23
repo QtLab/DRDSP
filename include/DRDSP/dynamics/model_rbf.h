@@ -13,7 +13,11 @@ namespace DRDSP {
 		uint16_t dimension, numRBFs;
 
 		ModelRBF();
+		ModelRBF( const ModelRBF& rhs );
+		ModelRBF( ModelRBF&& rhs );
 		ModelRBF( uint16_t dim, uint16_t nRBFs );
+		ModelRBF& operator=( const ModelRBF& rhs );
+		ModelRBF& operator=( ModelRBF&& rhs );
 		void Create( uint16_t dim, uint16_t nRBFs );
 		void Destroy();
 		VectorXd VectorField( const VectorXd& x ) const;

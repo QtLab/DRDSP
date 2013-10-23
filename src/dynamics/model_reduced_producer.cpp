@@ -9,6 +9,11 @@
 using namespace std;
 using namespace DRDSP;
 
+ModelReducedProducer::ModelReducedProducer() : numRBFs(30) {
+	fitWeight[0] = 1.0;
+	fitWeight[1] = 1.0;
+}
+
 void ModelReducedProducer::ComputeMatrices( const ModelRBF& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
 
 	MatrixXd y1, y2, A1, A2, Lambda, X, Y;
@@ -48,18 +53,40 @@ void ModelReducedProducer::ComputeMatrices( const ModelRBF& model, const Reduced
 }
 
 ModelReduced ModelReducedProducer::ComputeModelReduced( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const {
+
+	uint16_t dimension = data.reducedData[0].dimension;
+
+	ModelReduced reduced;
+	reduced.Create( dimension, parameterDimension, numRBFs );
+	reduced.model.SetCentresRandom( data.ComputeBoundingBox() );
+
+	Fit(reduced,data,parameterDimension,parameters);
+	
+	return std::move(reduced);
+}
+
+double ModelReducedProducer::ComputeTotalCost( ModelReduced& model, const ReducedDataSystem& data, const VectorXd* parameters ) const {
+	double T = 0.0;
+	for(uint16_t j=0;j<data.numParameters;j++) {
+		double S1 = 0.0, S2 = 0.0;
+		ModelRBF modelRBF = model.ComputeModelRBF( parameters[j] );
+		for(uint32_t i=0;i<data.reducedData[j].count;i++) {
+			S1 += ( modelRBF.VectorField(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
+			S2 += ( modelRBF.VectorFieldDerivative(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
+		}
+		T += (fitWeight[0]/data.reducedData[j].scales[0]) * S1 + (fitWeight[1]/data.reducedData[j].scales[1]) * S2;
+	}
+	return T;
+}
+
+void ModelReducedProducer::Fit( ModelReduced& reduced, const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const {
 	MatrixXd A, B, Atemp, Btemp, z;
 
 	uint16_t dimension = data.reducedData[0].dimension;
 	uint16_t m = dimension + numRBFs;
 
-	ModelReduced reduced;
-	reduced.Create( dimension, parameterDimension, numRBFs );
-
-	reduced.model.SetCentresRandom( data.ComputeBoundingBox() );
-
-	A.setZero(m*(data.numParameters+1),m*(data.numParameters+1));
-	B.setZero(m*(data.numParameters+1),dimension);
+	A.setZero(m*(parameterDimension+1),m*(parameterDimension+1));
+	B.setZero(m*(parameterDimension+1),dimension);
 
 	for(uint16_t i=0;i<data.numParameters;i++) {
 		ComputeMatrices( reduced.model, data.reducedData[i], parameters[i], Atemp, Btemp );
@@ -81,20 +108,26 @@ ModelReduced ModelReducedProducer::ComputeModelReduced( const ReducedDataSystem&
 			reduced.model.weights[j] = z.col(dimension+j);
 		}
 	}
-	return std::move(reduced);
 }
 
-double ModelReducedProducer::ComputeTotalCost( ModelReduced& model, const ReducedDataSystem& data, const VectorXd* parameters ) const {
-	double T = 0.0;
-	for(uint16_t j=0;j<data.numParameters;j++) {
-		double S1 = 0.0, S2 = 0.0;
-		ModelRBF modelRBF = model.ComputeModelRBF( parameters[j] );
-		for(uint32_t i=0;i<data.reducedData[j].count;i++) {
-			S1 += ( modelRBF.VectorField(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
-			S2 += ( modelRBF.VectorFieldDerivative(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
+ModelReduced ModelReducedProducer::BruteForce( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters, uint32_t numIterations ) const {
+	double Sft = 0.0, Sf = -1.0;
+
+	ModelReduced reduced, best;
+	reduced.Create(data.reducedData[0].dimension,parameterDimension,numRBFs);
+	AABB box = data.ComputeBoundingBox();
+	box.Scale(1.1);
+
+	for(uint32_t i=0;i<numIterations;i++) {
+		reduced.model.SetCentresRandom( box );
+		Fit(reduced,data,parameterDimension,parameters);
+		Sft = ComputeTotalCost(reduced,data,parameters);
+
+		if( Sft < Sf || i==0 ) {
+			Sf = Sft;
+			best = reduced;
+			cout << i << ", " << Sf << endl;
 		}
-		T += (fitWeight[0]/data.reducedData[j].scales[0]) * S1 + (fitWeight[1]/data.reducedData[j].scales[1]) * S2;
 	}
-	return T;
+	return std::move(best);
 }
-

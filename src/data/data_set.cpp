@@ -170,15 +170,16 @@ bool DataSystem::Load( const char* filename ) {
 	}
 	cout << "Loading system " << filename << endl << endl;
 	numParameters = 0;
-	uint16_t dt;
+	uint16_t dt, pDim;
 	bool binary;
-	in >> binary >> dt >> numParameters >> dimension >> parameterDimension;
+	in >> binary >> dt >> numParameters >> dimension >> pDim;
 	if( !numParameters )
 		return false;
 	
+	parameterDimension = (uint8_t)pDim;
 	cout << "State Dimension: " << dimension << endl;
 	cout << "Parameter Samples: " << numParameters << endl;
-	cout << "Parameter Dimension: " << parameterDimension << endl << endl;
+	cout << "Parameter Dimension: " << pDim << endl << endl;
 
 	dataSets = new DataSet [numParameters];
 	parameters = new VectorXd [numParameters];
@@ -210,10 +211,10 @@ bool DataSystem::LoadSetBinary( const char* filename, uint32_t i ) {
 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 
-	cout << " - " << numPoints << " points" << endl << endl;
-
 	parameters[i].setZero(parameterDimension);
 	in.read((char*)&parameters[i](0),sizeof(double)*parameterDimension);
+
+	cout << " - points = " << numPoints << ", parameter(0) = " << parameters[i](0) << endl << endl;
 	
 	dataSets[i].Create(numPoints,dimension);
 	uint32_t k=0;
@@ -241,13 +242,13 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i ) {
 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 
-	cout << " - " << numPoints << " points" << endl << endl;
-
 	parameters[i].setZero(parameterDimension);
 	for(uint16_t j=0;j<parameterDimension;j++) {
 		in >> parameters[i](j);
 	}
-	
+
+	cout << " - points = " << numPoints << ", parameter(0) = " << parameters[i](0) << endl << endl;
+
 	dataSets[i].Create(numPoints,dimension);
 	uint32_t k=0, j=0;
 	while( !in.eof() ) {

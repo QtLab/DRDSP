@@ -52,15 +52,15 @@ void ModelReduced::OutputText( const char *filename ) const {
 	ofstream out;
 	out.open(filename);
 	out.precision(16);
-	out << dimension << " " << model.numRBFs << " " << parameterDimension << endl;
+	out << dimension << "," << model.numRBFs << "," << (uint16_t)parameterDimension << endl;
 	for(int i=0;i<affine.coeffs.rows();i++) {	
 		for(int j=0;j<affine.coeffs.cols();j++)
-			out << affine.coeffs(i,j) << " ";
+			out << affine.coeffs(i,j) << ",";
 		out << endl;
 	}
 	for(uint16_t k=0;k<model.numRBFs;k++) {
 		for(uint16_t j=0;j<dimension;j++)
-			out << model.rbfs[k].centre(j) << " ";
+			out << model.rbfs[k].centre(j) << ",";
 		out << endl;
 	}
 	out.close();

@@ -9,21 +9,30 @@
 using namespace std;
 using namespace DRDSP;
 
+struct Options {
+	Options() : numIterations(10), maxPoints(20), targetDimension(2), numRBFs(30) {}
+	uint32_t numIterations, maxPoints;
+	uint16_t targetDimension, numRBFs;
+};
+
+Options GetOptions( int argc, char** argv ) {
+	Options options;
+
+	if( argc >= 2 ) options.targetDimension = (uint16_t)atoi(argv[1]);
+	if( argc >= 3 ) options.numRBFs = (uint16_t)atoi(argv[2]);
+	if( argc >= 4 ) options.maxPoints = (uint32_t)atoi(argv[3]);
+	if( argc >= 5 ) options.numIterations = (uint32_t)atoi(argv[4]);
+
+	return options;
+}
+
 int main( int argc, char** argv ) {
 
-	uint16_t targetDimension = 2;
-	if( argc >= 2 ) {
-		targetDimension = (uint16_t)atoi(argv[1]);
-	}
-
-	uint16_t numRBFs = 30;
-	if( argc >= 3 ) {
-		numRBFs = (uint16_t)atoi(argv[2]);
-	}
+	Options options = GetOptions(argc,argv);
 
 	// Create a new data set
 	DataSystem data;
-	//data.maxPoints = 200;
+	data.maxPoints = options.maxPoints;
 
 	// Load data from file
 	bool success = data.Load("data/brusselator.txt");
@@ -45,7 +54,7 @@ int main( int argc, char** argv ) {
 
 	// Find a projection
 	ProjSecant projSecant;
-	projSecant.targetDimension = targetDimension;
+	projSecant.targetDimension = options.targetDimension;
 	projSecant.targetMinProjectedLength = 0.7;
 
 	// Compute initial condition
@@ -61,17 +70,17 @@ int main( int argc, char** argv ) {
 
 	// Dynamics
 	Brusselator brusselator;
-	VectorXd parameter(1);
-	parameter(0) = 2.5;
 
 	// Compute projected data
+	cout << endl << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData(brusselator,data,projSecant.W);
 
 	// Obtain the reduced model
+	cout << endl << "Computing Reduced Model..." << endl;
 	ModelReducedProducer producer;
-	producer.numRBFs = numRBFs;
-	ModelReduced reducedModel = producer.ComputeModelReduced(reducedData,data.parameterDimension,data.parameters);
+	producer.numRBFs = options.numRBFs;
+	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
 
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
@@ -80,8 +89,6 @@ int main( int argc, char** argv ) {
 	//reducedData.WriteVectorsText("output/p2.5-vectors.csv");
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteText("output/projection.csv");
-
-	
 
 	return 0;
 }
