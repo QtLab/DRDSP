@@ -94,7 +94,33 @@ void ReducedData::Destroy() {
 	count = 0;
 }
 
-void ReducedData::ComputeData( ModelOriginal& original, const DataSet& data, const VectorXd& parameter, const MatrixXd& W ) {
+void ReducedData::ComputeData( Model& original, const DataSet& data, const MatrixXd& W ) {
+	Create( (uint16_t)W.cols(), data.count );
+
+	for(uint32_t i=0;i<count;i++) {
+		//original.PrepareOptimizations( data.points[i] );
+		points[i] = W.adjoint() * data.points[i];
+		vectors[i] = W.adjoint() * original.VectorField( data.points[i] );
+		derivatives[i] = W.adjoint() * original.Partials( data.points[i] ) * W;
+	}
+	scales[0] = ComputeVectorScale();
+	scales[1] = ComputeDerivativeScale();
+}
+
+void ReducedData::ComputeData( ModelParameterized& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
+	Create( (uint16_t)W.cols(), data.count );
+
+	for(uint32_t i=0;i<count;i++) {
+		//original.PrepareOptimizations( data.points[i], parameter );
+		points[i] = W.adjoint() * data.points[i];
+		vectors[i] = W.adjoint() * original.VectorField( data.points[i], parameter );
+		derivatives[i] = W.adjoint() * original.Partials( data.points[i], parameter ) * W;
+	}
+	scales[0] = ComputeVectorScale();
+	scales[1] = ComputeDerivativeScale();
+}
+
+void ReducedData::ComputeData( ModelParameterizedEmbedded& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
 	Create( (uint16_t)W.cols(), data.count );
 
 	static double stabilityFactor = 1.0;
@@ -102,43 +128,123 @@ void ReducedData::ComputeData( ModelOriginal& original, const DataSet& data, con
 	MatrixXd A;
 
 	for(uint32_t i=0;i<count;i++) {
-		original.PrepareOptimizations( data.points[i], parameter );
+		//original.PrepareOptimizations( data.points[i], parameter );
 
-		points[i] = W.adjoint() * data.points[i];
+		points[i] = W.adjoint() * original.embedding.Evaluate(data.points[i]);
 		vectors[i] = W.adjoint() * original.VectorField( data.points[i], parameter );
 
-		if( original.componentWise ) {
-			if( original.Euclidean ) {
-				for(uint32_t c1=0;c1<original.oDim;c1++)
-					for(uint32_t c2=0;c2<original.oDim;c2++) {
-						double temp = original.VectorFieldDCW( data.points[i], parameter, c1, c2 );
-						if( temp != 0.0 ) {
-							for(uint16_t k=0;k<dimension;k++)
-								for(uint16_t j=0;j<dimension;j++)
-									derivatives[i](j,k) += W.adjoint()(j,c1) * temp * W(c2,k);
-						}
-					}
-			}
-		} else {
-			if( original.Euclidean ) {
-				derivatives[i] = W.adjoint() * original.VectorFieldD( data.points[i], parameter ) * W;
-			} else {
-				JacobiSVD<MatrixXd> svd(W.adjoint() * original.embedding->Derivative(original.embedding->Inverse(data.points[i])),ComputeThinU);
-				uint32_t rank = 0;
-				double tolerance = original.oDim * eps(svd.singularValues()(0));
-				for(int j=0;j<svd.nonzeroSingularValues();j++) {
-					if( svd.singularValues()(j) > tolerance )
-						rank++;
-					else break;
-				}
-				A = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();
-				derivatives[i] = W.adjoint() * original.VectorFieldD( data.points[i], parameter ) * W * A - stabilityFactor * ( MatrixXd::Identity(A.rows(),A.cols()) - A );
-			}
-
+		JacobiSVD<MatrixXd> svd(W.adjoint() * original.embedding.Derivative(data.points[i]),ComputeThinU);
+		uint32_t rank = 0;
+		double tolerance = original.model.dimension * eps(svd.singularValues()(0));
+		for(int j=0;j<svd.nonzeroSingularValues();j++) {
+			if( svd.singularValues()(j) > tolerance )
+				rank++;
+			else break;
 		}
-
+		A = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();
+		derivatives[i] = W.adjoint() * original.Partials( data.points[i], parameter ) * original.embedding.DerivativeAdjoint(data.points[i]) * W * A - stabilityFactor * ( MatrixXd::Identity(A.rows(),A.cols()) - A );
 	}
+	scales[0] = ComputeVectorScale();
+	scales[1] = ComputeDerivativeScale();
+}
 
+void ReducedData::ComputeData( ModelCW& original, const DataSet& data, const MatrixXd& W ) {
+	Create( (uint16_t)W.cols(), data.count );
+
+	for(uint32_t i=0;i<count;i++) {
+		//original.PrepareOptimizations( data.points[i] );
+
+		points[i] = W.adjoint() * data.points[i];
+
+		for(uint32_t j=0;j<dimension;j++)
+			for(uint32_t k=0;k<original.dimension;k++)
+				vectors[i](j) = W(k,j) * original.VectorField( data.points[i], k );
+
+		for(uint32_t c1=0;c1<original.dimension;c1++)
+			for(uint32_t c2=0;c2<original.dimension;c2++) {
+				double temp = original.Partials( data.points[i], c1, c2 );
+				if( temp != 0.0 ) {
+					for(uint16_t k=0;k<dimension;k++)
+						for(uint16_t j=0;j<dimension;j++)
+							derivatives[i](j,k) += W(c1,j) * temp * W(c2,k);
+				}
+			}
+	}
+	scales[0] = ComputeVectorScale();
+	scales[1] = ComputeDerivativeScale();
+}
+
+void ReducedData::ComputeData( ModelParameterizedCW& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
+	Create( (uint16_t)W.cols(), data.count );
+
+	for(uint32_t i=0;i<count;i++) {
+		//original.PrepareOptimizations( data.points[i], parameter );
+
+		points[i] = W.adjoint() * data.points[i];
+
+		for(uint32_t j=0;j<dimension;j++)
+			for(uint32_t k=0;k<original.dimension;k++)
+				vectors[i](j) = W(k,j) * original.VectorField( data.points[i], parameter, k );
+
+		for(uint32_t c1=0;c1<original.dimension;c1++)
+			for(uint32_t c2=0;c2<original.dimension;c2++) {
+				double temp = original.Partials( data.points[i], parameter, c1, c2 );
+				if( temp != 0.0 ) {
+					for(uint16_t k=0;k<dimension;k++)
+						for(uint16_t j=0;j<dimension;j++)
+							derivatives[i](j,k) += W(c1,j) * temp * W(c2,k);
+				}
+			}
+	}
+	scales[0] = ComputeVectorScale();
+	scales[1] = ComputeDerivativeScale();
+}
+
+void ReducedData::ComputeData( ModelParameterizedEmbeddedCW& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
+	Create( (uint16_t)W.cols(), data.count );
+
+	static double stabilityFactor = 1.0;
+
+	MatrixXd A, dPhi, tempMatrix;
+	
+	for(uint32_t i=0;i<count;i++) {
+		//original.PrepareOptimizations( data.points[i], parameter );
+		dPhi.setZero(dimension,original.embedding.eDim);
+		tempMatrix.setZero(dimension,dimension);
+
+		points[i] = W.adjoint() * original.embedding.Evaluate(data.points[i]);
+		for(uint32_t j=0;j<dimension;j++)
+			for(uint32_t k=0;k<original.embedding.eDim;k++) {
+				vectors[i](j) = W(k,j) * original.VectorField( data.points[i], parameter, k );
+				for(uint32_t c=0;c<original.embedding.oDim;c++)
+					dPhi(j,c) += W(k,j) * original.embedding.Derivative(data.points[i],k,c);
+			}
+
+		JacobiSVD<MatrixXd> svd(dPhi,ComputeThinU);
+		uint32_t rank = 0;
+		double tolerance = original.model.dimension * eps(svd.singularValues()(0));
+		for(int j=0;j<svd.nonzeroSingularValues();j++) {
+			if( svd.singularValues()(j) > tolerance )
+				rank++;
+			else break;
+		}
+		A = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();
+		
+		for(uint32_t c1=0;c1<original.model.dimension;c1++)
+			for(uint32_t c2=0;c2<original.model.dimension;c2++) {
+				double temp1 = original.Partials( data.points[i], parameter, c1, c2 );
+				if( temp1 == 0.0 ) continue;
+				for(uint32_t c3=0;c3<original.embedding.eDim;c3++) {
+					double temp2 = original.embedding.DerivativeAdjoint(data.points[i],c2,c3);
+					if( temp2 == 0.0 ) continue;
+					double temp = temp1 * temp2;
+					for(uint16_t k=0;k<dimension;k++)
+						for(uint16_t j=0;j<dimension;j++)
+							tempMatrix(j,k) += W(c1,j) * temp * W(c2,k);
+				}
+			}
+		derivatives[i] = tempMatrix * A - stabilityFactor * ( MatrixXd::Identity(A.rows(),A.cols()) - A );
+	}
 	scales[0] = ComputeVectorScale();
 	scales[1] = ComputeDerivativeScale();
 }

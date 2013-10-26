@@ -87,6 +87,12 @@
     <ClCompile Include="..\..\..\src\data\aabb.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\model_orig.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\embedding.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\DRDSP\types.h">

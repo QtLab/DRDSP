@@ -1,57 +1,97 @@
+#include <iostream>
 #include <DRDSP/data/data_set.h>
 #include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
-#include <DRDSP/dynamics/model_rbf_producer.h>
+#include <DRDSP/dynamics/model_reduced_producer.h>
 
-//#include "pendulum.h"
+#include "pendulum.h"
 
+using namespace std;
 using namespace DRDSP;
 
-int main() {
+struct Options {
+	Options() : numIterations(10), maxPoints(20), targetDimension(2), numRBFs(30) {}
+	uint32_t numIterations, maxPoints;
+	uint16_t targetDimension, numRBFs;
+};
+
+Options GetOptions( int argc, char** argv ) {
+	Options options;
+
+	if( argc >= 2 ) options.targetDimension = (uint16_t)atoi(argv[1]);
+	if( argc >= 3 ) options.numRBFs = (uint16_t)atoi(argv[2]);
+	if( argc >= 4 ) options.maxPoints = (uint32_t)atoi(argv[3]);
+	if( argc >= 5 ) options.numIterations = (uint32_t)atoi(argv[4]);
+
+	return options;
+}
+
+int main( int argc, char** argv ) {
+
+	Options options = GetOptions(argc,argv);
 
 	// Create a new data set
-	DataSet data;
+	DataSystem data;
+	data.maxPoints = options.maxPoints;
 
 	// Load data from file
-	data.LoadSetBinary("data/p1.8.bin");
+	bool success = data.Load("data/pendulum.txt");
+	if( !success ) {
+		return 0;
+	}
 
-	// Pre-compute secants if less than 128 MB
-	Secants secants;
-	secants.ComputeFromData( data, 1 << 27 );
+	// The pendulum example
+	PendulumFlat pendulum;
+
+	// Embed the data
+	DataSystem dataEmbedded = pendulum.embedding.EmbedData(data);
+
+	// Pre-compute secants if less than 64 MB
+	Secants* secants = new Secants [dataEmbedded.numParameters];
+	Secants* newSecants = new Secants [dataEmbedded.numParameters];
+	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
+		secants[i].ComputeFromData( dataEmbedded.dataSets[i], 1 << 26 );
 
 	// Secant culling
-	Secants newSecants = secants.CullSecantsDegrees( 10.0 );
+	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
+		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
+
+	delete[] secants;
 
 	// Find a projection
 	ProjSecant projSecant;
-	projSecant.targetDimension = 2;
+	projSecant.targetDimension = options.targetDimension;
 	projSecant.targetMinProjectedLength = 0.7;
 
 	// Compute initial condition
-	projSecant.GetInitial(data);
+	projSecant.GetInitial(dataEmbedded);
 
 	// Optimize over Grassmannian
-	projSecant.Find(newSecants);
+	projSecant.Find(newSecants,dataEmbedded.numParameters);
 
 	// Print some statistics
-	projSecant.AnalyseSecants(newSecants);
+	projSecant.AnalyseSecants(newSecants,dataEmbedded.numParameters);
 
-	// Dynamics
-	//Pendulum brusselator;
-	VectorXd parameter(1);
-	parameter(0) = 2.0;
+	delete[] newSecants;
 
 	// Compute projected data
-	ReducedData reducedData;
-	//reducedData.ComputeData(brusselator,data,parameter,projSecant.W);
+	cout << endl << "Computing Reduced Data..." << endl;
+	ReducedDataSystem reducedData;
+	reducedData.ComputeData(pendulum,data,projSecant.W);
 
 	// Obtain the reduced model
-	ModelRBFProducer producer;
-	//producer.numRBFs = numRBFs;
+	cout << endl << "Computing Reduced Model..." << endl;
+	ModelReducedProducer producer;
+	producer.numRBFs = options.numRBFs;
+	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
 
-	// Find a reduced model for the projected data using 100 radial basis functions
-	ModelRBF reducedModel = producer.BruteForce(reducedData,100);
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
+	reducedModel.OutputText("output/reduced.csv");
+	//reducedData.WritePointsText("output/p2.5-points.csv");
+	//reducedData.WriteVectorsText("output/p2.5-vectors.csv");
+	projSecant.WriteBinary("output/projection.bin");
+	projSecant.WriteText("output/projection.csv");
 
 	return 0;
 }

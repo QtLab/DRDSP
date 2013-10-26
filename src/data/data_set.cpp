@@ -16,7 +16,6 @@ DataSet::DataSet( const DataSet& rhs ) {
 }
 
 DataSet::DataSet( DataSet&& rhs ) {
-	delete[] points;
 	points = rhs.points;
 	count = rhs.count;
 	dimension = rhs.dimension;
@@ -114,19 +113,19 @@ bool DataSet::LoadSetText( const char* filename ) {
 	return true;
 }
 
-DataSystem::DataSystem() : dimension(0), numParameters(0), parameterDimension(0), maxPoints(0) {
+DataSystem::DataSystem() : dimension(0), numParameters(0), parameterDimension(0), maxPoints(0), dataSets(nullptr), parameters(nullptr) {
 }
 
 DataSystem::DataSystem( const DataSystem& rhs ) {
 	Create(rhs.dimension,rhs.numParameters,rhs.parameterDimension);
 	maxPoints = rhs.maxPoints;
-	for(uint32_t i=0;i<numParameters;i++)
+	for(uint32_t i=0;i<numParameters;i++) {
 		dataSets[i] = rhs.dataSets[i];
+		parameters[i] = rhs.parameters[i];
+	}
 }
 
 DataSystem::DataSystem( DataSystem&& rhs ) {
-	delete[] dataSets;
-	delete[] parameters;
 	dataSets = rhs.dataSets;
 	parameters = rhs.parameters;
 	dimension = rhs.dimension;

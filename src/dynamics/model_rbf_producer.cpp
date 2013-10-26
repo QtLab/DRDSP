@@ -74,9 +74,8 @@ void ModelRBFProducer::Fit( ModelRBF& model, const ReducedData& data ) const {
 ModelRBF ModelRBFProducer::BruteForce( const ReducedData& data, uint32_t numIterations ) const {
 	double Sft = 0.0, Sf = -1.0;
 
-	ModelRBF model( data.dimension, numRBFs );
+	ModelRBF model( data.dimension, numRBFs ), best;
 	AABB box = data.ComputeBoundingBox();
-	ModelRBF best;
 
 	for(uint32_t i=0;i<numIterations;i++) {
 		model.SetCentresRandom( box );

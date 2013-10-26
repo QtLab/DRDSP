@@ -17,7 +17,10 @@ namespace DRDSP {
 		ReducedDataSystem& operator=( ReducedDataSystem&& rhs );
 		void Create( uint16_t N );
 		void Destroy();
-		void ComputeData( ModelOriginal& model, const DataSystem& data, const MatrixXd& W );
+		void ComputeData( ModelParameterized& model, const DataSystem& data, const MatrixXd& W );
+		void ComputeData( ModelParameterizedCW& model, const DataSystem& data, const MatrixXd& W );
+		void ComputeData( ModelParameterizedEmbedded& model, const DataSystem& data, const MatrixXd& W );
+		void ComputeData( ModelParameterizedEmbeddedCW& model, const DataSystem& data, const MatrixXd& W );
 		AABB ComputeBoundingBox() const;
 	};
 

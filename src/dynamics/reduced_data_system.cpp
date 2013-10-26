@@ -57,10 +57,31 @@ void ReducedDataSystem::Destroy() {
 	numParameters = 0;
 }
 
-void ReducedDataSystem::ComputeData( ModelOriginal& original, const DataSystem& data, const MatrixXd& W ) {
+void ReducedDataSystem::ComputeData( ModelParameterized& original, const DataSystem& data, const MatrixXd& W ) {
 	Create( data.numParameters );
 	for(uint16_t i=0;i<numParameters;i++) {
-		reducedData[i].ComputeData(original,data.dataSets[i],data.parameters[i],W);
+		reducedData[i].ComputeData(original,data.parameters[i],data.dataSets[i],W);
+	}
+}
+
+void ReducedDataSystem::ComputeData( ModelParameterizedCW& original, const DataSystem& data, const MatrixXd& W ) {
+	Create( data.numParameters );
+	for(uint16_t i=0;i<numParameters;i++) {
+		reducedData[i].ComputeData(original,data.parameters[i],data.dataSets[i],W);
+	}
+}
+
+void ReducedDataSystem::ComputeData( ModelParameterizedEmbedded& original, const DataSystem& data, const MatrixXd& W ) {
+	Create( data.numParameters );
+	for(uint16_t i=0;i<numParameters;i++) {
+		reducedData[i].ComputeData(original,data.parameters[i],data.dataSets[i],W);
+	}
+}
+
+void ReducedDataSystem::ComputeData( ModelParameterizedEmbeddedCW& original, const DataSystem& data, const MatrixXd& W ) {
+	Create( data.numParameters );
+	for(uint16_t i=0;i<numParameters;i++) {
+		reducedData[i].ComputeData(original,data.parameters[i],data.dataSets[i],W);
 	}
 }
 

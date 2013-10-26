@@ -20,6 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\examples\pendulum\main.cpp" />
+    <ClCompile Include="..\..\..\..\examples\pendulum\pendulum.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\examples\pendulum\pendulum.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{638E94A9-BC05-4D11-AEAB-391563E05C08}</ProjectGuid>

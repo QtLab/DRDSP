@@ -96,7 +96,7 @@ void ModelReducedProducer::Fit( ModelReduced& reduced, const ReducedDataSystem& 
 
 	Eigen::FullPivLU<MatrixXd> lu(A);
 	if( !lu.isInjective() ) {
-		cout << "Matrix not injective, rank = " << lu.rank() << " != (" << lu.matrixLU().rows() << "," << lu.matrixLU().cols() << ")" << endl;
+		//cout << "Matrix not injective, rank = " << lu.rank() << " != (" << lu.matrixLU().rows() << "," << lu.matrixLU().cols() << ")" << endl;
 	} else {
 		reduced.affine.coeffs = lu.solve(B).transpose();
 	}

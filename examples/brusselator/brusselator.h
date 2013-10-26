@@ -5,20 +5,14 @@
 
 using namespace DRDSP;
 
-struct Brusselator : ModelOriginal {
+struct BrusselatorBase {
 	double A, D1, D2;
 	static const uint32_t nX = 32;
 	static const uint32_t nY = 32;
 	static const uint32_t N = nX * nY;
 	double dx, dy;
 
-	Brusselator();
-
-	VectorXd VectorField( const VectorXd &X, const VectorXd &beta );
-	MatrixXd VectorFieldD( const VectorXd &X, const VectorXd &beta );
-
-	double VectorFieldCW( const VectorXd &x, const VectorXd &beta, uint32_t k );
-	double VectorFieldDCW( const VectorXd &x, const VectorXd &beta, uint32_t k1, uint32_t k2 );
+	BrusselatorBase();
 
 protected:
 	inline double delta( uint32_t i, uint32_t j ) const;
@@ -38,6 +32,18 @@ protected:
 	uint32_t im1( uint32_t i ) const;
 	uint32_t jp1( uint32_t j ) const;
 	uint32_t jm1( uint32_t j ) const;
+};
+
+struct Brusselator : ModelParameterized, BrusselatorBase {
+	Brusselator();
+	VectorXd VectorField( const VectorXd &X, const VectorXd &beta );
+	MatrixXd Partials( const VectorXd &X, const VectorXd &beta );
+};
+
+struct BrusselatorCW : ModelParameterizedCW, BrusselatorBase {
+	BrusselatorCW();
+	double VectorField( const VectorXd &x, const VectorXd &beta, uint32_t k );
+	double Partials( const VectorXd &x, const VectorXd &beta, uint32_t k1, uint32_t k2 );
 };
 
 #endif

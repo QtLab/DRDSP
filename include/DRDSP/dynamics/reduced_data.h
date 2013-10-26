@@ -23,7 +23,15 @@ namespace DRDSP {
 		ReducedData& operator=( ReducedData&& rhs );
 		void Create( uint16_t dim, uint32_t numPoints );
 		void Destroy();
-		void ComputeData( ModelOriginal& model, const DataSet& data, const VectorXd& parameter, const MatrixXd& W );
+		
+		void ComputeData( Model& model, const DataSet& data, const MatrixXd& W );
+		void ComputeData( ModelCW& model, const DataSet& data, const MatrixXd& W );
+		void ComputeData( ModelParameterized& model, const VectorXd& parameter, const DataSet& data, const MatrixXd& W );
+		void ComputeData( ModelParameterizedCW& model, const VectorXd& parameter, const DataSet& data, const MatrixXd& W );
+		void ComputeData( ModelEmbedded& model, const DataSet& data, const MatrixXd& W );
+		void ComputeData( ModelParameterizedEmbedded& model, const VectorXd& parameter, const DataSet& data, const MatrixXd& W );
+		void ComputeData( ModelParameterizedEmbeddedCW& model, const VectorXd& parameter, const DataSet& data, const MatrixXd& W );
+		
 		AABB ComputeBoundingBox() const;
 		double ComputeVectorScale();
 		double ComputeDerivativeScale();
