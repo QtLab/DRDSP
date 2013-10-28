@@ -3,6 +3,7 @@
 #include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/model_reduced_producer.h>
+#include <DRDSP/dynamics/generate_data.h>
 
 #include "pendulum.h"
 
@@ -92,6 +93,9 @@ int main( int argc, char** argv ) {
 	//reducedData.WriteVectorsText("output/p2.5-vectors.csv");
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteText("output/projection.csv");
+
+	
+
 
 	return 0;
 }

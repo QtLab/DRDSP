@@ -43,7 +43,9 @@
     <ClInclude Include="..\..\..\include\DRDSP\data\data_typed.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\secants.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf_producer.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_orig.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf.h" />
@@ -52,6 +54,8 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\radial_basis.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\solver.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\grassmannian.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\inner_product.h" />

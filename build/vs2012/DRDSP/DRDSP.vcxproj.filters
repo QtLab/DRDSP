@@ -173,5 +173,17 @@
     <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h">
       <Filter>Header Files\data</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\solver.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
