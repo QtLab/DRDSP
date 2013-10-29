@@ -11,7 +11,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(10), maxPoints(20), targetDimension(2), numRBFs(30) {}
+	Options() : numIterations(100), maxPoints(0), targetDimension(3), numRBFs(60) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -30,7 +30,7 @@ Options GetOptions( int argc, char** argv ) {
 int main( int argc, char** argv ) {
 
 	Options options = GetOptions(argc,argv);
-
+/*
 	// Create a new data set
 	DataSystem data;
 	data.maxPoints = options.maxPoints;
@@ -40,18 +40,32 @@ int main( int argc, char** argv ) {
 	if( !success ) {
 		return 0;
 	}
-
+*/
 	// The pendulum example
 	PendulumFlat pendulum;
 
+	// Generate the data
+	DataGenerator dataGenerator(pendulum.model);
+	dataGenerator.pMin = 1.8;
+	dataGenerator.pMax = 1.825;
+	dataGenerator.pDelta = 0.005;
+	dataGenerator.initial(0) = 0.3;
+	dataGenerator.initial(1) = 0.3;
+	dataGenerator.tStart = 10000;
+	dataGenerator.tInterval = 4;
+	dataGenerator.print = 200;
+	dataGenerator.rk.dtmax = 0.001;
+
+	DataSystem data = dataGenerator.GenerateDataSystem();
+	
 	// Embed the data
 	DataSystem dataEmbedded = pendulum.embedding.EmbedData(data);
-
-	// Pre-compute secants if less than 64 MB
-	Secants* secants = new Secants [dataEmbedded.numParameters];
-	Secants* newSecants = new Secants [dataEmbedded.numParameters];
+	
+	// Pre-compute secants
+	SecantsPreComputed* secants = new SecantsPreComputed [dataEmbedded.numParameters];
+	SecantsPreComputed* newSecants = new SecantsPreComputed [dataEmbedded.numParameters];
 	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
-		secants[i].ComputeFromData( dataEmbedded.dataSets[i], 1 << 26 );
+		secants[i].ComputeFromData( dataEmbedded.dataSets[i] );
 
 	// Secant culling
 	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
@@ -96,6 +110,6 @@ int main( int argc, char** argv ) {
 
 	
 
-
+	system("PAUSE");
 	return 0;
 }

@@ -15,10 +15,13 @@ namespace DRDSP {
 		DataSet( const DataSet& rhs );
 		DataSet( DataSet&& rhs );
 		~DataSet();
+		DataSet& operator=( const DataSet& rhs );
+		DataSet& operator=( DataSet&& rhs );
 		void Create( uint32_t numPoints, uint32_t dim );
 		void Destroy();
-		bool LoadSetBinary( const char* filename );
-		bool LoadSetText( const char* filename );
+		bool LoadBinary( const char* filename );
+		bool LoadText( const char* filename );
+		void WriteText( const char* filename ) const;
 		DataSet ProjectData( const MatrixXd& W ) const;
 		
 		VectorXd& operator[]( uint32_t i ) {
@@ -42,6 +45,8 @@ namespace DRDSP {
 		DataSystem( const DataSystem& rhs );
 		DataSystem( DataSystem&& rhs );
 		~DataSystem();
+		DataSystem& operator=( const DataSystem& rhs );
+		DataSystem& operator=( DataSystem&& rhs );
 		void Create( uint32_t dim, uint16_t numParams, uint8_t paramDim );
 		void Destroy();
 		bool Load( const char* filename );

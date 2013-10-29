@@ -12,7 +12,7 @@ ProjSecant::ProjSecant() : targetMinProjectedLength(0.5),
 						   maxIterations(30) {
 }
 
-void ProjSecant::Find( const Secants& secants ) {
+void ProjSecant::Find( const SecantsPreComputed& secants ) {
 	W.setIdentity(secants.dimension,targetDimension);
 
 	GradientDescent<Grassmannian,MetricFrobenius> optimiziation;
@@ -28,7 +28,7 @@ void ProjSecant::Find( const Secants& secants ) {
 	optimiziation.Optimize( W );
 }
 
-void ProjSecant::Find( const Secants* secants, uint16_t N ) {
+void ProjSecant::Find( const SecantsPreComputed* secants, uint16_t N ) {
 	W.setIdentity(secants[0].dimension,targetDimension);
 	
 	SecantsSystem ss;
@@ -157,7 +157,7 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 	delete[] spread;
 }
 
-void ProjSecant::AnalyseSecants( const Secants* secants, uint16_t N ) const {
+void ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, uint16_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
 	uint32_t numSecants = 0;
 	for(uint16_t i=0;i<N;i++) {
@@ -173,15 +173,15 @@ void ProjSecant::AnalyseSecants( const Secants* secants, uint16_t N ) const {
 	cout << endl << "Projected Lengths: Range = [ " << xMin << ", " << xMax << " ], Mean = " << xMean << endl;
 }
 
-void ProjSecant::AnalyseSecants( const Secants& secants ) const {
+void ProjSecant::AnalyseSecants( const SecantsPreComputed& secants ) const {
 	AnalyseSecants(&secants,1);
 }
 
-double ProjSecant::CostFunction( const Secants& secants, const MatrixXd &X ) {
+double ProjSecant::CostFunction( const SecantsPreComputed& secants, const MatrixXd &X ) {
 	
 	double sum = 0.0;
 
-	if( secants.weighted ) {
+	if( secants.weights ) {
 		uint32_t sumWeights = 0;
 		for(uint32_t j=0;j<secants.count;j++) {
 			sumWeights += secants.weights[j];
@@ -197,7 +197,7 @@ double ProjSecant::CostFunction( const Secants& secants, const MatrixXd &X ) {
 	return sum;
 }
 
-double ProjSecant::CostFunction( const Secants* secants, uint16_t N, const MatrixXd &X ) {
+double ProjSecant::CostFunction( const SecantsPreComputed* secants, uint16_t N, const MatrixXd &X ) {
 	
 	double sum = 0.0;
 
@@ -207,14 +207,14 @@ double ProjSecant::CostFunction( const Secants* secants, uint16_t N, const Matri
 	return sum / N;
 }
 
-MatrixXd ProjSecant::CostFunctionDerivative( const Secants& secants, const MatrixXd &X ) {
+MatrixXd ProjSecant::CostFunctionDerivative( const SecantsPreComputed& secants, const MatrixXd &X ) {
 
 	MatrixXd sum;
 	sum.setZero(X.rows(),X.cols());
 	double projectedLength;
 	VectorXd secant, projectedSecant;
 
-	if( secants.weighted ) {
+	if( secants.weights ) {
 		uint32_t sumWeights = 0;
 		for(uint32_t j=0;j<secants.count;j++) {
 			sumWeights += secants.weights[j];
@@ -236,7 +236,7 @@ MatrixXd ProjSecant::CostFunctionDerivative( const Secants& secants, const Matri
 	return -sum;
 }
 
-MatrixXd ProjSecant::CostFunctionDerivative( const Secants* secants, uint16_t N, const MatrixXd &X ) {
+MatrixXd ProjSecant::CostFunctionDerivative( const SecantsPreComputed* secants, uint16_t N, const MatrixXd &X ) {
 	
 	MatrixXd sum = CostFunctionDerivative(secants[0],X);
 
@@ -247,7 +247,7 @@ MatrixXd ProjSecant::CostFunctionDerivative( const Secants* secants, uint16_t N,
 }
 
 double ProjSecant::Cost( const MatrixXd &X, const void* obj ) {
-	return CostFunction( *(const Secants*)obj, X );
+	return CostFunction( *(const SecantsPreComputed*)obj, X );
 }
 
 double ProjSecant::CostN( const MatrixXd &X, const void* obj ) {
@@ -256,7 +256,7 @@ double ProjSecant::CostN( const MatrixXd &X, const void* obj ) {
 }
 
 MatrixXd ProjSecant::GradCost( const MatrixXd &X, const void* obj ) {
-	return Grassmannian::HorizontalComponent( X, CostFunctionDerivative( *(const Secants*)obj, X ) );
+	return Grassmannian::HorizontalComponent( X, CostFunctionDerivative( *(const SecantsPreComputed*)obj, X ) );
 }
 
 MatrixXd ProjSecant::GradCostN( const MatrixXd &X, const void* obj ) {

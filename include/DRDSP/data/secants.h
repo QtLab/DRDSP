@@ -8,32 +8,43 @@ namespace DRDSP {
 
 	typedef uint16_t weightType;
 
+	struct SecantsPreComputed;
+
 	struct Secants {
-		VectorXd* secants;     // Pre-computed secants
-		weightType* weights;     // Secant weights produced by culling
-		uint32_t count;        // Number of secants
-		uint32_t dimension;
-		bool preComputed;
-		bool weighted;
+		uint32_t count, dimension;
 
 		Secants();
-		Secants( const Secants& rhs );
-		Secants( Secants&& rhs );
-		~Secants();
-		Secants& operator=( const Secants& rhs );
-		Secants& operator=( Secants&& rhs );
-		void ComputeFromData( const DataSet& dataSet, size_t preComputeSize = 0 );
-		VectorXd GetSecant( uint32_t k ) const;
-		Secants CullSecants( double tolerance ) const;
-		Secants CullSecantsDegrees( double degrees ) const;
-	protected:
-		void PreCompute();
+		virtual VectorXd GetSecant( uint32_t k ) const = 0;
+		SecantsPreComputed CullSecants( double tolerance ) const;
+		SecantsPreComputed CullSecantsDegrees( double degrees ) const;
+		SecantsPreComputed CullSecantsRadians( double radians ) const;
+	};
 
-		// For large sets, we determine each secant from the data points on demand
+	struct SecantsPreComputed : Secants {
+		VectorXd* secants;       // Pre-computed secants
+		weightType* weights;     // Secant weights produced by culling
+
+		SecantsPreComputed();
+		SecantsPreComputed( const SecantsPreComputed& rhs );
+		SecantsPreComputed( SecantsPreComputed&& rhs );
+		~SecantsPreComputed();
+		SecantsPreComputed& operator=( const SecantsPreComputed& rhs );
+		SecantsPreComputed& operator=( SecantsPreComputed&& rhs );
+		void ComputeFromData( const DataSet& dataSet );
+		VectorXd GetSecant( uint32_t k ) const;
+	};
+
+
+	// For large sets, we determine each secant from the data points on demand
+	struct SecantsData : Secants {
 		const DataSet* data;
+
+		void SetData( const DataSet& dataSet );
+		VectorXd GetSecant( uint32_t k ) const;
 		static uint32_t GetIndexI( uint32_t k, uint32_t N );
 		static uint32_t GetIndexJ( uint32_t k, uint32_t i, uint32_t N );
 	};
+
 
 }
 

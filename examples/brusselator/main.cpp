@@ -40,11 +40,11 @@ int main( int argc, char** argv ) {
 		return 0;
 	}
 
-	// Pre-compute secants if less than 64 MB
-	Secants* secants = new Secants [data.numParameters];
-	Secants* newSecants = new Secants [data.numParameters];
+	// Pre-compute secants
+	SecantsPreComputed* secants = new SecantsPreComputed [data.numParameters];
+	SecantsPreComputed* newSecants = new SecantsPreComputed [data.numParameters];
 	for(uint16_t i=0;i<data.numParameters;i++)
-		secants[i].ComputeFromData( data.dataSets[i], 1 << 26 );
+		secants[i].ComputeFromData( data.dataSets[i] );
 
 	// Secant culling
 	for(uint16_t i=0;i<data.numParameters;i++)

@@ -25,6 +25,7 @@
     <ClCompile Include="..\..\..\src\data\secants.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\embedding.cpp" />
+    <ClCompile Include="..\..\..\src\dynamics\generate_data.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_orig.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_rbf_producer.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_rbf.cpp" />
