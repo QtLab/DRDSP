@@ -1,14 +1,14 @@
-#include <DRDSP/dynamics/model_orig.h>
+#include <DRDSP/dynamics/model.h>
 
 using namespace DRDSP;
 
 ModelEmbedded::ModelEmbedded( Model& m, Embedding& e ) : model(m), embedding(e) {}
 
-VectorXd ModelEmbedded::VectorField( const VectorXd& state ) const {
+VectorXd ModelEmbedded::VectorField( const VectorXd& state ) {
 	return embedding.Derivative(state) * model.VectorField(state);
 }
 
-MatrixXd ModelEmbedded::Partials( const VectorXd& state ) const {
+MatrixXd ModelEmbedded::Partials( const VectorXd& state ) {
 
 	MatrixXd embeddingPartials2, result;
 	result.setZero(embedding.oDim,embedding.oDim);
@@ -27,7 +27,7 @@ MatrixXd ModelEmbedded::Partials( const VectorXd& state ) const {
 
 ModelEmbeddedCW::ModelEmbeddedCW( ModelCW& m, EmbeddingCW& e ) : model(m), embedding(e) {}
 
-double ModelEmbeddedCW::VectorField( const VectorXd& state, uint32_t i ) const {
+double ModelEmbeddedCW::VectorField( const VectorXd& state, uint32_t i ) {
 	double result = 0.0;
 
 	for(uint32_t j=0;j<embedding.oDim;j++) {
@@ -36,7 +36,7 @@ double ModelEmbeddedCW::VectorField( const VectorXd& state, uint32_t i ) const {
 	return result;
 }
 
-double ModelEmbeddedCW::Partials( const VectorXd& state, uint32_t i, uint32_t j ) const {
+double ModelEmbeddedCW::Partials( const VectorXd& state, uint32_t i, uint32_t j ) {
 	double result = 0.0;
 
 	for(uint32_t k=0;k<embedding.oDim;k++) {
@@ -48,11 +48,11 @@ double ModelEmbeddedCW::Partials( const VectorXd& state, uint32_t i, uint32_t j 
 
 ModelParameterizedEmbedded::ModelParameterizedEmbedded( ModelParameterized& m, Embedding& e ) : model(m), embedding(e) {}
 
-VectorXd ModelParameterizedEmbedded::VectorField( const VectorXd& state, const VectorXd& parameter ) const {
+VectorXd ModelParameterizedEmbedded::VectorField( const VectorXd& state, const VectorXd& parameter ) {
 	return embedding.Derivative(state) * model.VectorField(state,parameter);
 }
 
-MatrixXd ModelParameterizedEmbedded::Partials( const VectorXd& state, const VectorXd& parameter ) const {
+MatrixXd ModelParameterizedEmbedded::Partials( const VectorXd& state, const VectorXd& parameter ) {
 
 	MatrixXd embeddingPartials2, result;
 	result.setZero(embedding.eDim,embedding.oDim);
@@ -71,7 +71,7 @@ MatrixXd ModelParameterizedEmbedded::Partials( const VectorXd& state, const Vect
 
 ModelParameterizedEmbeddedCW::ModelParameterizedEmbeddedCW( ModelParameterizedCW& m, EmbeddingCW& e ) : model(m), embedding(e) {}
 
-double ModelParameterizedEmbeddedCW::VectorField( const VectorXd& state, const VectorXd& parameter, uint32_t i ) const {
+double ModelParameterizedEmbeddedCW::VectorField( const VectorXd& state, const VectorXd& parameter, uint32_t i ) {
 	double result = 0.0;
 
 	for(uint32_t j=0;j<embedding.oDim;j++) {
@@ -80,7 +80,7 @@ double ModelParameterizedEmbeddedCW::VectorField( const VectorXd& state, const V
 	return result;
 }
 
-double ModelParameterizedEmbeddedCW::Partials( const VectorXd& state, const VectorXd& parameter, uint32_t i, uint32_t j ) const {
+double ModelParameterizedEmbeddedCW::Partials( const VectorXd& state, const VectorXd& parameter, uint32_t i, uint32_t j ) {
 	double result = 0.0;
 
 	for(uint32_t k=0;k<embedding.oDim;k++) {

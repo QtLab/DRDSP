@@ -4,7 +4,7 @@
 #include <fstream>
 #include "../types.h"
 #include "dynamicalSystem.h"
-#include "model_orig.h"
+#include "model.h"
 #include "../data/data_set.h"
 
 using namespace std;

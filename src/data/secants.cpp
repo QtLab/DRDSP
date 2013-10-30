@@ -89,7 +89,6 @@ void SecantsPreComputed::ComputeFromData( const DataSet& data ) {
 	count = ( data.count * (data.count - 1) ) / 2;
 	size_t bytes = sizeof(double) * data.dimension * count;
 
-	cout << "Precomputing Secants..." << endl;
 	secants = new VectorXd [count];
 	uint32_t k = 0;
 	for(uint32_t i=0;i<data.count;i++) {
@@ -124,7 +123,6 @@ VectorXd SecantsData::GetSecant( uint32_t k ) const {
 }
 
 SecantsPreComputed Secants::CullSecants( double tolerance ) const {
-	cout << "Culling Secants..." << endl;
 	uint32_t culled = 0;
 	VectorXd si;
 	double dot;

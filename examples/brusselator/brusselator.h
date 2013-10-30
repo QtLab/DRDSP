@@ -1,7 +1,7 @@
 #ifndef INCLUDED_BRUSSELATOR
 #define INCLUDED_BRUSSELATOR
 #include <DRDSP/types.h>
-#include <DRDSP/dynamics/model_orig.h>
+#include <DRDSP/dynamics/model.h>
 
 using namespace DRDSP;
 

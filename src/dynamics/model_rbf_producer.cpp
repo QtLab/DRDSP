@@ -13,11 +13,11 @@ ModelRBFProducer::ModelRBFProducer() : numRBFs(30) {
 	fitWeight[1] = 1.0;
 }
 
-double ModelRBFProducer::ComputeTotalCost( const ModelRBF& model, const ReducedData& data ) const {
+double ModelRBFProducer::ComputeTotalCost( ModelRBF& model, const ReducedData& data ) const {
 	double S1 = 0.0, S2 = 0.0;
 	for(uint32_t i=0;i<data.count;i++) {
 		S1 += ( model.VectorField(data.points[i]) - data.vectors[i] ).squaredNorm();
-		S2 += ( model.VectorFieldDerivative(data.points[i]) - data.derivatives[i] ).squaredNorm();
+		S2 += ( model.Partials(data.points[i]) - data.derivatives[i] ).squaredNorm();
 	}
 	return (fitWeight[0]/data.scales[0]) * S1 + (fitWeight[1]/data.scales[1]) * S2;
 }

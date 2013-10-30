@@ -1,6 +1,6 @@
 #ifndef INCLUDED_DYNAMICS_MODEL_REDUCED_PRODUCER
 #define INCLUDED_DYNAMICS_MODEL_REDUCED_PRODUCER
-#include "model_orig.h"
+#include "model.h"
 #include "model_reduced.h"
 #include "reduced_data_system.h"
 

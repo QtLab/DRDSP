@@ -10,7 +10,7 @@ namespace DRDSP {
 		uint16_t numRBFs;
 	
 		ModelRBFProducer();
-		double ComputeTotalCost( const ModelRBF& model, const ReducedData& data ) const;
+		double ComputeTotalCost( ModelRBF& model, const ReducedData& data ) const;
 
 		ModelRBF ComputeModelRBF( const ReducedData& data );
 		void Fit( ModelRBF& model, const ReducedData& data ) const;

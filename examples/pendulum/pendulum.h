@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PENDULUM
 #define INCLUDED_PENDULUM
 #include <DRDSP/types.h>
-#include <DRDSP/dynamics/model_orig.h>
+#include <DRDSP/dynamics/model.h>
 
 using namespace DRDSP;
 
@@ -15,26 +15,26 @@ protected:
 	// fixed parameters
 	double length, mass, A, delta1, delta2;
 
-	double f1( double p );
-	double f2( double p );
-	double f3( double p, const VectorXd &b );
-	double f4( double p );
-	double g1( double p );
+	double f1( double p ) const;
+	double f2( double p ) const;
+	double f3( double p, const VectorXd &b ) const;
+	double f4( double p ) const;
+	double g1( double p ) const;
 
-	double phiDot( const VectorXd &x );
-	double thetaDot( const VectorXd &x );
-	double psiDot( const VectorXd &b );
-	double vpDot( const VectorXd &x, const VectorXd &b );
-	double vtDot( const VectorXd &x, const VectorXd &b);
+	double phiDot( const VectorXd &x ) const;
+	double thetaDot( const VectorXd &x ) const;
+	double psiDot( const VectorXd &b ) const;
+	double vpDot( const VectorXd &x, const VectorXd &b ) const;
+	double vtDot( const VectorXd &x, const VectorXd &b) const;
 
-	VectorXd G( const VectorXd &theta, const VectorXd &b );
-	MatrixXd DG( const VectorXd &x, const VectorXd &b );
+	VectorXd G( const VectorXd &theta, const VectorXd &b ) const;
+	MatrixXd DG( const VectorXd &x, const VectorXd &b ) const;
 
-	double f1d( double p );
-	double f2d( double p );
-	double f3d( double p, const VectorXd &b );
-	double f4d( double p );
-	double g1d( double p );
+	double f1d( double p ) const;
+	double f2d( double p ) const;
+	double f3d( double p, const VectorXd &b ) const;
+	double f4d( double p ) const;
+	double g1d( double p ) const;
 
 };
 

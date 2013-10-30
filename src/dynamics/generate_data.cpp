@@ -69,6 +69,8 @@ void DataGenerator::GenerateSingleFile( double param ) {
 
 DataSet DataGenerator::GenerateDataSet( double param ) {
 
+	cout << "Parameter " << param << endl;
+
 	model.parameter(0) = param;
 	rk.state = initial;
 	rk.Advance(tStart);

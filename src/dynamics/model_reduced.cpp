@@ -9,7 +9,7 @@
 using namespace std;
 using namespace DRDSP;
 
-ModelReduced::ModelReduced() : dimension(0), parameterDimension(0) {
+ModelReduced::ModelReduced() {
 }
 
 ModelReduced::~ModelReduced() {
@@ -36,7 +36,7 @@ ModelRBF ModelReduced::ComputeModelRBF( const VectorXd& parameter ) {
 	return model;
 }
 
-VectorXd ModelReduced::Evaluate( const VectorXd &x, const VectorXd &parameter ) {
+VectorXd ModelReduced::VectorField( const VectorXd &x, const VectorXd &parameter ) {
 	MatrixXd z = affine.Evaluate(parameter);
 
 	model.linear = z.block(0,0,dimension,dimension);
@@ -45,6 +45,17 @@ VectorXd ModelReduced::Evaluate( const VectorXd &x, const VectorXd &parameter ) 
 		model.weights[i] = z.col(dimension+i);
 	}
 	return model.VectorField(x);
+}
+
+MatrixXd ModelReduced::Partials( const VectorXd& x, const VectorXd& parameter ) {
+	MatrixXd z = affine.Evaluate(parameter);
+
+	model.linear = z.block(0,0,dimension,dimension);
+
+	for(uint16_t i=0;i<model.numRBFs;i++) {
+		model.weights[i] = z.col(dimension+i);
+	}
+	return model.Partials(x);
 }
 
 void ModelReduced::OutputText( const char *filename ) const {

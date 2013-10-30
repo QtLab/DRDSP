@@ -72,7 +72,7 @@ double ModelReducedProducer::ComputeTotalCost( ModelReduced& model, const Reduce
 		ModelRBF modelRBF = model.ComputeModelRBF( parameters[j] );
 		for(uint32_t i=0;i<data.reducedData[j].count;i++) {
 			S1 += ( modelRBF.VectorField(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
-			S2 += ( modelRBF.VectorFieldDerivative(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
+			S2 += ( modelRBF.Partials(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
 		}
 		T += (fitWeight[0]/data.reducedData[j].scales[0]) * S1 + (fitWeight[1]/data.reducedData[j].scales[1]) * S2;
 	}

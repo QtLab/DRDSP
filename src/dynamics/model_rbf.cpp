@@ -4,9 +4,9 @@
 using namespace std;
 using namespace DRDSP;
 
-ModelRBF::ModelRBF() : weights(nullptr), rbfs(nullptr), dimension(0), numRBFs(0) {}
+ModelRBF::ModelRBF() : weights(nullptr), rbfs(nullptr), numRBFs(0) {}
 
-ModelRBF::ModelRBF( uint16_t dim, uint16_t nRBFs ) : weights(nullptr), rbfs(nullptr), dimension(0), numRBFs(0) {
+ModelRBF::ModelRBF( uint16_t dim, uint16_t nRBFs ) : weights(nullptr), rbfs(nullptr), numRBFs(0) {
 	Create(dim,nRBFs);
 }
 
@@ -87,14 +87,14 @@ void ModelRBF::SetRBFType( const Function& f ) {
 	}
 }
 
-VectorXd ModelRBF::VectorField( const VectorXd& x ) const {
+VectorXd ModelRBF::VectorField( const VectorXd& x ) {
 	VectorXd sum = linear * x;
 	for(uint16_t i=0;i<numRBFs;i++)
 		sum += weights[i] * rbfs[i](x);
 	return sum;
 }
 
-MatrixXd ModelRBF::VectorFieldDerivative( const VectorXd &x ) const {
+MatrixXd ModelRBF::Partials( const VectorXd &x ) {
 	MatrixXd sum = linear;
 	for(uint16_t i=0;i<numRBFs;i++)
 		sum += weights[i] * rbfs[i].Derivative(x).transpose();

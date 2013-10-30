@@ -1,7 +1,7 @@
 #ifndef INCLUDED_DYNAMICS_REDUCED_DATA
 #define INCLUDED_DYNAMICS_REDUCED_DATA
 #include "../types.h"
-#include "model_orig.h"
+#include "model.h"
 #include "../data/data_set.h"
 #include "../data/aabb.h"
 

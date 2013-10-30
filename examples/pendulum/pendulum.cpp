@@ -227,72 +227,72 @@ MatrixXd Pendulum::Partials( const VectorXd &state, const VectorXd &parameter ) 
 	return std::move(res);
 }
 
-double Pendulum::f1( double p ) {
+double Pendulum::f1( double p ) const {
 	double s = sin(p);
 	double c = cos(p);
 	return (3.0*length+2.0*c)*s;
 }
 
-double Pendulum::f2( double p ) {
+double Pendulum::f2( double p ) const {
 	return (mass+2.0)*length+cos(p);
 }
 
-double Pendulum::f3( double p, const VectorXd &b ) {
+double Pendulum::f3( double p, const VectorXd &b ) const {
 	double omega = b(0);
 	return 1.0 + A*omega*omega*cos(p);
 }
 
-double Pendulum::f4( double p ) {
+double Pendulum::f4( double p ) const {
 	double c = cos(p);
 	return (mass+3.0)*length*length + 3.0*length*c + c*c;
 }
 
-inline double Pendulum::g1( double p ) {
+inline double Pendulum::g1( double p ) const {
 	return f1(p)*0.5;
 }
 
-inline double Pendulum::phiDot( const VectorXd &x ) {
+inline double Pendulum::phiDot( const VectorXd &x ) const {
 	return x(3);
 }
 
-inline double Pendulum::thetaDot( const VectorXd &x ) {
+inline double Pendulum::thetaDot( const VectorXd &x ) const {
 	return x(4);
 }
 
 
-inline double Pendulum::psiDot( const VectorXd &b ) {
+inline double Pendulum::psiDot( const VectorXd &b ) const {
 	return b(0);
 }
 
-double Pendulum::vpDot( const VectorXd &x, const VectorXd &b ) {
+double Pendulum::vpDot( const VectorXd &x, const VectorXd &b ) const {
 	return -g1(x[0])*x[4]*x[4] - delta2*x[3] - f3(x[2],b)*sin(x[0])*cos(x[1]);
 }
 
-double Pendulum::vtDot( const VectorXd &x, const VectorXd &b) {
+double Pendulum::vtDot( const VectorXd &x, const VectorXd &b) const {
 	return (f1(x[0])*x[4]*x[3] - delta1*x[4] - f2(x[0])*f3(x[2],b)*sin(x[1]) )/f4(x[0]);
 }
 
-double Pendulum::f1d( double p ) {
+double Pendulum::f1d( double p ) const {
 	double s = sin(p);
 	double c = cos(p);
 	return (3.0*length+2.0*c)*c - 2.0*s*s;
 }
 
-inline double Pendulum::f2d( double p ) {
+inline double Pendulum::f2d( double p ) const {
 	return -sin(p);
 }
 
-double Pendulum::f3d( double p, const VectorXd &b ) {
+double Pendulum::f3d( double p, const VectorXd &b ) const {
 	double omega = b(0);
 	//double A = b(1);
 	return -A*omega*omega*sin(p);
 }
 
-inline double Pendulum::f4d( double p ) {
+inline double Pendulum::f4d( double p ) const {
 	return -f1(p);
 }
 
-inline double Pendulum::g1d( double p ) {
+inline double Pendulum::g1d( double p ) const {
 	return f1d(p)*0.5;
 }
 

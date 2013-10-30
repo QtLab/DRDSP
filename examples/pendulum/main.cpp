@@ -11,7 +11,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(100), maxPoints(0), targetDimension(3), numRBFs(60) {}
+	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(60) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -45,35 +45,41 @@ int main( int argc, char** argv ) {
 	PendulumFlat pendulum;
 
 	// Generate the data
+	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(pendulum.model);
 	dataGenerator.pMin = 1.8;
-	dataGenerator.pMax = 1.825;
+	dataGenerator.pMax = 1.8251;
 	dataGenerator.pDelta = 0.005;
 	dataGenerator.initial(0) = 0.3;
 	dataGenerator.initial(1) = 0.3;
 	dataGenerator.tStart = 10000;
-	dataGenerator.tInterval = 4;
-	dataGenerator.print = 200;
+	dataGenerator.tInterval = 3.5;
+	dataGenerator.print = 100;
 	dataGenerator.rk.dtmax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
 	
 	// Embed the data
+	cout << "Embedding data..." << endl;
 	DataSystem dataEmbedded = pendulum.embedding.EmbedData(data);
 	
 	// Pre-compute secants
+	cout << "Computing secants..." << endl;
 	SecantsPreComputed* secants = new SecantsPreComputed [dataEmbedded.numParameters];
-	SecantsPreComputed* newSecants = new SecantsPreComputed [dataEmbedded.numParameters];
+	
 	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
 		secants[i].ComputeFromData( dataEmbedded.dataSets[i] );
 
 	// Secant culling
+	cout << "Culling secants..." << endl;
+	SecantsPreComputed* newSecants = new SecantsPreComputed [dataEmbedded.numParameters];
 	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
 		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
 
 	delete[] secants;
 
 	// Find a projection
+	cout << "Finding projection..." << endl;
 	ProjSecant projSecant;
 	projSecant.targetDimension = options.targetDimension;
 	projSecant.targetMinProjectedLength = 0.7;
@@ -90,12 +96,12 @@ int main( int argc, char** argv ) {
 	delete[] newSecants;
 
 	// Compute projected data
-	cout << endl << "Computing Reduced Data..." << endl;
+	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData(pendulum,data,projSecant.W);
 
 	// Obtain the reduced model
-	cout << endl << "Computing Reduced Model..." << endl;
+	cout << "Computing Reduced Model..." << endl;
 	ModelReducedProducer producer;
 	producer.numRBFs = options.numRBFs;
 	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
@@ -108,7 +114,22 @@ int main( int argc, char** argv ) {
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteText("output/projection.csv");
 
-	
+	// Generate the data
+	cout << "Generating Reduced data..." << endl;
+	DataGenerator rdataGenerator(reducedModel);
+	rdataGenerator.pMin = 1.8;
+	rdataGenerator.pMax = 1.8251;
+	rdataGenerator.pDelta = 0.005;
+	rdataGenerator.initial(0) = 0.3;
+	rdataGenerator.initial(1) = 0.3;
+	rdataGenerator.tStart = 10000;
+	rdataGenerator.tInterval = 3.5;
+	rdataGenerator.print = 100;
+	rdataGenerator.rk.dtmax = 0.001;
+
+	DataSystem rdata = rdataGenerator.GenerateDataSystem();
+
+	rdata.dataSets[0].WriteText("output/p1.8.csv");
 
 	system("PAUSE");
 	return 0;

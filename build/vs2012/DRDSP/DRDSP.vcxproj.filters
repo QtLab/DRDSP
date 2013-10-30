@@ -87,13 +87,13 @@
     <ClCompile Include="..\..\..\src\data\aabb.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\model_orig.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\dynamics\embedding.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\dynamics\generate_data.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\model.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -103,9 +103,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\data\secants.h">
       <Filter>Header Files\data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_orig.h">
-      <Filter>Header Files\dynamics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced.h">
       <Filter>Header Files\dynamics</Filter>
@@ -186,6 +183,9 @@
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
   </ItemGroup>

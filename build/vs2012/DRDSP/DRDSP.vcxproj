@@ -26,7 +26,7 @@
     <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\embedding.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\generate_data.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_orig.cpp" />
+    <ClCompile Include="..\..\..\src\dynamics\model.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_rbf_producer.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_rbf.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model_reduced.cpp" />
@@ -48,7 +48,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf_producer.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_orig.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h" />
