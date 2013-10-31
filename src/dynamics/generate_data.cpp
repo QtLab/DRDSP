@@ -5,7 +5,7 @@
 using namespace std;
 using namespace DRDSP;
 
-DataGenerator::DataGenerator( ModelParameterized& m ) : model(m), rk(model), tStart(0), tInterval(10), print(200), pMin(0), pMax(1), pDelta(0.1), binaryOutput(true), textOutput(false) {
+DataGenerator::DataGenerator( ModelParameterized& m ) : model(m), rk(model,*model.model.wrap), tStart(0), tInterval(10), print(200), pMin(0), pMax(1), pDelta(0.1), binaryOutput(true), textOutput(false) {
 	initial.setZero(m.dimension);
 }
 

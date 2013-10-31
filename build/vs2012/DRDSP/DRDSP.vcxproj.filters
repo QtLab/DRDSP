@@ -96,6 +96,9 @@
     <ClCompile Include="..\..\..\src\dynamics\model.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\dynamics\dynamicalSystem.cpp">
+      <Filter>Source Files\dynamics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\DRDSP\types.h">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model.h">
       <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\misc.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

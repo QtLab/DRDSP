@@ -24,6 +24,7 @@
     <ClCompile Include="..\..\..\src\data\data_typed.cpp" />
     <ClCompile Include="..\..\..\src\data\secants.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp" />
+    <ClCompile Include="..\..\..\src\dynamics\dynamicalSystem.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\embedding.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\generate_data.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\model.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\geometry\inner_product.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\metric.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\vector.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\misc.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\linesearch.h" />

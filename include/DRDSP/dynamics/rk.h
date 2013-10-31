@@ -2,6 +2,7 @@
 #define INCLUDED_DYNAMICS_RK
 #include "../types.h"
 #include "solver.h"
+#include "../misc.h"
 
 namespace DRDSP {
 	const double RK1_Table[] = {1.0,0.0};
@@ -9,18 +10,11 @@ namespace DRDSP {
 	const double RK3_Table[] = {1.0/6.0,1.0/6.0,1.0/6.0,1.0,-1.0,2.0,0.5,0.5,0.0};
 	const double RK4_Table[] = {1.0/6.0,1.0/3.0,1.0/3.0,1.0/6.0,1.0,0.0,0.0,1.0,0.5,0.0,0.5,0.5,0.5,0.0};
 
-	template<typename T>
-	T Clamp( T x, T lower, T upper ) {
-		if( x > upper ) return upper;
-		if( x < lower ) return lower;
-		return x;
-	}
-
 	template<typename TState>
 	struct RK : Solver<double,TState> {
 
 		explicit RK( SolverFunction<double,TState>& f ) : Solver(f), created(false) { Create(4); }
-		
+
 		RK( uint8_t RK_order, const SolverFunction<double,TState>& f ) : Solver(f), created(false), order(4) {
 			Create(RK_order);
 		}

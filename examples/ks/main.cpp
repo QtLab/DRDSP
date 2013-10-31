@@ -5,7 +5,7 @@
 #include <DRDSP/dynamics/model_reduced_producer.h>
 #include <DRDSP/dynamics/generate_data.h>
 
-#include "pendulum.h"
+#include "ks.h"
 
 using namespace std;
 using namespace DRDSP;
@@ -32,27 +32,26 @@ int main( int argc, char** argv ) {
 	Options options = GetOptions(argc,argv);
 
 	// The pendulum example
-	PendulumFlat pendulum;
+	KSFlat ks;
 
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator dataGenerator(pendulum.model);
+	DataGenerator dataGenerator(ks.model);
 	dataGenerator.pMin = 1.8;
 	dataGenerator.pMax = 1.8201;
 	dataGenerator.pDelta = 0.005;
-	dataGenerator.initial(1) = -0.422;
-	dataGenerator.tStart = 1000;
-	dataGenerator.tInterval = 7;
+	dataGenerator.initial(0) = 0.3;
+	dataGenerator.initial(1) = 0.3;
+	dataGenerator.tStart = 10000;
+	dataGenerator.tInterval = 3.5;
 	dataGenerator.print = 100;
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
-	for(uint16_t i=0;i<1;i++)
-		data.dataSets[i].WriteText("output/orig1.8.csv");
 	
 	// Embed the data
 	cout << "Embedding data..." << endl;
-	DataSystem dataEmbedded = pendulum.embedding.EmbedData(data);
+	DataSystem dataEmbedded = ks.embedding.EmbedData(data);
 	
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;
@@ -89,7 +88,7 @@ int main( int argc, char** argv ) {
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData(pendulum,data,projSecant.W);
+	reducedData.ComputeData(ks,data,projSecant.W);
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;

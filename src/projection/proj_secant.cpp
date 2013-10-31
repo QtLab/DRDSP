@@ -9,7 +9,7 @@ using namespace DRDSP;
 
 ProjSecant::ProjSecant() : targetMinProjectedLength(0.5),
 						   targetDimension(2),
-						   maxIterations(30) {
+						   maxIterations(100) {
 }
 
 void ProjSecant::Find( const SecantsPreComputed& secants ) {
@@ -55,18 +55,14 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 	double *minVal = new double [n];
 	double *spread = new double [n];
 	double val, bigVal;
-	uint bigAxis;
+	uint32_t bigAxis;
 
-	for(uint32_t k=0;k<n;k++) {
-		maxVal[k] = 0.0;
-		minVal[k] = 0.0;
-	}
+	for(uint32_t k=0;k<n;k++)
+		maxVal[k] = minVal[k] = data.points[0](0);
 
 	for(uint32_t j=0;j<data.count;j++)
 		for(uint32_t k=0;k<n;k++) {
 			val = data.points[j](k);
-			if( j==0 )
-				maxVal[k] = minVal[k] = val;
 			if( val > maxVal[k] )
 				maxVal[k] = val;
 			if( val < minVal[k] )
@@ -109,19 +105,15 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 	double *minVal = new double [n];
 	double *spread = new double [n];
 	double val, bigVal;
-	uint bigAxis;
+	uint32_t bigAxis;
 
-	for(uint32_t k=0;k<n;k++) {
-		maxVal[k] = 0.0;
-		minVal[k] = 0.0;
-	}
+	for(uint32_t k=0;k<n;k++)
+		maxVal[k] = minVal[k] = data.dataSets[0].points[0](k);
 
 	for(uint16_t i=0;i<data.numParameters;i++)
 		for(uint32_t j=0;j<data.dataSets[i].count;j++)
 			for(uint32_t k=0;k<n;k++) {
 				val = data.dataSets[i].points[j](k);
-				if( j==0 )
-					maxVal[k] = minVal[k] = val;
 				if( val > maxVal[k] )
 					maxVal[k] = val;
 				if( val < minVal[k] )

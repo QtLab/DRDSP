@@ -2,12 +2,18 @@
 #define INCLUDED_PENDULUM
 #include <DRDSP/types.h>
 #include <DRDSP/dynamics/model.h>
+#include <DRDSP/dynamics/dynamicalSystem.h>
 
 using namespace DRDSP;
 
-struct Pendulum : ModelParameterized {
+struct PendulumWrap : WrapFunction<VectorXd> {
+	void operator()( VectorXd& x ) const;
+};
 
-	Pendulum() : ModelParameterized(5,1), length(1.1), mass(7.0), A(0.15), delta1(0.245), delta2(0.245) {}
+struct Pendulum : ModelParameterized {
+	PendulumWrap pendulumWrap;
+
+	Pendulum() : ModelParameterized(&pendulumWrap,5,1), length(1.1), mass(7.0), A(0.15), delta1(0.245), delta2(0.245) {}
 	VectorXd VectorField( const VectorXd &state, const VectorXd &parameter );
 	MatrixXd Partials( const VectorXd &state, const VectorXd &parameter );
 

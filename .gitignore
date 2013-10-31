@@ -11,3 +11,5 @@ build/vs2012/examples/brusselator/x64/
 build/vs2012/examples/brusselator/Win32/
 build/vs2012/examples/pendulum/x64/
 build/vs2012/examples/pendulum/Win32/
+build/vs2012/examples/ks/x64/
+build/vs2012/examples/ks/Win32/
