@@ -1,8 +1,7 @@
 #ifndef INCLUDED_DYNAMICS_RK
 #define INCLUDED_DYNAMICS_RK
-#include "../types.h"
-#include "solver.h"
 #include "../misc.h"
+#include "solver.h"
 
 namespace DRDSP {
 	const double RK1_Table[] = {1.0,0.0};

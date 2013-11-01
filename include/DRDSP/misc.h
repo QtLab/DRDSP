@@ -1,5 +1,6 @@
 #ifndef INCLUDED_MISC
 #define INCLUDED_MISC
+#include "types.h"
 
 namespace DRDSP {
 
@@ -25,6 +26,11 @@ namespace DRDSP {
 	template<typename T>
 	bool IsOdd( T x ) {
 		return (x % 2) != 0;
+	}
+
+	template<typename T>
+	T Delta( uint32_t i, uint32_t j ) {
+		return (i==j)?T(1):T(0);
 	}
 
 }

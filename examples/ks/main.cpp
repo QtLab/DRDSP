@@ -11,7 +11,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(50) {}
+	Options() : numIterations(1000), maxPoints(0), targetDimension(3), numRBFs(70) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -31,24 +31,23 @@ int main( int argc, char** argv ) {
 
 	Options options = GetOptions(argc,argv);
 
-	// The pendulum example
-	KSFlat ks;
+	// The ks example
+	KSFlat ks(100);
 
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(ks.model);
-	dataGenerator.pMin = 1.8;
-	dataGenerator.pMax = 1.8201;
-	dataGenerator.pDelta = 0.005;
-	dataGenerator.initial(0) = 0.3;
-	dataGenerator.initial(1) = 0.3;
-	dataGenerator.tStart = 10000;
-	dataGenerator.tInterval = 3.5;
+	dataGenerator.pMin = 0.1;
+	dataGenerator.pMax = 1.0;
+	dataGenerator.pDelta = 0.2;
+	dataGenerator.initial.setRandom();
+	dataGenerator.tStart = 50;
+	dataGenerator.tInterval = 7;
 	dataGenerator.print = 100;
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
-	
+		
 	// Embed the data
 	cout << "Embedding data..." << endl;
 	DataSystem dataEmbedded = ks.embedding.EmbedData(data);
@@ -99,26 +98,28 @@ int main( int argc, char** argv ) {
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
 	reducedModel.OutputText("output/reduced.csv");
-	//reducedData.WritePointsText("output/p2.5-points.csv");
-	//reducedData.WriteVectorsText("output/p2.5-vectors.csv");
+	reducedData.reducedData[0].WritePointsText("output/p1-points.csv");
+	reducedData.reducedData[1].WritePointsText("output/p2-points.csv");
+	reducedData.reducedData[2].WritePointsText("output/p3-points.csv");
+	reducedData.reducedData[3].WritePointsText("output/p4-points.csv");
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteText("output/projection.csv");
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
 	DataGenerator rdataGenerator(reducedModel);
-	rdataGenerator.pMin = 1.8;
-	rdataGenerator.pMax = 1.8251;
-	rdataGenerator.pDelta = 0.005;
+	rdataGenerator.pMin = dataGenerator.pMin;
+	rdataGenerator.pMax = dataGenerator.pMax;
+	rdataGenerator.pDelta = dataGenerator.pDelta;
 	rdataGenerator.initial = reducedData.reducedData[0].points[0];
-	rdataGenerator.tStart = 0;
-	rdataGenerator.tInterval = 3.5;
-	rdataGenerator.print = 100;
-	rdataGenerator.rk.dtMax = 0.001;
+	rdataGenerator.tStart = 10;
+	rdataGenerator.tInterval = dataGenerator.tInterval;
+	rdataGenerator.print = dataGenerator.print;
+	rdataGenerator.rk.dtMax = dataGenerator.rk.dtMax;
 
 	DataSystem rdata = rdataGenerator.GenerateDataSystem();
 
-	rdata.dataSets[0].WriteText("output/p1.8.csv");
+	rdata.dataSets[0].WriteText("output/rdata.csv");
 
 	system("PAUSE");
 	return 0;

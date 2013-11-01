@@ -1,17 +1,8 @@
 #include "ks.h"
-#include <iostream>
-#include <Eigen/LU>
 #include <DRDSP/misc.h>
+#include <cmath>
 
 using namespace std;
-using namespace Eigen;
-
-void KSWrap::operator()( VectorXd& state ) const {
-	for(uint32_t i=0;i<state.size()-1;i++)
-		Wrap(state(i),-M_PI,M_PI);
-}
-
-// Embeddings
 
 VectorXd FlatEmbedding::Evaluate( const VectorXd &state ) const {
 	VectorXd X(eDim);
@@ -24,8 +15,6 @@ VectorXd FlatEmbedding::Evaluate( const VectorXd &state ) const {
 
 	return std::move(X);
 }
-
-// Embedding First Derivatives
 
 MatrixXd FlatEmbedding::Derivative( const VectorXd &state ) const {
 	MatrixXd res;
@@ -43,13 +32,9 @@ MatrixXd FlatEmbedding::Derivative( const VectorXd &state ) const {
 	return std::move(res);
 }
 
-// Embedding First Derivatives Adjoint
-
 MatrixXd FlatEmbedding::DerivativeAdjoint( const VectorXd &state ) const {
 	return Derivative(state).transpose();
 }
-
-// Embedding Second Derivatives
 
 MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 	MatrixXd res;
@@ -66,7 +51,55 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 	return std::move(res);
 }
 
-// Model Functions
+void KSWrap::operator()( VectorXd& state ) const {
+	for(uint32_t i=0;i<state.size();i++)
+		Wrap(state(i),-M_PI,M_PI);
+}
+
+KS::KS() : ModelParameterized(&wrap), numOscillators(0), forcingFrequency(5.0) {}
+
+KS::KS( uint32_t N ) : ModelParameterized(&wrap,N+1,1), numOscillators(N), frequencies(N), interactionStrengths(N), forcingFrequency(5.0) {
+	Create(N);
+}
+
+void KS::Create( uint32_t N ) {
+	frequencies.setOnes(N);
+	interactionStrengths.setOnes(N);
+	numOscillators = N;
+	dimension = N+1;
+	parameterDimension = 1;
+}
+
+VectorXd KS::VectorField( const VectorXd& state, const VectorXd& parameter ) {
+	complex<double> z = ComplexOrderParameter(state);
+	VectorXd s(numOscillators);
+	double psi = arg(z);
+	const double& K = parameter(0);
+	for(uint32_t i=0;i<numOscillators;i++)
+		s(i) = sin( psi - Phase(i,state) );
+	VectorXd res(dimension);
+	res.head(numOscillators) = frequencies + interactionStrengths * Forcing(state) + K * abs(z) * s;
+	res(dimension-1) = forcingFrequency;
+	return std::move(res);
+}
+	
+MatrixXd KS::Partials( const VectorXd& state, const VectorXd& parameter ) {
+	MatrixXd res;
+	res.setZero(dimension,dimension);
+			
+	complex<double> z = ComplexOrderParameter(state);
+	double psi = arg(z);
+	double r = abs(z);
+	double forcing = Forcing(state);
+	const double& K = parameter(0);
+	for(uint32_t i=0;i<numOscillators;i++) {
+		for(uint32_t j=0;j<numOscillators;j++) {
+			res(i,j) = interactionStrengths(i) * forcing + K * MeanAmplitudeDerivative(j,state,psi) * sin( psi - Phase(i,state) ) + K  * cos( psi - Phase(i,state) ) * ( MeanPhaseDerivative(j,state,psi) - Delta<double>(i,j) * r );
+		}
+		res(i,dimension-1) = interactionStrengths(i) * ForcingDerivative(state);
+	}
+	return std::move(res);
+}
 
 double KS::Forcing( const VectorXd& state ) const {
 	return sin( state(dimension-1) );
@@ -87,39 +120,6 @@ complex<double> KS::ComplexOrderParameter( const VectorXd& state ) const {
 	}
 	z /= numOscillators;
 	return std::move(z);
-}
-
-VectorXd KS::VectorField( const VectorXd& state, const VectorXd& parameter ) {
-	complex<double> z = ComplexOrderParameter(state);
-	VectorXd s(numOscillators);
-	double psi = arg(z);
-	for(uint32_t i=0;i<numOscillators;i++)
-		s(i) = sin( psi - Phase(i,state) );
-	VectorXd res(dimension);
-	res.head(numOscillators) = frequencies + interactionStrengths * Forcing(state) + K * abs(z) * s;
-	res(dimension-1) = forcingFrequency;
-	return std::move(res);
-}
-	
-MatrixXd KS::Partials( const VectorXd& state, const VectorXd& parameter ) {
-	MatrixXd res;
-	res.setZero(dimension,dimension);
-			
-	complex<double> z = ComplexOrderParameter(state);
-	double psi = arg(z);
-	double r = abs(z);
-	double forcing = Forcing(state);
-	for(uint32_t i=0;i<numOscillators;i++) {
-		for(uint32_t j=0;j<numOscillators;j++) {
-			res(i,j) = interactionStrengths(i) * forcing + K * MeanAmplitudeDerivative(j,state,psi) * sin( psi - Phase(i,state) ) + K  * cos( psi - Phase(i,state) ) * ( MeanPhaseDerivative(j,state,psi) - delta(i,j) * r );
-		}
-		res(i,dimension-1) = interactionStrengths(i) * ForcingDerivative(state);
-	}
-	return std::move(res);
-}
-
-double KS::delta( uint32_t i, uint32_t j ) const {
-	return (i==j)?1.0:0.0;
 }
 
 double KS::MeanAmplitudeDerivative( uint32_t j, const VectorXd &state, double psi ) const {

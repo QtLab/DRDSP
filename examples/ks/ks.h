@@ -1,6 +1,5 @@
 #ifndef INCLUDED_KS
 #define INCLUDED_KS
-#include <DRDSP/types.h>
 #include <DRDSP/dynamics/model.h>
 #include <complex>
 
@@ -12,53 +11,40 @@ struct KSWrap : WrapFunction<VectorXd> {
 };
 
 struct KS : ModelParameterized {
+	KS();
+	explicit KS( uint32_t N );
+	void Create( uint32_t N );
+	VectorXd VectorField( const VectorXd& state, const VectorXd& parameter );
+	MatrixXd Partials( const VectorXd& state, const VectorXd& parameter );
+
+protected:
 	KSWrap wrap;
 	VectorXd frequencies;
 	VectorXd interactionStrengths;
-	double K, forcingFrequency;
+	double forcingFrequency;
 	uint32_t numOscillators;
 
 	double Forcing( const VectorXd& state ) const;
 	double ForcingDerivative( const VectorXd& state ) const;
 	double Phase( uint32_t i, const VectorXd& state ) const;
 	complex<double> ComplexOrderParameter( const VectorXd& state ) const;
-	VectorXd VectorField( const VectorXd& state, const VectorXd& parameter );
-	MatrixXd Partials( const VectorXd& state, const VectorXd& parameter );
-	double delta( uint32_t i, uint32_t j ) const;
 	double MeanAmplitudeDerivative( uint32_t j, const VectorXd &state, double psi ) const;
 	double MeanPhaseDerivative( uint32_t j, const VectorXd &state, double psi ) const;
-
-	KS() : ModelParameterized(&wrap), numOscillators(0), K(1.0), forcingFrequency(1.0) {}
-	KS( uint32_t N ) : ModelParameterized(&wrap,N+1,1), numOscillators(N), frequencies(N), interactionStrengths(N), K(1.0), forcingFrequency(1.0) {}
-
-	void Create( uint32_t N ) {
-		frequencies.setZero(N);
-		interactionStrengths.setZero(N);
-		numOscillators = N;
-	}
-
-protected:
-
 };
 
 struct FlatEmbedding : Embedding {
-	FlatEmbedding() : Embedding(5,8) {}
+	explicit FlatEmbedding( uint32_t n ) : Embedding(n,2*n) {}
 	VectorXd Evaluate( const VectorXd &x ) const;
 	MatrixXd Derivative( const VectorXd &x ) const;
 	MatrixXd DerivativeAdjoint( const VectorXd &x ) const;
 	MatrixXd Derivative2( const VectorXd &x, uint32_t mu ) const;
-	
 };
 
-
 struct KSFlat : ModelParameterizedEmbedded {
-
-	KSFlat() : ModelParameterizedEmbedded(ks,embedFlat) {}
-
+	explicit KSFlat( uint32_t N ) : ModelParameterizedEmbedded(ks,embedFlat), ks(N), embedFlat(N+1) {}
 protected:
 	KS ks;
 	FlatEmbedding embedFlat;
 };
-
 
 #endif

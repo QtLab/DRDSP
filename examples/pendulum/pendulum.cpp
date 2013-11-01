@@ -1,10 +1,7 @@
 #include "pendulum.h"
-#include <iostream>
-#include <Eigen/LU>
 #include <DRDSP/misc.h>
 
 using namespace std;
-using namespace Eigen;
 
 void PendulumWrap::operator()( VectorXd& state ) const {
 	Wrap(state(0),-M_PI,M_PI);

@@ -36,9 +36,6 @@ namespace DRDSP {
 		DataSystem EmbedData( const DataSystem& data ) const;
 	};
 
-
-
 }
 
 #endif
-
