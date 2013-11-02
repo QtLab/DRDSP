@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\examples\ks\main.cpp">
+    <ClCompile Include="..\..\..\..\examples\kuramoto\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\examples\ks\ks.cpp">
+    <ClCompile Include="..\..\..\..\examples\kuramoto\kuramoto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\examples\ks\ks.h">
+    <ClInclude Include="..\..\..\..\examples\kuramoto\kuramoto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,7 +11,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(50) {}
+	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(80) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -35,7 +35,7 @@ int main( int argc, char** argv ) {
 	PendulumFlat pendulum;
 
 	// Generate the data
-	cout << "Generating data..." << endl;
+	cout << "Simulating the original model..." << endl;
 	DataGenerator dataGenerator(pendulum.model);
 	dataGenerator.pMin = 1.8;
 	dataGenerator.pMax = 1.8201;
@@ -48,7 +48,7 @@ int main( int argc, char** argv ) {
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
 	for(uint16_t i=0;i<1;i++)
-		data.dataSets[i].WriteText("output/orig1.8.csv");
+		data.dataSets[i].WriteCSV("output/orig1.8.csv");
 	
 	// Embed the data
 	cout << "Embedding data..." << endl;
@@ -99,27 +99,21 @@ int main( int argc, char** argv ) {
 
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
-	reducedModel.OutputText("output/reduced.csv");
+	reducedModel.WriteCSV("output/reduced.csv");
 	//reducedData.WritePointsText("output/p2.5-points.csv");
 	//reducedData.WriteVectorsText("output/p2.5-vectors.csv");
 	projSecant.WriteBinary("output/projection.bin");
-	projSecant.WriteText("output/projection.csv");
+	projSecant.WriteCSV("output/projection.csv");
 
 	// Generate the data
-	cout << "Generating Reduced data..." << endl;
+	cout << "Simulating the reduced model..." << endl;
 	DataGenerator rdataGenerator(reducedModel);
-	rdataGenerator.pMin = 1.8;
-	rdataGenerator.pMax = 1.8251;
-	rdataGenerator.pDelta = 0.005;
+	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.initial = reducedData.reducedData[0].points[0];
-	rdataGenerator.tStart = 0;
-	rdataGenerator.tInterval = 3.5;
-	rdataGenerator.print = 100;
-	rdataGenerator.rk.dtMax = 0.001;
-
+	rdataGenerator.tStart = 100;
 	DataSystem rdata = rdataGenerator.GenerateDataSystem();
 
-	rdata.dataSets[0].WriteText("output/p1.8.csv");
+	rdata.dataSets[0].WriteCSV("output/p1.8.csv");
 
 	system("PAUSE");
 	return 0;

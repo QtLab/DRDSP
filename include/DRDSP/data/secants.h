@@ -34,7 +34,6 @@ namespace DRDSP {
 		VectorXd GetSecant( uint32_t k ) const;
 	};
 
-
 	// For large sets, we determine each secant from the data points on demand
 	struct SecantsData : Secants {
 		const DataSet* data;
@@ -44,7 +43,6 @@ namespace DRDSP {
 		static uint32_t GetIndexI( uint32_t k, uint32_t N );
 		static uint32_t GetIndexJ( uint32_t k, uint32_t i, uint32_t N );
 	};
-
 
 }
 

@@ -13,8 +13,6 @@ ProjSecant::ProjSecant() : targetMinProjectedLength(0.5),
 }
 
 void ProjSecant::Find( const SecantsPreComputed& secants ) {
-	W.setIdentity(secants.dimension,targetDimension);
-
 	GradientDescent<Grassmannian,MetricFrobenius> optimiziation;
 	MetricFrobenius M;
 
@@ -29,8 +27,6 @@ void ProjSecant::Find( const SecantsPreComputed& secants ) {
 }
 
 void ProjSecant::Find( const SecantsPreComputed* secants, uint16_t N ) {
-	W.setIdentity(secants[0].dimension,targetDimension);
-	
 	SecantsSystem ss;
 	ss.secants = secants;
 	ss.N = N;
@@ -47,6 +43,15 @@ void ProjSecant::Find( const SecantsPreComputed* secants, uint16_t N ) {
 
 	optimiziation.Optimize( W );
 }
+/*
+void ProjSecant::FindForMinProjectedLength( const SecantsPreComputed* secants, uint16_t N, double targetMinPLen ) {
+	for(uint32_t i=2;i<secants[0].dimension;i++) {
+		GetInitial( data );
+		Find(secants,N);
+		if( MinProjectedLength( secants ) >= targetMinPLen )
+			break;
+	}
+}*/
 
 void ProjSecant::GetInitial( const DataSet& data ) {
 	uint32_t n = data.dimension;
@@ -256,7 +261,7 @@ MatrixXd ProjSecant::GradCostN( const MatrixXd &X, const void* obj ) {
 	return Grassmannian::HorizontalComponent( X, CostFunctionDerivative( ss->secants, ss->N, X ) );
 }
 
-void ProjSecant::WriteText( const char* filename ) const {
+void ProjSecant::WriteCSV( const char* filename ) const {
 	ofstream out;
 	out.open(filename);
 	out.precision(16);

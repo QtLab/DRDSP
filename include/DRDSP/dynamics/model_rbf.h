@@ -27,7 +27,7 @@ namespace DRDSP {
 		void SetRBFType( const Function& f );
 		void LoadCentresText( const char* filename );
 		void LoadCentresBinary( const char* filename );
-		void OutputText( const char *filename ) const;
+		void WriteCSV( const char *filename ) const;
 	};
 
 }

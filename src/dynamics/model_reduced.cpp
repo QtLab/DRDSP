@@ -58,7 +58,7 @@ MatrixXd ModelReduced::Partials( const VectorXd& x, const VectorXd& parameter ) 
 	return model.Partials(x);
 }
 
-void ModelReduced::OutputText( const char *filename ) const {
+void ModelReduced::WriteCSV( const char *filename ) const {
 	
 	ofstream out;
 	out.open(filename);

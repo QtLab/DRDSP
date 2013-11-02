@@ -1,4 +1,4 @@
-#include "ks.h"
+#include "kuramoto.h"
 #include <DRDSP/misc.h>
 #include <cmath>
 
@@ -51,18 +51,18 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 	return std::move(res);
 }
 
-void KSWrap::operator()( VectorXd& state ) const {
+void KuramotoWrap::operator()( VectorXd& state ) const {
 	for(uint32_t i=0;i<state.size();i++)
 		Wrap(state(i),-M_PI,M_PI);
 }
 
-KS::KS() : ModelParameterized(&wrap), numOscillators(0), forcingFrequency(5.0) {}
+Kuramoto::Kuramoto() : ModelParameterized(&wrap), numOscillators(0), K(1.0) {}
 
-KS::KS( uint32_t N ) : ModelParameterized(&wrap,N+1,1), numOscillators(N), frequencies(N), interactionStrengths(N), forcingFrequency(5.0) {
+Kuramoto::Kuramoto( uint32_t N ) : ModelParameterized(&wrap,N+1,1), numOscillators(N), frequencies(N), interactionStrengths(N), K(1.0) {
 	Create(N);
 }
 
-void KS::Create( uint32_t N ) {
+void Kuramoto::Create( uint32_t N ) {
 	frequencies.setOnes(N);
 	interactionStrengths.setOnes(N);
 	numOscillators = N;
@@ -70,11 +70,11 @@ void KS::Create( uint32_t N ) {
 	parameterDimension = 1;
 }
 
-VectorXd KS::VectorField( const VectorXd& state, const VectorXd& parameter ) {
+VectorXd Kuramoto::VectorField( const VectorXd& state, const VectorXd& parameter ) {
 	complex<double> z = ComplexOrderParameter(state);
 	VectorXd s(numOscillators);
 	double psi = arg(z);
-	const double& K = parameter(0);
+	const double& forcingFrequency = parameter(0);
 	for(uint32_t i=0;i<numOscillators;i++)
 		s(i) = sin( psi - Phase(i,state) );
 	VectorXd res(dimension);
@@ -83,7 +83,7 @@ VectorXd KS::VectorField( const VectorXd& state, const VectorXd& parameter ) {
 	return std::move(res);
 }
 	
-MatrixXd KS::Partials( const VectorXd& state, const VectorXd& parameter ) {
+MatrixXd Kuramoto::Partials( const VectorXd& state, const VectorXd& parameter ) {
 	MatrixXd res;
 	res.setZero(dimension,dimension);
 			
@@ -91,7 +91,7 @@ MatrixXd KS::Partials( const VectorXd& state, const VectorXd& parameter ) {
 	double psi = arg(z);
 	double r = abs(z);
 	double forcing = Forcing(state);
-	const double& K = parameter(0);
+	const double& forcingFrequency = parameter(0);
 	for(uint32_t i=0;i<numOscillators;i++) {
 		for(uint32_t j=0;j<numOscillators;j++) {
 			res(i,j) = interactionStrengths(i) * forcing + K * MeanAmplitudeDerivative(j,state,psi) * sin( psi - Phase(i,state) ) + K  * cos( psi - Phase(i,state) ) * ( MeanPhaseDerivative(j,state,psi) - Delta<double>(i,j) * r );
@@ -101,19 +101,19 @@ MatrixXd KS::Partials( const VectorXd& state, const VectorXd& parameter ) {
 	return std::move(res);
 }
 
-double KS::Forcing( const VectorXd& state ) const {
+double Kuramoto::Forcing( const VectorXd& state ) const {
 	return sin( state(dimension-1) );
 }
 
-double KS::ForcingDerivative( const VectorXd& state ) const {
+double Kuramoto::ForcingDerivative( const VectorXd& state ) const {
 	return cos( state(dimension-1) );
 }
 
-double KS::Phase( uint32_t i, const VectorXd& state ) const {
+double Kuramoto::Phase( uint32_t i, const VectorXd& state ) const {
 	return state(i);
 }
 	
-complex<double> KS::ComplexOrderParameter( const VectorXd& state ) const {
+complex<double> Kuramoto::ComplexOrderParameter( const VectorXd& state ) const {
 	complex<double> z(0,0);
 	for(uint32_t i=0;i<numOscillators;i++) {
 		z += complex<double>( cos(Phase(i,state)), sin(Phase(i,state)) ) ;
@@ -122,11 +122,11 @@ complex<double> KS::ComplexOrderParameter( const VectorXd& state ) const {
 	return std::move(z);
 }
 
-double KS::MeanAmplitudeDerivative( uint32_t j, const VectorXd &state, double psi ) const {
+double Kuramoto::MeanAmplitudeDerivative( uint32_t j, const VectorXd &state, double psi ) const {
 	return ( cos(Phase(j,state)) * sin(psi) - sin(Phase(j,state)) * cos(psi) ) / numOscillators;
 }
 
-double KS::MeanPhaseDerivative( uint32_t j, const VectorXd &state, double psi ) const {
+double Kuramoto::MeanPhaseDerivative( uint32_t j, const VectorXd &state, double psi ) const {
 	return ( cos(Phase(j,state)) * cos(psi) + sin(Phase(j,state)) * sin(psi) ) / numOscillators;
 }
 

@@ -133,7 +133,7 @@ bool DataSet::LoadText( const char* filename ) {
 	return true;
 }
 
-void DataSet::WriteText( const char* filename ) const {
+void DataSet::WriteCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
 		cout << "DataSet::WriteText : file error" << endl;

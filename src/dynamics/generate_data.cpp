@@ -44,8 +44,7 @@ void DataGenerator::GenerateSingleFile( double param ) {
 		outBin.write((char*)&print,sizeof(uint32_t));
 		outBin.write((char*)&param,sizeof(double));
 	}
-	if( textOutput )
-		outTxt << print << "," << param << endl;
+	if( textOutput ) outTxt << print << "," << param << endl;
 
 	while( t <= tInterval ) {
 			
@@ -62,9 +61,7 @@ void DataGenerator::GenerateSingleFile( double param ) {
 		t += dtPrint;
 	}
 	if( binaryOutput ) outBin.close();
-	if( textOutput ) {
-		outTxt.close();
-	}
+	if( textOutput ) outTxt.close();
 }
 
 DataSet DataGenerator::GenerateDataSet( double param ) {
@@ -98,5 +95,18 @@ DataSystem DataGenerator::GenerateDataSystem() {
 		p += pDelta;
 	}
 	return std::move(data);
+}
+
+void DataGenerator::MatchSettings( const DataGenerator& gen ) {
+	pMin = gen.pMin;
+	pMax = gen.pMax;
+	pDelta = gen.pDelta;
+	tStart = gen.tStart;
+	tInterval = gen.tInterval;
+	print = gen.print;
+	binaryOutput = gen.binaryOutput;
+	textOutput = gen.textOutput;
+	initial = gen.initial;
+	rk.dtMax = gen.rk.dtMax;
 }
 

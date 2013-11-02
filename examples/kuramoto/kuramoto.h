@@ -1,27 +1,27 @@
-#ifndef INCLUDED_KS
-#define INCLUDED_KS
+#ifndef INCLUDED_KURAMOTO
+#define INCLUDED_KURAMOTO
 #include <DRDSP/dynamics/model.h>
 #include <complex>
 
 using namespace std;
 using namespace DRDSP;
 
-struct KSWrap : WrapFunction<VectorXd> {
+struct KuramotoWrap : WrapFunction<VectorXd> {
 	void operator()( VectorXd& x ) const;
 };
 
-struct KS : ModelParameterized {
-	KS();
-	explicit KS( uint32_t N );
+struct Kuramoto : ModelParameterized {
+	Kuramoto();
+	explicit Kuramoto( uint32_t N );
 	void Create( uint32_t N );
 	VectorXd VectorField( const VectorXd& state, const VectorXd& parameter );
 	MatrixXd Partials( const VectorXd& state, const VectorXd& parameter );
 
 protected:
-	KSWrap wrap;
+	KuramotoWrap wrap;
 	VectorXd frequencies;
 	VectorXd interactionStrengths;
-	double forcingFrequency;
+	double K;
 	uint32_t numOscillators;
 
 	double Forcing( const VectorXd& state ) const;
@@ -40,10 +40,10 @@ struct FlatEmbedding : Embedding {
 	MatrixXd Derivative2( const VectorXd &x, uint32_t mu ) const;
 };
 
-struct KSFlat : ModelParameterizedEmbedded {
-	explicit KSFlat( uint32_t N ) : ModelParameterizedEmbedded(ks,embedFlat), ks(N), embedFlat(N+1) {}
+struct KuramotoFlat : ModelParameterizedEmbedded {
+	explicit KuramotoFlat( uint32_t N ) : ModelParameterizedEmbedded(kuramoto,embedFlat), kuramoto(N), embedFlat(N+1) {}
 protected:
-	KS ks;
+	Kuramoto kuramoto;
 	FlatEmbedding embedFlat;
 };
 

@@ -51,6 +51,7 @@ namespace DRDSP {
 		void GenerateFiles();
 		DataSet GenerateDataSet( double param );
 		DataSystem GenerateDataSystem();
+		void MatchSettings( const DataGenerator& gen );
 	};
 
 }

@@ -23,7 +23,7 @@ namespace DRDSP {
 		void Find( const SecantsPreComputed* secants, uint16_t N );
 		void AnalyseSecants( const SecantsPreComputed* secants, uint16_t N ) const;
 		void AnalyseSecants( const SecantsPreComputed& secants ) const;
-		void WriteText( const char* filename ) const;
+		void WriteCSV( const char* filename ) const;
 		void WriteBinary( const char* filename ) const;
 		bool ReadBinary( const char* filename );
 

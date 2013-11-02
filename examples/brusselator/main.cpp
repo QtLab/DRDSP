@@ -84,11 +84,11 @@ int main( int argc, char** argv ) {
 
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
-	reducedModel.OutputText("output/reduced.csv");
+	reducedModel.WriteCSV("output/reduced.csv");
 	//reducedData.WritePointsText("output/p2.5-points.csv");
 	//reducedData.WriteVectorsText("output/p2.5-vectors.csv");
 	projSecant.WriteBinary("output/projection.bin");
-	projSecant.WriteText("output/projection.csv");
+	projSecant.WriteCSV("output/projection.csv");
 
 	return 0;
 }

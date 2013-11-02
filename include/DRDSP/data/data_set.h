@@ -21,7 +21,7 @@ namespace DRDSP {
 		void Destroy();
 		bool LoadBinary( const char* filename );
 		bool LoadText( const char* filename );
-		void WriteText( const char* filename ) const;
+		void WriteCSV( const char* filename ) const;
 		DataSet ProjectData( const MatrixXd& W ) const;
 		
 		VectorXd& operator[]( uint32_t i ) {

@@ -130,7 +130,7 @@ void ModelRBF::LoadCentresBinary( const char* filename ) {
 	in.close();
 }
 
-void ModelRBF::OutputText( const char *filename ) const {
+void ModelRBF::WriteCSV( const char *filename ) const {
 	
 	ofstream out;
 	out.open(filename);

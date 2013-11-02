@@ -22,7 +22,7 @@ namespace DRDSP {
 		ModelRBF ComputeModelRBF( const VectorXd& parameter );
 		VectorXd VectorField( const VectorXd& x, const VectorXd& parameter );
 		MatrixXd Partials( const VectorXd& x, const VectorXd& parameter );
-		void OutputText( const char* filename ) const;
+		void WriteCSV( const char* filename ) const;
 	};
 }
 

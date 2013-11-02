@@ -19,15 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\examples\ks\main.cpp" />
-    <ClCompile Include="..\..\..\..\examples\ks\ks.cpp" />
+    <ClCompile Include="..\..\..\..\examples\kuramoto\main.cpp" />
+    <ClCompile Include="..\..\..\..\examples\kuramoto\kuramoto.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\examples\ks\ks.h" />
+    <ClInclude Include="..\..\..\..\examples\kuramoto\kuramoto.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D8C56D54-B9C3-4BCC-9B2E-4415A04EB210}</ProjectGuid>
-    <RootNamespace>ks</RootNamespace>
+    <RootNamespace>kuramoto</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

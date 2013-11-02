@@ -5,13 +5,13 @@
 #include <DRDSP/dynamics/model_reduced_producer.h>
 #include <DRDSP/dynamics/generate_data.h>
 
-#include "ks.h"
+#include "kuramoto.h"
 
 using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(1000), maxPoints(0), targetDimension(3), numRBFs(70) {}
+	Options() : numIterations(1000), maxPoints(0), targetDimension(10), numRBFs(50) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -32,14 +32,14 @@ int main( int argc, char** argv ) {
 	Options options = GetOptions(argc,argv);
 
 	// The ks example
-	KSFlat ks(100);
+	KuramotoFlat kuramoto(100);
 
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator dataGenerator(ks.model);
-	dataGenerator.pMin = 0.1;
-	dataGenerator.pMax = 1.0;
-	dataGenerator.pDelta = 0.2;
+	DataGenerator dataGenerator(kuramoto.model);
+	dataGenerator.pMin = 1.0;
+	dataGenerator.pMax = 2.0;
+	dataGenerator.pDelta = 0.1;
 	dataGenerator.initial.setRandom();
 	dataGenerator.tStart = 50;
 	dataGenerator.tInterval = 7;
@@ -47,11 +47,15 @@ int main( int argc, char** argv ) {
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
+	
+	data.dataSets[0].WriteCSV("output/orig.csv");
 		
 	// Embed the data
 	cout << "Embedding data..." << endl;
-	DataSystem dataEmbedded = ks.embedding.EmbedData(data);
-	
+	DataSystem dataEmbedded = kuramoto.embedding.EmbedData(data);
+
+	dataEmbedded.dataSets[0].WriteCSV("output/embed.csv");
+
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;
 	SecantsPreComputed* secants = new SecantsPreComputed [dataEmbedded.numParameters];
@@ -87,7 +91,7 @@ int main( int argc, char** argv ) {
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData(ks,data,projSecant.W);
+	reducedData.ComputeData(kuramoto,data,projSecant.W);
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
@@ -97,29 +101,20 @@ int main( int argc, char** argv ) {
 
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
-	reducedModel.OutputText("output/reduced.csv");
+	reducedModel.WriteCSV("output/reduced.csv");
 	reducedData.reducedData[0].WritePointsText("output/p1-points.csv");
-	reducedData.reducedData[1].WritePointsText("output/p2-points.csv");
-	reducedData.reducedData[2].WritePointsText("output/p3-points.csv");
-	reducedData.reducedData[3].WritePointsText("output/p4-points.csv");
 	projSecant.WriteBinary("output/projection.bin");
-	projSecant.WriteText("output/projection.csv");
+	projSecant.WriteCSV("output/projection.csv");
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
 	DataGenerator rdataGenerator(reducedModel);
-	rdataGenerator.pMin = dataGenerator.pMin;
-	rdataGenerator.pMax = dataGenerator.pMax;
-	rdataGenerator.pDelta = dataGenerator.pDelta;
+	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.initial = reducedData.reducedData[0].points[0];
-	rdataGenerator.tStart = 10;
-	rdataGenerator.tInterval = dataGenerator.tInterval;
-	rdataGenerator.print = dataGenerator.print;
-	rdataGenerator.rk.dtMax = dataGenerator.rk.dtMax;
 
 	DataSystem rdata = rdataGenerator.GenerateDataSystem();
 
-	rdata.dataSets[0].WriteText("output/rdata.csv");
+	rdata.dataSets[0].WriteCSV("output/rdata.csv");
 
 	system("PAUSE");
 	return 0;
