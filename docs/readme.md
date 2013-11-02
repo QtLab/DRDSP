@@ -24,18 +24,18 @@ Usage
 In order to use the library with your example system, you need to implement some interfaces to specify the dynamics of the system.
 
 * `DRDSP/dynamics/embedding.h`
-** `Embedding` -- An embedding of the state space into R^n. The default implementation is the identity map, which is for systems whose state space is already R^n. For example, if your model contains angular variables, these must be embedded.
+    * `Embedding` -- An embedding of the state space into R^n. The default implementation is the identity map, which is for systems whose state space is already R^n. For example, if your model contains angular variables, these must be embedded.
 
 * `DRDSP/dynamics/dynamicalSystem.h`
-** `WrapFunction` -- If your system contains angular variables, they must be wrapped to the range [-pi,pi] to avoid a loss of precision. The `WrapFunction` class is a function object that takes a state and performs the wrapping. The default implementation leaves the state unchanged.
+    * `WrapFunction` -- If your system contains angular variables, they must be wrapped to the range [-pi,pi] to avoid a loss of precision. The `WrapFunction` class is a function object that takes a state and performs the wrapping. The default implementation leaves the state unchanged.
 
 * `DRDSP/dynamics/model.h`
-** `Model*` -- This is where the dynamics of the original model are specified. Both the vector field and its partial derivatives (Jacobian) must be implemented.
+    * `Model*` -- This is where the dynamics of the original model are specified. Both the vector field and its partial derivatives (Jacobian) must be implemented.
 
-*** `Model` -- A single vector field, no parameters.
-*** `ModelCW` -- A single vector field, no parameters. Evaluate component-wise.
-*** `ModelParameterized` -- A family of vector fields with parameters.
-*** `ModelParameterizedCW` -- A family of vector fields with parameters. Evaluate component-wise.
+        * `Model` -- A single vector field, no parameters.
+        * `ModelCW` -- A single vector field, no parameters. Evaluate component-wise.
+        * `ModelParameterized` -- A family of vector fields with parameters.
+        * `ModelParameterizedCW` -- A family of vector fields with parameters. Evaluate component-wise.
 
 ### Data sets
 
