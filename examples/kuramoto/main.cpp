@@ -11,7 +11,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(1000), maxPoints(0), targetDimension(10), numRBFs(50) {}
+	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(50) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -38,8 +38,8 @@ int main( int argc, char** argv ) {
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(kuramoto.model);
 	dataGenerator.pMin = 1.0;
-	dataGenerator.pMax = 2.0;
-	dataGenerator.pDelta = 0.1;
+	dataGenerator.pMax = 1.1;
+	dataGenerator.pDelta = 0.01;
 	dataGenerator.initial.setRandom();
 	dataGenerator.tStart = 50;
 	dataGenerator.tInterval = 7;
@@ -47,14 +47,10 @@ int main( int argc, char** argv ) {
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
-	
-	data.dataSets[0].WriteCSV("output/orig.csv");
-		
+			
 	// Embed the data
 	cout << "Embedding data..." << endl;
 	DataSystem dataEmbedded = kuramoto.embedding.EmbedData(data);
-
-	dataEmbedded.dataSets[0].WriteCSV("output/embed.csv");
 
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;
@@ -78,7 +74,19 @@ int main( int argc, char** argv ) {
 	projSecant.targetMinProjectedLength = 0.7;
 
 	// Compute initial condition
-	projSecant.GetInitial(dataEmbedded);
+	projSecant.W.setZero(kuramoto.embedding.eDim,4);
+	
+	for(uint32_t i=0;i<(kuramoto.embedding.eDim-2)/2;i++) {
+		projSecant.W(2*i,0) = 1;
+		projSecant.W(2*i+1,1) = 1;
+	}
+	projSecant.W(kuramoto.embedding.eDim-2,2) = 1;
+	projSecant.W(kuramoto.embedding.eDim-1,3) = 1;
+	
+	projSecant.W.col(0).normalize();
+	projSecant.W.col(1).normalize();
+
+	//projSecant.GetInitial(dataEmbedded);
 
 	// Optimize over Grassmannian
 	projSecant.Find(newSecants,dataEmbedded.numParameters);
@@ -102,7 +110,10 @@ int main( int argc, char** argv ) {
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
 	reducedModel.WriteCSV("output/reduced.csv");
-	reducedData.reducedData[0].WritePointsText("output/p1-points.csv");
+	reducedData.reducedData[0].WritePointsText("output/p0-points.csv");
+	reducedData.reducedData[1].WritePointsText("output/p1-points.csv");
+	reducedData.reducedData[2].WritePointsText("output/p2-points.csv");
+	reducedData.reducedData[3].WritePointsText("output/p3-points.csv");
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteCSV("output/projection.csv");
 
@@ -114,7 +125,10 @@ int main( int argc, char** argv ) {
 
 	DataSystem rdata = rdataGenerator.GenerateDataSystem();
 
-	rdata.dataSets[0].WriteCSV("output/rdata.csv");
+	rdata.dataSets[0].WriteCSV("output/rdata0.csv");
+	rdata.dataSets[1].WriteCSV("output/rdata1.csv");
+	rdata.dataSets[2].WriteCSV("output/rdata2.csv");
+	rdata.dataSets[3].WriteCSV("output/rdata3.csv");
 
 	system("PAUSE");
 	return 0;

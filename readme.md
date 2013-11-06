@@ -58,7 +58,7 @@ The `ProjSecant` class determines a projection from a set of secants. The projec
 
 ### Find Reduced Model
 
-The `ModelRBFProduced` class takes a `ReducedData` and produces a `ModelRBF`.
+The `ModelRBFProducer` class takes a `ReducedData` and produces a `ModelRBF`.
 The `ModelReducedProducer` class takes a `ReducedDataSystem` and produces a `ModelReduced`.
 
 Examples

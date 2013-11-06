@@ -43,15 +43,6 @@ void ProjSecant::Find( const SecantsPreComputed* secants, uint16_t N ) {
 
 	optimiziation.Optimize( W );
 }
-/*
-void ProjSecant::FindForMinProjectedLength( const SecantsPreComputed* secants, uint16_t N, double targetMinPLen ) {
-	for(uint32_t i=2;i<secants[0].dimension;i++) {
-		GetInitial( data );
-		Find(secants,N);
-		if( MinProjectedLength( secants ) >= targetMinPLen )
-			break;
-	}
-}*/
 
 void ProjSecant::GetInitial( const DataSet& data ) {
 	uint32_t n = data.dimension;
