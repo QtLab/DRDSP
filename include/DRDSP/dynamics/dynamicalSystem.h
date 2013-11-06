@@ -19,12 +19,12 @@ namespace DRDSP {
 	template<typename TTime,typename TState>
 	struct ContinuousDynamicalSystem : DynamicalSystem<TTime,TState> {
 		Solver<TTime,TState>& solver;
-		const WrapFunction<TState>& wrap;
+		const WrapFunction<TState>& wrapFunction;
 		double dtMax;
 		
-		explicit ContinuousDynamicalSystem( Solver<TTime,TState>& S ) : solver(S), wrap(WrapFunction<TState>::identity), dtMax(0) {}
+		explicit ContinuousDynamicalSystem( Solver<TTime,TState>& S ) : solver(S), wrapFunction(WrapFunction<TState>::identity), dtMax(0) {}
 
-		ContinuousDynamicalSystem( Solver<TTime,TState>& S, const WrapFunction<TState>& W ) : solver(S), wrap(W), dtMax(0) {}
+		ContinuousDynamicalSystem( Solver<TTime,TState>& S, const WrapFunction<TState>& W ) : solver(S), wrapFunction(W), dtMax(0) {}
 
 		void Advance( TTime dt ) {
 			double t = 0.0, timeStep = dt;
@@ -35,7 +35,7 @@ namespace DRDSP {
 			}
 			for(uint32_t i=0;i<n;i++) {
 				solver.Integrate(state,t,timeStep);
-				wrap(state);
+				wrapFunction(state);
 			}
 		}
 

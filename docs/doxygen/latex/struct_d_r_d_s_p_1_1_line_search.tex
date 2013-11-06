@@ -1,0 +1,80 @@
+\hypertarget{struct_d_r_d_s_p_1_1_line_search}{\section{D\-R\-D\-S\-P\-:\-:Line\-Search$<$ T\-Met $>$ Struct Template Reference}
+\label{struct_d_r_d_s_p_1_1_line_search}\index{D\-R\-D\-S\-P\-::\-Line\-Search$<$ T\-Met $>$@{D\-R\-D\-S\-P\-::\-Line\-Search$<$ T\-Met $>$}}
+}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a0a4f464ca776f11974fbe1bf8b5b10ef}{typedef T\-Met\-::\-T\-Vec {\bfseries T\-Vec}}\label{struct_d_r_d_s_p_1_1_line_search_a0a4f464ca776f11974fbe1bf8b5b10ef}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a11c98ca28033eb725eb0f8c0c2165415}{{\bfseries Line\-Search} (\hyperlink{struct_d_r_d_s_p_1_1_geodesic}{Geodesic}$<$ T\-Vec $>$ $\ast$geodesic)}\label{struct_d_r_d_s_p_1_1_line_search_a11c98ca28033eb725eb0f8c0c2165415}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a4ea0db15193335a91e76b2e6460eac14}{double {\bfseries Deriv\-S} (const T\-Vec \&X, const T\-Vec \&V)}\label{struct_d_r_d_s_p_1_1_line_search_a4ea0db15193335a91e76b2e6460eac14}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_ab33f387294ebe3f8fe93a1a35b86bca3}{double {\bfseries Search} ()}\label{struct_d_r_d_s_p_1_1_line_search_ab33f387294ebe3f8fe93a1a35b86bca3}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_aeeb734f0f9cfb12bb1012900d86b6ad3}{double($\ast$ {\bfseries S} )(const T\-Vec \&X, const void $\ast$obj)}\label{struct_d_r_d_s_p_1_1_line_search_aeeb734f0f9cfb12bb1012900d86b6ad3}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_aa58cdd4d0ac6bb29c91013bf3e036511}{T\-Vec($\ast$ {\bfseries grad\-S} )(const T\-Vec \&X, const void $\ast$obj)}\label{struct_d_r_d_s_p_1_1_line_search_aa58cdd4d0ac6bb29c91013bf3e036511}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a5b4fc5bf7eec402586369be822ac471d}{const void $\ast$ {\bfseries obj}}\label{struct_d_r_d_s_p_1_1_line_search_a5b4fc5bf7eec402586369be822ac471d}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a97269c9395582cd1e5686b2bb88357b7}{const T\-Met $\ast$ {\bfseries metric}}\label{struct_d_r_d_s_p_1_1_line_search_a97269c9395582cd1e5686b2bb88357b7}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a69072580c2272d7dc555b89a727e575d}{T\-Vec {\bfseries grad\-Sx}}\label{struct_d_r_d_s_p_1_1_line_search_a69072580c2272d7dc555b89a727e575d}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a86391914be1b243831bd5227cca39513}{double {\bfseries Sx}}\label{struct_d_r_d_s_p_1_1_line_search_a86391914be1b243831bd5227cca39513}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_aae7c2b8bcd865b0a6aba7754ace51073}{double {\bfseries alpha}}\label{struct_d_r_d_s_p_1_1_line_search_aae7c2b8bcd865b0a6aba7754ace51073}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a3ccc22ae4853a6b617ca2e13bda842f2}{bool {\bfseries Wolfe} (double Sc, double gc)}\label{struct_d_r_d_s_p_1_1_line_search_a3ccc22ae4853a6b617ca2e13bda842f2}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a3b1a2771360efeaf9434479b0df9fbf1}{double {\bfseries Secant} (double a, double b, double ga, double gb)}\label{struct_d_r_d_s_p_1_1_line_search_a3b1a2771360efeaf9434479b0df9fbf1}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a202ae4e26b280c839008a5021e7afa67}{double {\bfseries Riddler} (double x1, double x2, double x3, double gx1, double gx2, double gx3)}\label{struct_d_r_d_s_p_1_1_line_search_a202ae4e26b280c839008a5021e7afa67}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a0512b9941dfb6af38a9bf1296904d7eb}{\hyperlink{struct_d_r_d_s_p_1_1_geodesic}{Geodesic}$<$ T\-Vec $>$ $\ast$ {\bfseries G}}\label{struct_d_r_d_s_p_1_1_line_search_a0512b9941dfb6af38a9bf1296904d7eb}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a4872eda50336fe3573d2118d3b929ef0}{double {\bfseries deriv\-Sx}}\label{struct_d_r_d_s_p_1_1_line_search_a4872eda50336fe3573d2118d3b929ef0}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a7cb4acca18846268383c8e579bb58260}{double {\bfseries mu}}\label{struct_d_r_d_s_p_1_1_line_search_a7cb4acca18846268383c8e579bb58260}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_a05c6aafb2cd71e6b9bac7dcc1724986e}{double {\bfseries eta}}\label{struct_d_r_d_s_p_1_1_line_search_a05c6aafb2cd71e6b9bac7dcc1724986e}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_line_search_aa5f9dd44b7ef2c694469b31f3e7ee9d7}{double {\bfseries alpha\-Max}}\label{struct_d_r_d_s_p_1_1_line_search_aa5f9dd44b7ef2c694469b31f3e7ee9d7}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/\-D\-R\-D\-S\-P/optimization/linesearch.\-h\end{DoxyCompactItemize}

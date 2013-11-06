@@ -32,8 +32,8 @@ int main( int argc, char** argv ) {
 	Options options = GetOptions(argc,argv);
 
 	// The ks example
-	KuramotoFlat kuramoto(100);
-
+	KuramotoBFlat kuramoto(100);
+	
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(kuramoto.model);

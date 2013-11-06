@@ -11,51 +11,51 @@
 namespace DRDSP {
 
 	struct Model {
-		const WrapFunction<VectorXd>* wrap;
+		const WrapFunction<VectorXd>* wrapFunction;
 		uint32_t dimension;
 
-		Model() : wrap(&WrapFunction<VectorXd>::identity), dimension(0) {}
-		explicit Model( const WrapFunction<VectorXd>* wrapFunc ) : wrap(wrapFunc), dimension(0) {}
-		explicit Model( uint32_t dim ) : wrap(&WrapFunction<VectorXd>::identity), dimension(dim) {}
-		Model( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim ) : wrap(wrapFunc), dimension(dim) {}
+		Model() : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(0) {}
+		explicit Model( const WrapFunction<VectorXd>* wrapFunc ) : wrapFunction(wrapFunc), dimension(0) {}
+		explicit Model( uint32_t dim ) : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(dim) {}
+		Model( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim ) : wrapFunction(wrapFunc), dimension(dim) {}
 		virtual VectorXd VectorField( const VectorXd& state ) = 0;
 		virtual MatrixXd Partials( const VectorXd& state ) = 0;
 	};
 	
 	struct ModelCW {
-		const WrapFunction<VectorXd>* wrap;
+		const WrapFunction<VectorXd>* wrapFunction;
 		uint32_t dimension;
 
-		ModelCW() : wrap(&WrapFunction<VectorXd>::identity), dimension(0) {}
-		explicit ModelCW( const WrapFunction<VectorXd>* wrapFunc ) : wrap(wrapFunc), dimension(0) {}
-		explicit ModelCW( uint32_t dim ) : wrap(&WrapFunction<VectorXd>::identity), dimension(dim) {}
-		ModelCW( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim ) : wrap(wrapFunc), dimension(dim) {}
+		ModelCW() : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(0) {}
+		explicit ModelCW( const WrapFunction<VectorXd>* wrapFunc ) : wrapFunction(wrapFunc), dimension(0) {}
+		explicit ModelCW( uint32_t dim ) : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(dim) {}
+		ModelCW( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim ) : wrapFunction(wrapFunc), dimension(dim) {}
 		virtual double VectorField( const VectorXd& state, uint32_t i ) = 0;
 		virtual double Partials( const VectorXd& state, uint32_t i, uint32_t j ) = 0;
 	};
 
 	struct ModelParameterized {
-		const WrapFunction<VectorXd>* wrap;
+		const WrapFunction<VectorXd>* wrapFunction;
 		uint32_t dimension;
 		uint8_t parameterDimension;
 
-		ModelParameterized() : wrap(&WrapFunction<VectorXd>::identity), dimension(0), parameterDimension(0) {}
-		explicit ModelParameterized( const WrapFunction<VectorXd>* wrapFunc ) : wrap(wrapFunc), dimension(0), parameterDimension(0) {}
-		ModelParameterized( uint32_t dim, uint32_t pDim ) : wrap(&WrapFunction<VectorXd>::identity), dimension(dim), parameterDimension(pDim) {}
-		ModelParameterized( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim, uint32_t pDim ) : wrap(wrapFunc), dimension(dim), parameterDimension(pDim) {}
+		ModelParameterized() : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(0), parameterDimension(0) {}
+		explicit ModelParameterized( const WrapFunction<VectorXd>* wrapFunc ) : wrapFunction(wrapFunc), dimension(0), parameterDimension(0) {}
+		ModelParameterized( uint32_t dim, uint32_t pDim ) : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(dim), parameterDimension(pDim) {}
+		ModelParameterized( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim, uint32_t pDim ) : wrapFunction(wrapFunc), dimension(dim), parameterDimension(pDim) {}
 		virtual VectorXd VectorField( const VectorXd& state, const VectorXd& parameter ) = 0;
 		virtual MatrixXd Partials( const VectorXd& state, const VectorXd& parameter ) = 0;
 	};
 	
 	struct ModelParameterizedCW {
-		const WrapFunction<VectorXd>* wrap;
+		const WrapFunction<VectorXd>* wrapFunction;
 		uint32_t dimension;
 		uint8_t parameterDimension;
 
-		ModelParameterizedCW() : wrap(&WrapFunction<VectorXd>::identity), dimension(0), parameterDimension(0) {}
-		explicit ModelParameterizedCW( const WrapFunction<VectorXd>* wrapFunc ) : wrap(wrapFunc), dimension(0), parameterDimension(0) {}
-		ModelParameterizedCW( uint32_t dim, uint32_t pDim ) : wrap(&WrapFunction<VectorXd>::identity), dimension(dim), parameterDimension(pDim) {}
-		ModelParameterizedCW( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim, uint32_t pDim ) : wrap(wrapFunc), dimension(dim), parameterDimension(pDim) {}
+		ModelParameterizedCW() : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(0), parameterDimension(0) {}
+		explicit ModelParameterizedCW( const WrapFunction<VectorXd>* wrapFunc ) : wrapFunction(wrapFunc), dimension(0), parameterDimension(0) {}
+		ModelParameterizedCW( uint32_t dim, uint32_t pDim ) : wrapFunction(&WrapFunction<VectorXd>::identity), dimension(dim), parameterDimension(pDim) {}
+		ModelParameterizedCW( const WrapFunction<VectorXd>* wrapFunc, uint32_t dim, uint32_t pDim ) : wrapFunction(wrapFunc), dimension(dim), parameterDimension(pDim) {}
 		virtual double VectorField( const VectorXd& state, const VectorXd& parameter, uint32_t i ) = 0;
 		virtual double Partials( const VectorXd& state, const VectorXd& parameter, uint32_t i, uint32_t j ) = 0;
 	};

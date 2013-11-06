@@ -10,12 +10,10 @@ struct KuramotoWrap : WrapFunction<VectorXd> {
 	void operator()( VectorXd& x ) const;
 };
 
-struct Kuramoto : ModelParameterized {
-	Kuramoto();
-	explicit Kuramoto( uint32_t N );
+struct KuramotoBase {
+	KuramotoBase();
+	explicit KuramotoBase( uint32_t N );
 	void Create( uint32_t N );
-	VectorXd VectorField( const VectorXd& state, const VectorXd& parameter );
-	MatrixXd Partials( const VectorXd& state, const VectorXd& parameter );
 
 protected:
 	KuramotoWrap wrap;
@@ -32,6 +30,20 @@ protected:
 	double MeanPhaseDerivative( uint32_t j, const VectorXd &state, double psi ) const;
 };
 
+struct KuramotoA : KuramotoBase, ModelParameterized {
+	KuramotoA();
+	explicit KuramotoA( uint32_t N );
+	VectorXd VectorField( const VectorXd& state, const VectorXd& parameter );
+	MatrixXd Partials( const VectorXd& state, const VectorXd& parameter );
+};
+
+struct KuramotoB : KuramotoBase, ModelParameterized {
+	KuramotoB();
+	explicit KuramotoB( uint32_t N );
+	VectorXd VectorField( const VectorXd& state, const VectorXd& parameter );
+	MatrixXd Partials( const VectorXd& state, const VectorXd& parameter );
+};
+
 struct FlatEmbedding : Embedding {
 	explicit FlatEmbedding( uint32_t n ) : Embedding(n,2*n) {}
 	VectorXd Evaluate( const VectorXd &x ) const;
@@ -40,10 +52,17 @@ struct FlatEmbedding : Embedding {
 	MatrixXd Derivative2( const VectorXd &x, uint32_t mu ) const;
 };
 
-struct KuramotoFlat : ModelParameterizedEmbedded {
-	explicit KuramotoFlat( uint32_t N ) : ModelParameterizedEmbedded(kuramoto,embedFlat), kuramoto(N), embedFlat(N+1) {}
+struct KuramotoAFlat : ModelParameterizedEmbedded {
+	explicit KuramotoAFlat( uint32_t N ) : ModelParameterizedEmbedded(kuramoto,embedFlat), kuramoto(N), embedFlat(N+1) {}
 protected:
-	Kuramoto kuramoto;
+	KuramotoA kuramoto;
+	FlatEmbedding embedFlat;
+};
+
+struct KuramotoBFlat : ModelParameterizedEmbedded {
+	explicit KuramotoBFlat( uint32_t N ) : ModelParameterizedEmbedded(kuramoto,embedFlat), kuramoto(N), embedFlat(N+1) {}
+protected:
+	KuramotoA kuramoto;
 	FlatEmbedding embedFlat;
 };
 
