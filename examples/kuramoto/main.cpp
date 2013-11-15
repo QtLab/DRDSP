@@ -2,6 +2,7 @@
 #include <DRDSP/data/data_set.h>
 #include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
+#include <DRDSP/dynamics/model_rbf_producer.h>
 #include <DRDSP/dynamics/model_reduced_producer.h>
 #include <DRDSP/dynamics/generate_data.h>
 
@@ -11,7 +12,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(50) {}
+	Options() : numIterations(5000), maxPoints(0), targetDimension(4), numRBFs(30) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -37,9 +38,9 @@ int main( int argc, char** argv ) {
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(kuramoto.model);
-	dataGenerator.pMin = 1.0;
-	dataGenerator.pMax = 1.1;
-	dataGenerator.pDelta = 0.01;
+	dataGenerator.pMin = 2.0;
+	dataGenerator.pMax = 2.01;
+	dataGenerator.pDelta = 0.002;
 	dataGenerator.initial.setRandom();
 	dataGenerator.tStart = 50;
 	dataGenerator.tInterval = 7;
@@ -94,6 +95,9 @@ int main( int argc, char** argv ) {
 	// Print some statistics
 	projSecant.AnalyseSecants(newSecants,dataEmbedded.numParameters);
 
+	projSecant.WriteBinary("output/projection.bin");
+	projSecant.WriteCSV("output/projection.csv");
+
 	delete[] newSecants;
 
 	// Compute projected data
@@ -101,21 +105,29 @@ int main( int argc, char** argv ) {
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData(kuramoto,data,projSecant.W);
 
-	// Obtain the reduced model
-	cout << "Computing Reduced Model..." << endl;
-	ModelReducedProducer producer;
-	producer.numRBFs = options.numRBFs;
-	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
-
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
-
-	reducedModel.WriteCSV("output/reduced.csv");
 	reducedData.reducedData[0].WritePointsText("output/p0-points.csv");
 	reducedData.reducedData[1].WritePointsText("output/p1-points.csv");
 	reducedData.reducedData[2].WritePointsText("output/p2-points.csv");
 	reducedData.reducedData[3].WritePointsText("output/p3-points.csv");
-	projSecant.WriteBinary("output/projection.bin");
-	projSecant.WriteCSV("output/projection.csv");
+
+	// Obtain the reduced model
+	cout << "Computing Reduced Model..." << endl;
+	
+	ModelReducedProducer producer;
+	producer.numRBFs = options.numRBFs;
+	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	
+	reducedModel.WriteCSV("output/reduced.csv");
+	
+	
+	ModelRBFProducer rbfProducer;
+	rbfProducer.numRBFs = options.numRBFs;
+	ModelRBF rbfModel = rbfProducer.BruteForce(reducedData.reducedData[0],options.numIterations);
+
+	cout << "Total Cost = " << rbfProducer.ComputeTotalCost(rbfModel,reducedData.reducedData[0]) << endl;	
+	
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;

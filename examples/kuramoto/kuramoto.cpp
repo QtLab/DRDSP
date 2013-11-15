@@ -52,7 +52,7 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 }
 
 void KuramotoWrap::operator()( VectorXd& state ) const {
-	for(uint32_t i=0;i<state.size();i++)
+	for(int i=0;i<state.size();i++)
 		Wrap(state(i),-M_PI,M_PI);
 }
 
@@ -102,8 +102,6 @@ KuramotoA::KuramotoA() : ModelParameterized(&wrap) {}
 
 KuramotoA::KuramotoA( uint32_t N ) : ModelParameterized(&wrap,N+1,1) {
 	Create(N);
-	dimension = N+1;
-	parameterDimension = 1;
 }
 
 VectorXd KuramotoA::VectorField( const VectorXd& state, const VectorXd& parameter ) {
@@ -142,19 +140,18 @@ KuramotoB::KuramotoB() : ModelParameterized(&wrap) {}
 
 KuramotoB::KuramotoB( uint32_t N ) : ModelParameterized(&wrap,N+1,1) {
 	Create(N);
-	dimension = N+1;
-	parameterDimension = 1;
 }
 
 VectorXd KuramotoB::VectorField( const VectorXd& state, const VectorXd& parameter ) {
 	complex<double> z = ComplexOrderParameter(state);
 	VectorXd s(numOscillators);
 	double psi = arg(z);
+	double r = abs(z);
 	const double& forcingFrequency = parameter(0);
 	for(uint32_t i=0;i<numOscillators;i++)
-		s(i) = sin( psi - Phase(i,state) );
+		s(i) = r * sin( psi - Phase(i,state) );
 	VectorXd res(dimension);
-	res.head(numOscillators) = frequencies + (interactionStrengths * Forcing(state) + K * VectorXd::Ones(numOscillators) ) * abs(z) * s;
+	res.head(numOscillators) = frequencies + (interactionStrengths * Forcing(state) + K * VectorXd::Ones(numOscillators) ).cwiseProduct(s);
 	res(dimension-1) = forcingFrequency;
 	return std::move(res);
 }

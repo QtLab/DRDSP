@@ -10,8 +10,8 @@ using namespace std;
 using namespace DRDSP;
 
 ModelReducedProducer::ModelReducedProducer() : numRBFs(30) {
-	fitWeight[0] = 1.0;
-	fitWeight[1] = 1.0;
+	fitWeight[0] = 0.5;
+	fitWeight[1] = 0.5;
 }
 
 void ModelReducedProducer::ComputeMatrices( const ModelRBF& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
@@ -74,9 +74,11 @@ double ModelReducedProducer::ComputeTotalCost( ModelReduced& model, const Reduce
 			S1 += ( modelRBF.VectorField(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
 			S2 += ( modelRBF.Partials(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
 		}
+		S1 /= data.reducedData[j].count;
+		S2 /= data.reducedData[j].count;
 		T += (fitWeight[0]/data.reducedData[j].scales[0]) * S1 + (fitWeight[1]/data.reducedData[j].scales[1]) * S2;
 	}
-	return T;
+	return T / data.numParameters;
 }
 
 void ModelReducedProducer::Fit( ModelReduced& reduced, const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const {
@@ -116,7 +118,7 @@ ModelReduced ModelReducedProducer::BruteForce( const ReducedDataSystem& data, ui
 	ModelReduced reduced, best;
 	reduced.Create(data.reducedData[0].dimension,parameterDimension,numRBFs);
 	AABB box = data.ComputeBoundingBox();
-	box.Scale(1.1);
+	//box.Scale(1.1);
 
 	for(uint32_t i=0;i<numIterations;i++) {
 		reduced.model.SetCentresRandom( box );
@@ -126,7 +128,7 @@ ModelReduced ModelReducedProducer::BruteForce( const ReducedDataSystem& data, ui
 		if( Sft < Sf || i==0 ) {
 			Sf = Sft;
 			best = reduced;
-			cout << i << ", " << Sf << endl;
+			cout << i << ", \t" << Sf << endl;
 		}
 	}
 	return std::move(best);

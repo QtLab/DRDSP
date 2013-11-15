@@ -9,8 +9,8 @@ using namespace std;
 using namespace DRDSP;
 
 ModelRBFProducer::ModelRBFProducer() : numRBFs(30) {
-	fitWeight[0] = 1.0;
-	fitWeight[1] = 1.0;
+	fitWeight[0] = 0.5;
+	fitWeight[1] = 0.5;
 }
 
 double ModelRBFProducer::ComputeTotalCost( ModelRBF& model, const ReducedData& data ) const {
@@ -19,6 +19,8 @@ double ModelRBFProducer::ComputeTotalCost( ModelRBF& model, const ReducedData& d
 		S1 += ( model.VectorField(data.points[i]) - data.vectors[i] ).squaredNorm();
 		S2 += ( model.Partials(data.points[i]) - data.derivatives[i] ).squaredNorm();
 	}
+	S1 /= data.count;
+	S2 /= data.count;
 	return (fitWeight[0]/data.scales[0]) * S1 + (fitWeight[1]/data.scales[1]) * S2;
 }
 
@@ -85,7 +87,7 @@ ModelRBF ModelRBFProducer::BruteForce( const ReducedData& data, uint32_t numIter
 		if( Sft < Sf || i==0 ) {
 			Sf = Sft;
 			best = model;
-			cout << Sf << endl;
+			cout << i << ", \t" << Sf << endl;
 		}
 	}
 	return std::move(best);

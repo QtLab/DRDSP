@@ -19,7 +19,7 @@ VectorXd RadialFunction::Derivative( const VectorXd& x ) const {
 	VectorXd r = x - centre;
 	double rnorm = r.norm();
 	if( rnorm == 0.0 ) VectorXd::Zero(x.size());
-	return (function->Derivative( rnorm )/rnorm) * r;
+	return ( function->Derivative( rnorm ) / rnorm ) * r;
 }
 
 double ThinPlateSpline::operator()( double r ) const {

@@ -20,7 +20,6 @@ ModelRBF::ModelRBF( const ModelRBF& rhs ) {
 }
 
 ModelRBF::ModelRBF( ModelRBF&& rhs ) {
-	Destroy();
 	dimension = rhs.dimension;
 	numRBFs = rhs.numRBFs;
 	linear = rhs.linear;

@@ -62,7 +62,7 @@ protected:
 struct KuramotoBFlat : ModelParameterizedEmbedded {
 	explicit KuramotoBFlat( uint32_t N ) : ModelParameterizedEmbedded(kuramoto,embedFlat), kuramoto(N), embedFlat(N+1) {}
 protected:
-	KuramotoA kuramoto;
+	KuramotoB kuramoto;
 	FlatEmbedding embedFlat;
 };
 
