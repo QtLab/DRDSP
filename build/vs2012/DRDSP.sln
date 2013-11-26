@@ -18,6 +18,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kuramoto", "examples\kuramo
 		{2E42D8FD-0BD3-4057-9C73-EFD24E366260} = {2E42D8FD-0BD3-4057-9C73-EFD24E366260}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "goodfellow", "examples\goodfellow\goodfellow.vcxproj", "{A165C714-9C5E-43D2-9582-0CF1107E6986}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2E42D8FD-0BD3-4057-9C73-EFD24E366260} = {2E42D8FD-0BD3-4057-9C73-EFD24E366260}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -58,6 +63,14 @@ Global
 		{D8C56D54-B9C3-4BCC-9B2E-4415A04EB210}.Release|Win32.Build.0 = Release|Win32
 		{D8C56D54-B9C3-4BCC-9B2E-4415A04EB210}.Release|x64.ActiveCfg = Release|x64
 		{D8C56D54-B9C3-4BCC-9B2E-4415A04EB210}.Release|x64.Build.0 = Release|x64
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Debug|Win32.Build.0 = Debug|Win32
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Debug|x64.ActiveCfg = Debug|x64
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Debug|x64.Build.0 = Debug|x64
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Release|Win32.ActiveCfg = Release|Win32
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Release|Win32.Build.0 = Release|Win32
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Release|x64.ActiveCfg = Release|x64
+		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

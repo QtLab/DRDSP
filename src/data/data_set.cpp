@@ -324,6 +324,15 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i ) {
 	return true;
 }
 
+void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const {
+	stringstream name;
+	for(uint16_t i=0;i<numParameters;i++) {
+		name.str("");
+		name << filePrefix << parameters[i](0) << fileSuffix;
+		dataSets[i].WriteCSV(name.str().c_str());
+	}
+}
+
 DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
 	DataSystem projectedData;
 

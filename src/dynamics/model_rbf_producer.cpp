@@ -13,6 +13,11 @@ ModelRBFProducer::ModelRBFProducer() : numRBFs(30) {
 	fitWeight[1] = 0.5;
 }
 
+ModelRBFProducer::ModelRBFProducer( uint16_t nRBFs ) : numRBFs(nRBFs) {
+	fitWeight[0] = 0.5;
+	fitWeight[1] = 0.5;
+}
+
 double ModelRBFProducer::ComputeTotalCost( ModelRBF& model, const ReducedData& data ) const {
 	double S1 = 0.0, S2 = 0.0;
 	for(uint32_t i=0;i<data.count;i++) {

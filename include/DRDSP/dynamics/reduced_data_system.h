@@ -22,6 +22,8 @@ namespace DRDSP {
 		void ComputeData( ModelParameterizedEmbedded& model, const DataSystem& data, const MatrixXd& W );
 		void ComputeData( ModelParameterizedEmbeddedCW& model, const DataSystem& data, const MatrixXd& W );
 		AABB ComputeBoundingBox() const;
+		void WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const;
+		void WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;
 	};
 
 }

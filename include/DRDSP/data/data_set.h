@@ -52,6 +52,7 @@ namespace DRDSP {
 		bool Load( const char* filename );
 		bool LoadSetBinary( const char* filename, uint32_t i );
 		bool LoadSetText( const char* filename, uint32_t i );
+		void WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const;
 		DataSystem ProjectData( const MatrixXd& W ) const;
 	};
 

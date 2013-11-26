@@ -319,7 +319,7 @@ void ReducedData::WriteData( const char* filename ) const {
 	out.close();
 }
 
-void ReducedData::WritePointsText( const char* filename ) const {
+void ReducedData::WritePointsCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
 		cout << "ReducedData::WritePointsText : file error" << endl;
@@ -333,7 +333,7 @@ void ReducedData::WritePointsText( const char* filename ) const {
 	out.close();
 }
 
-void ReducedData::WriteVectorsText( const char* filename ) const {
+void ReducedData::WriteVectorsCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
 		cout << "ReducedData::WriteVectorsText : file error" << endl;

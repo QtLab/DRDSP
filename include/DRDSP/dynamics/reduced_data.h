@@ -37,8 +37,8 @@ namespace DRDSP {
 		double ComputeDerivativeScale();
 		void WriteData( const char* filename ) const;
 		bool ReadData( const char* filename );
-		void WritePointsText( const char* filename ) const;
-		void WriteVectorsText( const char* filename ) const;
+		void WritePointsCSV( const char* filename ) const;
+		void WriteVectorsCSV( const char* filename ) const;
 	};
 
 }

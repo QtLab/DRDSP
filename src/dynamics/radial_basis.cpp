@@ -3,7 +3,12 @@
 
 using namespace DRDSP;
 
-ThinPlateSpline RadialFunction::thinPlateSpline;
+ThinPlateSpline       RadialFunction::thinPlateSpline;
+PolyharmonicSpline3   RadialFunction::polyharmonicSpline3;
+Gaussian              RadialFunction::gaussian;
+Multiquadratic        RadialFunction::multiquadratic;
+InverseQuadratic      RadialFunction::inverseQuadratic;
+InverseMultiquadratic RadialFunction::inverseMultiquadratic;
 
 RadialFunction::RadialFunction() : function(&thinPlateSpline) {
 }

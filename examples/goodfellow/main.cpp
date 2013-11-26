@@ -6,13 +6,13 @@
 #include <DRDSP/dynamics/model_reduced_producer.h>
 #include <DRDSP/dynamics/generate_data.h>
 
-#include "kuramoto.h"
+#include "goodfellow.h"
 
 using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(5000), maxPoints(0), targetDimension(4), numRBFs(50) {}
+	Options() : numIterations(5000), maxPoints(0), targetDimension(3), numRBFs(50) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -33,37 +33,33 @@ int main( int argc, char** argv ) {
 	Options options = GetOptions(argc,argv);
 
 	// The kuramoto example
-	KuramotoBFlat kuramoto(100);
+	Goodfellow goodfellow(100);
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator dataGenerator(kuramoto.model);
-	dataGenerator.pMin = 2.0;
-	dataGenerator.pMax = 2.01;
-	dataGenerator.pDelta = 0.002;
+	DataGenerator dataGenerator(goodfellow);
+	dataGenerator.pMin = 0.1;
+	dataGenerator.pMax = 0.8;
+	dataGenerator.pDelta = 0.1;
 	dataGenerator.initial.setRandom();
-	dataGenerator.tStart = 50;
-	dataGenerator.tInterval = 7;
-	dataGenerator.print = 100;
+	dataGenerator.tStart = 100;
+	dataGenerator.tInterval = 500;
+	dataGenerator.print = 1000;
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
-			
-	// Embed the data
-	cout << "Embedding data..." << endl;
-	DataSystem dataEmbedded = kuramoto.embedding.EmbedData(data);
 
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;
-	SecantsPreComputed* secants = new SecantsPreComputed [dataEmbedded.numParameters];
+	SecantsPreComputed* secants = new SecantsPreComputed [data.numParameters];
 	
-	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
-		secants[i].ComputeFromData( dataEmbedded.dataSets[i] );
+	for(uint16_t i=0;i<data.numParameters;i++)
+		secants[i].ComputeFromData( data.dataSets[i] );
 
 	// Secant culling
 	cout << "Culling secants..." << endl;
-	SecantsPreComputed* newSecants = new SecantsPreComputed [dataEmbedded.numParameters];
-	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
+	SecantsPreComputed* newSecants = new SecantsPreComputed [data.numParameters];
+	for(uint16_t i=0;i<data.numParameters;i++)
 		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
 
 	delete[] secants;
@@ -75,24 +71,13 @@ int main( int argc, char** argv ) {
 	projSecant.targetMinProjectedLength = 0.7;
 
 	// Compute initial condition
-	// For this particular example, we use a custom initial condition
-	projSecant.W.setZero(kuramoto.embedding.eDim,4);
-	
-	for(uint32_t i=0;i<(kuramoto.embedding.eDim-2)/2;i++) {
-		projSecant.W(2*i,0) = 1;
-		projSecant.W(2*i+1,1) = 1;
-	}
-	projSecant.W(kuramoto.embedding.eDim-2,2) = 1;
-	projSecant.W(kuramoto.embedding.eDim-1,3) = 1;
-	
-	projSecant.W.col(0).normalize();
-	projSecant.W.col(1).normalize();
+	projSecant.GetInitial(data);
 
 	// Optimize over Grassmannian
-	projSecant.Find(newSecants,dataEmbedded.numParameters);
+	projSecant.Find(newSecants,data.numParameters);
 
 	// Print some statistics
-	projSecant.AnalyseSecants(newSecants,dataEmbedded.numParameters);
+	projSecant.AnalyseSecants(newSecants,data.numParameters);
 
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteCSV("output/projection.csv");
@@ -102,7 +87,7 @@ int main( int argc, char** argv ) {
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData(kuramoto,data,projSecant.W);
+	reducedData.ComputeData(goodfellow,data,projSecant.W);
 	reducedData.WritePointsCSV("output/p","-points.csv");
 	reducedData.WriteVectorsCSV("output/p","-points.csv");
 

@@ -11,6 +11,7 @@ namespace DRDSP {
 		uint16_t numRBFs;
 
 		ModelReducedProducer();
+		ModelReducedProducer( uint16_t nRBFs );
 		double ComputeTotalCost( ModelReduced& model, const ReducedDataSystem& data, const VectorXd* parameters ) const;
 		ModelReduced ComputeModelReduced( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const;
 		ModelReduced BruteForce( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters, uint32_t numIterations ) const;

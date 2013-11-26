@@ -14,6 +14,11 @@ ModelReducedProducer::ModelReducedProducer() : numRBFs(30) {
 	fitWeight[1] = 0.5;
 }
 
+ModelReducedProducer::ModelReducedProducer( uint16_t nRBFs ) : numRBFs(nRBFs) {
+	fitWeight[0] = 0.5;
+	fitWeight[1] = 0.5;
+}
+
 void ModelReducedProducer::ComputeMatrices( const ModelRBF& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
 
 	MatrixXd y1, y2, A1, A2, Lambda, X, Y;
@@ -117,6 +122,7 @@ ModelReduced ModelReducedProducer::BruteForce( const ReducedDataSystem& data, ui
 
 	ModelReduced reduced, best;
 	reduced.Create(data.reducedData[0].dimension,parameterDimension,numRBFs);
+	reduced.model.SetRBFType( RadialFunction::multiquadratic );
 	AABB box = data.ComputeBoundingBox();
 	//box.Scale(1.1);
 

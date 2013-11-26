@@ -55,8 +55,13 @@ namespace DRDSP {
 		RadialFunction( const Function& f );
 		double operator()( const VectorXd& x ) const;
 		VectorXd Derivative( const VectorXd& x ) const;
-	protected:
+
 		static ThinPlateSpline thinPlateSpline;
+		static PolyharmonicSpline3 polyharmonicSpline3;
+		static Gaussian gaussian;
+		static Multiquadratic multiquadratic;
+		static InverseQuadratic inverseQuadratic;
+		static InverseMultiquadratic inverseMultiquadratic;
 	};
 
 }

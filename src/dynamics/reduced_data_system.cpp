@@ -1,6 +1,8 @@
 #include <DRDSP/dynamics/reduced_data_system.h>
+#include <sstream>
 
 using namespace DRDSP;
+using namespace std;
 
 ReducedDataSystem::ReducedDataSystem() : reducedData(nullptr), numParameters(0) {
 }
@@ -96,5 +98,23 @@ AABB ReducedDataSystem::ComputeBoundingBox() const {
 		}
 	}
 	return std::move(box);
+}
+
+void ReducedDataSystem::WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const {
+	stringstream name;
+	for(uint16_t i=0;i<numParameters;i++) {
+		name.str("");
+		name << filePrefix << i << fileSuffix;
+		reducedData[i].WritePointsCSV(name.str().c_str());
+	}
+}
+
+void ReducedDataSystem::WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const {
+	stringstream name;
+	for(uint16_t i=0;i<numParameters;i++) {
+		name.str("");
+		name << filePrefix << i << fileSuffix;
+		reducedData[i].WriteVectorsCSV(name.str().c_str());
+	}
 }
 
