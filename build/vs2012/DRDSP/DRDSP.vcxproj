@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\..\src\data\aabb.cpp" />
     <ClCompile Include="..\..\..\src\data\data_set.cpp" />
     <ClCompile Include="..\..\..\src\data\data_typed.cpp" />
+    <ClCompile Include="..\..\..\src\data\histogram.cpp" />
     <ClCompile Include="..\..\..\src\data\secants.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\dynamicalSystem.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\data_set.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\data_typed.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\data\histogram.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\secants.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h" />

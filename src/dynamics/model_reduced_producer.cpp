@@ -5,6 +5,7 @@
 #include <DRDSP/dynamics/model_reduced_producer.h>
 #include <DRDSP/dynamics/model_reduced.h>
 #include <DRDSP/dynamics/affineParameterMap.h>
+#include <DRDSP/data/histogram.h>
 
 using namespace std;
 using namespace DRDSP;
@@ -125,17 +126,25 @@ ModelReduced ModelReducedProducer::BruteForce( const ReducedDataSystem& data, ui
 	reduced.model.SetRBFType( RadialFunction::multiquadratic );
 	AABB box = data.ComputeBoundingBox();
 	//box.Scale(1.1);
+	double* costs = new double [numIterations];
 
 	for(uint32_t i=0;i<numIterations;i++) {
 		reduced.model.SetCentresRandom( box );
 		Fit(reduced,data,parameterDimension,parameters);
 		Sft = ComputeTotalCost(reduced,data,parameters);
-
+		costs[i] = Sft;
 		if( Sft < Sf || i==0 ) {
 			Sf = Sft;
 			best = reduced;
-			cout << i << ", \t" << Sf << endl;
+			cout << i << " \t" << Sf << endl;
 		}
 	}
+
+	HistogramGenerator histogramGenerator;
+	histogramGenerator.logScale = true;
+	histogramGenerator.clampMax = 0.02;
+	histogramGenerator.Generate(costs,numIterations).WriteCSV("output/costs.csv");
+	delete[] costs;
+
 	return std::move(best);
 }

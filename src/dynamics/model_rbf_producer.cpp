@@ -4,6 +4,7 @@
 #include <Eigen/LU>
 #include <DRDSP/dynamics/model_rbf_producer.h>
 #include <DRDSP/dynamics/model_rbf.h>
+#include <DRDSP/data/histogram.h>
 
 using namespace std;
 using namespace DRDSP;
@@ -83,17 +84,23 @@ ModelRBF ModelRBFProducer::BruteForce( const ReducedData& data, uint32_t numIter
 
 	ModelRBF model( data.dimension, numRBFs ), best;
 	AABB box = data.ComputeBoundingBox();
+	double* costs = new double [numIterations];
 
 	for(uint32_t i=0;i<numIterations;i++) {
 		model.SetCentresRandom( box );
 		Fit(model,data);
 		Sft = ComputeTotalCost(model,data);
-
+		costs[i] = Sft;
 		if( Sft < Sf || i==0 ) {
 			Sf = Sft;
 			best = model;
-			cout << i << ", \t" << Sf << endl;
+			cout << i << " \t" << Sf << endl;
 		}
 	}
+
+	HistogramGenerator histogramGenerator(100);
+	histogramGenerator.Generate(costs,numIterations).WriteCSV("output/costs.csv");
+	delete[] costs;
+
 	return std::move(best);
 }

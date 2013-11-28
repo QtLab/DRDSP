@@ -5,6 +5,7 @@
 #include <DRDSP/dynamics/model_rbf_producer.h>
 #include <DRDSP/dynamics/model_reduced_producer.h>
 #include <DRDSP/dynamics/generate_data.h>
+#include <DRDSP/data/histogram.h>
 
 #include "goodfellow.h"
 
@@ -12,7 +13,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(5000), maxPoints(0), targetDimension(3), numRBFs(50) {}
+	Options() : numIterations(2000), maxPoints(0), targetDimension(2), numRBFs(50) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -32,22 +33,25 @@ int main( int argc, char** argv ) {
 
 	Options options = GetOptions(argc,argv);
 
-	// The kuramoto example
-	Goodfellow goodfellow(100);
+	// The example
+	Goodfellow goodfellow(200);
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(goodfellow);
-	dataGenerator.pMin = 0.1;
-	dataGenerator.pMax = 0.8;
-	dataGenerator.pDelta = 0.1;
+	dataGenerator.pMin = 2.0;
+	dataGenerator.pMax = 4.5;
+	dataGenerator.pDelta = (dataGenerator.pMax - dataGenerator.pMin)/10;
 	dataGenerator.initial.setRandom();
+	dataGenerator.initial -= 0.5 * VectorXd::Ones(goodfellow.dimension);
+	dataGenerator.initial *= 2.0;
 	dataGenerator.tStart = 100;
-	dataGenerator.tInterval = 500;
-	dataGenerator.print = 1000;
+	dataGenerator.tInterval = 10;
+	dataGenerator.print = 200;
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
+	//data.WriteDataSetsCSV("output/orig",".csv");
 
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;
@@ -89,7 +93,7 @@ int main( int argc, char** argv ) {
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData(goodfellow,data,projSecant.W);
 	reducedData.WritePointsCSV("output/p","-points.csv");
-	reducedData.WriteVectorsCSV("output/p","-points.csv");
+	reducedData.WriteVectorsCSV("output/p","-vectors.csv");
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
@@ -111,6 +115,7 @@ int main( int argc, char** argv ) {
 	DataGenerator rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.initial = reducedData.reducedData[0].points[0];
+	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateDataSystem();
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
