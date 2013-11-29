@@ -13,7 +13,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(2000), maxPoints(0), targetDimension(2), numRBFs(50) {}
+	Options() : numIterations(10), maxPoints(0), targetDimension(4), numRBFs(50) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -34,24 +34,24 @@ int main( int argc, char** argv ) {
 	Options options = GetOptions(argc,argv);
 
 	// The example
-	Goodfellow goodfellow(200);
+	Goodfellow goodfellow(3);
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(goodfellow);
-	dataGenerator.pMin = 2.0;
-	dataGenerator.pMax = 4.5;
+	dataGenerator.pMin = 1.06;
+	dataGenerator.pMax = 1.09;
 	dataGenerator.pDelta = (dataGenerator.pMax - dataGenerator.pMin)/10;
 	dataGenerator.initial.setRandom();
 	dataGenerator.initial -= 0.5 * VectorXd::Ones(goodfellow.dimension);
 	dataGenerator.initial *= 2.0;
-	dataGenerator.tStart = 100;
-	dataGenerator.tInterval = 10;
-	dataGenerator.print = 200;
+	dataGenerator.tStart = 1000;
+	dataGenerator.tInterval = 1000;
+	dataGenerator.print = 500;
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
-	//data.WriteDataSetsCSV("output/orig",".csv");
+	data.WriteDataSetsCSV("output/orig",".csv");
 
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;

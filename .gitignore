@@ -5,6 +5,8 @@ lib/
 *.suo
 *.sdf
 *.opensdf
+*.psess
+*.vsp
 build/vs2012/DRDSP/x64/
 build/vs2012/DRDSP/Win32/
 build/vs2012/examples/brusselator/x64/
