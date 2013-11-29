@@ -1,8 +1,8 @@
 #include "goodfellow.h"
 
-Goodfellow::Goodfellow() : N(0), omega(1.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(1.0) {}
+Goodfellow::Goodfellow() : N(0), omega(20.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(10.0) {}
 
-Goodfellow::Goodfellow( uint32_t numCompartments ) : ModelParameterized(2*numCompartments,1), N(numCompartments), omega(1.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(1.0) {
+Goodfellow::Goodfellow( uint32_t numCompartments ) : ModelParameterized(2*numCompartments,1), N(numCompartments), omega(20.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(10.0) {
 	Create(N);
 }
 
