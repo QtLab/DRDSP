@@ -1,5 +1,5 @@
-#include <fstream>
 #include <DRDSP/dynamics/model_rbf.h>
+#include <fstream>
 
 using namespace std;
 using namespace DRDSP;
@@ -101,12 +101,10 @@ MatrixXd ModelRBF::Partials( const VectorXd &x ) {
 }
 
 void ModelRBF::SetCentresRandom( const AABB& box ) {
-	double rnd;
 	VectorXd diff = box.bMax - box.bMin;
 	for(uint16_t i=0;i<numRBFs;i++)
 		for(uint16_t j=0;j<dimension;j++) {
-			rnd = (double)rand()/RAND_MAX;
-			rbfs[i].centre(j) = box.bMin(j) + diff(j) * rnd;
+			rbfs[i].centre(j) = box.bMin(j) + diff(j) * dist(mt);
 		}
 }
 

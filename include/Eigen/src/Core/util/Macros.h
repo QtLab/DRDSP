@@ -13,7 +13,7 @@
 
 #define EIGEN_WORLD_VERSION 3
 #define EIGEN_MAJOR_VERSION 2
-#define EIGEN_MINOR_VERSION 0
+#define EIGEN_MINOR_VERSION 90
 
 #define EIGEN_VERSION_AT_LEAST(x,y,z) (EIGEN_WORLD_VERSION>x || (EIGEN_WORLD_VERSION>=x && \
                                       (EIGEN_MAJOR_VERSION>y || (EIGEN_MAJOR_VERSION>=y && \
@@ -87,13 +87,27 @@
 #endif
 
 #ifdef EIGEN_DEFAULT_TO_ROW_MAJOR
-#define EIGEN_DEFAULT_MATRIX_STORAGE_ORDER_OPTION RowMajor
+#define EIGEN_DEFAULT_MATRIX_STORAGE_ORDER_OPTION Eigen::RowMajor
 #else
-#define EIGEN_DEFAULT_MATRIX_STORAGE_ORDER_OPTION ColMajor
+#define EIGEN_DEFAULT_MATRIX_STORAGE_ORDER_OPTION Eigen::ColMajor
 #endif
 
 #ifndef EIGEN_DEFAULT_DENSE_INDEX_TYPE
 #define EIGEN_DEFAULT_DENSE_INDEX_TYPE std::ptrdiff_t
+#endif
+
+// A Clang feature extension to determine compiler features.
+// We use it to determine 'cxx_rvalue_references'
+#ifndef __has_feature
+# define __has_feature(x) 0
+#endif
+
+// Do we support r-value references?
+#if (__has_feature(cxx_rvalue_references) || \
+    (defined(__cplusplus) && __cplusplus >= 201103L) || \
+     defined(__GXX_EXPERIMENTAL_CXX0X__) || \
+    (defined(_MSC_VER) && _MSC_VER >= 1600))
+  #define EIGEN_HAVE_RVALUE_REFERENCES
 #endif
 
 /** Allows to disable some optimizations which might affect the accuracy of the result.
@@ -284,7 +298,8 @@
 #endif
 
 #ifndef EIGEN_STACK_ALLOCATION_LIMIT
-#define EIGEN_STACK_ALLOCATION_LIMIT 20000
+// 131072 == 128 KB
+#define EIGEN_STACK_ALLOCATION_LIMIT 131072
 #endif
 
 #ifndef EIGEN_DEFAULT_IO_FORMAT
@@ -398,7 +413,7 @@
 
 #define EIGEN_MAKE_CWISE_BINARY_OP(METHOD,FUNCTOR) \
   template<typename OtherDerived> \
-  EIGEN_STRONG_INLINE const CwiseBinaryOp<FUNCTOR<Scalar>, const Derived, const OtherDerived> \
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const CwiseBinaryOp<FUNCTOR<Scalar>, const Derived, const OtherDerived> \
   (METHOD)(const EIGEN_CURRENT_STORAGE_BASE_CLASS<OtherDerived> &other) const \
   { \
     return CwiseBinaryOp<FUNCTOR<Scalar>, const Derived, const OtherDerived>(derived(), other.derived()); \

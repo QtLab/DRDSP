@@ -126,7 +126,7 @@ Packet4f pexp<Packet4f>(const Packet4f& _x)
   _EIGEN_DECLARE_CONST_Packet4f(cephes_exp_p4, 1.6666665459E-1f);
   _EIGEN_DECLARE_CONST_Packet4f(cephes_exp_p5, 5.0000001201E-1f);
 
-  Packet4f tmp = _mm_setzero_ps(), fx;
+  Packet4f tmp, fx;
   Packet4i emm0;
 
   // clamp x
@@ -138,6 +138,7 @@ Packet4f pexp<Packet4f>(const Packet4f& _x)
 #ifdef EIGEN_VECTORIZE_SSE4_1
   fx = _mm_floor_ps(fx);
 #else
+  tmp = _mm_setzero_ps();
   emm0 = _mm_cvttps_epi32(fx);
   tmp  = _mm_cvtepi32_ps(emm0);
   /* if greater, substract 1 */
@@ -195,7 +196,7 @@ Packet2d pexp<Packet2d>(const Packet2d& _x)
   _EIGEN_DECLARE_CONST_Packet2d(cephes_exp_C2, 1.42860682030941723212e-6);
   static const __m128i p4i_1023_0 = _mm_setr_epi32(1023, 1023, 0, 0);
 
-  Packet2d tmp = _mm_setzero_pd(), fx;
+  Packet2d tmp, fx;
   Packet4i emm0;
 
   // clamp x
@@ -206,6 +207,7 @@ Packet2d pexp<Packet2d>(const Packet2d& _x)
 #ifdef EIGEN_VECTORIZE_SSE4_1
   fx = _mm_floor_pd(fx);
 #else
+  tmp = _mm_setzero_pd();
   emm0 = _mm_cvttpd_epi32(fx);
   tmp  = _mm_cvtepi32_pd(emm0);
   /* if greater, substract 1 */
@@ -279,7 +281,7 @@ Packet4f psin<Packet4f>(const Packet4f& _x)
   _EIGEN_DECLARE_CONST_Packet4f(coscof_p2,  4.166664568298827E-002f);
   _EIGEN_DECLARE_CONST_Packet4f(cephes_FOPI, 1.27323954473516f); // 4 / M_PI
 
-  Packet4f xmm1, xmm2 = _mm_setzero_ps(), xmm3, sign_bit, y;
+  Packet4f xmm1, xmm2, xmm3, sign_bit, y;
 
   Packet4i emm0, emm2;
   sign_bit = x;
@@ -378,7 +380,7 @@ Packet4f pcos<Packet4f>(const Packet4f& _x)
   _EIGEN_DECLARE_CONST_Packet4f(coscof_p2,  4.166664568298827E-002f);
   _EIGEN_DECLARE_CONST_Packet4f(cephes_FOPI, 1.27323954473516f); // 4 / M_PI
 
-  Packet4f xmm1, xmm2 = _mm_setzero_ps(), xmm3, y;
+  Packet4f xmm1, xmm2, xmm3, y;
   Packet4i emm0, emm2;
 
   x = pabs(x);
@@ -442,8 +444,11 @@ Packet4f pcos<Packet4f>(const Packet4f& _x)
   return _mm_xor_ps(y, sign_bit);
 }
 
+#if EIGEN_FAST_MATH
+
 // This is based on Quake3's fast inverse square root.
 // For detail see here: http://www.beyond3d.com/content/articles/8/
+// It lacks 1 (or 2 bits in some rare cases) of precision, and does not handle negative, +inf, or denormalized numbers correctly.
 template<> EIGEN_DEFINE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS EIGEN_UNUSED
 Packet4f psqrt<Packet4f>(const Packet4f& _x)
 {
@@ -456,6 +461,14 @@ Packet4f psqrt<Packet4f>(const Packet4f& _x)
   x = pmul(x, psub(pset1<Packet4f>(1.5f), pmul(half, pmul(x,x))));
   return pmul(_x,x);
 }
+
+#else
+
+template<> EIGEN_STRONG_INLINE Packet4f psqrt<Packet4f>(const Packet4f& x) { return _mm_sqrt_ps(x); }
+
+#endif
+
+template<> EIGEN_STRONG_INLINE Packet2d psqrt<Packet2d>(const Packet2d& x) { return _mm_sqrt_pd(x); }
 
 } // end namespace internal
 

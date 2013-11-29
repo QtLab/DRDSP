@@ -4,6 +4,9 @@
 #include "model.h"
 #include "radial_basis.h"
 #include "../data/aabb.h"
+#include <random>
+
+using namespace std;
 
 namespace DRDSP {
 
@@ -12,6 +15,8 @@ namespace DRDSP {
 		VectorXd* weights;
 		RadialFunction* rbfs;
 		uint16_t numRBFs;
+		mt19937 mt;
+		uniform_real_distribution<double> dist;
 
 		ModelRBF();
 		ModelRBF( const ModelRBF& rhs );

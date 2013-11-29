@@ -161,8 +161,9 @@ class SparseQR
       b = y;
       
       // Solve with the triangular matrix R
+      y.resize((std::max)(cols(),Index(y.rows())),y.cols());
       y.topRows(rank) = this->matrixR().topLeftCorner(rank, rank).template triangularView<Upper>().solve(b.topRows(rank));
-      y.bottomRows(y.size()-rank).setZero();
+      y.bottomRows(y.rows()-rank).setZero();
 
       // Apply the column permutation
       if (m_perm_c.size())  dest.topRows(cols()) = colsPermutation() * y.topRows(cols());
@@ -205,7 +206,7 @@ class SparseQR
     
     /** \brief Reports whether previous computation was successful.
       *
-      * \returns \c Success if computation was succesful,
+      * \returns \c Success if computation was successful,
       *          \c NumericalIssue if the QR factorization reports a numerical problem
       *          \c InvalidInput if the input matrix is invalid
       *
@@ -246,7 +247,7 @@ class SparseQR
     Index m_nonzeropivots;          // Number of non zero pivots found 
     IndexVector m_etree;            // Column elimination tree
     IndexVector m_firstRowElt;      // First element in each row
-    bool m_isQSorted;                 // whether Q is sorted or not
+    bool m_isQSorted;               // whether Q is sorted or not
     
     template <typename, typename > friend struct SparseQR_QProduct;
     template <typename > friend struct SparseQRMatrixQReturnType;
@@ -256,7 +257,7 @@ class SparseQR
 /** \brief Preprocessing step of a QR factorization 
   * 
   * In this step, the fill-reducing permutation is computed and applied to the columns of A
-  * and the column elimination tree is computed as well. Only the sparcity pattern of \a mat is exploited.
+  * and the column elimination tree is computed as well. Only the sparsity pattern of \a mat is exploited.
   * 
   * \note In this step it is assumed that there is no empty row in the matrix \a mat.
   */
@@ -292,7 +293,7 @@ void SparseQR<MatrixType,OrderingType>::analyzePattern(const MatrixType& mat)
 /** \brief Performs the numerical QR factorization of the input matrix
   * 
   * The function SparseQR::analyzePattern(const MatrixType&) must have been called beforehand with
-  * a matrix having the same sparcity pattern than \a mat.
+  * a matrix having the same sparsity pattern than \a mat.
   * 
   * \param mat The sparse column-major matrix
   */
@@ -338,7 +339,7 @@ void SparseQR<MatrixType,OrderingType>::factorize(const MatrixType& mat)
   Index nonzeroCol = 0; // Record the number of valid pivots
   
   // Left looking rank-revealing QR factorization: compute a column of R and Q at a time
-  for (Index col = 0; col < n; ++col)
+  for (Index col = 0; col < (std::min)(n,m); ++col)
   {
     mark.setConstant(-1);
     m_R.startVec(col);
@@ -346,7 +347,7 @@ void SparseQR<MatrixType,OrderingType>::factorize(const MatrixType& mat)
     mark(nonzeroCol) = col;
     Qidx(0) = nonzeroCol;
     nzcolR = 0; nzcolQ = 1;
-    found_diag = false;
+    found_diag = col>=m;
     tval.setZero(); 
     
     // Symbolic factorization: find the nonzero locations of the column k of the factors R and Q, i.e.,
@@ -445,7 +446,8 @@ void SparseQR<MatrixType,OrderingType>::factorize(const MatrixType& mat)
      }
     else
     {
-      beta = std::sqrt(numext::abs2(c0) + sqrNorm);
+      using std::sqrt;
+      beta = sqrt(numext::abs2(c0) + sqrNorm);
       if(numext::real(c0) >= RealScalar(0))
         beta = -beta;
       tval(Qidx(0)) = 1;
@@ -571,6 +573,7 @@ struct SparseQR_QProduct : ReturnByValue<SparseQR_QProduct<SparseQRType, Derived
         {
           Scalar tau = Scalar(0);
           tau = m_qr.m_Q.col(k).dot(res.col(j));
+          if(tau==Scalar(0)) continue;
           tau = tau * m_qr.m_hcoeffs(k);
           res.col(j) -= tau * m_qr.m_Q.col(k);
         }
@@ -578,7 +581,7 @@ struct SparseQR_QProduct : ReturnByValue<SparseQR_QProduct<SparseQRType, Derived
     }
     else
     {
-      eigen_assert(m_qr.m_Q.cols() == m_other.rows() && "Non conforming object sizes");
+      eigen_assert(m_qr.m_Q.rows() == m_other.rows() && "Non conforming object sizes");
       // Compute res = Q' * other column by column
       for(Index j = 0; j < res.cols(); j++)
       {
@@ -586,6 +589,7 @@ struct SparseQR_QProduct : ReturnByValue<SparseQR_QProduct<SparseQRType, Derived
         {
           Scalar tau = Scalar(0);
           tau = m_qr.m_Q.col(k).dot(res.col(j));
+          if(tau==Scalar(0)) continue;
           tau = tau * m_qr.m_hcoeffs(k);
           res.col(j) -= tau * m_qr.m_Q.col(k);
         }

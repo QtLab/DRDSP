@@ -384,7 +384,7 @@ class SparseMatrix
       eigen_assert( (m_outerIndex[outer+1]-m_outerIndex[outer]==0 || m_data.index(m_data.size()-1)<inner) && "Invalid ordered insertion (invalid inner index)");
       Index p = m_outerIndex[outer+1];
       ++m_outerIndex[outer+1];
-      m_data.append(0, inner);
+      m_data.append(Scalar(0), inner);
       return m_data.value(p);
     }
 
@@ -394,7 +394,7 @@ class SparseMatrix
     {
       Index p = m_outerIndex[outer+1];
       ++m_outerIndex[outer+1];
-      m_data.append(0, inner);
+      m_data.append(Scalar(0), inner);
       return m_data.value(p);
     }
 
@@ -711,7 +711,7 @@ class SparseMatrix
         initAssignment(other);
         if(other.isCompressed())
         {
-          memcpy(m_outerIndex, other.m_outerIndex, (m_outerSize+1)*sizeof(Index));
+          internal::smart_copy(other.m_outerIndex, other.m_outerIndex + m_outerSize + 1, m_outerIndex);
           m_data = other.m_data;
         }
         else
@@ -941,7 +941,7 @@ void set_from_triplets(const InputIterator& begin, const InputIterator& end, Spa
   typedef typename SparseMatrixType::Scalar Scalar;
   SparseMatrix<Scalar,IsRowMajor?ColMajor:RowMajor> trMat(mat.rows(),mat.cols());
 
-  if(begin<end)
+  if(begin!=end)
   {
     // pass 1: count the nnz per inner-vector
     VectorXi wi(trMat.outerSize());

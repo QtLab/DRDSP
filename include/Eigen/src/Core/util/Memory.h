@@ -6,6 +6,7 @@
 // Copyright (C) 2009 Kenneth Riddile <kfriddile@yahoo.com>
 // Copyright (C) 2010 Hauke Heibel <hauke.heibel@gmail.com>
 // Copyright (C) 2010 Thomas Capricelli <orzel@freehackers.org>
+// Copyright (C) 2013 Pavel Holoborodko <pavel@holoborodko.com>
 //
 // This Source Code Form is subject to the terms of the Mozilla
 // Public License v. 2.0. If a copy of the MPL was not distributed
@@ -82,6 +83,7 @@ namespace Eigen {
 
 namespace internal {
 
+EIGEN_DEVICE_FUNC 
 inline void throw_std_bad_alloc()
 {
   #ifdef EIGEN_EXCEPTIONS
@@ -514,6 +516,34 @@ template<typename T> struct smart_copy_helper<T,false> {
   { std::copy(start, end, target); }
 };
 
+// intelligent memmove. falls back to std::memmove for POD types, uses std::copy otherwise. 
+template<typename T, bool UseMemmove> struct smart_memmove_helper;
+
+template<typename T> void smart_memmove(const T* start, const T* end, T* target)
+{
+    smart_memmove_helper<T,!NumTraits<T>::RequireInitialization>::run(start, end, target);
+}
+
+template<typename T> struct smart_memmove_helper<T,true> {
+    static inline void run(const T* start, const T* end, T* target)
+    { std::memmove(target, start, std::ptrdiff_t(end)-std::ptrdiff_t(start)); }
+};
+
+template<typename T> struct smart_memmove_helper<T,false> {
+    static inline void run(const T* start, const T* end, T* target)
+    { 
+        if (uintptr_t(target) < uintptr_t(start))
+        {
+            std::copy(start, end, target);
+        }
+        else                                 
+        {
+            std::ptrdiff_t count = (std::ptrdiff_t(end)-std::ptrdiff_t(start)) / sizeof(T);
+            std::copy_backward(start, end, target + count); 
+        }
+    }
+};
+
 
 /*****************************************************************************
 *** Implementation of runtime stack allocation (falling back to malloc)    ***
@@ -634,7 +664,9 @@ template<typename T> class aligned_stack_memory_handler
       /* memory allocated we can safely let the default implementation handle */ \
       /* this particular case. */ \
       static void *operator new(size_t size, void *ptr) { return ::operator new(size,ptr); } \
+      static void *operator new[](size_t size, void* ptr) { return ::operator new[](size,ptr); } \
       void operator delete(void * memory, void *ptr) throw() { return ::operator delete(memory,ptr); } \
+      void operator delete[](void * memory, void *ptr) throw() { return ::operator delete[](memory,ptr); } \
       /* nothrow-new (returns zero instead of std::bad_alloc) */ \
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW_NOTHROW(NeedsToAlign) \
       void operator delete(void *ptr, const std::nothrow_t&) throw() { \
@@ -728,15 +760,6 @@ public:
     {
         ::new( p ) T( value );
     }
-
-    // Support for c++11
-#if (__cplusplus >= 201103L)
-    template<typename... Args>
-    void  construct(pointer p, Args&&... args)
-    {
-      ::new(p) T(std::forward<Args>(args)...);
-    }
-#endif
 
     void destroy( pointer p )
     {

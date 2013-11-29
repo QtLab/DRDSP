@@ -60,24 +60,38 @@ public:
 
     EIGEN_STRONG_INLINE Index rows() const { return IsRowMajor ? m_outerSize.value() : m_matrix.rows(); }
     EIGEN_STRONG_INLINE Index cols() const { return IsRowMajor ? m_matrix.cols() : m_outerSize.value(); }
+    
+    Index nonZeros() const
+    {
+      Index nnz = 0;
+      Index end = m_outerStart + m_outerSize.value();
+      for(int j=m_outerStart; j<end; ++j)
+        for(typename XprType::InnerIterator it(m_matrix, j); it; ++it)
+          ++nnz;
+      return nnz;
+    }
 
   protected:
 
     typename XprType::Nested m_matrix;
     Index m_outerStart;
     const internal::variable_if_dynamic<Index, OuterSize> m_outerSize;
+  
+  public:
+    EIGEN_INHERIT_ASSIGNMENT_OPERATORS(BlockImpl)
 };
 
 
 /***************************************************************************
-* specialisation for SparseMatrix
+* specialization for SparseMatrix
 ***************************************************************************/
 
-template<typename _Scalar, int _Options, typename _Index, int BlockRows, int BlockCols>
-class BlockImpl<SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols,true,Sparse>
-  : public SparseMatrixBase<Block<SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols,true> >
+namespace internal {
+
+template<typename SparseMatrixType, int BlockRows, int BlockCols>
+class sparse_matrix_block_impl
+  : public SparseMatrixBase<Block<SparseMatrixType,BlockRows,BlockCols,true> >
 {
-    typedef SparseMatrix<_Scalar, _Options, _Index> SparseMatrixType;
     typedef typename internal::remove_all<typename SparseMatrixType::Nested>::type _MatrixTypeNested;
     typedef Block<SparseMatrixType, BlockRows, BlockCols, true> BlockType;
 public:
@@ -110,11 +124,11 @@ public:
         Index m_outer;
     };
 
-    inline BlockImpl(const SparseMatrixType& xpr, int i)
+    inline sparse_matrix_block_impl(const SparseMatrixType& xpr, int i)
       : m_matrix(xpr), m_outerStart(i), m_outerSize(OuterSize)
     {}
 
-    inline BlockImpl(const SparseMatrixType& xpr, int startRow, int startCol, int blockRows, int blockCols)
+    inline sparse_matrix_block_impl(const SparseMatrixType& xpr, int startRow, int startCol, int blockRows, int blockCols)
       : m_matrix(xpr), m_outerStart(IsRowMajor ? startRow : startCol), m_outerSize(IsRowMajor ? blockRows : blockCols)
     {}
 
@@ -123,7 +137,7 @@ public:
     {
       typedef typename internal::remove_all<typename SparseMatrixType::Nested>::type _NestedMatrixType;
       _NestedMatrixType& matrix = const_cast<_NestedMatrixType&>(m_matrix);;
-      // This assignement is slow if this vector set is not empty
+      // This assignment is slow if this vector set is not empty
       // and/or it is not at the end of the nonzeros of the underlying matrix.
 
       // 1 - eval to a temporary to avoid transposition and/or aliasing issues
@@ -132,7 +146,7 @@ public:
       // 2 - let's check whether there is enough allocated memory
       Index nnz           = tmp.nonZeros();
       Index start         = m_outerStart==0 ? 0 : matrix.outerIndexPtr()[m_outerStart]; // starting position of the current block
-      Index end           = m_matrix.outerIndexPtr()[m_outerStart+m_outerSize.value()]; // ending posiiton of the current block
+      Index end           = m_matrix.outerIndexPtr()[m_outerStart+m_outerSize.value()]; // ending position of the current block
       Index block_size    = end - start;                                                // available room in the current block
       Index tail_size     = m_matrix.outerIndexPtr()[m_matrix.outerSize()] - end;
       
@@ -145,14 +159,14 @@ public:
         // realloc manually to reduce copies
         typename SparseMatrixType::Storage newdata(m_matrix.data().allocatedSize() - block_size + nnz);
 
-        std::memcpy(&newdata.value(0), &m_matrix.data().value(0), start*sizeof(Scalar));
-        std::memcpy(&newdata.index(0), &m_matrix.data().index(0), start*sizeof(Index));
+        internal::smart_copy(&m_matrix.data().value(0),  &m_matrix.data().value(0) + start, &newdata.value(0));
+        internal::smart_copy(&m_matrix.data().index(0),  &m_matrix.data().index(0) + start, &newdata.index(0));
 
-        std::memcpy(&newdata.value(start), &tmp.data().value(0), nnz*sizeof(Scalar));
-        std::memcpy(&newdata.index(start), &tmp.data().index(0), nnz*sizeof(Index));
+        internal::smart_copy(&tmp.data().value(0),  &tmp.data().value(0) + nnz, &newdata.value(start));
+        internal::smart_copy(&tmp.data().index(0),  &tmp.data().index(0) + nnz, &newdata.index(start));
 
-        std::memcpy(&newdata.value(start+nnz), &matrix.data().value(end), tail_size*sizeof(Scalar));
-        std::memcpy(&newdata.index(start+nnz), &matrix.data().index(end), tail_size*sizeof(Index));
+        internal::smart_copy(&matrix.data().value(end),  &matrix.data().value(end) + tail_size, &newdata.value(start+nnz));
+        internal::smart_copy(&matrix.data().index(end),  &matrix.data().index(end) + tail_size, &newdata.index(start+nnz));
         
         newdata.resize(m_matrix.outerIndexPtr()[m_matrix.outerSize()] - block_size + nnz);
 
@@ -163,11 +177,11 @@ public:
         // no need to realloc, simply copy the tail at its respective position and insert tmp
         matrix.data().resize(start + nnz + tail_size);
 
-        std::memmove(&matrix.data().value(start+nnz), &matrix.data().value(end), tail_size*sizeof(Scalar));
-        std::memmove(&matrix.data().index(start+nnz), &matrix.data().index(end), tail_size*sizeof(Index));
+        internal::smart_memmove(&matrix.data().value(end),  &matrix.data().value(end) + tail_size, &matrix.data().value(start + nnz));
+        internal::smart_memmove(&matrix.data().index(end),  &matrix.data().index(end) + tail_size, &matrix.data().index(start + nnz));
 
-        std::memcpy(&matrix.data().value(start), &tmp.data().value(0), nnz*sizeof(Scalar));
-        std::memcpy(&matrix.data().index(start), &tmp.data().index(0), nnz*sizeof(Index));
+        internal::smart_copy(&tmp.data().value(0),  &tmp.data().value(0) + nnz, &matrix.data().value(start));
+        internal::smart_copy(&tmp.data().index(0),  &tmp.data().index(0) + nnz, &matrix.data().index(start));
       }
       
       // update innerNonZeros
@@ -224,7 +238,7 @@ public:
 
     const Scalar& lastCoeff() const
     {
-      EIGEN_STATIC_ASSERT_VECTOR_ONLY(BlockImpl);
+      EIGEN_STATIC_ASSERT_VECTOR_ONLY(sparse_matrix_block_impl);
       eigen_assert(nonZeros()>0);
       if(m_matrix.isCompressed())
         return m_matrix.valuePtr()[m_matrix.outerIndexPtr()[m_outerStart+1]-1];
@@ -243,6 +257,44 @@ public:
 
 };
 
+} // namespace internal
+
+template<typename _Scalar, int _Options, typename _Index, int BlockRows, int BlockCols>
+class BlockImpl<SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols,true,Sparse>
+  : public internal::sparse_matrix_block_impl<SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols>
+{
+public:
+  typedef SparseMatrix<_Scalar, _Options, _Index> SparseMatrixType;
+  typedef internal::sparse_matrix_block_impl<SparseMatrixType,BlockRows,BlockCols> Base;
+  inline BlockImpl(SparseMatrixType& xpr, int i)
+    : Base(xpr, i)
+  {}
+
+  inline BlockImpl(SparseMatrixType& xpr, int startRow, int startCol, int blockRows, int blockCols)
+    : Base(xpr, startRow, startCol, blockRows, blockCols)
+  {}
+  
+  using Base::operator=;
+};
+
+template<typename _Scalar, int _Options, typename _Index, int BlockRows, int BlockCols>
+class BlockImpl<const SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols,true,Sparse>
+  : public internal::sparse_matrix_block_impl<const SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols>
+{
+public:
+  typedef const SparseMatrix<_Scalar, _Options, _Index> SparseMatrixType;
+  typedef internal::sparse_matrix_block_impl<SparseMatrixType,BlockRows,BlockCols> Base;
+  inline BlockImpl(SparseMatrixType& xpr, int i)
+    : Base(xpr, i)
+  {}
+
+  inline BlockImpl(SparseMatrixType& xpr, int startRow, int startCol, int blockRows, int blockCols)
+    : Base(xpr, startRow, startCol, blockRows, blockCols)
+  {}
+  
+  using Base::operator=;
+};
+  
 //----------
 
 /** \returns the \a outer -th column (resp. row) of the matrix \c *this if \c *this
@@ -391,6 +443,8 @@ public:
   protected:
     friend class InnerIterator;
     friend class ReverseInnerIterator;
+    
+    EIGEN_INHERIT_ASSIGNMENT_OPERATORS(BlockImpl)
 
     typename XprType::Nested m_matrix;
     const internal::variable_if_dynamic<Index, XprType::RowsAtCompileTime == 1 ? 0 : Dynamic> m_startRow;
