@@ -13,7 +13,7 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(10), maxPoints(0), targetDimension(5), numRBFs(50) {}
+	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(50) {}
 	uint32_t numIterations, maxPoints;
 	uint16_t targetDimension, numRBFs;
 };
@@ -39,15 +39,15 @@ int main( int argc, char** argv ) {
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(goodfellow);
-	dataGenerator.pMin = 3.9;
-	dataGenerator.pMax = 5.4;
+	dataGenerator.pMin = 4.0;
+	dataGenerator.pMax = 5.0;
 	dataGenerator.pDelta = (dataGenerator.pMax - dataGenerator.pMin)/10;
 	dataGenerator.initial.setRandom();
 	dataGenerator.initial -= 0.5 * VectorXd::Ones(goodfellow.dimension);
 	dataGenerator.initial *= 2.0;
 	dataGenerator.tStart = 1000;
 	dataGenerator.tInterval = 1000;
-	dataGenerator.print = 350;
+	dataGenerator.print = 500;
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();

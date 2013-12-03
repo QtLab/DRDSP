@@ -18,7 +18,24 @@ namespace DRDSP {
 		ModelRBF BruteForce( const ReducedData& data, uint32_t numIterations ) const;
 
 	};
+/*
+	struct ReducedModel : ModelParameterized {
+		void Randomize( const ReducedData& data );
+	};
 
+	template<typename R>
+	struct ModelProducer {
+		double fitWeight[2];
+	
+		ModelProducer();
+		double ComputeTotalCost( R& model, const ReducedData& data ) const;
+
+		R ComputeModel( const ReducedData& data ) const;
+		void Fit( R& model, const ReducedData& data ) const;
+		R BruteForce( const ReducedData& data, uint32_t numIterations ) const;
+
+	};
+	*/
 }
 
 #endif
