@@ -86,7 +86,7 @@ The following C++11 features are used by the library:
 
 * rvalue references
 * move semantics
-* <random>
+* &lt;random&gt;
 * nullptr
 
 
