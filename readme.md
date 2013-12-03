@@ -11,12 +11,11 @@ DRDSP is a C++ library for producing a low-dimensional dynamical system that mod
 The steps involved in the method are:
 
 1. Generate some data from the attractors.
-2.
-    a. Compute the secants from the data sets.
-    b. Cull the secants (optional optimization).
-3. Use the secants to find a projection.
-4. Use the projection, the data, and the original model to compute some reduced data.
-5. Use the reduced data to obtain the reduced model.
+2. Compute the secants from the data sets.
+3. Cull the secants (optional optimization).
+4. Use the secants to find a projection.
+5. Use the projection, the data, and the original model to compute some reduced data.
+6. Use the reduced data to obtain the reduced model.
 
 Usage
 -----
