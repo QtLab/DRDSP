@@ -2,10 +2,8 @@
 #include <DRDSP/data/data_set.h>
 #include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
-#include <DRDSP/dynamics/model_rbf_producer.h>
 #include <DRDSP/dynamics/model_reduced_producer.h>
 #include <DRDSP/dynamics/generate_data.h>
-#include <DRDSP/data/histogram.h>
 
 #include "goodfellow.h"
 
@@ -39,15 +37,15 @@ int main( int argc, char** argv ) {
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator dataGenerator(goodfellow);
-	dataGenerator.pMin = 4.0;
-	dataGenerator.pMax = 5.0;
-	dataGenerator.pDelta = (dataGenerator.pMax - dataGenerator.pMin)/10;
+	dataGenerator.pMin = 4.9;
+	dataGenerator.pMax = 5.5;
+	dataGenerator.pDelta = (dataGenerator.pMax - dataGenerator.pMin)/1;
 	dataGenerator.initial.setRandom();
 	dataGenerator.initial -= 0.5 * VectorXd::Ones(goodfellow.dimension);
 	dataGenerator.initial *= 2.0;
-	dataGenerator.tStart = 1000;
-	dataGenerator.tInterval = 1000;
-	dataGenerator.print = 500;
+	dataGenerator.tStart = 100;
+	dataGenerator.tInterval = 2;
+	dataGenerator.print = 200;
 	dataGenerator.rk.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem();
@@ -104,12 +102,7 @@ int main( int argc, char** argv ) {
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 	
 	reducedModel.WriteCSV("output/reduced.csv");
-	
-	//ModelRBFProducer rbfProducer(options.numRBFs);
-	//ModelRBF rbfModel = rbfProducer.BruteForce(reducedData.reducedData[0],options.numIterations);
 
-	//cout << "Total Cost = " << rbfProducer.ComputeTotalCost(rbfModel,reducedData.reducedData[0]) << endl;	
-	
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
 	DataGenerator rdataGenerator(reducedModel);

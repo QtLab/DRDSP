@@ -15,7 +15,8 @@ namespace DRDSP {
 
 		Secants();
 		virtual VectorXd GetSecant( uint32_t k ) const = 0;
-		SecantsPreComputed CullSecants( double tolerance ) const;
+		virtual VectorXd GetSecantNoNormalize( uint32_t k ) const = 0;
+		virtual SecantsPreComputed CullSecants( double tolerance ) const;
 		SecantsPreComputed CullSecantsDegrees( double degrees ) const;
 		SecantsPreComputed CullSecantsRadians( double radians ) const;
 	};
@@ -32,6 +33,8 @@ namespace DRDSP {
 		SecantsPreComputed& operator=( SecantsPreComputed&& rhs );
 		void ComputeFromData( const DataSet& dataSet );
 		VectorXd GetSecant( uint32_t k ) const;
+		VectorXd GetSecantNoNormalize( uint32_t k ) const;
+		SecantsPreComputed CullSecants( double tolerance ) const;
 	};
 
 	// For large sets, we determine each secant from the data points on demand
@@ -40,6 +43,7 @@ namespace DRDSP {
 
 		void SetData( const DataSet& dataSet );
 		VectorXd GetSecant( uint32_t k ) const;
+		VectorXd GetSecantNoNormalize( uint32_t k ) const;
 		static uint32_t GetIndexI( uint32_t k, uint32_t N );
 		static uint32_t GetIndexJ( uint32_t k, uint32_t i, uint32_t N );
 	};
