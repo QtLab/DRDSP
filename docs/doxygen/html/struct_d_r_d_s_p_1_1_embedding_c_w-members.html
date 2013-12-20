@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -92,20 +93,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>This is the complete list of members for <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>ComputeInducedMetric</b>(const VectorXd &amp;x, uint32_t i, uint32_t j) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>Derivative</b>(const VectorXd &amp;x, uint32_t i, uint32_t j) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Derivative2</b>(const VectorXd &amp;x, uint32_t i, uint32_t j, uint32_t k) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>DerivativeAdjoint</b>(const VectorXd &amp;x, uint32_t i, uint32_t j) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>eDim</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>EmbedData</b>(const DataSet &amp;data) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>EmbedData</b>(const DataSystem &amp;data) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>EmbeddingCW</b>(uint32_t origDim, uint32_t embedDim) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a7fc6f574011396ef14a775e02fb7ef25">ComputeInducedMetric</a>(const VectorXd &amp;x, uint32_t i, uint32_t j) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#ae7e3c46b785e7b023119238a0d8cc0db">Derivative</a>(const VectorXd &amp;x, uint32_t i, uint32_t j) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a98b06fcd2b37246b967ff2660be15568">Derivative2</a>(const VectorXd &amp;x, uint32_t i, uint32_t j, uint32_t k) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a0350d8d148c7816ae8b2ee27bf4f54cd">DerivativeAdjoint</a>(const VectorXd &amp;x, uint32_t i, uint32_t j) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#ade05f2b8835edeb8b418bcd27d2d74db">eDim</a></td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#ad63dfe0eeab18767684e46cd3000ef83">EmbedData</a>(const DataSet &amp;data) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a3ac7659dca082002fef531dd9403ee1f">EmbedData</a>(const DataSystem &amp;data) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a36beb21857003df4f283dd1f0459b178">EmbeddingCW</a>(uint32_t origDim, uint32_t embedDim)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Evaluate</b>(const VectorXd &amp;x) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>oDim</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html">DRDSP::EmbeddingCW</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:43 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:49 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

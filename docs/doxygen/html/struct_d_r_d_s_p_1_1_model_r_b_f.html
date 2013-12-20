@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -99,7 +100,7 @@ Inheritance diagram for DRDSP::ModelRBF:</div>
  <div class="center">
   <img src="struct_d_r_d_s_p_1_1_model_r_b_f.png" usemap="#DRDSP::ModelRBF_map" alt=""/>
   <map id="DRDSP::ModelRBF_map" name="DRDSP::ModelRBF_map">
-<area href="struct_d_r_d_s_p_1_1_model.html" alt="DRDSP::Model" shape="rect" coords="0,0,119,24"/>
+<area href="struct_d_r_d_s_p_1_1_model.html" title="Interface for a model without parameters. " alt="DRDSP::Model" shape="rect" coords="0,0,119,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -130,7 +131,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Destroy</b> ()</td></
 VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>VectorField</b> (const VectorXd &amp;x)</td></tr>
 <tr class="separator:a368c91d7df8ea3c0183dac748526e44c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a926c68bffcc90d16e5000659846e7a61"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a926c68bffcc90d16e5000659846e7a61"></a>
-MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>Partials</b> (const VectorXd &amp;x)</td></tr>
+MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_r_b_f.html#a926c68bffcc90d16e5000659846e7a61">Partials</a> (const VectorXd &amp;x)</td></tr>
+<tr class="memdesc:a926c68bffcc90d16e5000659846e7a61"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vector field. <br/></td></tr>
 <tr class="separator:a926c68bffcc90d16e5000659846e7a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09e9a5e98036cdc2afa0efeee79120fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09e9a5e98036cdc2afa0efeee79120fe"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetCentresRandom</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> &amp;box)</td></tr>
@@ -148,6 +150,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>LoadCentresBinary</b>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteCSV</b> (const char *filename) const </td></tr>
 <tr class="separator:a04accc1f2dfafb57beef56fb8f845b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_struct_d_r_d_s_p_1_1_model"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_d_r_d_s_p_1_1_model')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></td></tr>
+<tr class="memitem:a2f892ad08042296572d273b386deb4d8 inherit pub_methods_struct_d_r_d_s_p_1_1_model"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f892ad08042296572d273b386deb4d8"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model.html#a2f892ad08042296572d273b386deb4d8">Model</a> ()</td></tr>
+<tr class="memdesc:a2f892ad08042296572d273b386deb4d8 inherit pub_methods_struct_d_r_d_s_p_1_1_model"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the model's state space. <br/></td></tr>
+<tr class="separator:a2f892ad08042296572d273b386deb4d8 inherit pub_methods_struct_d_r_d_s_p_1_1_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9ab80237f807fecc435534c8705ea8c inherit pub_methods_struct_d_r_d_s_p_1_1_model"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9ab80237f807fecc435534c8705ea8c"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Model</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_wrap_function.html">WrapFunction</a>&lt; VectorXd &gt; *wrapFunc)</td></tr>
 <tr class="separator:af9ab80237f807fecc435534c8705ea8c inherit pub_methods_struct_d_r_d_s_p_1_1_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,6 +178,12 @@ VectorXd *&#160;</td><td class="memItemRight" valign="bottom"><b>weights</b></td
 <tr class="memitem:aabf99925c656c768e46f1ddd5096f2d5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aabf99925c656c768e46f1ddd5096f2d5"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>numRBFs</b></td></tr>
 <tr class="separator:aabf99925c656c768e46f1ddd5096f2d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50c0bfe964e3d4e0471d243df45339ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a50c0bfe964e3d4e0471d243df45339ac"></a>
+mt19937&#160;</td><td class="memItemRight" valign="bottom"><b>mt</b></td></tr>
+<tr class="separator:a50c0bfe964e3d4e0471d243df45339ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98593874be4ffe6191cec267cefa773d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a98593874be4ffe6191cec267cefa773d"></a>
+uniform_real_distribution&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>dist</b></td></tr>
+<tr class="separator:a98593874be4ffe6191cec267cefa773d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_struct_d_r_d_s_p_1_1_model"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_struct_d_r_d_s_p_1_1_model')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></td></tr>
 <tr class="memitem:a286bbeaa673d5e756b1b4e97bdab30f6 inherit pub_attribs_struct_d_r_d_s_p_1_1_model"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a286bbeaa673d5e756b1b4e97bdab30f6"></a>
 const <a class="el" href="struct_d_r_d_s_p_1_1_wrap_function.html">WrapFunction</a>&lt; VectorXd &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>wrapFunction</b></td></tr>
@@ -187,7 +199,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b></td
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:44 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:51 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

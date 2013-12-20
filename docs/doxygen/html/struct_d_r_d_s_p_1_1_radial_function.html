@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -88,7 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="struct_d_r_d_s_p_1_1_radial_function-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">DRDSP::RadialFunction Struct Reference</div>  </div>
@@ -116,11 +117,26 @@ const <a class="el" href="struct_d_r_d_s_p_1_1_function.html">Function</a> *&#16
 VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>centre</b></td></tr>
 <tr class="separator:ae854a39065305d4ca7dd614ca914c3a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
-Static Protected Attributes</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
 <tr class="memitem:a3127a8f8bc519d3844e1411585d52f29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3127a8f8bc519d3844e1411585d52f29"></a>
 static <a class="el" href="struct_d_r_d_s_p_1_1_thin_plate_spline.html">ThinPlateSpline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>thinPlateSpline</b></td></tr>
 <tr class="separator:a3127a8f8bc519d3844e1411585d52f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37de083f32f66b1cd77c0ee7e49f032f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37de083f32f66b1cd77c0ee7e49f032f"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1_polyharmonic_spline3.html">PolyharmonicSpline3</a>&#160;</td><td class="memItemRight" valign="bottom"><b>polyharmonicSpline3</b></td></tr>
+<tr class="separator:a37de083f32f66b1cd77c0ee7e49f032f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad100a3aa9c46c4c4790162747cd5494d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad100a3aa9c46c4c4790162747cd5494d"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1_gaussian.html">Gaussian</a>&#160;</td><td class="memItemRight" valign="bottom"><b>gaussian</b></td></tr>
+<tr class="separator:ad100a3aa9c46c4c4790162747cd5494d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb20eb1b47b6e68ea16e610a8d41f948"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb20eb1b47b6e68ea16e610a8d41f948"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1_multiquadratic.html">Multiquadratic</a>&#160;</td><td class="memItemRight" valign="bottom"><b>multiquadratic</b></td></tr>
+<tr class="separator:aeb20eb1b47b6e68ea16e610a8d41f948"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a216209cd1f401c6ce3d1b0b30e5e1cf6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a216209cd1f401c6ce3d1b0b30e5e1cf6"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1_inverse_quadratic.html">InverseQuadratic</a>&#160;</td><td class="memItemRight" valign="bottom"><b>inverseQuadratic</b></td></tr>
+<tr class="separator:a216209cd1f401c6ce3d1b0b30e5e1cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c076d35277e84cc9bfb64035f98c28d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c076d35277e84cc9bfb64035f98c28d"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1_inverse_multiquadratic.html">InverseMultiquadratic</a>&#160;</td><td class="memItemRight" valign="bottom"><b>inverseMultiquadratic</b></td></tr>
+<tr class="separator:a3c076d35277e84cc9bfb64035f98c28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>include/DRDSP/dynamics/<a class="el" href="radial__basis_8h_source.html">radial_basis.h</a></li>
@@ -129,7 +145,7 @@ static <a class="el" href="struct_d_r_d_s_p_1_1_thin_plate_spline.html">ThinPlat
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:46 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:55 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

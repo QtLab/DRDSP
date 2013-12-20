@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -99,7 +100,7 @@ Inheritance diagram for DRDSP::ModelReduced:</div>
  <div class="center">
   <img src="struct_d_r_d_s_p_1_1_model_reduced.png" usemap="#DRDSP::ModelReduced_map" alt=""/>
   <map id="DRDSP::ModelReduced_map" name="DRDSP::ModelReduced_map">
-<area href="struct_d_r_d_s_p_1_1_model_parameterized.html" alt="DRDSP::ModelParameterized" shape="rect" coords="0,0,176,24"/>
+<area href="struct_d_r_d_s_p_1_1_model_parameterized.html" title="Interface for a model with parameters. " alt="DRDSP::ModelParameterized" shape="rect" coords="0,0,176,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -118,12 +119,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Destroy</b> ()</td></
 VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>VectorField</b> (const VectorXd &amp;x, const VectorXd &amp;parameter)</td></tr>
 <tr class="separator:a3e4dde2aa65d53f6033c0248bafab699"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ae282852370f25a33b346beb3ba2751"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ae282852370f25a33b346beb3ba2751"></a>
-MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>Partials</b> (const VectorXd &amp;x, const VectorXd &amp;parameter)</td></tr>
+MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_reduced.html#a3ae282852370f25a33b346beb3ba2751">Partials</a> (const VectorXd &amp;x, const VectorXd &amp;parameter)</td></tr>
+<tr class="memdesc:a3ae282852370f25a33b346beb3ba2751"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vector field. <br/></td></tr>
 <tr class="separator:a3ae282852370f25a33b346beb3ba2751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3da2cd9ed93e71e44c00718e49ec4d2a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3da2cd9ed93e71e44c00718e49ec4d2a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteCSV</b> (const char *filename) const </td></tr>
 <tr class="separator:a3da2cd9ed93e71e44c00718e49ec4d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_struct_d_r_d_s_p_1_1_model_parameterized"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_d_r_d_s_p_1_1_model_parameterized')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_d_r_d_s_p_1_1_model_parameterized.html">DRDSP::ModelParameterized</a></td></tr>
+<tr class="memitem:aa410d930f96000a98a73cf132d5c2e2d inherit pub_methods_struct_d_r_d_s_p_1_1_model_parameterized"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa410d930f96000a98a73cf132d5c2e2d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_parameterized.html#aa410d930f96000a98a73cf132d5c2e2d">ModelParameterized</a> ()</td></tr>
+<tr class="memdesc:aa410d930f96000a98a73cf132d5c2e2d inherit pub_methods_struct_d_r_d_s_p_1_1_model_parameterized"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the parameter space. <br/></td></tr>
+<tr class="separator:aa410d930f96000a98a73cf132d5c2e2d inherit pub_methods_struct_d_r_d_s_p_1_1_model_parameterized"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cd93ae8805e21e731e65a732048c2b7 inherit pub_methods_struct_d_r_d_s_p_1_1_model_parameterized"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0cd93ae8805e21e731e65a732048c2b7"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ModelParameterized</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_wrap_function.html">WrapFunction</a>&lt; VectorXd &gt; *wrapFunc)</td></tr>
 <tr class="separator:a0cd93ae8805e21e731e65a732048c2b7 inherit pub_methods_struct_d_r_d_s_p_1_1_model_parameterized"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,7 +156,8 @@ const <a class="el" href="struct_d_r_d_s_p_1_1_wrap_function.html">WrapFunction<
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b></td></tr>
 <tr class="separator:a80a78be5602accbde02f804ec1284be8 inherit pub_attribs_struct_d_r_d_s_p_1_1_model_parameterized"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ac0ef55c53f1b2361c32b9594ad081e inherit pub_attribs_struct_d_r_d_s_p_1_1_model_parameterized"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ac0ef55c53f1b2361c32b9594ad081e"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>parameterDimension</b></td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_parameterized.html#a0ac0ef55c53f1b2361c32b9594ad081e">parameterDimension</a></td></tr>
+<tr class="memdesc:a0ac0ef55c53f1b2361c32b9594ad081e inherit pub_attribs_struct_d_r_d_s_p_1_1_model_parameterized"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the state space. <br/></td></tr>
 <tr class="separator:a0ac0ef55c53f1b2361c32b9594ad081e inherit pub_attribs_struct_d_r_d_s_p_1_1_model_parameterized"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following files:<ul>
@@ -160,7 +167,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>parameterDimension
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:44 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:51 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

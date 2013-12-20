@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -93,18 +94,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">DRDSP::DataSet Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A set of data points.  
+ <a href="struct_d_r_d_s_p_1_1_data_set.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="data__set_8h_source.html">data_set.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for DRDSP::DataSet:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="struct_d_r_d_s_p_1_1_data_set.png" usemap="#DRDSP::DataSet_map" alt=""/>
   <map id="DRDSP::DataSet_map" name="DRDSP::DataSet_map">
-<area href="struct_d_r_d_s_p_1_1_data_set_typed.html" alt="DRDSP::DataSetTyped" shape="rect" coords="0,56,139,80"/>
+<area href="struct_d_r_d_s_p_1_1_data_set_typed.html" title="A data set with a corrsponding set of types. " alt="DRDSP::DataSetTyped" shape="rect" coords="0,56,139,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ac9b99505bafd5b1cccf8a361c3ac84a7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9b99505bafd5b1cccf8a361c3ac84a7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#ac9b99505bafd5b1cccf8a361c3ac84a7">DataSet</a> ()</td></tr>
+<tr class="memdesc:ac9b99505bafd5b1cccf8a361c3ac84a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of points in the set. <br/></td></tr>
+<tr class="separator:ac9b99505bafd5b1cccf8a361c3ac84a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1212b5491e3c0a478da1910952e2bc2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1212b5491e3c0a478da1910952e2bc2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DataSet</b> (uint32_t dim)</td></tr>
 <tr class="separator:ae1212b5491e3c0a478da1910952e2bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,16 +140,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Destroy</b> ()</td></
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>LoadBinary</b> (const char *filename)</td></tr>
 <tr class="separator:a0ffb95866863d3b2bad35b0c68c6c7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9caf2a2c685f1433028de6d3c11bd758"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9caf2a2c685f1433028de6d3c11bd758"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>LoadText</b> (const char *filename)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a9caf2a2c685f1433028de6d3c11bd758">LoadText</a> (const char *filename)</td></tr>
+<tr class="memdesc:a9caf2a2c685f1433028de6d3c11bd758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a data set from file in binary format. <br/></td></tr>
 <tr class="separator:a9caf2a2c685f1433028de6d3c11bd758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d90f86c1fbe0380d91158b1c050c501"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d90f86c1fbe0380d91158b1c050c501"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteCSV</b> (const char *filename) const </td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a1d90f86c1fbe0380d91158b1c050c501">WriteCSV</a> (const char *filename) const </td></tr>
+<tr class="memdesc:a1d90f86c1fbe0380d91158b1c050c501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a data set from file in text format (space separated) <br/></td></tr>
 <tr class="separator:a1d90f86c1fbe0380d91158b1c050c501"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f42640d4f826807b69830bf3617152c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f42640d4f826807b69830bf3617152c"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ProjectData</b> (const MatrixXd &amp;W) const </td></tr>
+<a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a0f42640d4f826807b69830bf3617152c">ProjectData</a> (const MatrixXd &amp;W) const </td></tr>
+<tr class="memdesc:a0f42640d4f826807b69830bf3617152c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the data set to file in CSV format. <br/></td></tr>
 <tr class="separator:a0f42640d4f826807b69830bf3617152c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae82340f4e02cb4ca434dc9361716eef0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae82340f4e02cb4ca434dc9361716eef0"></a>
-VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (uint32_t i)</td></tr>
+VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#ae82340f4e02cb4ca434dc9361716eef0">operator[]</a> (uint32_t i)</td></tr>
+<tr class="memdesc:ae82340f4e02cb4ca434dc9361716eef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the given projection to this data set. <br/></td></tr>
 <tr class="separator:ae82340f4e02cb4ca434dc9361716eef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1349d1989fe1292e4c8e7ce4eb105b6c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1349d1989fe1292e4c8e7ce4eb105b6c"></a>
 const VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (uint32_t i) const </td></tr>
@@ -151,20 +165,24 @@ Public Attributes</h2></td></tr>
 VectorXd *&#160;</td><td class="memItemRight" valign="bottom"><b>points</b></td></tr>
 <tr class="separator:a3b7ec561a02546bc111bd2ad69146cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2598262725329c137e03b8947638780"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2598262725329c137e03b8947638780"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b></td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#aa2598262725329c137e03b8947638780">dimension</a></td></tr>
+<tr class="memdesc:aa2598262725329c137e03b8947638780"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of data vectors. <br/></td></tr>
 <tr class="separator:aa2598262725329c137e03b8947638780"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e6912a9f2017bb2c97840a5d379c882"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e6912a9f2017bb2c97840a5d379c882"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>count</b></td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a5e6912a9f2017bb2c97840a5d379c882">count</a></td></tr>
+<tr class="memdesc:a5e6912a9f2017bb2c97840a5d379c882"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the space. <br/></td></tr>
 <tr class="separator:a5e6912a9f2017bb2c97840a5d379c882"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A set of data points. </p>
+</div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>include/DRDSP/data/<a class="el" href="data__set_8h_source.html">data_set.h</a></li>
 <li>src/data/data_set.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:42 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:45 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

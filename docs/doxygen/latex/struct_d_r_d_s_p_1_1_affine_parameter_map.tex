@@ -1,37 +1,49 @@
 \hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map}{\section{D\-R\-D\-S\-P\-:\-:Affine\-Parameter\-Map Struct Reference}
 \label{struct_d_r_d_s_p_1_1_affine_parameter_map}\index{D\-R\-D\-S\-P\-::\-Affine\-Parameter\-Map@{D\-R\-D\-S\-P\-::\-Affine\-Parameter\-Map}}
 }
+
+
+An affine map from the original parameter space to the reduced parameter space.  
+
+
+
+
+{\ttfamily \#include $<$affine\-Parameter\-Map.\-h$>$}
+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a56991113d3a808ed701b1d1e10ebb3e0}{void {\bfseries Init} (uint16\-\_\-t dim, uint16\-\_\-t num\-R\-B\-Fs, uint8\-\_\-t param\-Dim)}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a56991113d3a808ed701b1d1e10ebb3e0}
+\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a56991113d3a808ed701b1d1e10ebb3e0}{void \hyperlink{struct_d_r_d_s_p_1_1_affine_parameter_map_a56991113d3a808ed701b1d1e10ebb3e0}{Init} (uint16\-\_\-t dim, uint16\-\_\-t num\-R\-B\-Fs, uint8\-\_\-t param\-Dim)}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a56991113d3a808ed701b1d1e10ebb3e0}
+
+\begin{DoxyCompactList}\small\item\em Coefficients describing the affine map. \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a185c0b51a2ac97fadcfd137f8b35cd98}{Matrix\-Xd {\bfseries Evaluate} (const Vector\-Xd \&parameter) const }\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a185c0b51a2ac97fadcfd137f8b35cd98}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a1d177c7c644e587969c3c751828c1181}{Matrix\-Xd {\bfseries Evaluate} (const Vector\-Xd \&x) const }\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a1d177c7c644e587969c3c751828c1181}
+\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_ae983bda2073bac0d8e6aebcc34d51153}{Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_affine_parameter_map_ae983bda2073bac0d8e6aebcc34d51153}{Get\-Lambda} (const Vector\-Xd \&parameter) const }\label{struct_d_r_d_s_p_1_1_affine_parameter_map_ae983bda2073bac0d8e6aebcc34d51153}
 
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a01b509358863e765d181ce5d7e9e6326}{Matrix\-Xd {\bfseries Get\-Lambda} (const Vector\-Xd \&x) const }\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a01b509358863e765d181ce5d7e9e6326}
-
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Evaluate the parameter map. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a7c4c0f072f5248a9c5cf65b813fcb836}{uint32\-\_\-t {\bfseries R}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a7c4c0f072f5248a9c5cf65b813fcb836}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a5f12477a00c6f104a97b240cb5a81295}{uint32\-\_\-t {\bfseries N}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a5f12477a00c6f104a97b240cb5a81295}
+\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a5f12477a00c6f104a97b240cb5a81295}{uint32\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_affine_parameter_map_a5f12477a00c6f104a97b240cb5a81295}{N}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a5f12477a00c6f104a97b240cb5a81295}
 
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_aed859f95d6b7ea0850f84242df5379ab}{uint16\-\_\-t {\bfseries dimension}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_aed859f95d6b7ea0850f84242df5379ab}
+\begin{DoxyCompactList}\small\item\em Width of the coefficient matrix. \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_aed859f95d6b7ea0850f84242df5379ab}{uint16\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_affine_parameter_map_aed859f95d6b7ea0850f84242df5379ab}{dimension}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_aed859f95d6b7ea0850f84242df5379ab}
 
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a210acc8ae8c11b4b2c9360e42ccafb00}{uint8\-\_\-t {\bfseries parameter\-Dimension}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a210acc8ae8c11b4b2c9360e42ccafb00}
+\begin{DoxyCompactList}\small\item\em Width of the matrix version of the parameter returned by \hyperlink{struct_d_r_d_s_p_1_1_affine_parameter_map_ae983bda2073bac0d8e6aebcc34d51153}{Get\-Lambda()} \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a210acc8ae8c11b4b2c9360e42ccafb00}{uint8\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_affine_parameter_map_a210acc8ae8c11b4b2c9360e42ccafb00}{parameter\-Dimension}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a210acc8ae8c11b4b2c9360e42ccafb00}
 
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a760993390cbbec42011c1e1e76a44660}{Matrix\-Xd {\bfseries coeffs}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a760993390cbbec42011c1e1e76a44660}
+\begin{DoxyCompactList}\small\item\em Dimension of the reduced state space. \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_affine_parameter_map_a760993390cbbec42011c1e1e76a44660}{Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_affine_parameter_map_a760993390cbbec42011c1e1e76a44660}{coeffs}}\label{struct_d_r_d_s_p_1_1_affine_parameter_map_a760993390cbbec42011c1e1e76a44660}
 
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Dimension of the original parameter space. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+An affine map from the original parameter space to the reduced parameter space. 
 
 The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 

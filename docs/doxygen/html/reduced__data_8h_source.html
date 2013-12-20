@@ -68,7 +68,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -126,27 +126,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordtype">double</span> ComputeDerivativeScale();</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">void</span> WriteData( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">bool</span> ReadData( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename );</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">void</span> WritePointsText( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> WriteVectorsText( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">void</span> WritePointsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> WriteVectorsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    };</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdef"><b>Definition:</b> aabb.h:7</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_embedded.html">DRDSP::ModelParameterizedEmbedded</a></div><div class="ttdef"><b>Definition:</b> model.h:81</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdef"><b>Definition:</b> data_set.h:9</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></div><div class="ttdef"><b>Definition:</b> model.h:13</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdoc">An axis-aligned bounding box in n-dimensions. </div><div class="ttdef"><b>Definition:</b> aabb.h:10</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_embedded.html">DRDSP::ModelParameterizedEmbedded</a></div><div class="ttdoc">A model with parameters whose state space is embedded into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:111</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdoc">A set of data points. </div><div class="ttdef"><b>Definition:</b> data_set.h:13</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></div><div class="ttdoc">Interface for a model without parameters. </div><div class="ttdef"><b>Definition:</b> model.h:11</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data.html">DRDSP::ReducedData</a></div><div class="ttdef"><b>Definition:</b> reduced_data.h:10</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_c_w.html">DRDSP::ModelCW</a></div><div class="ttdef"><b>Definition:</b> model.h:25</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_embedded_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_embedded_c_w.html">DRDSP::ModelParameterizedEmbeddedCW</a></div><div class="ttdef"><b>Definition:</b> model.h:90</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_c_w.html">DRDSP::ModelParameterizedCW</a></div><div class="ttdef"><b>Definition:</b> model.h:50</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized.html">DRDSP::ModelParameterized</a></div><div class="ttdef"><b>Definition:</b> model.h:37</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html">DRDSP::ModelEmbedded</a></div><div class="ttdef"><b>Definition:</b> model.h:63</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_c_w.html">DRDSP::ModelCW</a></div><div class="ttdoc">Interface for a model without parameters, whose derivatives are to be evaluated component-wise. </div><div class="ttdef"><b>Definition:</b> model.h:34</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_embedded_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_embedded_c_w.html">DRDSP::ModelParameterizedEmbeddedCW</a></div><div class="ttdoc">A model with parameters whose state space is embedded into R^n, and whose derivatives are to be evalu...</div><div class="ttdef"><b>Definition:</b> model.h:124</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_c_w.html">DRDSP::ModelParameterizedCW</a></div><div class="ttdoc">Interface for a model with parameters, whose derivatives are to be evaluated component-wise. </div><div class="ttdef"><b>Definition:</b> model.h:70</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized.html">DRDSP::ModelParameterized</a></div><div class="ttdoc">Interface for a model with parameters. </div><div class="ttdef"><b>Definition:</b> model.h:49</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html">DRDSP::ModelEmbedded</a></div><div class="ttdoc">A model without parameters whose state space is embedded into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:86</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:42 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:43 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

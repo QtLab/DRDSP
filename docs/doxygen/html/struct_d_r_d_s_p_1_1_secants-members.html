@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -93,16 +94,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>This is the complete list of members for <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>, including all inherited members.</p>
 <table class="directory">
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>count</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>CullSecants</b>(double tolerance) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a9b6763bc1541a775e842e437448200ef">CullSecants</a>(double tolerance) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>CullSecantsDegrees</b>(double degrees) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>CullSecantsRadians</b>(double radians) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>dimension</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a950d625f7d298f93eaad20062f79db1b">dimension</a></td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>GetSecant</b>(uint32_t k) const =0 (defined in <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Secants</b>() (defined in <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#ac919bfb4875117588b6a2a0c5938b59e">GetSecantNoNormalize</a>(uint32_t k) const =0</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a1b22c485c03ef8b5f9181e102f81fddc">Secants</a>()</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:42 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:46 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

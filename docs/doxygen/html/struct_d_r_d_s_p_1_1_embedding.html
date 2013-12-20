@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -93,32 +94,44 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">DRDSP::Embedding Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>An embedding of a state space into R^n.  
+ <a href="struct_d_r_d_s_p_1_1_embedding.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="embedding_8h_source.html">embedding.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a044e60ce685c03b1e31a080455a47a43"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a044e60ce685c03b1e31a080455a47a43"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Embedding</b> (uint32_t origDim, uint32_t embedDim)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a044e60ce685c03b1e31a080455a47a43">Embedding</a> (uint32_t origDim, uint32_t embedDim)</td></tr>
+<tr class="memdesc:a044e60ce685c03b1e31a080455a47a43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the embedding space, R^n. <br/></td></tr>
 <tr class="separator:a044e60ce685c03b1e31a080455a47a43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a128ada65c8aafc9348dafd8c89add0da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a128ada65c8aafc9348dafd8c89add0da"></a>
 virtual VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>Evaluate</b> (const VectorXd &amp;x) const </td></tr>
 <tr class="separator:a128ada65c8aafc9348dafd8c89add0da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18d562ec89da43df7dd66b1b8b694e85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18d562ec89da43df7dd66b1b8b694e85"></a>
-virtual MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>Derivative</b> (const VectorXd &amp;x) const </td></tr>
+virtual MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a18d562ec89da43df7dd66b1b8b694e85">Derivative</a> (const VectorXd &amp;x) const </td></tr>
+<tr class="memdesc:a18d562ec89da43df7dd66b1b8b694e85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Embeds the given state. <br/></td></tr>
 <tr class="separator:a18d562ec89da43df7dd66b1b8b694e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a010327f5b83006a24e466deabad5a852"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a010327f5b83006a24e466deabad5a852"></a>
-virtual MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>DerivativeAdjoint</b> (const VectorXd &amp;x) const </td></tr>
+virtual MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a010327f5b83006a24e466deabad5a852">DerivativeAdjoint</a> (const VectorXd &amp;x) const </td></tr>
+<tr class="memdesc:a010327f5b83006a24e466deabad5a852"><td class="mdescLeft">&#160;</td><td class="mdescRight">The partial derivatives of the embedding with respect to the state. <br/></td></tr>
 <tr class="separator:a010327f5b83006a24e466deabad5a852"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae651c3ad18c8ad3dbbfea1577d7d395f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae651c3ad18c8ad3dbbfea1577d7d395f"></a>
-virtual MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>Derivative2</b> (const VectorXd &amp;x, uint32_t i) const </td></tr>
+virtual MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#ae651c3ad18c8ad3dbbfea1577d7d395f">Derivative2</a> (const VectorXd &amp;x, uint32_t i) const </td></tr>
+<tr class="memdesc:ae651c3ad18c8ad3dbbfea1577d7d395f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The linear algebraic adjoint of the derivative. <br/></td></tr>
 <tr class="separator:ae651c3ad18c8ad3dbbfea1577d7d395f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d28c64ee0aa19fb2481f16795b31765"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d28c64ee0aa19fb2481f16795b31765"></a>
-MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeInducedMetric</b> (const VectorXd &amp;x) const </td></tr>
+MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a5d28c64ee0aa19fb2481f16795b31765">ComputeInducedMetric</a> (const VectorXd &amp;x) const </td></tr>
+<tr class="memdesc:a5d28c64ee0aa19fb2481f16795b31765"><td class="mdescLeft">&#160;</td><td class="mdescRight">The second partial derivatives of the ith component with respect to the state. <br/></td></tr>
 <tr class="separator:a5d28c64ee0aa19fb2481f16795b31765"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71acf702383901f9d4aa6fb198dc0892"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71acf702383901f9d4aa6fb198dc0892"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>EmbedData</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;data) const </td></tr>
+<a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a71acf702383901f9d4aa6fb198dc0892">EmbedData</a> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;data) const </td></tr>
+<tr class="memdesc:a71acf702383901f9d4aa6fb198dc0892"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pullback metric on the state space from R^n. <br/></td></tr>
 <tr class="separator:a71acf702383901f9d4aa6fb198dc0892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf67b0ed050b58fc9a0943d604093ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abdf67b0ed050b58fc9a0943d604093ef"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&#160;</td><td class="memItemRight" valign="bottom"><b>EmbedData</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data) const </td></tr>
+<a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#abdf67b0ed050b58fc9a0943d604093ef">EmbedData</a> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data) const </td></tr>
+<tr class="memdesc:abdf67b0ed050b58fc9a0943d604093ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply this embedding to the data set. <br/></td></tr>
 <tr class="separator:abdf67b0ed050b58fc9a0943d604093ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -127,17 +140,20 @@ Public Attributes</h2></td></tr>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>oDim</b></td></tr>
 <tr class="separator:ac49e8aa042fbf2ee8e9fdc3d2b4f1c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa49b8deb5d403025ca5db3f483c015b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa49b8deb5d403025ca5db3f483c015b2"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>eDim</b></td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#aa49b8deb5d403025ca5db3f483c015b2">eDim</a></td></tr>
+<tr class="memdesc:aa49b8deb5d403025ca5db3f483c015b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the original state space. <br/></td></tr>
 <tr class="separator:aa49b8deb5d403025ca5db3f483c015b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>An embedding of a state space into R^n. </p>
+</div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>include/DRDSP/dynamics/<a class="el" href="embedding_8h_source.html">embedding.h</a></li>
 <li>src/dynamics/embedding.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:43 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:49 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

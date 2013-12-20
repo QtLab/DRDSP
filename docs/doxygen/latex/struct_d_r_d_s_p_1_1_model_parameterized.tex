@@ -1,6 +1,15 @@
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized}{\section{D\-R\-D\-S\-P\-:\-:Model\-Parameterized Struct Reference}
 \label{struct_d_r_d_s_p_1_1_model_parameterized}\index{D\-R\-D\-S\-P\-::\-Model\-Parameterized@{D\-R\-D\-S\-P\-::\-Model\-Parameterized}}
 }
+
+
+Interface for a model with parameters.  
+
+
+
+
+{\ttfamily \#include $<$model.\-h$>$}
+
 Inheritance diagram for D\-R\-D\-S\-P\-:\-:Model\-Parameterized\-:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -10,6 +19,9 @@ Inheritance diagram for D\-R\-D\-S\-P\-:\-:Model\-Parameterized\-:\begin{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_aa410d930f96000a98a73cf132d5c2e2d}{\hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_aa410d930f96000a98a73cf132d5c2e2d}{Model\-Parameterized} ()}\label{struct_d_r_d_s_p_1_1_model_parameterized_aa410d930f96000a98a73cf132d5c2e2d}
+
+\begin{DoxyCompactList}\small\item\em Dimension of the parameter space. \end{DoxyCompactList}\item 
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_a0cd93ae8805e21e731e65a732048c2b7}{{\bfseries Model\-Parameterized} (const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ Vector\-Xd $>$ $\ast$wrap\-Func)}\label{struct_d_r_d_s_p_1_1_model_parameterized_a0cd93ae8805e21e731e65a732048c2b7}
 
 \item 
@@ -22,9 +34,9 @@ Inheritance diagram for D\-R\-D\-S\-P\-:\-:Model\-Parameterized\-:\begin{figure}
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_a7fc3a7f0f10a3e4215bf67cb6e302e05}{virtual Vector\-Xd {\bfseries Vector\-Field} (const Vector\-Xd \&state, const Vector\-Xd \&parameter)=0}\label{struct_d_r_d_s_p_1_1_model_parameterized_a7fc3a7f0f10a3e4215bf67cb6e302e05}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_a1aa9163a2e1e92e8bc2e644832721de7}{virtual Matrix\-Xd {\bfseries Partials} (const Vector\-Xd \&state, const Vector\-Xd \&parameter)=0}\label{struct_d_r_d_s_p_1_1_model_parameterized_a1aa9163a2e1e92e8bc2e644832721de7}
+\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_a1aa9163a2e1e92e8bc2e644832721de7}{virtual Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_a1aa9163a2e1e92e8bc2e644832721de7}{Partials} (const Vector\-Xd \&state, const Vector\-Xd \&parameter)=0}\label{struct_d_r_d_s_p_1_1_model_parameterized_a1aa9163a2e1e92e8bc2e644832721de7}
 
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The vector field. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -34,10 +46,13 @@ Inheritance diagram for D\-R\-D\-S\-P\-:\-:Model\-Parameterized\-:\begin{figure}
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_a80a78be5602accbde02f804ec1284be8}{uint32\-\_\-t {\bfseries dimension}}\label{struct_d_r_d_s_p_1_1_model_parameterized_a80a78be5602accbde02f804ec1284be8}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_a0ac0ef55c53f1b2361c32b9594ad081e}{uint8\-\_\-t {\bfseries parameter\-Dimension}}\label{struct_d_r_d_s_p_1_1_model_parameterized_a0ac0ef55c53f1b2361c32b9594ad081e}
+\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_a0ac0ef55c53f1b2361c32b9594ad081e}{uint8\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_a0ac0ef55c53f1b2361c32b9594ad081e}{parameter\-Dimension}}\label{struct_d_r_d_s_p_1_1_model_parameterized_a0ac0ef55c53f1b2361c32b9594ad081e}
 
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Dimension of the state space. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Interface for a model with parameters. 
 
 The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 

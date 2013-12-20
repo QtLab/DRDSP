@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -94,26 +95,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="directory">
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Create</b>(uint32_t dim, uint16_t numParams, uint8_t paramDim) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>dataSets</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>DataSystem</b>() (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ac69e5c3eea5a44af77e637de52e7bae4">DataSystem</a>()</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>DataSystem</b>(const DataSystem &amp;rhs) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>DataSystem</b>(DataSystem &amp;&amp;rhs) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>Destroy</b>() (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>dimension</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ab6aefaa08cd0a5b6a9e83105ecd56289">dimension</a></td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>Load</b>(const char *filename) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>LoadSetBinary</b>(const char *filename, uint32_t i) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>LoadSetText</b>(const char *filename, uint32_t i) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>maxPoints</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>numParameters</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a1199512ac121edb15215c5031a5ac531">LoadSetBinary</a>(const char *filename, uint32_t i)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ae1487971b82db1d86736eddd2c520355">LoadSetText</a>(const char *filename, uint32_t i)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a3e5fe0e180799a6251dfd66b4a2cd49c">maxPoints</a></td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ab6c8c9e69467d53990254ecdcbf5e073">numParameters</a></td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator=</b>(const DataSystem &amp;rhs) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>operator=</b>(DataSystem &amp;&amp;rhs) (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>parameterDimension</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>parameters</b> (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>ProjectData</b>(const MatrixXd &amp;W) const  (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>~DataSystem</b>() (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ae4c6d5195272938097c0f9b01c18b4e0">parameterDimension</a></td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#adfbfe0987e15a40aa9a39987937ca337">parameters</a></td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">ProjectData</a>(const MatrixXd &amp;W) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a6b4e0e6bc3ba1135a08fc2c2ed874e39">WriteDataSetsCSV</a>(const char *filePrefix, const char *fileSuffix) const </td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>~DataSystem</b>() (defined in <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a>)</td><td class="entry"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:42 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:45 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

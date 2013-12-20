@@ -63,6 +63,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
       <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -70,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -132,6 +133,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeData</b> (<a c
 <tr class="memitem:a21853627f8229be7b5ec278faa31257e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21853627f8229be7b5ec278faa31257e"></a>
 <a class="el" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeBoundingBox</b> () const </td></tr>
 <tr class="separator:a21853627f8229be7b5ec278faa31257e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cee3fafe99a55ab69f54a97a6694b5b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3cee3fafe99a55ab69f54a97a6694b5b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>WritePointsCSV</b> (const char *filePrefix, const char *fileSuffix) const </td></tr>
+<tr class="separator:a3cee3fafe99a55ab69f54a97a6694b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90193676fbce0169bc7491ab686d79fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90193676fbce0169bc7491ab686d79fa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteVectorsCSV</b> (const char *filePrefix, const char *fileSuffix) const </td></tr>
+<tr class="separator:a90193676fbce0169bc7491ab686d79fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -149,7 +156,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>numParameters</b>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 6 2013 18:47:46 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 20 2013 17:03:55 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

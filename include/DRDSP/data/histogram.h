@@ -6,6 +6,10 @@
 using namespace std;
 
 namespace DRDSP {
+
+	/*!
+	 * \brief A single bin for the histogram.
+	 */
 	struct Bin {
 		double minValue, maxValue;
 		uint32_t frequency;
@@ -19,6 +23,11 @@ namespace DRDSP {
 		Bin& operator--();
 	};
 
+	/*!
+	 * \brief A histogram.
+	 *
+	 * This is just an array of bins with some helper functions.
+	 */
 	struct Histogram {
 		Bin* bins;
 		uint32_t numBins;
@@ -32,18 +41,22 @@ namespace DRDSP {
 		Histogram& operator=( Histogram&& rhs );
 		void Create( uint32_t nBins );
 		void Destroy();
-		uint32_t TotalFrequency() const;
+		uint32_t TotalFrequency() const; //! Sums the bin frequencies
 		void WriteCSV( const char* filename ) const;
 	};
 
+	/*!
+	 * \brief A class for generating histograms from data.
+	 */
 	struct HistogramGenerator {
-		uint32_t numBins;
-		double clampMin, clampMax;
-		bool clamp, logScale;
+		uint32_t numBins; //! The number of bins that we want the histogram to contain
+		double clampMin, clampMax; //! clamping limits the range of the bins
+		bool clamp,    //! Perform clamping
+			 logScale; //! Use a logarithmic scale for the bin sizes
 	
 		HistogramGenerator();
 		HistogramGenerator( uint32_t nBins );
-		Histogram Generate( const double* data, size_t N ) const;
+		Histogram Generate( const double* data, size_t N ) const; //! Generates a histogram from the given data
 	};
 
 }
