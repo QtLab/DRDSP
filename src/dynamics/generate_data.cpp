@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <future>
 #include <DRDSP/dynamics/generate_data.h>
 
 using namespace std;
@@ -89,8 +90,8 @@ DataSystem DataGenerator::GenerateDataSystem() {
 	data.Create(model.model.dimension,numParms,1);
 	double p = pMin;
 	for(uint16_t i=0;i<numParms;i++) {
-		data.parameters[i].setZero(model.model.parameterDimension);
-		data.parameters[i](0) = p;
+		data.parameters[i].setZero( model.model.parameterDimension );
+		data.parameters[i]( 0 ) = p;
 		data.dataSets[i] = GenerateDataSet(p);
 		p += pDelta;
 	}

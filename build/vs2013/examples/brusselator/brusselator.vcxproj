@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,90 +18,34 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\src\data\aabb.cpp" />
-    <ClCompile Include="..\..\..\src\data\data_set.cpp" />
-    <ClCompile Include="..\..\..\src\data\data_typed.cpp" />
-    <ClCompile Include="..\..\..\src\data\histogram.cpp" />
-    <ClCompile Include="..\..\..\src\data\secants.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\dynamicalSystem.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\embedding.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\generate_data.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_rbf_producer.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_rbf.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_reduced.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_reduced_producer.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\radial_basis.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\reduced_data.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\reduced_data_system.cpp" />
-    <ClCompile Include="..\..\..\src\geometry\grassmannian.cpp" />
-    <ClCompile Include="..\..\..\src\projection\proj_pod.cpp" />
-    <ClCompile Include="..\..\..\src\projection\proj_secant.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\data\data_set.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\data\data_typed.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\data\histogram.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\data\secants.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf_producer.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\radial_basis.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\solver.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\grassmannian.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\inner_product.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\metric.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\vector.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\misc.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\optimization\linesearch.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\optimization\optimization.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\projection\proj_pod.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\projection\proj_secant.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\types.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2E42D8FD-0BD3-4057-9C73-EFD24E366260}</ProjectGuid>
-    <RootNamespace>DRDSP</RootNamespace>
+    <ProjectGuid>{A59F79A8-1300-4D42-8EAA-D6DC2A564FD2}</ProjectGuid>
+    <RootNamespace>brusselator</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -121,35 +65,34 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies />
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>DRDSP.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -157,17 +100,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>DRDSP.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -181,12 +121,11 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies />
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>DRDSP.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -200,15 +139,20 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>DRDSP.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\examples\brusselator\brusselator.cpp" />
+    <ClCompile Include="..\..\..\..\examples\brusselator\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\examples\brusselator\brusselator.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

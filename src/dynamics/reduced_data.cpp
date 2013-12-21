@@ -346,3 +346,4 @@ void ReducedData::WriteVectorsCSV( const char* filename ) const {
 	}
 	out.close();
 }
+

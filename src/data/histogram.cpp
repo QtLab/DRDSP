@@ -112,7 +112,7 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 	
 	uint32_t nBins = numBins;
 	if( nBins == 0 ) {
-		nBins = 1 + N / 20;
+		nBins = uint32_t(1 + N / 20);
 	}
 		
 	Histogram H(nBins);
@@ -157,7 +157,7 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 		for(size_t i=0;i<N;i++) {
 			double temp = ( data[i] - minVal ) / width;
 			int32_t j = (int32_t)temp;
-			if( j >= 0 && j < nBins ) {
+			if( j >= 0 && j < (int32_t)nBins ) {
 				++H.bins[j];
 			}
 		}
