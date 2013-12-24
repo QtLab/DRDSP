@@ -127,8 +127,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    };</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_histogram_generator.html">   51</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html">HistogramGenerator</a> {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        uint32_t numBins; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_histogram_generator.html#aef85198c4644dbcfa27d24e9015bb025">   53</a></span>&#160;        <span class="keywordtype">double</span> <a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html#aef85198c4644dbcfa27d24e9015bb025">clampMin</a>, clampMax; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_histogram_generator.html#a2f6b01668e743ce436f54c3ca56275a1">   52</a></span>&#160;        uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html#a2f6b01668e743ce436f54c3ca56275a1">numBins</a>; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_histogram_generator.html#a5cec8e7e75d95a66b4a17c3f70c2b556">   53</a></span>&#160;        <span class="keywordtype">double</span> clampMin, <a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html#a5cec8e7e75d95a66b4a17c3f70c2b556">clampMax</a>; </div>
 <div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_histogram_generator.html#a84935b50902a985afdeca6541bac8c06">   54</a></span>&#160;        <span class="keywordtype">bool</span> clamp,    </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;             <a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html#a84935b50902a985afdeca6541bac8c06">logScale</a>; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    </div>
@@ -140,15 +140,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html_a2f6b01668e743ce436f54c3ca56275a1"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html#a2f6b01668e743ce436f54c3ca56275a1">DRDSP::HistogramGenerator::numBins</a></div><div class="ttdeci">uint32_t numBins</div><div class="ttdoc">The number of bins that we want the histogram to contain. </div><div class="ttdef"><b>Definition:</b> histogram.h:52</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram.html">DRDSP::Histogram</a></div><div class="ttdoc">A histogram. </div><div class="ttdef"><b>Definition:</b> histogram.h:31</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html_aef85198c4644dbcfa27d24e9015bb025"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html#aef85198c4644dbcfa27d24e9015bb025">DRDSP::HistogramGenerator::clampMin</a></div><div class="ttdeci">double clampMin</div><div class="ttdoc">The number of bins that we want the histogram to contain. </div><div class="ttdef"><b>Definition:</b> histogram.h:53</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html_a84935b50902a985afdeca6541bac8c06"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html#a84935b50902a985afdeca6541bac8c06">DRDSP::HistogramGenerator::logScale</a></div><div class="ttdeci">bool logScale</div><div class="ttdoc">Perform clamping. </div><div class="ttdef"><b>Definition:</b> histogram.h:54</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html_a84935b50902a985afdeca6541bac8c06"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html#a84935b50902a985afdeca6541bac8c06">DRDSP::HistogramGenerator::logScale</a></div><div class="ttdeci">bool logScale</div><div class="ttdoc">Use a logarithmic scale for the bin sizes. </div><div class="ttdef"><b>Definition:</b> histogram.h:54</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_bin_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_bin.html">DRDSP::Bin</a></div><div class="ttdoc">A single bin for the histogram. </div><div class="ttdef"><b>Definition:</b> histogram.h:13</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html_a5cec8e7e75d95a66b4a17c3f70c2b556"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html#a5cec8e7e75d95a66b4a17c3f70c2b556">DRDSP::HistogramGenerator::clampMax</a></div><div class="ttdeci">double clampMax</div><div class="ttdoc">clamping limits the range of the bins </div><div class="ttdef"><b>Definition:</b> histogram.h:53</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html">DRDSP::HistogramGenerator</a></div><div class="ttdoc">A class for generating histograms from data. </div><div class="ttdef"><b>Definition:</b> histogram.h:51</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 20 2013 17:03:43 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 23 2013 00:20:13 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

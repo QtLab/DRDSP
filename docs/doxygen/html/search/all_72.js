@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['r',['R',['../struct_d_r_d_s_p_1_1_affine_parameter_map.html#a7c4c0f072f5248a9c5cf65b813fcb836',1,'DRDSP::AffineParameterMap']]],
   ['radialfunction',['RadialFunction',['../struct_d_r_d_s_p_1_1_radial_function.html',1,'DRDSP']]],
   ['reduceddata',['ReducedData',['../struct_d_r_d_s_p_1_1_reduced_data.html',1,'DRDSP']]],
   ['reduceddatasystem',['ReducedDataSystem',['../struct_d_r_d_s_p_1_1_reduced_data_system.html',1,'DRDSP']]],

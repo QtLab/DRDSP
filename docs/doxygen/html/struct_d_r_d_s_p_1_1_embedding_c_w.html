@@ -103,45 +103,46 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a36beb21857003df4f283dd1f0459b178"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36beb21857003df4f283dd1f0459b178"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a36beb21857003df4f283dd1f0459b178">EmbeddingCW</a> (uint32_t origDim, uint32_t embedDim)</td></tr>
-<tr class="memdesc:a36beb21857003df4f283dd1f0459b178"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the embedding space, R^n. <br/></td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>EmbeddingCW</b> (uint32_t origDim, uint32_t embedDim)</td></tr>
 <tr class="separator:a36beb21857003df4f283dd1f0459b178"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a630cb32ea4cf52cc278c89322a944257"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a630cb32ea4cf52cc278c89322a944257"></a>
-virtual VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>Evaluate</b> (const VectorXd &amp;x) const </td></tr>
+virtual VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a630cb32ea4cf52cc278c89322a944257">Evaluate</a> (const VectorXd &amp;x) const </td></tr>
+<tr class="memdesc:a630cb32ea4cf52cc278c89322a944257"><td class="mdescLeft">&#160;</td><td class="mdescRight">Embeds the given state. <br/></td></tr>
 <tr class="separator:a630cb32ea4cf52cc278c89322a944257"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7e3c46b785e7b023119238a0d8cc0db"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7e3c46b785e7b023119238a0d8cc0db"></a>
 virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#ae7e3c46b785e7b023119238a0d8cc0db">Derivative</a> (const VectorXd &amp;x, uint32_t i, uint32_t j) const </td></tr>
-<tr class="memdesc:ae7e3c46b785e7b023119238a0d8cc0db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Embeds the given state. <br/></td></tr>
+<tr class="memdesc:ae7e3c46b785e7b023119238a0d8cc0db"><td class="mdescLeft">&#160;</td><td class="mdescRight">The partial derivatives of the ith component of the embedding with respect to the jth component of the state. <br/></td></tr>
 <tr class="separator:ae7e3c46b785e7b023119238a0d8cc0db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0350d8d148c7816ae8b2ee27bf4f54cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0350d8d148c7816ae8b2ee27bf4f54cd"></a>
 virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a0350d8d148c7816ae8b2ee27bf4f54cd">DerivativeAdjoint</a> (const VectorXd &amp;x, uint32_t i, uint32_t j) const </td></tr>
-<tr class="memdesc:a0350d8d148c7816ae8b2ee27bf4f54cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The partial derivatives of the ith component of the embedding with respect to the jth component of the state. <br/></td></tr>
+<tr class="memdesc:a0350d8d148c7816ae8b2ee27bf4f54cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The (i,j) component of the linear algebraic adjoint of the derivative. <br/></td></tr>
 <tr class="separator:a0350d8d148c7816ae8b2ee27bf4f54cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98b06fcd2b37246b967ff2660be15568"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a98b06fcd2b37246b967ff2660be15568"></a>
 virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a98b06fcd2b37246b967ff2660be15568">Derivative2</a> (const VectorXd &amp;x, uint32_t i, uint32_t j, uint32_t k) const </td></tr>
-<tr class="memdesc:a98b06fcd2b37246b967ff2660be15568"><td class="mdescLeft">&#160;</td><td class="mdescRight">The (i,j) component of the linear algebraic adjoint of the derivative. <br/></td></tr>
+<tr class="memdesc:a98b06fcd2b37246b967ff2660be15568"><td class="mdescLeft">&#160;</td><td class="mdescRight">The second partial derivatives of the ith component with respect to the j and k components of the state. <br/></td></tr>
 <tr class="separator:a98b06fcd2b37246b967ff2660be15568"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fc6f574011396ef14a775e02fb7ef25"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7fc6f574011396ef14a775e02fb7ef25"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a7fc6f574011396ef14a775e02fb7ef25">ComputeInducedMetric</a> (const VectorXd &amp;x, uint32_t i, uint32_t j) const </td></tr>
-<tr class="memdesc:a7fc6f574011396ef14a775e02fb7ef25"><td class="mdescLeft">&#160;</td><td class="mdescRight">The second partial derivatives of the ith component with respect to the j and k components of the state. <br/></td></tr>
+<tr class="memdesc:a7fc6f574011396ef14a775e02fb7ef25"><td class="mdescLeft">&#160;</td><td class="mdescRight">The (i,j) component of the pullback metric on the state space from R^n. <br/></td></tr>
 <tr class="separator:a7fc6f574011396ef14a775e02fb7ef25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad63dfe0eeab18767684e46cd3000ef83"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad63dfe0eeab18767684e46cd3000ef83"></a>
 <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#ad63dfe0eeab18767684e46cd3000ef83">EmbedData</a> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;data) const </td></tr>
-<tr class="memdesc:ad63dfe0eeab18767684e46cd3000ef83"><td class="mdescLeft">&#160;</td><td class="mdescRight">The (i,j) component of the pullback metric on the state space from R^n. <br/></td></tr>
+<tr class="memdesc:ad63dfe0eeab18767684e46cd3000ef83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply this embedding to the data set. <br/></td></tr>
 <tr class="separator:ad63dfe0eeab18767684e46cd3000ef83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ac7659dca082002fef531dd9403ee1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ac7659dca082002fef531dd9403ee1f"></a>
 <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#a3ac7659dca082002fef531dd9403ee1f">EmbedData</a> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data) const </td></tr>
-<tr class="memdesc:a3ac7659dca082002fef531dd9403ee1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply this embedding to the data set. <br/></td></tr>
+<tr class="memdesc:a3ac7659dca082002fef531dd9403ee1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply this embedding to the data system. <br/></td></tr>
 <tr class="separator:a3ac7659dca082002fef531dd9403ee1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa3f8538fb8f9341f744f79a2bda8d8ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3f8538fb8f9341f744f79a2bda8d8ef"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>oDim</b></td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#aa3f8538fb8f9341f744f79a2bda8d8ef">oDim</a></td></tr>
+<tr class="memdesc:aa3f8538fb8f9341f744f79a2bda8d8ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the original state space. <br/></td></tr>
 <tr class="separator:aa3f8538fb8f9341f744f79a2bda8d8ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade05f2b8835edeb8b418bcd27d2d74db"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade05f2b8835edeb8b418bcd27d2d74db"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding_c_w.html#ade05f2b8835edeb8b418bcd27d2d74db">eDim</a></td></tr>
-<tr class="memdesc:ade05f2b8835edeb8b418bcd27d2d74db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the original state space. <br/></td></tr>
+<tr class="memdesc:ade05f2b8835edeb8b418bcd27d2d74db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the embedding space, R^n. <br/></td></tr>
 <tr class="separator:ade05f2b8835edeb8b418bcd27d2d74db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -154,7 +155,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 20 2013 17:03:49 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 23 2013 00:20:14 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

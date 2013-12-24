@@ -13,9 +13,6 @@ Interface for a model with parameters, whose derivatives are to be evaluated com
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a2be94490482d194c8c25aed1b8f99b4d}{\hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a2be94490482d194c8c25aed1b8f99b4d}{Model\-Parameterized\-C\-W} ()}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a2be94490482d194c8c25aed1b8f99b4d}
-
-\begin{DoxyCompactList}\small\item\em Dimension of the parameter space. \end{DoxyCompactList}\item 
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a6dc3f89073452ab9fe6e0060aa14ad24}{{\bfseries Model\-Parameterized\-C\-W} (const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ Vector\-Xd $>$ $\ast$wrap\-Func)}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a6dc3f89073452ab9fe6e0060aa14ad24}
 
 \item 
@@ -25,24 +22,24 @@ Interface for a model with parameters, whose derivatives are to be evaluated com
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a9ce0b83304e3da9c41142baf2e5f8b75}{{\bfseries Model\-Parameterized\-C\-W} (const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ Vector\-Xd $>$ $\ast$wrap\-Func, uint32\-\_\-t dim, uint32\-\_\-t p\-Dim)}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a9ce0b83304e3da9c41142baf2e5f8b75}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a21a471d9a6eebf3939b6605a9243253d}{virtual double {\bfseries Vector\-Field} (const Vector\-Xd \&state, const Vector\-Xd \&parameter, uint32\-\_\-t i)=0}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a21a471d9a6eebf3939b6605a9243253d}
+\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a21a471d9a6eebf3939b6605a9243253d}{virtual double \hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a21a471d9a6eebf3939b6605a9243253d}{Vector\-Field} (const Vector\-Xd \&state, const Vector\-Xd \&parameter, uint32\-\_\-t i)=0}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a21a471d9a6eebf3939b6605a9243253d}
 
-\item 
+\begin{DoxyCompactList}\small\item\em The ith component of the vector field. \end{DoxyCompactList}\item 
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a6b8e4d5f583b7553db1986a6ef859c86}{virtual double \hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a6b8e4d5f583b7553db1986a6ef859c86}{Partials} (const Vector\-Xd \&state, const Vector\-Xd \&parameter, uint32\-\_\-t i, uint32\-\_\-t j)=0}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a6b8e4d5f583b7553db1986a6ef859c86}
 
-\begin{DoxyCompactList}\small\item\em The ith component of the vector field. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The partial derivative of the ith component of the vector field with respect to the jth element of the state. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a185304f801d2372b66f5f08f4458a684}{const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ Vector\-Xd $>$ $\ast$ {\bfseries wrap\-Function}}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a185304f801d2372b66f5f08f4458a684}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_ac840c2c4704f71998043ea2c27fa6b8b}{uint32\-\_\-t {\bfseries dimension}}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_ac840c2c4704f71998043ea2c27fa6b8b}
+\hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_ac840c2c4704f71998043ea2c27fa6b8b}{uint32\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_c_w_ac840c2c4704f71998043ea2c27fa6b8b}{dimension}}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_ac840c2c4704f71998043ea2c27fa6b8b}
 
-\item 
+\begin{DoxyCompactList}\small\item\em Dimension of the state space. \end{DoxyCompactList}\item 
 \hypertarget{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a618fb5f5113e0a04bec9cd2221f30b00}{uint8\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a618fb5f5113e0a04bec9cd2221f30b00}{parameter\-Dimension}}\label{struct_d_r_d_s_p_1_1_model_parameterized_c_w_a618fb5f5113e0a04bec9cd2221f30b00}
 
-\begin{DoxyCompactList}\small\item\em Dimension of the state space. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Dimension of the parameter space. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}

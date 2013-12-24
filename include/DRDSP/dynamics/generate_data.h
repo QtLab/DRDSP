@@ -36,17 +36,15 @@ namespace DRDSP {
 
 	struct DataGenerator {
 
-		DataGenerator( ModelParameterized& m );
-
 		double pMin, pMax, pDelta;
 		double tStart, tInterval;
 		uint32_t print;
 		bool binaryOutput, textOutput;
 		VectorXd initial;
-
 		ModelParameterizedInterface model;
 		RKDynamicalSystem<double,VectorXd> rk;
 
+		DataGenerator( ModelParameterized& m );
 		void GenerateSingleFile( double param );
 		void GenerateFiles();
 		DataSet GenerateDataSet( double param );

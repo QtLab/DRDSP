@@ -103,37 +103,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a56991113d3a808ed701b1d1e10ebb3e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a56991113d3a808ed701b1d1e10ebb3e0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#a56991113d3a808ed701b1d1e10ebb3e0">Init</a> (uint16_t dim, uint16_t numRBFs, uint8_t paramDim)</td></tr>
-<tr class="memdesc:a56991113d3a808ed701b1d1e10ebb3e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coefficients describing the affine map. <br/></td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Init</b> (uint16_t dim, uint16_t numRBFs, uint8_t paramDim)</td></tr>
 <tr class="separator:a56991113d3a808ed701b1d1e10ebb3e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a185c0b51a2ac97fadcfd137f8b35cd98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a185c0b51a2ac97fadcfd137f8b35cd98"></a>
-MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>Evaluate</b> (const VectorXd &amp;parameter) const </td></tr>
+MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#a185c0b51a2ac97fadcfd137f8b35cd98">Evaluate</a> (const VectorXd &amp;parameter) const </td></tr>
+<tr class="memdesc:a185c0b51a2ac97fadcfd137f8b35cd98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the parameter map. <br/></td></tr>
 <tr class="separator:a185c0b51a2ac97fadcfd137f8b35cd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae983bda2073bac0d8e6aebcc34d51153"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae983bda2073bac0d8e6aebcc34d51153"></a>
 MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#ae983bda2073bac0d8e6aebcc34d51153">GetLambda</a> (const VectorXd &amp;parameter) const </td></tr>
-<tr class="memdesc:ae983bda2073bac0d8e6aebcc34d51153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the parameter map. <br/></td></tr>
+<tr class="memdesc:ae983bda2073bac0d8e6aebcc34d51153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the matrix version of the original parameter. <br/></td></tr>
 <tr class="separator:ae983bda2073bac0d8e6aebcc34d51153"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a7c4c0f072f5248a9c5cf65b813fcb836"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c4c0f072f5248a9c5cf65b813fcb836"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>R</b></td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#a7c4c0f072f5248a9c5cf65b813fcb836">R</a></td></tr>
+<tr class="memdesc:a7c4c0f072f5248a9c5cf65b813fcb836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of the coefficient matrix. <br/></td></tr>
 <tr class="separator:a7c4c0f072f5248a9c5cf65b813fcb836"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f12477a00c6f104a97b240cb5a81295"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f12477a00c6f104a97b240cb5a81295"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#a5f12477a00c6f104a97b240cb5a81295">N</a></td></tr>
-<tr class="memdesc:a5f12477a00c6f104a97b240cb5a81295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of the coefficient matrix. <br/></td></tr>
+<tr class="memdesc:a5f12477a00c6f104a97b240cb5a81295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of the matrix version of the parameter returned by <a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#ae983bda2073bac0d8e6aebcc34d51153" title="Get the matrix version of the original parameter. ">GetLambda()</a> <br/></td></tr>
 <tr class="separator:a5f12477a00c6f104a97b240cb5a81295"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed859f95d6b7ea0850f84242df5379ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed859f95d6b7ea0850f84242df5379ab"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#aed859f95d6b7ea0850f84242df5379ab">dimension</a></td></tr>
-<tr class="memdesc:aed859f95d6b7ea0850f84242df5379ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of the matrix version of the parameter returned by <a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#ae983bda2073bac0d8e6aebcc34d51153" title="Evaluate the parameter map. ">GetLambda()</a> <br/></td></tr>
+<tr class="memdesc:aed859f95d6b7ea0850f84242df5379ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the reduced state space. <br/></td></tr>
 <tr class="separator:aed859f95d6b7ea0850f84242df5379ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a210acc8ae8c11b4b2c9360e42ccafb00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a210acc8ae8c11b4b2c9360e42ccafb00"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#a210acc8ae8c11b4b2c9360e42ccafb00">parameterDimension</a></td></tr>
-<tr class="memdesc:a210acc8ae8c11b4b2c9360e42ccafb00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the reduced state space. <br/></td></tr>
+<tr class="memdesc:a210acc8ae8c11b4b2c9360e42ccafb00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the original parameter space. <br/></td></tr>
 <tr class="separator:a210acc8ae8c11b4b2c9360e42ccafb00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a760993390cbbec42011c1e1e76a44660"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a760993390cbbec42011c1e1e76a44660"></a>
 MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#a760993390cbbec42011c1e1e76a44660">coeffs</a></td></tr>
-<tr class="memdesc:a760993390cbbec42011c1e1e76a44660"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the original parameter space. <br/></td></tr>
+<tr class="memdesc:a760993390cbbec42011c1e1e76a44660"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coefficients describing the affine map. <br/></td></tr>
 <tr class="separator:a760993390cbbec42011c1e1e76a44660"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -145,7 +146,7 @@ MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 20 2013 17:03:47 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 23 2013 00:20:14 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
