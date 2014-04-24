@@ -13,89 +13,27 @@ static double eps( double x ) {
 	return *((double*)&y) - x;
 }
 
-ReducedData::ReducedData() : points(nullptr), vectors(nullptr), derivatives(nullptr), dimension(0), count(0) {
-}
+ReducedData::ReducedData() : dimension(0), count(0) {}
 
-ReducedData::ReducedData( uint16_t dim, uint32_t numPoints ) : points(nullptr), vectors(nullptr), derivatives(nullptr), dimension(0), count(0) {
+ReducedData::ReducedData( uint16_t dim, size_t numPoints ) : dimension(0), count(0) {
 	Create(dim,numPoints);
 }
 
-ReducedData::ReducedData( const ReducedData& rhs ) : points(nullptr), vectors(nullptr), derivatives(nullptr), dimension(0), count(0) {
-	*this = rhs;			
-}
-
-ReducedData::ReducedData( ReducedData&& rhs ) {
-	points = rhs.points;
-	vectors = rhs.vectors;
-	derivatives = rhs.derivatives;
-	count = rhs.count;
-	dimension = rhs.dimension;
-	rhs.points = nullptr;
-	rhs.vectors = nullptr;
-	rhs.derivatives = nullptr;
-	rhs.count = 0;
-	rhs.dimension = 0;		
-}
-
-ReducedData::~ReducedData() {
-	Destroy();
-}
-
-ReducedData& ReducedData::operator=( const ReducedData& rhs ) {
-	Create(rhs.dimension,rhs.count);
-	for(uint32_t i=0;i<count;i++) {
-		points[i] = rhs.points[i];
-		vectors[i] = rhs.vectors[i];
-		derivatives[i] = rhs.derivatives[i];
-	}
-	return *this;
-}
-
-ReducedData& ReducedData::operator=( ReducedData&& rhs ) {
-	if( this != &rhs ) {
-		Destroy();
-		points = rhs.points;
-		vectors = rhs.vectors;
-		derivatives = rhs.derivatives;
-		count = rhs.count;
-		dimension = rhs.dimension;
-		rhs.points = nullptr;
-		rhs.vectors = nullptr;
-		rhs.derivatives = nullptr;
-		rhs.count = 0;
-		rhs.dimension = 0;
-	}
-	return *this;
-}
-
-void ReducedData::Create( uint16_t dim, uint32_t numPoints ) {
-	if( count != numPoints ) {
-		Destroy();
-		points = new VectorXd [numPoints];
-		vectors = new VectorXd [numPoints];
-		derivatives = new MatrixXd [numPoints];
-		count = numPoints;
-	}
+void ReducedData::Create( uint16_t dim, size_t numPoints ) {
+	points.resize(numPoints);
+	vectors.resize(numPoints);
+	derivatives.resize(numPoints);
+	count = numPoints;
 	dimension = dim;
-	for(uint32_t i=0;i<count;i++) {
+	for(size_t i=0;i<count;i++) {
 		points[i].setZero(dimension);
 		vectors[i].setZero(dimension);
 		derivatives[i].setZero(dimension,dimension);
 	}
 }
 
-void ReducedData::Destroy() {
-	delete[] points;
-	points = nullptr;
-	delete[] vectors;
-	vectors = nullptr;
-	delete[] derivatives;
-	derivatives = nullptr;
-	count = 0;
-}
-
 void ReducedData::ComputeData( Model& original, const DataSet& data, const MatrixXd& W ) {
-	Create( (uint16_t)W.cols(), data.count );
+	Create( (uint16_t)W.cols(), data.points.size() );
 
 	for(uint32_t i=0;i<count;i++) {
 		//original.PrepareOptimizations( data.points[i] );
@@ -108,7 +46,7 @@ void ReducedData::ComputeData( Model& original, const DataSet& data, const Matri
 }
 
 void ReducedData::ComputeData( ModelParameterized& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
-	Create( (uint16_t)W.cols(), data.count );
+	Create( (uint16_t)W.cols(), data.points.size() );
 
 	for(uint32_t i=0;i<count;i++) {
 		//original.PrepareOptimizations( data.points[i], parameter );
@@ -121,7 +59,7 @@ void ReducedData::ComputeData( ModelParameterized& original, const VectorXd& par
 }
 
 void ReducedData::ComputeData( ModelParameterizedEmbedded& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
-	Create( (uint16_t)W.cols(), data.count );
+	Create( (uint16_t)W.cols(), data.points.size() );
 
 	static double stabilityFactor = 1.0;
 
@@ -149,7 +87,7 @@ void ReducedData::ComputeData( ModelParameterizedEmbedded& original, const Vecto
 }
 
 void ReducedData::ComputeData( ModelCW& original, const DataSet& data, const MatrixXd& W ) {
-	Create( (uint16_t)W.cols(), data.count );
+	Create( (uint16_t)W.cols(), data.points.size() );
 
 	for(uint32_t i=0;i<count;i++) {
 		//original.PrepareOptimizations( data.points[i] );
@@ -175,7 +113,7 @@ void ReducedData::ComputeData( ModelCW& original, const DataSet& data, const Mat
 }
 
 void ReducedData::ComputeData( ModelParameterizedCW& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
-	Create( (uint16_t)W.cols(), data.count );
+	Create( (uint16_t)W.cols(), data.points.size() );
 
 	for(uint32_t i=0;i<count;i++) {
 		//original.PrepareOptimizations( data.points[i], parameter );
@@ -201,7 +139,7 @@ void ReducedData::ComputeData( ModelParameterizedCW& original, const VectorXd& p
 }
 
 void ReducedData::ComputeData( ModelParameterizedEmbeddedCW& original, const VectorXd& parameter, const DataSet& data, const MatrixXd& W ) {
-	Create( (uint16_t)W.cols(), data.count );
+	Create( (uint16_t)W.cols(), data.points.size() );
 
 	static double stabilityFactor = 1.0;
 
@@ -301,7 +239,6 @@ bool ReducedData::ReadData( const char* filename ) {
 		in.read( (char*)&vectors[k](0), sizeof(double) * dimension);
 		in.read( (char*)&derivatives[k](0,0), sizeof(double) * dimension * dimension );
 	}
-	in.close();
 	return true;
 }
 
@@ -316,7 +253,6 @@ void ReducedData::WriteData( const char* filename ) const {
 		out.write( (const char*)&vectors[k](0), sizeof(double) * dimension );
 		out.write( (const char*)&derivatives[k](0,0), sizeof(double) * dimension * dimension );
 	}
-	out.close();
 }
 
 void ReducedData::WritePointsCSV( const char* filename ) const {
@@ -330,7 +266,6 @@ void ReducedData::WritePointsCSV( const char* filename ) const {
 			out << points[i](j) << ",";
 		out << endl;
 	}
-	out.close();
 }
 
 void ReducedData::WriteVectorsCSV( const char* filename ) const {
@@ -344,6 +279,5 @@ void ReducedData::WriteVectorsCSV( const char* filename ) const {
 			out << vectors[i](j) << ",";
 		out << endl;
 	}
-	out.close();
 }
 

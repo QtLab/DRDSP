@@ -6,71 +6,19 @@
 using namespace std;
 using namespace DRDSP;
 
-DataSet::DataSet() : count(0), dimension(0), points(nullptr) {
-}
-
-DataSet::DataSet( const DataSet& rhs ) : count(0), dimension(0), points(nullptr) {
-	Create(rhs.count,rhs.dimension);
-	for(uint32_t i=0;i<count;i++)
-		points[i] = rhs.points[i];
-}
-
-DataSet::DataSet( DataSet&& rhs ) {
-	points = rhs.points;
-	count = rhs.count;
-	dimension = rhs.dimension;
-	rhs.points = nullptr;
-	rhs.count = 0;
-}
-
-DataSet::~DataSet() {
-	Destroy();
-}
-
-DataSet& DataSet::operator=( const DataSet& rhs ) {
-	Destroy();
-	Create(rhs.count,rhs.dimension);
-	for(uint32_t i=0;i<count;i++)
-		points[i] = rhs.points[i];
-	return *this;
-}
-
-DataSet& DataSet::operator=( DataSet&& rhs ) {
-	if( this != &rhs ) {
-		Destroy();
-		points = rhs.points;
-		count = rhs.count;
-		dimension = rhs.dimension;
-		rhs.points = nullptr;
-		rhs.count = 0;
-	}
-	return *this;
-}
-
-void DataSet::Create(uint32_t numPoints, uint32_t dim) {
-	count = numPoints;
-	dimension = dim;
-	points = new VectorXd [count];
-	for(uint32_t i=0;i<count;i++)
-		points[i].setZero(dimension);
-}
-
-void DataSet::Destroy() {
-	delete[] points;
-	points = nullptr;
-	count = 0;
+DataSet::DataSet( size_t numPoints, uint32_t dim ) : dimension(dim), points(numPoints) {
+	for( auto& x : points )
+		x.setZero(dimension);
 }
 
 DataSet DataSet::ProjectData( const MatrixXd& W ) const {
-	DataSet projectedData;
+	DataSet projectedData( points.size(), (uint32_t)W.cols() );
 
-	projectedData.Create(count,(uint32_t)W.cols());
-
-	for(uint32_t i=0;i<count;i++) {
+	for(uint32_t i=0;i<points.size();++i) {
 		projectedData.points[i] = W.adjoint() * points[i];
 	}
 
-	return std::move(projectedData);
+	return projectedData;
 }
 
 bool DataSet::LoadBinary( const char* filename ) {
@@ -89,10 +37,13 @@ bool DataSet::LoadBinary( const char* filename ) {
 
 	in.seekg(sizeof(double),ios::cur);
 
-	Create(numPoints,dimension);
+	points.resize( numPoints );
+	for( auto& x : points )
+		x.setZero( dimension );
+
 	uint32_t k=0, j=0;
 	while( !in.eof() ) {
-		if( k >= count ) break;
+		if( k >= points.size() ) break;
 		j=0;
 		while( !in.eof() ) {
 			if( j >= dimension ) break;
@@ -118,10 +69,13 @@ bool DataSet::LoadText( const char* filename ) {
 	in >> numPoints;
 	cout << " - " << numPoints << " points" << endl << endl;
 
-	Create(numPoints,dimension);
+	points.resize( numPoints );
+	for( auto& x : points )
+		x.setZero( dimension );
+
 	uint32_t k=0, j=0;
 	while( !in.eof() ) {
-		if ( k >= count ) break;
+		if ( k >= points.size() ) break;
 		j=0;
 		while( !in.eof() ) {
 			if( j >= dimension ) break;
@@ -139,87 +93,32 @@ void DataSet::WriteCSV( const char* filename ) const {
 		cout << "DataSet::WriteText : file error" << endl;
 		return;
 	}
-	for(uint32_t i=0;i<count;i++) {
-		for(uint16_t j=0;j<dimension;j++)
-			out << points[i](j) << ",";
+	for( const auto& x : points ) {
+		for(uint32_t j=0;j<dimension;++j)
+			out << x(j) << ",";
 		out << endl;
 	}
 	out.close();
 }
 
-DataSystem::DataSystem() : dimension(0), numParameters(0), parameterDimension(0), maxPoints(0), dataSets(nullptr), parameters(nullptr) {
-}
+DataSystem::DataSystem() :
+	dimension( 0 ),
+	numParameters( 0 ),
+	parameterDimension( 0 ),
+	maxPoints( 0 )
+{}
 
-DataSystem::DataSystem( const DataSystem& rhs ) {
-	Create(rhs.dimension,rhs.numParameters,rhs.parameterDimension);
-	maxPoints = rhs.maxPoints;
-	for(uint32_t i=0;i<numParameters;i++) {
-		dataSets[i] = rhs.dataSets[i];
-		parameters[i] = rhs.parameters[i];
+DataSystem::DataSystem( uint32_t dim, uint16_t numParams, uint8_t paramDim ) :
+	dimension( dim ),
+	numParameters( numParams ),
+	parameterDimension( paramDim ),
+	maxPoints( 0 ),
+	dataSets( numParameters ),
+	parameters( numParameters )
+{
+	for( auto& p : parameters ) {
+		p.setZero(parameterDimension);
 	}
-}
-
-DataSystem::DataSystem( DataSystem&& rhs ) {
-	dataSets = rhs.dataSets;
-	parameters = rhs.parameters;
-	dimension = rhs.dimension;
-	numParameters = rhs.numParameters;
-	parameterDimension = rhs.parameterDimension;
-	maxPoints = rhs.maxPoints;
-	rhs.dataSets = nullptr;
-	rhs.parameters = nullptr;
-	rhs.numParameters = 0;
-}
-
-DataSystem::~DataSystem() {
-	Destroy();
-}
-
-DataSystem& DataSystem::operator=( const DataSystem& rhs ) {
-	Destroy();
-	Create(rhs.dimension,rhs.numParameters,rhs.parameterDimension);
-	maxPoints = rhs.maxPoints;
-	for(uint32_t i=0;i<numParameters;i++) {
-		dataSets[i] = rhs.dataSets[i];
-		parameters[i] = rhs.parameters[i];
-	}
-	return *this;
-}
-
-DataSystem& DataSystem::operator=( DataSystem&& rhs ) {
-	if( this != &rhs ) {
-		Destroy();
-		dataSets = rhs.dataSets;
-		parameters = rhs.parameters;
-		dimension = rhs.dimension;
-		numParameters = rhs.numParameters;
-		parameterDimension = rhs.parameterDimension;
-		maxPoints = rhs.maxPoints;
-		rhs.dataSets = nullptr;
-		rhs.parameters = nullptr;
-		rhs.numParameters = 0;
-	}
-	return *this;
-}
-
-void DataSystem::Create( uint32_t dim, uint16_t numParams, uint8_t paramDim ) {
-	numParameters = numParams;
-	dimension = dim;
-	parameterDimension = paramDim;
-	dataSets = new DataSet [numParameters];
-	parameters = new VectorXd [numParameters];
-	for(uint16_t i=0;i<numParameters;i++) {
-		parameters[i].setZero(parameterDimension);
-	}
-
-}
-
-void DataSystem::Destroy() {
-	delete[] dataSets;
-	delete[] parameters;
-	dataSets = nullptr;
-	parameters = nullptr;
-	numParameters = 0;
 }
 
 bool DataSystem::Load( const char* filename ) {
@@ -241,8 +140,8 @@ bool DataSystem::Load( const char* filename ) {
 	cout << "Parameter Samples: " << numParameters << endl;
 	cout << "Parameter Dimension: " << pDim << endl << endl;
 
-	dataSets = new DataSet [numParameters];
-	parameters = new VectorXd [numParameters];
+	dataSets.resize( numParameters );
+	parameters.resize( numParameters );
 
 	char* setPath = new char [256];
 	for(uint16_t i=0;i<numParameters;i++) {
@@ -257,8 +156,7 @@ bool DataSystem::Load( const char* filename ) {
 
 
 bool DataSystem::LoadSetBinary( const char* filename, uint32_t i ) {
-	ifstream in;
-	in.open(filename,ios::binary);
+	ifstream in(filename,ios::binary);
 	if( !in ) {
 		cout << "File not found" << endl;
 		return false;
@@ -276,20 +174,22 @@ bool DataSystem::LoadSetBinary( const char* filename, uint32_t i ) {
 
 	cout << " - points = " << numPoints << ", parameter(0) = " << parameters[i](0) << endl << endl;
 	
-	dataSets[i].Create(numPoints,dimension);
+	dataSets[i].points.resize( numPoints );
+	
+	for( auto& x : dataSets[i].points )
+		x.setZero( dimension );
+
 	uint32_t k=0;
 	while( !in.eof() ) {
-		if( k >= dataSets[i].count ) break;
+		if( k >= dataSets[i].points.size() ) break;
 		in.read((char*)&dataSets[i].points[k](0),sizeof(double)*dimension);
 		k++;
 	}
-	in.close();
 	return true;
 }
 
 bool DataSystem::LoadSetText( const char* filename, uint32_t i ) {
-	ifstream in;
-	in.open(filename);
+	ifstream in(filename);
 	if( !in ) {
 		cout << "File not found" << endl;
 		return false;
@@ -302,17 +202,20 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i ) {
 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 
-	parameters[i].setZero(parameterDimension);
+	parameters[i].setZero( parameterDimension );
 	for(uint16_t j=0;j<parameterDimension;j++) {
 		in >> parameters[i](j);
 	}
 
 	cout << " - points = " << numPoints << ", parameter(0) = " << parameters[i](0) << endl << endl;
 
-	dataSets[i].Create(numPoints,dimension);
+	dataSets[i].points.resize( numPoints );
+	for( auto& x : dataSets[i].points )
+		x.setZero( dimension );
+
 	uint32_t k=0, j=0;
 	while( !in.eof() ) {
-		if ( k >= dataSets[i].count ) break;
+		if ( k >= dataSets[i].points.size() ) break;
 		j=0;
 		while( !in.eof() ) {
 			if( j >= dimension ) break;
@@ -320,7 +223,6 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i ) {
 		}
 		k++;
 	}
-	in.close();
 	return true;
 }
 
@@ -334,19 +236,34 @@ void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffi
 }
 
 DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
-	DataSystem projectedData;
-
-	projectedData.Create((uint32_t)W.cols(),numParameters,parameterDimension);
+	DataSystem projectedData( (uint32_t)W.cols(), numParameters, parameterDimension );
 
 	for(uint16_t i=0;i<numParameters;i++) {
 		projectedData.parameters[i] = parameters[i];
-		projectedData.dataSets[i].Create(dataSets[i].count,projectedData.dimension);
-
-		for(uint32_t j=0;j<dataSets[i].count;j++) {
-			projectedData.dataSets[i].points[j] = W.adjoint() * dataSets[i].points[j];
-		}
-
+		projectedData.dataSets[i] = dataSets[i].ProjectData( W );
 	}
 
-	return std::move(projectedData);
+	return projectedData;
+}
+
+vector<double> DRDSP::NormDifferences( const vector<VectorXd>& s1, const vector<VectorXd>& s2 ) {
+	size_t n = min( s1.size(), s2.size() );
+	vector<double> r(n);
+
+	for(size_t i=0;i<n;++i) {
+		r[i] = ( s1[i] - s2[i] ).norm();
+	}
+
+	return r;
+}
+
+double DRDSP::RMSDifference( const vector<VectorXd>& s1, const vector<VectorXd>& s2 ) {
+	size_t n = min( s1.size(), s2.size() );
+	double sum = 0.0;
+
+	for(size_t i=0;i<n;++i) {
+		sum += ( s1[i] - s2[i] ).squaredNorm();
+	}
+
+	return sqrt( sum / n );
 }

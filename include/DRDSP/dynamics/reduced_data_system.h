@@ -5,18 +5,12 @@
 namespace DRDSP {
 
 	struct ReducedDataSystem {
-		ReducedData* reducedData;
+		vector<ReducedData> reducedData;
 		uint16_t numParameters;
 
 		ReducedDataSystem();
 		ReducedDataSystem( uint16_t N );
-		ReducedDataSystem( const ReducedDataSystem& rhs );
-		ReducedDataSystem( ReducedDataSystem&& rhs );
-		~ReducedDataSystem();
-		ReducedDataSystem& operator=( const ReducedDataSystem& rhs );
-		ReducedDataSystem& operator=( ReducedDataSystem&& rhs );
 		void Create( uint16_t N );
-		void Destroy();
 		void ComputeData( ModelParameterized& model, const DataSystem& data, const MatrixXd& W );
 		void ComputeData( ModelParameterizedCW& model, const DataSystem& data, const MatrixXd& W );
 		void ComputeData( ModelParameterizedEmbedded& model, const DataSystem& data, const MatrixXd& W );

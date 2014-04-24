@@ -15,8 +15,8 @@ namespace DRDSP {
 		MatrixXd coeffs;            //!< Coefficients describing the affine map
 	
 		void Init( uint16_t dim, uint16_t numRBFs, uint8_t paramDim );
-		MatrixXd Evaluate( const VectorXd &parameter ) const;  //!< Evaluate the parameter map
-		MatrixXd GetLambda( const VectorXd &parameter ) const; //!< Get the matrix version of the original parameter
+		MatrixXd Evaluate( const VectorXd &parameter ) const;          //!< Evaluate the parameter map
+		MatrixXd GetLambda( const VectorXd &parameter ) const;         //!< Get the matrix version of the original parameter
 	};
 
 }

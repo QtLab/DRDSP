@@ -59,42 +59,39 @@ double EmbeddingCW::ComputeInducedMetric( const VectorXd &x, uint32_t i, uint32_
 }
 
 DataSet Embedding::EmbedData( const DataSet& data ) const {
-	DataSet r;
-	r.Create(data.count,data.dimension);
-	for(uint32_t i=0;i<r.count;i++) {
+	DataSet r( data.points.size(), data.dimension );
+	for(uint32_t i=0;i<r.points.size();i++) {
 		r[i] = Evaluate(data[i]);
 	}
-	return std::move(r);
+	return r;
 }
 
 DataSystem Embedding::EmbedData( const DataSystem& data ) const {
-	DataSystem r;
-	r.Create(eDim,data.numParameters,data.parameterDimension);
+	DataSystem r( eDim, data.numParameters, data.parameterDimension );
 	for(uint32_t i=0;i<r.numParameters;i++) {
 		r.parameters[i] = data.parameters[i];
-		r.dataSets[i].Create(data.dataSets[i].count,eDim);
-		for(uint32_t j=0;j<r.dataSets[i].count;j++)
+		r.dataSets[i].points.resize( data.dataSets[i].points.size() );
+
+		for(uint32_t j=0;j<r.dataSets[i].points.size();j++)
 			r.dataSets[i][j] = Evaluate(data.dataSets[i][j]);
 	}
 
-	return std::move(r);
+	return r;
 }
 
 DataSet EmbeddingCW::EmbedData( const DataSet& data ) const {
-	DataSet r;
-	r.Create(data.count,data.dimension);
-	for(uint32_t i=0;i<r.count;i++) {
+	DataSet r( data.points.size(), data.dimension );
+	for(uint32_t i=0;i<r.points.size();i++) {
 		r[i] = Evaluate(data[i]);
 	}
-	return std::move(r);
+	return r;
 }
 
 DataSystem EmbeddingCW::EmbedData( const DataSystem& data ) const {
-	DataSystem r;
-	r.Create(data.dimension,data.numParameters,data.parameterDimension);
+	DataSystem r( data.dimension, data.numParameters, data.parameterDimension );
 	for(uint32_t i=0;i<r.numParameters;i++)
-		for(uint32_t j=0;j<r.dataSets[i].count;j++) {
-		r.dataSets[i][j] = Evaluate(data.dataSets[i][j]);
-	}
-	return std::move(r);
+		for(uint32_t j=0;j<r.dataSets[i].points.size();j++) {
+			r.dataSets[i][j] = Evaluate(data.dataSets[i][j]);
+		}
+	return r;
 }

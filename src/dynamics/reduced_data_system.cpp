@@ -4,59 +4,13 @@
 using namespace DRDSP;
 using namespace std;
 
-ReducedDataSystem::ReducedDataSystem() : reducedData(nullptr), numParameters(0) {
-}
+ReducedDataSystem::ReducedDataSystem() : numParameters(0) {}
 
-ReducedDataSystem::ReducedDataSystem( uint16_t N ) : reducedData(nullptr), numParameters(0) {
-	Create(N);
-}
-
-ReducedDataSystem::ReducedDataSystem( const ReducedDataSystem& rhs ) : reducedData(nullptr), numParameters(0) {
-	*this = rhs;			
-}
-
-ReducedDataSystem::ReducedDataSystem( ReducedDataSystem&& rhs ) {
-	reducedData = rhs.reducedData;
-	numParameters = rhs.numParameters;
-	rhs.reducedData = nullptr;
-	rhs.numParameters = 0;		
-}
-
-ReducedDataSystem::~ReducedDataSystem() {
-	Destroy();
-}
-
-ReducedDataSystem& ReducedDataSystem::operator=( const ReducedDataSystem& rhs ) {
-	Create(rhs.numParameters);
-	for(uint16_t i=0;i<numParameters;i++) {
-		reducedData[i] = rhs.reducedData[i];
-	}
-	return *this;
-}
-
-ReducedDataSystem& ReducedDataSystem::operator=( ReducedDataSystem&& rhs ) {
-	if( this != &rhs ) {
-		Destroy();
-		reducedData = rhs.reducedData;
-		numParameters = rhs.numParameters;
-		rhs.reducedData = nullptr;
-		rhs.numParameters = 0;
-	}
-	return *this;
-}
+ReducedDataSystem::ReducedDataSystem( uint16_t N ) : reducedData(N), numParameters(N) {}
 
 void ReducedDataSystem::Create( uint16_t N ) {
-	if( numParameters != N ) {
-		Destroy();
-		reducedData = new ReducedData [N];
-		numParameters = N;
-	}
-}
-
-void ReducedDataSystem::Destroy() {
-	delete[] reducedData;
-	reducedData = nullptr;
-	numParameters = 0;
+	reducedData.resize(N);
+	numParameters = N;
 }
 
 void ReducedDataSystem::ComputeData( ModelParameterized& original, const DataSystem& data, const MatrixXd& W ) {

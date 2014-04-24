@@ -10,10 +10,10 @@ ProjPOD::ProjPOD() : targetDimension(2) {
 
 void ProjPOD::Find( const DataSet& data ) {
 
-	dataMatrix.setZero(data.dimension,data.count);
+	dataMatrix.setZero(data.dimension,data.points.size());
 
 	uint32_t k = 0;
-	for(uint32_t j=0;j<data.count;j++)
+	for(uint32_t j=0;j<data.points.size();j++)
 		dataMatrix.col(k++) = data.points[j];
 
 	svd.compute(dataMatrix,ComputeThinU);
@@ -23,15 +23,15 @@ void ProjPOD::Find( const DataSet& data ) {
 
 void ProjPOD::Find( const DataSystem& data ) {
 
-	uint32_t totalPoints = 0;
-	for(uint32_t i=0;i<data.numParameters;i++)
-		totalPoints += data.dataSets[i].count;
+	size_t totalPoints = 0;
+	for(uint16_t i=0;i<data.numParameters;i++)
+		totalPoints += data.dataSets[i].points.size();
 
-	dataMatrix.setZero(data.dimension,totalPoints);
+	dataMatrix.setZero( data.dimension, totalPoints );
 
-	uint32_t k = 0;
-	for(uint32_t i=0;i<data.numParameters;i++)
-		for(uint32_t j=0;j<data.dataSets[i].count;j++)
+	size_t k = 0;
+	for(uint16_t i=0;i<data.numParameters;i++)
+		for(size_t j=0;j<data.dataSets[i].points.size();j++)
 			dataMatrix.col(k++) = data.dataSets[i].points[j];
 
 	svd.compute(dataMatrix,ComputeThinU);

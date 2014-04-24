@@ -110,9 +110,9 @@ int main( int argc, char** argv ) {
 	cout << "Computing Reduced Model..." << endl;
 	
 	ModelReducedProducer producer(options.numRBFs);
-	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
 	
 	reducedModel.WriteCSV("output/reduced.csv");
 	

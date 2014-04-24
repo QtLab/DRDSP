@@ -75,19 +75,17 @@ DataSet DataGenerator::GenerateDataSet( double param ) {
 
 	double dtPrint = tInterval / print;
 
-	DataSet data;
-	data.Create(print,model.model.dimension);
+	DataSet data( print, model.model.dimension );
 	for(uint32_t i=0;i<print;i++) {
 		data[i] = rk.state;
 		rk.Advance(dtPrint);
 	}
-	return std::move(data);
+	return data;
 }
 
 DataSystem DataGenerator::GenerateDataSystem() {
-	DataSystem data;
 	uint16_t numParms = 1 + (uint16_t)(( pMax - pMin ) / pDelta);
-	data.Create(model.model.dimension,numParms,1);
+	DataSystem data( model.model.dimension, numParms, 1 );
 	double p = pMin;
 	for(uint16_t i=0;i<numParms;i++) {
 		data.parameters[i].setZero( model.model.parameterDimension );
@@ -95,7 +93,7 @@ DataSystem DataGenerator::GenerateDataSystem() {
 		data.dataSets[i] = GenerateDataSet(p);
 		p += pDelta;
 	}
-	return std::move(data);
+	return data;
 }
 
 void DataGenerator::MatchSettings( const DataGenerator& gen ) {

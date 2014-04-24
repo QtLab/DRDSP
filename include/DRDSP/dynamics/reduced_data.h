@@ -8,21 +8,15 @@
 namespace DRDSP {
 
 	struct ReducedData {
-		VectorXd *points, *vectors;
-		MatrixXd *derivatives;
+		vector<VectorXd> points, vectors;
+		vector<MatrixXd> derivatives;
 		double scales[2];
-		uint32_t count;
+		size_t count;
 		uint16_t dimension;
 
 		ReducedData();
-		ReducedData( uint16_t dim, uint32_t numPoints );
-		ReducedData( const ReducedData& rhs );
-		ReducedData( ReducedData&& rhs );
-		~ReducedData();
-		ReducedData& operator=( const ReducedData& rhs );
-		ReducedData& operator=( ReducedData&& rhs );
-		void Create( uint16_t dim, uint32_t numPoints );
-		void Destroy();
+		ReducedData( uint16_t dim, size_t numPoints );
+		void Create( uint16_t dim, size_t numPoints );
 		
 		void ComputeData( Model& model, const DataSet& data, const MatrixXd& W );
 		void ComputeData( ModelCW& model, const DataSet& data, const MatrixXd& W );

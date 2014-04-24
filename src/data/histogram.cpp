@@ -1,10 +1,10 @@
 #include <DRDSP/data/histogram.h>
 #include <DRDSP/misc.h>
-#include <cmath>
+#include <fstream>
+#include <numeric>
+#include <algorithm>
 
 using namespace DRDSP;
-
-Bin::Bin() : minValue(0.0), maxValue(0.0), frequency(0) {}
 
 double Bin::Width() const {
 	return maxValue - minValue;
@@ -32,81 +32,40 @@ Bin& Bin::operator--() {
 	return *this;
 }
 	
-Histogram::Histogram() : bins(nullptr), numBins(0) {}
-	
-Histogram::Histogram( uint32_t nBins ) : bins(nullptr), numBins(0) {
-	Create(nBins);
-}
-	
-Histogram::Histogram( const Histogram& rhs ) {
-	Create(rhs.numBins);
-	for(uint32_t i=0;i<numBins;i++)
-		bins[i] = rhs.bins[i];
-}
-	
-Histogram::Histogram( Histogram&& rhs ) : numBins(rhs.numBins), bins(rhs.bins) {
-	rhs.numBins = 0;
-	rhs.bins = nullptr;
-}
-	
-Histogram::~Histogram() {
-	Destroy();
-}
-	
-Histogram& Histogram::operator=( const Histogram& rhs ) {
-	Destroy();
-	Create(rhs.numBins);
-	for(uint32_t i=0;i<numBins;i++)
-		bins[i] = rhs.bins[i];
-	return *this;
-}
-	
-Histogram& Histogram::operator=( Histogram&& rhs ) {
-	if( this != &rhs ) {
-		Destroy();
-		numBins = rhs.numBins;
-		bins = rhs.bins;
-		rhs.numBins = 0;
-		rhs.bins = nullptr;
-	}
-	return *this;
-}
-	
 void Histogram::Create( uint32_t nBins ) {
-	bins = new Bin [nBins];
-	numBins = nBins;
+	bins.resize(nBins);
 }
 	
 void Histogram::Destroy() {
-	delete[] bins;
-	bins = nullptr;
-	numBins = 0;
+	bins = vector<Bin>();
 }
 	
 uint32_t Histogram::TotalFrequency() const {
-	uint32_t total = 0;
-	for(uint32_t i=0;i<numBins;i++)
-		total += bins[i].frequency;
-	return total;
+	return accumulate(
+		begin(bins),
+		end(bins),
+		uint32_t(0),
+		[]( uint32_t x, const Bin& y ){ return x + y.frequency; }
+	);
 }
-	
+
 void Histogram::WriteCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) return;
 	uint32_t total = TotalFrequency();
-	for(uint32_t i=0;i<numBins;i++) {
-		double freqDensity = bins[i].FrequencyDensity();
-		out << bins[i].Centre() << ",";
-		out << bins[i].frequency << ",";
-		out << (double)bins[i].frequency / total << ",";
+	for(const auto& bin : bins) {
+		double freqDensity = bin.FrequencyDensity();
+		out << bin.Centre() << ",";
+		out << bin.frequency << ",";
+		out << (double)bin.frequency / total << ",";
 		out << freqDensity << ",";
 		out << freqDensity / total << endl;
 	}
 }
 
-HistogramGenerator::HistogramGenerator() : numBins(0), clampMin(0.0), clampMax(0.0), clamp(false), logScale(false) {}
-
-HistogramGenerator::HistogramGenerator( uint32_t nBins ) : numBins(nBins) {}
+Histogram HistogramGenerator::Generate( const vector<double>& data ) const {
+	return Generate( data.data(), data.size() );
+}
 
 Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 	
@@ -116,17 +75,12 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 	}
 		
 	Histogram H(nBins);
-	double minVal = data[0];
-	double maxVal = data[0];
-	for(size_t i=1;i<N;i++) {
-		if( data[i] > maxVal ) {
-			maxVal = data[i];
-		}
-		if( data[i] < minVal ) {
-			minVal = data[i];
-		}
-	}
 	
+	auto minmax = minmax_element(data,data+N);
+	
+	double minVal = *minmax.first;
+	double maxVal = *minmax.second;
+
 	if( clamp ) {
 		minVal = Clamp(minVal,clampMin,clampMax);
 		maxVal = Clamp(maxVal,clampMin,clampMax);
@@ -141,9 +95,9 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 		}
 		H.bins[nBins-1].maxValue = H.bins[nBins-1].minValue * factor;
 		for(size_t i=0;i<N;i++) {
-			for(uint32_t j=0;j<nBins;j++) {
-				if( H.bins[j].Test( data[i] ) ) {
-					++H.bins[j];
+			for(auto& bin : H.bins) {
+				if( bin.Test( data[i] ) ) {
+					++bin;
 					break;
 				}
 			}
@@ -163,8 +117,7 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 		}
 	}
 
-
-	return std::move(H);
+	return H;
 }
 
 

@@ -56,7 +56,7 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 	for(uint32_t k=0;k<n;k++)
 		maxVal[k] = minVal[k] = data.points[0](0);
 
-	for(uint32_t j=0;j<data.count;j++)
+	for(uint32_t j=0;j<data.points.size();j++)
 		for(uint32_t k=0;k<n;k++) {
 			val = data.points[j](k);
 			if( val > maxVal[k] )
@@ -107,7 +107,7 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 		maxVal[k] = minVal[k] = data.dataSets[0].points[0](k);
 
 	for(uint16_t i=0;i<data.numParameters;i++)
-		for(uint32_t j=0;j<data.dataSets[i].count;j++)
+		for(uint32_t j=0;j<data.dataSets[i].points.size();j++)
 			for(uint32_t k=0;k<n;k++) {
 				val = data.dataSets[i].points[j](k);
 				if( val > maxVal[k] )
@@ -147,9 +147,9 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 
 void ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, uint16_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
-	uint32_t numSecants = 0;
+	size_t numSecants = 0;
 	for(uint16_t i=0;i<N;i++) {
-		for(uint32_t j=0;j<secants[i].count;j++) {
+		for(size_t j=0;j<secants[i].count;j++) {
 			len = ( W.adjoint() * secants[i].GetSecant(j) ).norm();
 			if( len < xMin ) xMin = len;
 			if( len > xMax ) xMax = len;
@@ -169,15 +169,15 @@ double ProjSecant::CostFunction( const SecantsPreComputed& secants, const Matrix
 	
 	double sum = 0.0;
 
-	if( secants.weights ) {
+	if( secants.weights.size() > 0 ) {
 		uint32_t sumWeights = 0;
-		for(uint32_t j=0;j<secants.count;j++) {
+		for(size_t j=0;j<secants.count;j++) {
 			sumWeights += secants.weights[j];
 			sum += (double)secants.weights[j] / ( X.adjoint() * secants.GetSecant(j) ).norm();
 		}
 		sum *= 1.0 / (double)sumWeights;
 	} else {
-		for(uint32_t j=0;j<secants.count;j++) {
+		for(size_t j=0;j<secants.count;j++) {
 			sum += 1.0 / ( X.adjoint() * secants.GetSecant(j) ).norm();
 		}
 		sum *= 1.0 / (double)secants.count;
@@ -202,9 +202,9 @@ MatrixXd ProjSecant::CostFunctionDerivative( const SecantsPreComputed& secants, 
 	double projectedLength;
 	VectorXd secant, projectedSecant;
 
-	if( secants.weights ) {
+	if( secants.weights.size() > 0 ) {
 		uint32_t sumWeights = 0;
-		for(uint32_t j=0;j<secants.count;j++) {
+		for(size_t j=0;j<secants.count;j++) {
 			sumWeights += secants.weights[j];
 			secant = secants.GetSecant(j);
 			projectedSecant = X.adjoint() * secant;
@@ -213,7 +213,7 @@ MatrixXd ProjSecant::CostFunctionDerivative( const SecantsPreComputed& secants, 
 		}
 		sum *= 1.0 / (double)sumWeights;
 	} else {
-		for(uint32_t j=0;j<secants.count;j++) {
+		for(size_t j=0;j<secants.count;j++) {
 			secant = secants.GetSecant(j);
 			projectedSecant = X.adjoint() * secant;
 			projectedLength = projectedSecant.norm();

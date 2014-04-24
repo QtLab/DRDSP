@@ -5,102 +5,33 @@
 using namespace std;
 using namespace DRDSP;
 
-Secants::Secants() : dimension(0), count(0) {
-}
-
-SecantsPreComputed::SecantsPreComputed() : secants(nullptr), weights(nullptr) {
-}
-
-SecantsPreComputed::SecantsPreComputed( const SecantsPreComputed& rhs ) : secants(nullptr), weights(nullptr) {
-	count = rhs.count;
-	dimension = rhs.dimension;
-	if( rhs.weights ) {
-		weights = new weightType [count];
-		for(uint32_t i=0;i<count;i++)
-			weights[i] = rhs.weights[i];
-	}
-	if( rhs.secants ) {
-		secants = new VectorXd [count];
-		for(uint32_t i=0;i<count;i++)
-			secants[i] = rhs.secants[i];
-	}
-}
-
-SecantsPreComputed::SecantsPreComputed( SecantsPreComputed&& rhs ) {
-	count = rhs.count;
-	dimension = rhs.dimension;
-	weights = rhs.weights;
-	secants = rhs.secants;
-
-	rhs.count = 0;
-	rhs.dimension = 0;
-	rhs.weights = nullptr;
-	rhs.secants = nullptr;
-}
-
-SecantsPreComputed::~SecantsPreComputed() {
-	delete[] secants;
-	delete[] weights;
-}
-
-SecantsPreComputed& SecantsPreComputed::operator=( const SecantsPreComputed& rhs ) {
-	delete[] secants; secants = nullptr;
-	delete[] weights; weights = nullptr;
-	count = rhs.count;
-	dimension = rhs.dimension;
-	if( rhs.weights ) {
-		weights = new weightType [count];
-		for(uint32_t i=0;i<count;i++)
-			weights[i] = rhs.weights[i];
-	}
-	if( rhs.secants ) {
-		secants = new VectorXd [count];
-		for(uint32_t i=0;i<count;i++)
-			secants[i] = rhs.secants[i];
-	}
-	return *this;
-}
-
-SecantsPreComputed& SecantsPreComputed::operator=( SecantsPreComputed&& rhs ) {
-	if( this != &rhs ) {
-		delete[] secants;
-		delete[] weights;
-		count = rhs.count;
-		dimension = rhs.dimension;
-		weights = rhs.weights;
-		secants = rhs.secants;
-
-		rhs.count = 0;
-		rhs.dimension = 0;
-		rhs.weights = nullptr;
-		rhs.secants = nullptr;
-	}
-	return *this;
-}
+Secants::Secants() : dimension(0), count(0) {}
 
 void SecantsData::SetData( const DataSet& dataSet ) {
 	data = &dataSet;
 	dimension = dataSet.dimension;
-	count = ( dataSet.count * (dataSet.count - 1) ) / 2;
+	size_t N = dataSet.points.size();
+	count = ( N * (N - 1) ) / 2;
 }
 
 void SecantsPreComputed::ComputeFromData( const DataSet& data ) {
 	dimension = data.dimension;
-	count = ( data.count * (data.count - 1) ) / 2;
+	size_t N = data.points.size();
+	count = ( N * (N - 1) ) / 2;
 	size_t bytes = sizeof(double) * data.dimension * count;
 
-	secants = new VectorXd [count];
-	uint32_t k = 0;
-	for(uint32_t i=0;i<data.count;i++) {
-		for(uint32_t j=i+1;j<data.count;j++) {
+	secants.resize(count);
+	size_t k = 0;
+	for(size_t i=0;i<N;i++) {
+		for(size_t j=i+1;j<N;j++) {
 			secants[k++] = ( data.points[j] - data.points[i] ).normalized();
 		}
 	}
 }
 
-uint32_t SecantsData::GetIndexI( uint32_t k, uint32_t N ) {
-	for(uint32_t a=0;a<N;a++) {
-		uint32_t Ma = ((a+1)*(2*(N-1)-a))/2 - 1;
+size_t SecantsData::GetIndexI( size_t k, size_t N ) {
+	for(size_t a=0;a<N;a++) {
+		size_t Ma = ((a+1)*(2*(N-1)-a))/2 - 1;
 		if( Ma >= k ) {
 			return a;
 		}
@@ -108,45 +39,45 @@ uint32_t SecantsData::GetIndexI( uint32_t k, uint32_t N ) {
 	return N-1;
 }
 
-uint32_t SecantsData::GetIndexJ( uint32_t k, uint32_t i, uint32_t N ) {
+size_t SecantsData::GetIndexJ( size_t k, size_t i, size_t N ) {
 	return (k + 1 + (i*(i-1))/2) - i*(N-2);
 }
 
-VectorXd SecantsPreComputed::GetSecant( uint32_t k ) const {
+VectorXd SecantsPreComputed::GetSecant( size_t k ) const {
 	return secants[k];
 }
 
-VectorXd SecantsPreComputed::GetSecantNoNormalize( uint32_t k ) const {
+VectorXd SecantsPreComputed::GetSecantNoNormalize( size_t k ) const {
 	return secants[k];
 }
 
-VectorXd SecantsData::GetSecant( uint32_t k ) const {
-	uint32_t i = GetIndexI(k,data->count);
-	uint32_t j = GetIndexJ(k,i,data->count);
+VectorXd SecantsData::GetSecant( size_t k ) const {
+	size_t i = GetIndexI(k,data->points.size());
+	size_t j = GetIndexJ(k,i,data->points.size());
 	return ( data->points[j] - data->points[i] ).normalized();
 }
 
-VectorXd SecantsData::GetSecantNoNormalize( uint32_t k ) const {
-	uint32_t i = GetIndexI(k,data->count);
-	uint32_t j = GetIndexJ(k,i,data->count);
+VectorXd SecantsData::GetSecantNoNormalize( size_t k ) const {
+	size_t i = GetIndexI(k,data->points.size());
+	size_t j = GetIndexJ(k,i,data->points.size());
 	return data->points[j] - data->points[i];
 }
 
 SecantsPreComputed Secants::CullSecants( double tolerance ) const {
-	uint32_t culled = 0;
+	size_t culled = 0;
 	VectorXd si, sj;
 	double dot, test;
 	double tolerance2 = tolerance * tolerance;
 	
-	weightType* cullWeights = new weightType [count];
-	for(uint32_t i=0;i<count;i++) {
+	vector<weightType> cullWeights(count);
+	for(size_t i=0;i<count;i++) {
 		cullWeights[i] = 1;
 	}
 
-	for(uint32_t i=0;i<count;i++) {
+	for(size_t i=0;i<count;i++) {
 		if( cullWeights[i] == 0 ) continue;
 		si = GetSecantNoNormalize(i);
-		for(uint32_t j=i+1;j<count;j++) {
+		for(size_t j=i+1;j<count;j++) {
 			if( cullWeights[j] == 0 ) continue;
 			sj = GetSecantNoNormalize(j);
 			dot = si.dot(sj);
@@ -162,44 +93,42 @@ SecantsPreComputed Secants::CullSecants( double tolerance ) const {
 			}
 		}
 	}
-	uint32_t remain = count - culled;
+	size_t remain = count - culled;
 
 	SecantsPreComputed culledSecants;
 	culledSecants.count = remain;
-	culledSecants.secants = new VectorXd [remain];
-	culledSecants.weights = new weightType [remain];
+	culledSecants.secants.resize(remain);
+	culledSecants.weights.resize(remain);
 	culledSecants.dimension = dimension;
 
-	uint32_t j=0;
-	for(uint32_t i=0;i<count;i++) {
+	size_t j=0;
+	for(size_t i=0;i<count;i++) {
 		if( cullWeights[i] ) {
 			culledSecants.secants[j] = GetSecant(i);
 			culledSecants.weights[j] = cullWeights[i];
 			j++;
 		}
 	}
-	
-	delete[] cullWeights;
 
 	cout << "Culled " << culled << " secants. " << remain << " remain ( " << double(100*remain)/count << "% )" << endl;
-	return std::move(culledSecants);
+	return culledSecants;
 }
 
 SecantsPreComputed SecantsPreComputed::CullSecants( double tolerance ) const {
-	uint32_t culled = 0;
+	size_t culled = 0;
 	VectorXd si;
 	double dot;
 	double tolerance2 = tolerance * tolerance;
 	
-	weightType* cullWeights = new weightType [count];
+	vector<weightType> cullWeights(count);
 	for(uint32_t i=0;i<count;i++) {
 		cullWeights[i] = 1;
 	}
 
-	for(uint32_t i=0;i<count;i++) {
+	for(size_t i=0;i<count;i++) {
 		if( cullWeights[i] == 0 ) continue;
 		si = GetSecant(i);
-		for(uint32_t j=i+1;j<count;j++) {
+		for(size_t j=i+1;j<count;j++) {
 			if( cullWeights[j] == 0 ) continue;
 			dot = si.dot(GetSecant(j));
 			if( dot*dot >= tolerance2 ) {
@@ -213,27 +142,25 @@ SecantsPreComputed SecantsPreComputed::CullSecants( double tolerance ) const {
 			}
 		}
 	}
-	uint32_t remain = count - culled;
+	size_t remain = count - culled;
 
 	SecantsPreComputed culledSecants;
 	culledSecants.count = remain;
-	culledSecants.secants = new VectorXd [remain];
-	culledSecants.weights = new weightType [remain];
+	culledSecants.secants.resize(remain);
+	culledSecants.weights.resize(remain);
 	culledSecants.dimension = dimension;
 
-	uint32_t j=0;
-	for(uint32_t i=0;i<count;i++) {
+	size_t j=0;
+	for(size_t i=0;i<count;i++) {
 		if( cullWeights[i] ) {
 			culledSecants.secants[j] = GetSecant(i);
 			culledSecants.weights[j] = cullWeights[i];
 			j++;
 		}
 	}
-	
-	delete[] cullWeights;
 
 	cout << "Culled " << culled << " secants. " << remain << " remain ( " << double(100*remain)/count << "% )" << endl;
-	return std::move(culledSecants);
+	return culledSecants;
 }
 
 SecantsPreComputed Secants::CullSecantsDegrees( double degrees ) const {

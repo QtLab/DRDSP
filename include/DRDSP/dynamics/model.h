@@ -114,7 +114,7 @@ namespace DRDSP {
 
 		ModelParameterizedEmbedded( ModelParameterized& m, Embedding& e );
 		VectorXd VectorField( const VectorXd& state, const VectorXd& parameter ); //!< The vector field on R^n
-		MatrixXd Partials( const VectorXd& state, const VectorXd& parameter ); //!< The partial derivative of the vector field on R^n with respect to the underlying state
+		MatrixXd Partials( const VectorXd& state, const VectorXd& parameter );    //!< The partial derivative of the vector field on R^n with respect to the underlying state
 	};
 	
 	/*!
@@ -123,10 +123,10 @@ namespace DRDSP {
 	 */
 	struct ModelParameterizedEmbeddedCW {
 		ModelParameterizedCW& model; //!< The underlying model
-		EmbeddingCW& embedding; //!< An embedding into R^n
+		EmbeddingCW& embedding;      //!< An embedding into R^n
 
 		ModelParameterizedEmbeddedCW( ModelParameterizedCW& m, EmbeddingCW& e );
-		double VectorField( const VectorXd& state, const VectorXd& parameter, uint32_t i ); //!< The ith component of the vector field on R^n
+		double VectorField( const VectorXd& state, const VectorXd& parameter, uint32_t i );          //!< The ith component of the vector field on R^n
 		double Partials( const VectorXd& state, const VectorXd& parameter, uint32_t i, uint32_t j ); //!< The partial derivative of the ith component of the vector field with respect to the jth element of the underlying state
 	};
 

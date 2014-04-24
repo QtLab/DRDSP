@@ -97,9 +97,9 @@ int main( int argc, char** argv ) {
 	cout << "Computing Reduced Model..." << endl;
 	
 	ModelReducedProducer producer(options.numRBFs);
-	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
 	
 	reducedModel.WriteCSV("output/reduced.csv");
 
@@ -112,6 +112,9 @@ int main( int argc, char** argv ) {
 
 	DataSystem rdata = rdataGenerator.GenerateDataSystem();
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
+
+	for(uint16_t i=0;i<reducedData.numParameters;++i)
+		cout << RMSDifference( reducedData.reducedData[i].points, rdata.dataSets[i].points ) << endl;
 
 	system("PAUSE");
 	return 0;
