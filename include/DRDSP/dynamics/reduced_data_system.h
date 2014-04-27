@@ -6,15 +6,20 @@ namespace DRDSP {
 
 	struct ReducedDataSystem {
 		vector<ReducedData> reducedData;
-		uint16_t numParameters;
+		uint32_t numParameters;
 
 		ReducedDataSystem();
-		ReducedDataSystem( uint16_t N );
-		void Create( uint16_t N );
-		void ComputeData( ModelParameterized& model, const DataSystem& data, const MatrixXd& W );
-		void ComputeData( ModelParameterizedCW& model, const DataSystem& data, const MatrixXd& W );
-		void ComputeData( ModelParameterizedEmbedded& model, const DataSystem& data, const MatrixXd& W );
-		void ComputeData( ModelParameterizedEmbeddedCW& model, const DataSystem& data, const MatrixXd& W );
+		ReducedDataSystem( uint32_t N );
+		void Create( uint32_t N );
+
+		template<typename Family>
+		void ComputeData( Family&& family, const DataSystem& data, const MatrixXd& W ) {
+			Create( data.numParameters );
+			for(uint32_t i=0;i<numParameters;i++) {
+				reducedData[i].ComputeData( family(data.parameters[i]), data.dataSets[i], W );
+			}
+		}
+
 		AABB ComputeBoundingBox() const;
 		void WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const;
 		void WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;

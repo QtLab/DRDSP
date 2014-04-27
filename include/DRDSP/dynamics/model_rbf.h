@@ -10,29 +10,98 @@ using namespace std;
 
 namespace DRDSP {
 
-	struct ModelRBF : Model {
+	template<typename F = ThinPlateSpline>
+	struct ModelRBF : Model<VectorXd> {
 		MatrixXd linear;
-		VectorXd* weights;
-		RadialFunction* rbfs;
-		uint16_t numRBFs;
+		vector<VectorXd> weights;
+		vector<RadialFunction<F>> rbfs;
+		uint32_t numRBFs;
 		mt19937 mt;
 		uniform_real_distribution<double> dist;
 
-		ModelRBF();
-		ModelRBF( const ModelRBF& rhs );
-		ModelRBF( ModelRBF&& rhs );
-		ModelRBF( uint16_t dim, uint16_t nRBFs );
-		ModelRBF& operator=( const ModelRBF& rhs );
-		ModelRBF& operator=( ModelRBF&& rhs );
-		void Create( uint16_t dim, uint16_t nRBFs );
-		void Destroy();
-		VectorXd VectorField( const VectorXd& x );
-		MatrixXd Partials( const VectorXd &x );
-		void SetCentresRandom( const AABB& box );
-		void SetRBFType( const Function& f );
-		void LoadCentresText( const char* filename );
-		void LoadCentresBinary( const char* filename );
-		void WriteCSV( const char *filename ) const;
+		ModelRBF() : numRBFs(0) {}
+		
+		ModelRBF( uint32_t dim, uint32_t nRBFs ) :
+			Model<VectorXd>(dim),
+			numRBFs(nRBFs),
+			weights(nRBFs),
+			rbfs(nRBFs)
+		{
+			linear.setZero(dimension,dimension);
+			for(uint32_t i=0;i<numRBFs;++i) {
+				weights[i].setZero(dimension);
+				rbfs[i].centre.setZero(dimension);
+			}
+		}
+
+		VectorXd operator()( const VectorXd& x ) const {
+			VectorXd sum = linear * x;
+			for(uint32_t i=0;i<numRBFs;++i)
+				sum += weights[i] * rbfs[i](x);
+			return sum;
+		}
+
+		MatrixXd Partials( const VectorXd& x ) const {
+			MatrixXd sum = linear;
+			for(uint32_t i=0;i<numRBFs;++i)
+				sum += weights[i] * rbfs[i].Derivative(x).transpose();
+			return sum;
+		}
+
+		void SetCentresRandom( const AABB& box ) {
+			VectorXd diff = box.bMax - box.bMin;
+			for(uint32_t i=0;i<numRBFs;++i)
+				for(uint32_t j=0;j<dimension;++j) {
+					rbfs[i].centre(j) = box.bMin(j) + diff(j) * dist(mt);
+				}
+		}
+
+		void LoadCentresText( const char* filename ) {
+			ifstream in(filename);
+			if( !in ) return;
+
+			for(uint32_t k=0;k<numRBFs;++k)
+				for(uint32_t j=0;j<dimension;++j)
+					in >> rbfs[k].centre(j);
+			in.close();
+		}
+
+		void LoadCentresBinary( const char* filename ) {
+			ifstream in(filename);
+			if( !in ) return;
+
+			for(uint32_t k=0;k<numRBFs;++k)
+				in.read( (char*)&rbfs[k].centre(0), sizeof(double)*dimension );
+			in.close();
+		}
+
+		void WriteCSV( const char *filename ) const {
+	
+			ofstream out;
+			out.open(filename);
+			out.precision(16);
+			out << dimension << "," << numRBFs << endl;
+			for(uint32_t i=0;i<dimension;++i) {	
+				for(uint32_t j=0;j<dimension;++j)
+					out << linear(i,j) << ",";
+				out << endl;
+			}
+			out << endl;
+			for(uint32_t i=0;i<dimension;++i) {	
+				for(uint32_t j=0;j<numRBFs;++j)
+					out << weights[j](i) << ",";
+				out << endl;
+			}
+			out << endl;
+			for(uint32_t i=0;i<dimension;++i) {	
+				for(uint32_t j=0;j<numRBFs;++j)
+					out << rbfs[j].centre(i) << ",";
+				out << endl;
+			}
+			out.close();
+	
+		}
+
 	};
 
 }

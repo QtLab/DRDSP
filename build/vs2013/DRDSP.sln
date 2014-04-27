@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30324.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRDSP", "DRDSP\DRDSP.vcxproj", "{2E42D8FD-0BD3-4057-9C73-EFD24E366260}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "brusselator", "examples\brusselator\brusselator.vcxproj", "{A59F79A8-1300-4D42-8EAA-D6DC2A564FD2}"
@@ -19,6 +21,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kuramoto", "examples\kuramo
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "goodfellow", "examples\goodfellow\goodfellow.vcxproj", "{A165C714-9C5E-43D2-9582-0CF1107E6986}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2E42D8FD-0BD3-4057-9C73-EFD24E366260} = {2E42D8FD-0BD3-4057-9C73-EFD24E366260}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rossler", "examples\rossler\rossler.vcxproj", "{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2E42D8FD-0BD3-4057-9C73-EFD24E366260} = {2E42D8FD-0BD3-4057-9C73-EFD24E366260}
 	EndProjectSection
@@ -71,6 +78,14 @@ Global
 		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Release|Win32.Build.0 = Release|Win32
 		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Release|x64.ActiveCfg = Release|x64
 		{A165C714-9C5E-43D2-9582-0CF1107E6986}.Release|x64.Build.0 = Release|x64
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Debug|Win32.Build.0 = Debug|Win32
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Debug|x64.ActiveCfg = Debug|x64
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Debug|x64.Build.0 = Debug|x64
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Release|Win32.ActiveCfg = Release|Win32
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Release|Win32.Build.0 = Release|Win32
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Release|x64.ActiveCfg = Release|x64
+		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

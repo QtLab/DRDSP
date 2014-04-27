@@ -1,14 +1,39 @@
 #ifndef INCLUDED_PROJ_SECANT
 #define INCLUDED_PROJ_SECANT
 #include "../types.h"
-#include "../data/data_set.h"
+#include "../data/data_system.h"
 #include "../data/secants.h"
 
 namespace DRDSP {
 
-	struct SecantsSystem {
+	struct SecantCostFunction {
+		const SecantsPreComputed& secants;
+
+		SecantCostFunction( const SecantsPreComputed& secants ) : secants(secants) {}
+		double operator()( const MatrixXd& X ) const;
+	};
+
+	struct SecantCostGradient {
+		const SecantsPreComputed& secants;
+
+		SecantCostGradient( const SecantsPreComputed& secants ) : secants(secants) {}
+		MatrixXd operator()( const MatrixXd& X ) const;
+	};
+
+	struct SecantCostFunctionMulti {
 		const SecantsPreComputed* secants;
 		uint16_t N;
+
+		SecantCostFunctionMulti( const SecantsPreComputed* secants, uint16_t N ) : secants(secants), N(N) {}
+		double operator()( const MatrixXd& X ) const;
+	};
+
+	struct SecantCostGradientMulti {
+		const SecantsPreComputed* secants;
+		uint16_t N;
+
+		SecantCostGradientMulti( const SecantsPreComputed* secants, uint16_t N ) : secants(secants), N(N) {}
+		MatrixXd operator()( const MatrixXd& X ) const;
 	};
 
 	struct ProjSecant {

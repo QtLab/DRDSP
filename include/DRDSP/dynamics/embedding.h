@@ -1,7 +1,7 @@
 #ifndef INCLUDED_DYNAMICS_EMBEDDING
 #define INCLUDED_DYNAMICS_EMBEDDING
 #include "../types.h"
-#include "../data/data_set.h"
+#include "../data/data_system.h"
 
 namespace DRDSP {
 

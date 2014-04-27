@@ -3,30 +3,6 @@
 
 using namespace DRDSP;
 
-ThinPlateSpline       RadialFunction::thinPlateSpline;
-PolyharmonicSpline3   RadialFunction::polyharmonicSpline3;
-Gaussian              RadialFunction::gaussian;
-Multiquadratic        RadialFunction::multiquadratic;
-InverseQuadratic      RadialFunction::inverseQuadratic;
-InverseMultiquadratic RadialFunction::inverseMultiquadratic;
-
-RadialFunction::RadialFunction() : function(&thinPlateSpline) {
-}
-
-RadialFunction::RadialFunction( const Function& f ) : function(&f) {
-}
-	
-double RadialFunction::operator()( const VectorXd& x ) const {
-	return (*function)( (x-centre).norm() );
-}
-
-VectorXd RadialFunction::Derivative( const VectorXd& x ) const {
-	VectorXd r = x - centre;
-	double rnorm = r.norm();
-	if( rnorm == 0.0 ) VectorXd::Zero(x.size());
-	return ( function->Derivative( rnorm ) / rnorm ) * r;
-}
-
 double ThinPlateSpline::operator()( double r ) const {
 	return r*r*log(r);
 }

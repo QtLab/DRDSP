@@ -6,9 +6,6 @@
 using namespace std;
 using namespace DRDSP;
 
-DataSetTyped::DataSetTyped() {
-}
-
 DataSetTyped::DataSetTyped( uint32_t numPoints, uint32_t dim ) :
 	DataSet( numPoints, dim ),
 	types( numPoints, uint16_t(0) )
@@ -18,15 +15,15 @@ DataSystemTyped::DataSystemTyped( uint32_t dim, uint16_t numParams, uint8_t para
 	numParameters(numParams),
 	dimension(dim),
 	parameterDimension(paramDim),
-	dataSets(numParameters),
-	parameters(numParameters)
+	dataSets(numParams),
+	parameters(numParams)
 {
 	for( auto& p : parameters ) {
 		p.setZero(parameterDimension);
 	}
 }
 
-bool DataSystemTyped::Load( const char* filename ) {
+bool DataSystemTyped::Load( const char* filename, uint32_t maxPoints ) {
 	ifstream in(filename);
 	if( !in ) {
 		cout << "File not found" << endl;
@@ -57,7 +54,7 @@ bool DataSystemTyped::Load( const char* filename ) {
 	return true;
 }
 
-bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i ) {
+bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i, uint32_t maxPoints ) {
 	ifstream in(filename,ios::binary);
 	if( !in ) {
 		cout << "File not found" << endl;
@@ -94,7 +91,7 @@ bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i ) {
 	return true;
 }
 
-bool DataSystemTyped::LoadSetText( const char* filename, uint32_t i ) {
+bool DataSystemTyped::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoints ) {
 	ifstream in(filename);
 	if( !in ) {
 		cout << "File not found" << endl;

@@ -45,9 +45,6 @@
     <ClCompile Include="..\..\..\src\data\secants.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\model_reduced.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\geometry\grassmannian.cpp">
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
@@ -66,19 +63,10 @@
     <ClCompile Include="..\..\..\src\dynamics\radial_basis.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\model_rbf.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\dynamics\reduced_data.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\dynamics\reduced_data_system.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\model_rbf_producer.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\model_reduced_producer.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp">
@@ -90,16 +78,13 @@
     <ClCompile Include="..\..\..\src\dynamics\embedding.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\generate_data.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\model.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\dynamicalSystem.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\data\histogram.cpp">
+      <Filter>Source Files\data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\data\data_system.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,9 +108,6 @@
       <Filter>Header Files\geometry</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\optimization\linesearch.h">
-      <Filter>Header Files\optimization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\optimization\optimization.h">
       <Filter>Header Files\optimization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\projection\proj_pod.h">
@@ -152,9 +134,6 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\vector.h">
-      <Filter>Header Files\geometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
@@ -167,9 +146,6 @@
     <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h">
       <Filter>Header Files\optimization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\inner_product.h">
-      <Filter>Header Files\geometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
@@ -180,9 +156,6 @@
       <Filter>Header Files\data</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\solver.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h">
@@ -198,6 +171,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\data\histogram.h">
+      <Filter>Header Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\bitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\bifurcation.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\data\data_system.h">
       <Filter>Header Files\data</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\examples\brusselator\main.cpp">
+    <ClCompile Include="..\..\..\..\examples\rossler\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\examples\brusselator\brusselator.cpp">
+    <ClCompile Include="..\..\..\..\examples\rossler\rossler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\examples\brusselator\brusselator.h">
+    <ClInclude Include="..\..\..\..\examples\rossler\rossler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

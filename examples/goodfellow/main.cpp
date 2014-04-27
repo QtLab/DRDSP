@@ -27,28 +27,47 @@ Options GetOptions( int argc, char** argv ) {
 	return options;
 }
 
+void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
+
+	ofstream out("output/comparison.csv");
+	out << "Parameter,RMS,Max,Differences" << endl;
+	for(uint16_t i=0;i<reducedData.numParameters;++i) {
+		DataComparisonResult r = CompareData( reducedData.reducedData[i].points, rdata.dataSets[i].points );
+		cout << "Parameter " << rdata.parameters[i] << endl;
+		cout << "RMS: " << r.rmsDifference << endl;
+		cout << "Max: " << r.maxDifference << endl;
+		
+		out << rdata.parameters[i] << ",";
+		out << r.rmsDifference << ",";
+		out << r.maxDifference << ",";
+		for( const auto& x : r.differences )
+			out << x << ",";
+		out << endl;
+	}
+
+}
+
 int main( int argc, char** argv ) {
 
 	Options options = GetOptions(argc,argv);
 
 	// The example
 	Goodfellow goodfellow(100);
+
+	auto parameters = ParameterList( 4.9, 5.5, 21 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator dataGenerator(goodfellow);
-	dataGenerator.pMin = 4.9;
-	dataGenerator.pMax = 5.5;
-	dataGenerator.pDelta = (dataGenerator.pMax - dataGenerator.pMin)/1;
+	DataGenerator<Goodfellow> dataGenerator(goodfellow);
 	dataGenerator.initial.setRandom();
 	dataGenerator.initial -= 0.5 * VectorXd::Ones(goodfellow.dimension);
 	dataGenerator.initial *= 2.0;
 	dataGenerator.tStart = 100;
 	dataGenerator.tInterval = 2;
 	dataGenerator.print = 200;
-	dataGenerator.rk.dtMax = 0.001;
+	dataGenerator.dtMax = 0.001;
 
-	DataSystem data = dataGenerator.GenerateDataSystem();
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
 	data.WriteDataSetsCSV("output/orig",".csv");
 
 	// Pre-compute secants
@@ -96,8 +115,8 @@ int main( int argc, char** argv ) {
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	
-	ModelReducedProducer producer(options.numRBFs);
-	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
+	ModelReducedProducer<> producer(options.numRBFs);
+	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
 	
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
 	
@@ -105,17 +124,17 @@ int main( int argc, char** argv ) {
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator rdataGenerator(reducedModel);
+	DataGenerator<ModelReduced<>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.initial = reducedData.reducedData[0].points[0];
 	rdataGenerator.tStart = 0.0;
 
-	DataSystem rdata = rdataGenerator.GenerateDataSystem();
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
-	for(uint16_t i=0;i<reducedData.numParameters;++i)
-		cout << RMSDifference( reducedData.reducedData[i].points, rdata.dataSets[i].points ) << endl;
+	Compare( reducedData, rdata );
 
 	system("PAUSE");
 	return 0;
 }
+

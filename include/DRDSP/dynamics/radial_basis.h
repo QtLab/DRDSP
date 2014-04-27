@@ -4,64 +4,68 @@
 
 namespace DRDSP {
 
-	struct Function {
-		virtual double operator()( double r ) const = 0;
-		virtual double Derivative( double r ) const = 0;
-	};
-
-	struct ThinPlateSpline : Function {
+	struct ThinPlateSpline {
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
 
-	struct PolyharmonicSpline3 : Function {
+	struct PolyharmonicSpline3 {
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
 
-	struct Gaussian : Function {
+	struct Gaussian  {
 		double scale;
 		Gaussian();
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
 
-	struct Multiquadratic : Function {
+	struct Multiquadratic {
 		double scale;
 		Multiquadratic();
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
 
-	struct InverseQuadratic : Function {
+	struct InverseQuadratic {
 		double scale;
 		InverseQuadratic();
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
 
-	struct InverseMultiquadratic : Function {
+	struct InverseMultiquadratic {
 		double scale;
 		InverseMultiquadratic();
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
 
+	template<typename F>
 	struct RadialFunction {
-		const Function* function;
 		VectorXd centre;
+		F f;
 	
-		RadialFunction();
-		RadialFunction( const Function& f );
-		double operator()( const VectorXd& x ) const;
-		VectorXd Derivative( const VectorXd& x ) const;
+		RadialFunction() = default;
+		
+		explicit RadialFunction( const F& f ) : f(f) {}
+		
+		explicit RadialFunction( const VectorXd& centre ) : centre(centre) {}
+		
+		RadialFunction( const F& f, const VectorXd& centre ) : f(f), centre(centre) {}
 
-		static ThinPlateSpline thinPlateSpline;
-		static PolyharmonicSpline3 polyharmonicSpline3;
-		static Gaussian gaussian;
-		static Multiquadratic multiquadratic;
-		static InverseQuadratic inverseQuadratic;
-		static InverseMultiquadratic inverseMultiquadratic;
+		double operator()( const VectorXd& x ) const {
+			return f( (x-centre).norm() );
+		}
+
+		VectorXd Derivative( const VectorXd& x ) const {
+			VectorXd r = x - centre;
+			double rnorm = r.norm();
+			if( rnorm == 0.0 ) return VectorXd::Zero(x.size());
+			return ( f.Derivative( rnorm ) / rnorm ) * r;
+		}
+
 	};
 
 }

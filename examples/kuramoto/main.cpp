@@ -28,6 +28,26 @@ Options GetOptions( int argc, char** argv ) {
 	return options;
 }
 
+void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
+
+	ofstream out("output/comparison.csv");
+	out << "Parameter,RMS,Max,Differences" << endl;
+	for(uint16_t i=0;i<reducedData.numParameters;++i) {
+		DataComparisonResult r = CompareData( reducedData.reducedData[i].points, rdata.dataSets[i].points );
+		cout << "Parameter " << rdata.parameters[i] << endl;
+		cout << "RMS: " << r.rmsDifference << endl;
+		cout << "Max: " << r.maxDifference << endl;
+		
+		out << rdata.parameters[i] << ",";
+		out << r.rmsDifference << ",";
+		out << r.maxDifference << ",";
+		for( const auto& x : r.differences )
+			out << x << ",";
+		out << endl;
+	}
+
+}
+
 int main( int argc, char** argv ) {
 
 	Options options = GetOptions(argc,argv);
@@ -129,6 +149,8 @@ int main( int argc, char** argv ) {
 
 	DataSystem rdata = rdataGenerator.GenerateDataSystem();
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
+
+	Compare( reducedData, rdata );
 
 	system("PAUSE");
 	return 0;

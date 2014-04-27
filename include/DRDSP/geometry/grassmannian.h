@@ -1,24 +1,43 @@
 #ifndef INCLUDED_GEOMETRY_GRASSMANNIAN
 #define INCLUDED_GEOMETRY_GRASSMANNIAN
-#include "geodesic.h"
 #include <Eigen/Dense>
+#include "metric.h"
 
 using namespace Eigen;
 
 namespace DRDSP {
 
-	struct Grassmannian : Geodesic<MatrixXd> {
-		void Set( const MatrixXd& point, const MatrixXd& tangent );
-		MatrixXd Evaluate( double t );
-		MatrixXd ParallelTranslate( const MatrixXd &V, double t );
-		static MatrixXd HorizontalComponent( const MatrixXd& W, const MatrixXd& V );
-		static MatrixXd VerticalComponent( const MatrixXd& W, const MatrixXd& V );
-	protected:
-		JacobiSVD<MatrixXd> svd;
-		typedef JacobiSVD<MatrixXd>::SingularValuesType svType;
-	};
+	namespace Grassmannian {
+
+		MatrixXd HorizontalComponent( const MatrixXd& W, const MatrixXd& V );
+
+		MatrixXd VerticalComponent( const MatrixXd& W, const MatrixXd& V );
+
+		using Metric = UniformMetric<MatrixXd,FrobeniusInnerProduct>;
+
+		struct Geodesic {
+			typedef Metric Metric;
+			typedef double T;
+
+			MatrixXd position, velocity;
+
+			Geodesic( const MatrixXd& x, const MatrixXd& v ) : position(x), velocity(v) {
+				svd.compute( velocity, ComputeThinU | ComputeThinV );
+			}
+
+			void Set( const MatrixXd& x, const MatrixXd& v );
+		
+			MatrixXd operator()( double t ) const;
+		
+			MatrixXd ParallelTranslate( const MatrixXd& V, double t ) const;
+
+		protected:
+			JacobiSVD<MatrixXd> svd;
+			typedef JacobiSVD<MatrixXd>::SingularValuesType svType;
+		};
+
+	}
 
 }
 
 #endif
-

@@ -1,12 +1,12 @@
 #include "goodfellow.h"
 
-Goodfellow::Goodfellow() : N(0), omega(20.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(10.0) {}
+//GoodfellowModel::GoodfellowModel() : N(0), omega(20.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(10.0) {}
 
-Goodfellow::Goodfellow( uint32_t numCompartments ) : ModelParameterized(2*numCompartments,1), N(numCompartments), omega(20.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(10.0) {
+GoodfellowModel::GoodfellowModel( uint32_t numCompartments ) : Model<>(2*numCompartments), N(numCompartments), omega(20.0), a(2.0), b(3.0/2.0), c(1.0/3.0), d(10.0) {
 	Create(N);
 }
 
-void Goodfellow::Create( uint32_t numCompartments ) {
+void GoodfellowModel::Create( uint32_t numCompartments ) {
 	N = numCompartments;
 	dimension = 2*N;
 
@@ -26,7 +26,7 @@ void Goodfellow::Create( uint32_t numCompartments ) {
 			adjacency(i,j) = (i==j)?0.0:1.0;
 }
 
-VectorXd Goodfellow::VectorField( const VectorXd& state, const VectorXd& parameter ) {
+VectorXd GoodfellowModel::operator()( const VectorXd& state ) const {
 	VectorXd res(2*N);
 	for(uint32_t i=0;i<N;i++) {
 		double temp1 = omega - d * r2(state,i);
@@ -34,20 +34,20 @@ VectorXd Goodfellow::VectorField( const VectorXd& state, const VectorXd& paramet
 		res(i) = y(state,i) * temp1 + x(state,i) * temp2;
 		res(N+i) = -x(state,i) * temp1 + y(state,i) * temp2;
 	}
-	res.head(N) += parameter(0) * (adjacency * state.head(N)) / N;
-	return std::move(res);
+	res.head(N) += p * (adjacency * state.head(N)) / N;
+	return res;
 }
 
-MatrixXd Goodfellow::Partials( const VectorXd& state, const VectorXd& parameter ) {
+MatrixXd GoodfellowModel::Partials( const VectorXd& state ) const {
 	MatrixXd res(2*N,2*N);
 	for(uint32_t i=0;i<N;i++) {
 		for(uint32_t j=0;j<N;j++) {
-			res(i,j) = y(state,i) * (-d * dr2dx(state,i,j)) + delta(i,j) * poly(state,i) + x(state,i) * dpolydx(state,i,j) + parameter(0) * adjacency(i,j) / N;
+			res(i,j) = y(state,i) * (-d * dr2dx(state,i,j)) + delta(i,j) * poly(state,i) + x(state,i) * dpolydx(state,i,j) + p * adjacency(i,j) / N;
 			res(N+i,j) = -delta(i,j) * ( omega - d * r2(state,i) ) -x(state,i) * (-d * dr2dx(state,i,j)) + y(state,i) * dpolydx(state,i,j);
 			res(i,N+j) = delta(i,j) * ( omega - d * r2(state,i) ) + y(state,i) * (-d * dr2dy(state,i,j)) + x(state,i) * dpolydy(state,i,j);
 			res(N+i,N+j) = -x(state,i) * (-d * dr2dy(state,i,j)) + delta(i,j) * poly(state,i) + y(state,i) * dpolydy(state,i,j);
 		}
 	}
-	return std::move(res);
+	return res;
 }
 

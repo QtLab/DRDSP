@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PROJ_POD
 #define INCLUDED_PROJ_POD
 #include <DRDSP/types.h>
-#include <DRDSP/data/data_set.h>
+#include <DRDSP/data/data_system.h>
 #include <Eigen/Dense>
 
 namespace DRDSP {

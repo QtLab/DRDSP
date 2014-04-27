@@ -19,20 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\bitmap.cpp" />
     <ClCompile Include="..\..\..\src\data\aabb.cpp" />
     <ClCompile Include="..\..\..\src\data\data_set.cpp" />
+    <ClCompile Include="..\..\..\src\data\data_system.cpp" />
     <ClCompile Include="..\..\..\src\data\data_typed.cpp" />
     <ClCompile Include="..\..\..\src\data\histogram.cpp" />
     <ClCompile Include="..\..\..\src\data\secants.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\dynamicalSystem.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\embedding.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\generate_data.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_rbf_producer.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_rbf.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_reduced.cpp" />
-    <ClCompile Include="..\..\..\src\dynamics\model_reduced_producer.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\radial_basis.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\reduced_data.cpp" />
     <ClCompile Include="..\..\..\src\dynamics\reduced_data_system.cpp" />
@@ -41,12 +36,15 @@
     <ClCompile Include="..\..\..\src\projection\proj_secant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\DRDSP\bitmap.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\data_set.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\data\data_system.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\data_typed.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\histogram.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\secants.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\bifurcation.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h" />
@@ -59,17 +57,13 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\solver.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\grassmannian.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\inner_product.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\metric.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\geometry\vector.h" />
     <ClInclude Include="..\..\..\include\DRDSP\misc.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\linesearch.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\optimization\optimization.h" />
     <ClInclude Include="..\..\..\include\DRDSP\projection\proj_pod.h" />
     <ClInclude Include="..\..\..\include\DRDSP\projection\proj_secant.h" />
     <ClInclude Include="..\..\..\include\DRDSP\types.h" />

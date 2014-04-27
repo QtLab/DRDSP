@@ -2,11 +2,12 @@
 
 using namespace DRDSP;
 
-void AffineParameterMap::Init( uint16_t dim, uint16_t numRBFs, uint8_t paramDim ) {
-	dimension = dim;
-	N = dimension + numRBFs;
-	parameterDimension = paramDim;
-	R = N * (uint32_t)(parameterDimension+1);
+AffineParameterMap::AffineParameterMap( uint32_t dim, uint32_t numRBFs, uint32_t paramDim ) :
+	N( dim + numRBFs ),
+	R( N * (uint32_t)(paramDim+1) ),
+	dimension(dim),
+	parameterDimension(paramDim)
+{
 	coeffs.setZero(dimension,R);
 }
 
@@ -14,11 +15,11 @@ MatrixXd AffineParameterMap::Evaluate( const VectorXd &parameter ) const {
 	return coeffs * GetLambda(parameter);
 }
 
-MatrixXd AffineParameterMap::GetLambda( const VectorXd &parameter ) const {
+MatrixXd AffineParameterMap::GetLambda( const VectorXd& parameter ) const {
 	MatrixXd Lambda;
 	Lambda.setZero(R,N);
 	Lambda.block(0,0,N,N).setIdentity();
-	for(uint8_t i=0;i<parameterDimension;i++) {
+	for(uint32_t i=0;i<parameterDimension;i++) {
 		Lambda.block(N*(i+1),0,N,N).setIdentity();
 		Lambda.block(N*(i+1),0,N,N) *= parameter(i);
 	}

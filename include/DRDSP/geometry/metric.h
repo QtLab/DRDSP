@@ -1,40 +1,48 @@
 #ifndef INCLUDED_GEOMETRY_METRIC
 #define INCLUDED_GEOMETRY_METRIC
-#include "../types.h"
-#include "inner_product.h"
+#include <Eigen/Core>
+
+using namespace Eigen;
 
 namespace DRDSP {
-	template<typename Derived>
-	struct Metric {
-		typedef typename Traits<Derived>::TIP TIP;
-		typedef typename Traits<TIP>::TVec TVec;
-		virtual TIP operator()( const TVec& X ) const  = 0;
-	};
 
-	template<typename _TIP> struct MetricUniform;
+	template<typename V>
+	struct Traits;
 
-	template<typename _TIP>
-	struct Traits<MetricUniform<_TIP>> {
-		typedef _TIP TIP;
-		typedef typename Traits<TIP>::TCV TCV;
-		typedef typename Traits<TIP>::TVec TVec;
-		typedef typename Traits<TIP>::TScalar TScalar;
-	};
+	template<typename V>
+	struct DotProduct {
+		typedef typename V Vector;
+		typedef typename Traits<V>::Scalar Scalar;
 
-	template<typename _TIP>
-	struct MetricUniform : Metric<MetricUniform<_TIP>> {
-		TIP IP;
-		TIP operator()( const TVec& X ) const  {
-			return IP;
+		Scalar operator()( const V& x, const V& y ) const {
+			Scalar r(0);
+			for(uint32_t i=0;i<Traits<V>::dimension;++i) {
+				r += x[i] * y[i];
+			}
+			return r;
 		}
-		const TIP& operator()() const {
-			return IP;
+
+	};
+
+	template<typename Point,typename InnerProduct>
+	struct UniformMetric {
+		typedef Point Point;
+		typedef InnerProduct InnerProduct;
+		InnerProduct operator()( const Point& x ) const {
+			return InnerProduct();
 		}
 	};
 
-	typedef MetricUniform<IPFrobenius> MetricFrobenius;
-	typedef MetricUniform<IPDot> MetricDot;
+	struct FrobeniusInnerProduct {
+		typedef MatrixXd Vector;
+		typedef MatrixXd::Scalar Scalar;
+
+		Scalar operator()( const MatrixXd& x, const MatrixXd& y ) const {
+			return ( y.adjoint() * x ).trace();
+		}
+
+	};
+
 }
 
 #endif
-
