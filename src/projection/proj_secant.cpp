@@ -224,24 +224,20 @@ void ProjSecant::AnalyseSecants( const SecantsPreComputed& secants ) const {
 }
 
 void ProjSecant::WriteCSV( const char* filename ) const {
-	ofstream out;
-	out.open(filename);
+	ofstream out(filename);
 	out.precision(16);
 	for(int i=0;i<W.rows();i++) {
 		for(int j=0;j<W.cols();j++)
 			out << W(i,j) << ",";
 		out << endl;
 	}
-	out.close();
 }
 
 void ProjSecant::WriteBinary( const char* filename ) const {
-	ofstream out;
-	out.open(filename,ios::binary);
+	ofstream out(filename,ios::binary);
 	for(int i=0;i<W.rows();i++)
 		for(int j=0;j<W.cols();j++)
 			out.write((char*)&W(i,j),sizeof(double));
-	out.close();
 }
 
 bool ProjSecant::ReadBinary( const char* filename ) {
@@ -261,8 +257,6 @@ bool ProjSecant::ReadBinary( const char* filename ) {
 	for(int i=0;i<W.rows();i++)
 		for(int j=0;j<W.cols();j++)
 			in.read((char*)&W(i,j),sizeof(double));
-
-	in.close();
 
 	return true;
 }

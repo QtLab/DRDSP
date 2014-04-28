@@ -22,8 +22,7 @@ DataSet DataSet::ProjectData( const MatrixXd& W ) const {
 }
 
 bool DataSet::LoadBinary( const char* filename ) {
-	ifstream in;
-	in.open(filename,ios::binary);
+	ifstream in(filename,ios::binary);
 	if( !in ) {
 		cout << "File not found: " << filename << endl;
 		return false;
@@ -51,13 +50,11 @@ bool DataSet::LoadBinary( const char* filename ) {
 		}
 		k++;
 	}
-	in.close();
 	return true;
 }
 
 bool DataSet::LoadText( const char* filename ) {
-	ifstream in;
-	in.open(filename);
+	ifstream in(filename);
 	if( !in ) {
 		cout << "File not found: " << filename << endl;
 		return false;
@@ -83,7 +80,6 @@ bool DataSet::LoadText( const char* filename ) {
 		}
 		k++;
 	}
-	in.close();
 	return true;
 }
 
@@ -98,7 +94,6 @@ void DataSet::WriteCSV( const char* filename ) const {
 			out << x(j) << ",";
 		out << endl;
 	}
-	out.close();
 }
 
 DataComparisonResult DRDSP::CompareData( const vector<VectorXd>& s1, const vector<VectorXd>& s2 ) {

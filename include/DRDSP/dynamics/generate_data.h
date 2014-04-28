@@ -106,8 +106,6 @@ namespace DRDSP {
 				solver.Advance(dtPrint);
 				t += dtPrint;
 			}
-			if( binaryOutput ) outBin.close();
-			if( textOutput ) outTxt.close();
 		}
 
 		DataSet GenerateDataSet( const Parameter& param ) const {

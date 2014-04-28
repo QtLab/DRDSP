@@ -63,7 +63,6 @@ namespace DRDSP {
 			for(uint32_t k=0;k<numRBFs;++k)
 				for(uint32_t j=0;j<dimension;++j)
 					in >> rbfs[k].centre(j);
-			in.close();
 		}
 
 		void LoadCentresBinary( const char* filename ) {
@@ -72,13 +71,10 @@ namespace DRDSP {
 
 			for(uint32_t k=0;k<numRBFs;++k)
 				in.read( (char*)&rbfs[k].centre(0), sizeof(double)*dimension );
-			in.close();
 		}
 
 		void WriteCSV( const char *filename ) const {
-	
-			ofstream out;
-			out.open(filename);
+			ofstream out(filename);
 			out.precision(16);
 			out << dimension << "," << numRBFs << endl;
 			for(uint32_t i=0;i<dimension;++i) {	
@@ -98,8 +94,6 @@ namespace DRDSP {
 					out << rbfs[j].centre(i) << ",";
 				out << endl;
 			}
-			out.close();
-	
 		}
 
 	};

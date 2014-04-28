@@ -62,9 +62,7 @@ namespace DRDSP {
 		}
 
 		void WriteCSV( const char *filename ) const {
-	
-			ofstream out;
-			out.open(filename);
+			ofstream out(filename);
 			out.precision(16);
 			out << dimension << "," << model.numRBFs << "," << parameterDimension << endl;
 			for(int i=0;i<affine.coeffs.rows();i++) {	
@@ -77,8 +75,6 @@ namespace DRDSP {
 					out << model.rbfs[k].centre(j) << ",";
 				out << endl;
 			}
-			out.close();
-	
 		}
 
 	};

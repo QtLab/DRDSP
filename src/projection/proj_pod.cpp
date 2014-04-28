@@ -40,13 +40,11 @@ void ProjPOD::Find( const DataSystem& data ) {
 }
 
 void ProjPOD::Write( const char* filename ) const {
-	ofstream out;
 	stringstream outfn;
-
 	outfn.str("");
 	outfn << filename << "-singularValues.csv";
 
-	out.open(outfn.str());
+	ofstream out(outfn.str());
 	out.precision(16);
 	for(int i=0;i<svd.nonzeroSingularValues();i++) {
 		out << svd.singularValues()[i] << endl;
