@@ -47,8 +47,8 @@ bool DataSystemTyped::Load( const char* filename, uint32_t maxPoints ) {
 	char* setPath = new char [256];
 	for(uint16_t i=0;i<numParameters;i++) {
 		in >> setPath;
-		if(binary) LoadSetBinary(setPath,i);
-		else LoadSetText(setPath,i);
+		if(binary) LoadSetBinary(setPath,i,maxPoints);
+		else LoadSetText(setPath,i,maxPoints);
 	}
 	delete[] setPath;
 	return true;

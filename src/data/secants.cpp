@@ -18,7 +18,6 @@ void SecantsPreComputed::ComputeFromData( const DataSet& data ) {
 	dimension = data.dimension;
 	size_t N = data.points.size();
 	count = ( N * (N - 1) ) / 2;
-	size_t bytes = sizeof(double) * data.dimension * count;
 
 	secants.resize(count);
 	size_t k = 0;

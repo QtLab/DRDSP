@@ -1,48 +1,85 @@
 #ifndef INCLUDED_DYNAMICS_EMBEDDING
 #define INCLUDED_DYNAMICS_EMBEDDING
 #include "../types.h"
-#include "../data/data_system.h"
 
 namespace DRDSP {
 
 	/*!
-	 * \brief An embedding of a state space into R^n
+	 * \brief Base for an embedding of a state space into R^n
 	 */
 	struct Embedding {
 		uint32_t oDim, //!< Dimension of the original state space
 			     eDim; //!< Dimension of the embedding space, R^n
 
-		Embedding( uint32_t origDim, uint32_t embedDim );
-		virtual VectorXd Evaluate( const VectorXd &x ) const;                //!< Embeds the given state
-		virtual MatrixXd Derivative( const VectorXd &x ) const;              //!< The partial derivatives of the embedding with respect to the state
-		virtual MatrixXd DerivativeAdjoint( const VectorXd &x ) const;       //!< The linear algebraic adjoint of the derivative
-		virtual MatrixXd Derivative2( const VectorXd &x, uint32_t i ) const; //!< The second partial derivatives of the ith component with respect to the state
-		MatrixXd ComputeInducedMetric( const VectorXd &x ) const;            //!< The pullback metric on the state space from R^n
-		DataSet EmbedData( const DataSet& data ) const;                      //!< Apply this embedding to the data set
-		DataSystem EmbedData( const DataSystem& data ) const;                //!< Apply this embedding to the data system
+		Embedding( uint32_t originalDimension, uint32_t embeddedDimension ) : oDim(originalDimension), eDim(embeddedDimension) {}
+
 	};
 
-	/*!
-	 * \brief An embedding of a state space into R^n
-	 * whose matrices are to be evaluated component-wise
-	 *
-	 * This version of the embedding is for very high-dimensional systems
-	 * whose matrix of partial derivatives is too large to store in memory.
-	 * These systems will have their derivatives evaluated one element at a time.
-	 */
-	struct EmbeddingCW {
-		uint32_t oDim, //!< Dimension of the original state space
-			     eDim; //!< Dimension of the embedding space, R^n
+	struct IdentityEmbedding : Embedding {
 
-		EmbeddingCW( uint32_t origDim, uint32_t embedDim );
-		virtual VectorXd Evaluate( const VectorXd &x ) const;                                      //!< Embeds the given state
-		virtual double Derivative( const VectorXd &x, uint32_t i, uint32_t j ) const;              //!< The partial derivatives of the ith component of the embedding with respect to the jth component of the state
-		virtual double DerivativeAdjoint( const VectorXd &x, uint32_t i, uint32_t j ) const;       //!< The (i,j) component of the linear algebraic adjoint of the derivative
-		virtual double Derivative2( const VectorXd &x, uint32_t i, uint32_t j, uint32_t k ) const; //!< The second partial derivatives of the ith component with respect to the j and k components of the state
-		double ComputeInducedMetric( const VectorXd &x, uint32_t i, uint32_t j ) const;            //!< The (i,j) component of the pullback metric on the state space from R^n
-		DataSet EmbedData( const DataSet& data ) const;                                            //!< Apply this embedding to the data set
-		DataSystem EmbedData( const DataSystem& data ) const;                                      //!< Apply this embedding to the data system
+		IdentityEmbedding( uint32_t dimension ) : Embedding(dimension,dimension) {}
+
+		VectorXd operator()( const VectorXd& x ) const {
+			return x;
+		}
+
+		MatrixXd Derivative( const VectorXd& ) const {
+			return MatrixXd::Identity(eDim,oDim);
+		}
+
+		MatrixXd DerivativeAdjoint( const VectorXd& ) const {
+			return MatrixXd::Identity(oDim,eDim);
+		}
+
+		MatrixXd Derivative2( const VectorXd&, uint32_t ) const {
+			return MatrixXd::Identity(oDim,oDim);
+		}
+
 	};
+
+	struct IdentityEmbeddingCW : Embedding {
+
+		IdentityEmbeddingCW( uint32_t dimension ) : Embedding(dimension,dimension) {}
+
+		VectorXd Evaluate( const VectorXd& x ) const {
+			return x;
+		}
+
+		double Derivative( const VectorXd&, uint32_t i, uint32_t j ) const {
+			return (i==j)?1.0:0.0;
+		}
+
+		double DerivativeAdjoint( const VectorXd&, uint32_t i, uint32_t j ) const {
+			return (i==j)?1.0:0.0;
+		}
+
+		double Derivative2( const VectorXd&, uint32_t, uint32_t j, uint32_t k ) const {
+			return (j==k)?1.0:0.0;
+		}
+
+	};
+
+	template<typename E>
+	MatrixXd ComputeInducedMetric( const E& embedding, const VectorXd& x ) {
+		MatrixXd deriv = embedding.Derivative(x);
+		return deriv.transpose() * deriv;
+	}
+
+	template<typename E>
+	double ComputeInducedMetric( const E& embedding, const VectorXd& x, uint32_t i, uint32_t j ) {
+		double r = 0.0;
+		if( i==j ) {
+			double temp;
+			for(uint32_t a=0;a<eDim;++a) {
+				temp = embedding.Derivative(x,a,i);
+				r += temp * temp;
+			}
+		} else {
+			for(uint32_t a=0;a<eDim;++a)
+				r += embedding.Derivative(x,a,i) * embedding.Derivative(x,a,j);
+		}
+		return r;
+	}
 
 }
 

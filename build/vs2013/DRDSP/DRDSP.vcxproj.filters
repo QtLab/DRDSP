@@ -75,9 +75,6 @@
     <ClCompile Include="..\..\..\src\data\aabb.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\embedding.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\data\histogram.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>

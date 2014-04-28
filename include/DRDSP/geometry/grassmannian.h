@@ -1,6 +1,7 @@
 #ifndef INCLUDED_GEOMETRY_GRASSMANNIAN
 #define INCLUDED_GEOMETRY_GRASSMANNIAN
 #include <Eigen/Dense>
+#pragma warning( disable : 4714 ) // function '...' marked as __forceinline not inlined
 #include "metric.h"
 
 using namespace Eigen;
@@ -20,6 +21,8 @@ namespace DRDSP {
 			typedef double T;
 
 			MatrixXd position, velocity;
+
+			Geodesic() = default;
 
 			Geodesic( const MatrixXd& x, const MatrixXd& v ) : position(x), velocity(v) {
 				svd.compute( velocity, ComputeThinU | ComputeThinV );

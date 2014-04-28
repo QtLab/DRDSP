@@ -6,78 +6,74 @@
 
 using namespace DRDSP;
 
-struct PendulumWrap : WrapFunction<VectorXd> {
+struct PendulumWrap {
 	void operator()( VectorXd& x ) const;
 };
 
-struct Pendulum : ModelParameterized {
+struct Pendulum : Model<> {
 	PendulumWrap pendulumWrap;
 
-	Pendulum() : ModelParameterized(&pendulumWrap,5,1), length(1.1), mass(7.0), A(0.15), delta1(0.245), delta2(0.245) {}
-	VectorXd VectorField( const VectorXd &state, const VectorXd &parameter );
-	MatrixXd Partials( const VectorXd &state, const VectorXd &parameter );
+	Pendulum() : Pendulum(1.8) {}
+
+	explicit Pendulum( double Omega ) : Model<>(5), Omega(Omega), length(1.1), mass(7.0), A(0.15), delta1(0.245), delta2(0.245) {}
+
+	VectorXd operator()( const VectorXd& state ) const;
+	MatrixXd Partials( const VectorXd& state ) const;
 
 protected:
-	// fixed parameters
-	double length, mass, A, delta1, delta2;
+	// parameters
+	double Omega, length, mass, A, delta1, delta2;
 
 	double f1( double p ) const;
 	double f2( double p ) const;
-	double f3( double p, const VectorXd &b ) const;
+	double f3( double p ) const;
 	double f4( double p ) const;
 	double g1( double p ) const;
 
-	double phiDot( const VectorXd &x ) const;
-	double thetaDot( const VectorXd &x ) const;
-	double psiDot( const VectorXd &b ) const;
-	double vpDot( const VectorXd &x, const VectorXd &b ) const;
-	double vtDot( const VectorXd &x, const VectorXd &b) const;
+	double phiDot( const VectorXd& x ) const;
+	double thetaDot( const VectorXd& x ) const;
+	double psiDot() const;
+	double vpDot( const VectorXd& x ) const;
+	double vtDot( const VectorXd& x ) const;
 
-	VectorXd G( const VectorXd &theta, const VectorXd &b ) const;
-	MatrixXd DG( const VectorXd &x, const VectorXd &b ) const;
+	VectorXd G( const VectorXd& theta ) const;
+	MatrixXd DG( const VectorXd& x ) const;
 
 	double f1d( double p ) const;
 	double f2d( double p ) const;
-	double f3d( double p, const VectorXd &b ) const;
+	double f3d( double p ) const;
 	double f4d( double p ) const;
 	double g1d( double p ) const;
 
 };
 
+struct PendulumFamily : Family<Pendulum> {
+
+	PendulumFamily() : Family<Pendulum>(5,1) {}
+
+	Pendulum operator()( const VectorXd& parameter ) const {
+		return Pendulum( parameter[0] );
+	}
+};
+
 struct FlatEmbedding : Embedding {
 	FlatEmbedding() : Embedding(5,8) {}
-	VectorXd Evaluate( const VectorXd &x ) const;
-	MatrixXd Derivative( const VectorXd &x ) const;
-	MatrixXd DerivativeAdjoint( const VectorXd &x ) const;
-	MatrixXd Derivative2( const VectorXd &x, uint32_t mu ) const;
+	VectorXd operator()( const VectorXd& x ) const;
+	MatrixXd Derivative( const VectorXd& x ) const;
+	MatrixXd DerivativeAdjoint( const VectorXd& x ) const;
+	MatrixXd Derivative2( const VectorXd& x, uint32_t mu ) const;
 	
 };
 
 struct DoughnutEmbedding : Embedding {
 	double R1, R2;
 	DoughnutEmbedding() : Embedding(5,6), R1(2.0), R2(4.0) {}
-	VectorXd Evaluate( const VectorXd &x ) const;
-	MatrixXd Derivative( const VectorXd &x ) const;
-	MatrixXd DerivativeAdjoint( const VectorXd &x ) const;
-	MatrixXd Derivative2( const VectorXd &x, uint32_t mu ) const;
+	VectorXd operator()( const VectorXd& x ) const;
+	MatrixXd Derivative( const VectorXd& x ) const;
+	MatrixXd DerivativeAdjoint( const VectorXd& x ) const;
+	MatrixXd Derivative2( const VectorXd& x, uint32_t mu ) const;
 };
 
-struct PendulumFlat : ModelParameterizedEmbedded {
-
-	PendulumFlat() : ModelParameterizedEmbedded(pendulum,embedFlat) {}
-
-protected:
-	Pendulum pendulum;
-	FlatEmbedding embedFlat;
-};
-
-struct PendulumDoughnut : ModelParameterizedEmbedded {
-
-	PendulumDoughnut() : ModelParameterizedEmbedded(pendulum,embedDoughnut) {}
-
-protected:
-	Pendulum pendulum;
-	DoughnutEmbedding embedDoughnut;
-};
+typedef RKDynamicalSystem<SolverFunctionFromModel<Pendulum>,PendulumWrap> PendulumSolver;
 
 #endif

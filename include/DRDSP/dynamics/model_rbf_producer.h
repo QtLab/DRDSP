@@ -15,10 +15,7 @@ namespace DRDSP {
 		double fitWeight[2];
 		uint32_t numRBFs;
 
-		ModelRBFProducer() : numRBFs(30) {
-			fitWeight[0] = 0.5;
-			fitWeight[1] = 0.5;
-		}
+		ModelRBFProducer() : ModelRBFProducer(30) {}
 
 		ModelRBFProducer( uint32_t nRBFs ) : numRBFs(nRBFs) {
 			fitWeight[0] = 0.5;

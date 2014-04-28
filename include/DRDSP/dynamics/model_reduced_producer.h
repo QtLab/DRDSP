@@ -15,16 +15,12 @@ using namespace std;
 namespace DRDSP {
 	template<typename F = ThinPlateSpline>
 	struct ModelReducedProducer {
-		double fitWeight[2];
+		double fitWeight[2], boxScale;
 		uint32_t numRBFs;
 
-		
-		ModelReducedProducer() : numRBFs(30) {
-			fitWeight[0] = 0.5;
-			fitWeight[1] = 0.5;
-		}
+		ModelReducedProducer() : ModelReducedProducer(30) {}
 
-		ModelReducedProducer( uint32_t nRBFs ) : numRBFs(nRBFs) {
+		ModelReducedProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {
 			fitWeight[0] = 0.5;
 			fitWeight[1] = 0.5;
 		}
@@ -94,7 +90,7 @@ namespace DRDSP {
 			return T / data.numParameters;
 		}
 
-		void Fit( ModelReduced<F>& reduced, const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const {
+		void Fit( ModelReduced<F>& reduced, const ReducedDataSystem& data, uint32_t parameterDimension, const VectorXd* parameters ) const {
 			MatrixXd A, B, Atemp, Btemp, z;
 
 			uint32_t dimension = data.reducedData[0].dimension;
@@ -125,13 +121,13 @@ namespace DRDSP {
 			}
 		}
 
-		ModelReduced<F> BruteForce( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters, uint32_t numIterations ) const {
+		ModelReduced<F> BruteForce( const ReducedDataSystem& data, uint32_t parameterDimension, const VectorXd* parameters, uint32_t numIterations ) const {
 			double Sft = 0.0, Sf = -1.0;
 
 			ModelReduced<F> reduced( data.reducedData[0].dimension, parameterDimension, numRBFs);
 			ModelReduced<F> best;
 			AABB box = data.ComputeBoundingBox();
-			//box.Scale(1.1);
+			box.Scale(boxScale);
 			vector<double> costs(numIterations);
 
 			for(uint32_t i=0;i<numIterations;i++) {

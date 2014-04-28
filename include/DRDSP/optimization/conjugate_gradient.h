@@ -8,7 +8,7 @@ namespace DRDSP {
 	struct ConjugateGradient {
 		typedef typename Geodesic::Metric Metric;
 		typedef typename Metric::Point Point;
-		typedef typename Metric::Vector Vector;
+		typedef typename Metric::InnerProduct::Vector Vector;
 
 		const S& cost;
 		const DS& gradient;
@@ -42,7 +42,7 @@ namespace DRDSP {
 					Point xt = geodesic(t);
 					return metric(xt)(
 						gradient(xt),
-						geodesic.ParallelTranslate( geodesic.tangent, t )
+						geodesic.ParallelTranslate( geodesic.velocity, t )
 					);
 				}
 			);

@@ -1,6 +1,7 @@
 #ifndef INCLUDED_DYNAMICS_REDUCED_DATA_SYSTEM
 #define INCLUDED_DYNAMICS_REDUCED_DATA_SYSTEM
 #include "reduced_data.h"
+#include "../data/data_system.h"
 
 namespace DRDSP {
 
@@ -17,6 +18,30 @@ namespace DRDSP {
 			Create( data.numParameters );
 			for(uint32_t i=0;i<numParameters;i++) {
 				reducedData[i].ComputeData( family(data.parameters[i]), data.dataSets[i], W );
+			}
+		}
+
+		template<typename Family>
+		void ComputeDataEmbedded( Family&& family, const DataSystem& data, const MatrixXd& W ) {
+			Create( data.numParameters );
+			for(uint32_t i=0;i<numParameters;i++) {
+				reducedData[i].ComputeDataEmbedded( family(data.parameters[i]), data.dataSets[i], W );
+			}
+		}
+
+		template<typename Family>
+		void ComputeDataCW( Family&& family, const DataSystem& data, const MatrixXd& W ) {
+			Create( data.numParameters );
+			for(uint32_t i=0;i<numParameters;i++) {
+				reducedData[i].ComputeDataCW( family(data.parameters[i]), data.dataSets[i], W );
+			}
+		}
+
+		template<typename Family>
+		void ComputeDataEmbeddedCW( Family&& family, const DataSystem& data, const MatrixXd& W ) {
+			Create( data.numParameters );
+			for(uint32_t i=0;i<numParameters;i++) {
+				reducedData[i].ComputeDataEmbeddedCW( family(data.parameters[i]), data.dataSets[i], W );
 			}
 		}
 

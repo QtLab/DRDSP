@@ -35,6 +35,21 @@ namespace DRDSP {
 	
 	};
 
+	template<typename E>
+	DataSystem EmbedData( const E& embedding, const DataSystem& data ) {
+		DataSystem r( embedding.eDim, data.numParameters, data.parameterDimension );
+		r.parameters = data.parameters;
+		
+		for(uint32_t i=0;i<r.numParameters;++i) {
+			r.dataSets[i].points.resize( data.dataSets[i].points.size() );
+
+			for(uint32_t j=0;j<r.dataSets[i].points.size();++j)
+				r.dataSets[i][j] = embedding(data.dataSets[i][j]);
+		}
+
+		return r;
+	}
+
 }
 
 #endif

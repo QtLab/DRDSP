@@ -25,12 +25,18 @@ namespace DRDSP {
 
 	};
 
-	template<typename Solver>
+	struct IdentityWrapFunction {
+		template<typename T>
+		void operator()( T& ) const {}
+	};
+
+	template<typename Solver,typename WrapFunction = IdentityWrapFunction>
 	struct ContinuousDynamicalSystem {
 		typedef double Time;
 		typedef typename Solver::State State;
 		State state;
 		Solver solver;
+		WrapFunction wrap;
 		double dtMax;
 		
 		explicit ContinuousDynamicalSystem( const Solver& solver ) : solver(solver), dtMax(0) {}
@@ -44,20 +50,20 @@ namespace DRDSP {
 				n = uint32_t(dt / dtMax + 1.0);
 				dta = dt / n;
 			}
-			for(uint32_t i=0;i<n;++i)
+			for(uint32_t i=0;i<n;++i) {
 				solver.Integrate(state,t,dta);
+				wrap(state);
+			}
 		}
 
 	};
 
-	template<typename F>
-	struct RKDynamicalSystem : ContinuousDynamicalSystem<RK<F>> {
-		explicit RKDynamicalSystem( const F& f ) : ContinuousDynamicalSystem<RK<F>>(RK<F>(f)) {}
+	template<typename F,typename WrapFunction = IdentityWrapFunction>
+	struct RKDynamicalSystem : ContinuousDynamicalSystem<RK<F>,WrapFunction> {
+		explicit RKDynamicalSystem( const F& f ) : ContinuousDynamicalSystem<RK<F>,WrapFunction>(RK<F>(f)) {}
 	};
 
 }
 
 #endif
-
-
 

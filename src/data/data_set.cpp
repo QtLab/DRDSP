@@ -112,10 +112,20 @@ DataComparisonResult DRDSP::CompareData( const vector<VectorXd>& s1, const vecto
 		sum += temp;
 		if( r.differences[i] > maxVal ) maxVal = r.differences[i];
 	}
-
 	r.rmsDifference = sqrt( sum / n );
 	r.maxDifference = maxVal;
 
+	maxVal = 0.0;
+	for( const auto& x : s1 ) {
+		double minVal = numeric_limits<double>::max();
+		for( const auto& y : s2 ) {
+			double diff = ( x - y ).norm();
+			if( diff < minVal ) minVal = diff;
+		}
+		if( minVal > maxVal ) maxVal = minVal;
+	}
+	r.maxMinDifference = maxVal;
+	
 	return r;
 }
 

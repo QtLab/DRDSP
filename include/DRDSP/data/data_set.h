@@ -30,8 +30,17 @@ namespace DRDSP {
 		}
 	};
 
+	template<typename E>
+	DataSet EmbedData( const E& embedding, const DataSet& data ) {
+		DataSet r( data.points.size(), embedding.eDim );
+		for(uint32_t i=0;i<r.points.size();++i) {
+			r[i] = embedding(data[i]);
+		}
+		return r;
+	}
+
 	struct DataComparisonResult {
-		double maxDifference, rmsDifference;
+		double maxDifference, rmsDifference, maxMinDifference;
 		vector<double> differences;
 
 		DataComparisonResult( size_t n ) : differences(n) {}

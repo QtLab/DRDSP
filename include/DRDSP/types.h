@@ -5,6 +5,8 @@
 
 typedef unsigned int uint;
 
+#pragma warning( disable : 4714 ) // function '...' marked as __forceinline not inlined
+
 #include <Eigen/Core>
 using namespace Eigen;
 

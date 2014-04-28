@@ -22,13 +22,17 @@ namespace DRDSP {
 			return r;
 		}
 
+		Scalar Norm2( const V& x ) const {
+			return (*this)(x,x);
+		}
+
 	};
 
 	template<typename Point,typename InnerProduct>
 	struct UniformMetric {
 		typedef Point Point;
 		typedef InnerProduct InnerProduct;
-		InnerProduct operator()( const Point& x ) const {
+		InnerProduct operator()( const Point& ) const {
 			return InnerProduct();
 		}
 	};
@@ -39,6 +43,10 @@ namespace DRDSP {
 
 		Scalar operator()( const MatrixXd& x, const MatrixXd& y ) const {
 			return ( y.adjoint() * x ).trace();
+		}
+
+		Scalar Norm2( const MatrixXd& x ) const {
+			return (*this)(x,x);
 		}
 
 	};

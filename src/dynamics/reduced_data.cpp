@@ -1,13 +1,11 @@
 #include <fstream>
 #include <iostream>
-#include <Eigen/Dense>
 #include <DRDSP/dynamics/reduced_data.h>
 
 using namespace std;
-using namespace Eigen;
 using namespace DRDSP;
 
-static double eps( double x ) {
+double DRDSP::eps( double x ) {
 	int64_t y = *((int64_t*)&x);
 	y++;
 	return *((double*)&y) - x;

@@ -51,7 +51,7 @@ namespace DRDSP {
 				if( !Step(x) )
 					return true;
 				++n;
-				//cout << n << "\t" << lineSearch.S0 << "\t" << lineSearch.alpha << endl;
+				cout << n << "\t" << lineSearch.S0 << "\t" << lineSearch.alpha << endl;
 			}
 			return false;
 		}

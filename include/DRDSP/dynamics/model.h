@@ -1,7 +1,7 @@
 #ifndef INCLUDED_DYNAMICS_MODEL
 #define INCLUDED_DYNAMICS_MODEL
 #include "embedding.h"
-#include <DRDSP/dynamics/dynamicalSystem.h>
+#include "dynamicalSystem.h"
 
 namespace DRDSP {
 
@@ -14,7 +14,7 @@ namespace DRDSP {
 		Model model;
 		explicit SolverFunctionFromModel( const Model& model ) : model(model) {}
 		template<typename Time>
-		State operator()( const State& x, Time t ) const {
+		State operator()( const State& x, Time ) const {
 			return model(x);
 		}
 	};
@@ -66,14 +66,13 @@ namespace DRDSP {
 
 		MatrixXd Partials( const State& state ) const {
 
-			MatrixXd embeddingPartials2, result;
-			result.setZero(embedding.oDim,embedding.oDim);
+			MatrixXd result;
+			result.setZero(embedding.eDim,embedding.oDim);
 
 			VectorXd vector = model(state);
 
 			for(uint32_t i=0;i<embedding.eDim;++i) {
-				embeddingPartials2 = embedding.Derivative2(state,i);
-				result.row(i) += embeddingPartials2 * vector;
+				result.row(i) += embedding.Derivative2(state,i) * vector;
 			}
 
 			result += embedding.Derivative(state) * model.Partials(state);
@@ -127,6 +126,8 @@ namespace DRDSP {
 		Embedding embedding; //!< An embedding into R^n
 
 		FamilyEmbedded() = default;
+		explicit FamilyEmbedded( const Family& f ) : family(f) {}
+		explicit FamilyEmbedded( const Embedding& e ) : embedding(e) {}
 		FamilyEmbedded( const Family& f, const Embedding& e ) : family(f), embedding(e) {}
 
 		ModelEmbedded<Model,Embedding> operator()( const Parameter& parameter ) const {
@@ -146,6 +147,8 @@ namespace DRDSP {
 		Embedding embedding; //!< An embedding into R^n
 
 		FamilyEmbeddedCW() = default;
+		explicit FamilyEmbeddedCW( const Family& f ) : family(f) {}
+		explicit FamilyEmbeddedCW( const Embedding& e ) : embedding(e) {}
 		FamilyEmbeddedCW( const Family& f, const Embedding& e ) : family(f), embedding(e) {}
 
 		ModelEmbeddedCW<Model,Embedding> operator()( const Parameter& parameter ) const {

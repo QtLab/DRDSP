@@ -11,7 +11,7 @@ void PendulumWrap::operator()( VectorXd& state ) const {
 
 // Embeddings
 
-VectorXd FlatEmbedding::Evaluate( const VectorXd &state ) const {
+VectorXd FlatEmbedding::operator()( const VectorXd& state ) const {
 	VectorXd X(eDim);
 	
 	X(0) = cos(state(0));
@@ -23,10 +23,10 @@ VectorXd FlatEmbedding::Evaluate( const VectorXd &state ) const {
 	X(6) = state(3);
 	X(7) = state(4);
 
-	return std::move(X);
+	return X;
 }
 
-VectorXd DoughnutEmbedding::Evaluate( const VectorXd &state ) const {
+VectorXd DoughnutEmbedding::operator()( const VectorXd& state ) const {
 	VectorXd y(eDim);
 
 	double phi = state(0);
@@ -45,16 +45,16 @@ VectorXd DoughnutEmbedding::Evaluate( const VectorXd &state ) const {
 	y(4) = vp;
 	y(5) = vt;
 
-	return std::move(y);
+	return y;
 }
 
 // Embedding First Derivatives
 
-MatrixXd FlatEmbedding::Derivative( const VectorXd &state ) const {
+MatrixXd FlatEmbedding::Derivative( const VectorXd& state ) const {
 	MatrixXd res;
 	res.setZero(eDim,oDim);
 
-	VectorXd X = Evaluate(state);
+	VectorXd X = (*this)(state);
 
 	res(0,0) = -X(1);
 	res(1,0) = X(0);
@@ -66,19 +66,19 @@ MatrixXd FlatEmbedding::Derivative( const VectorXd &state ) const {
 	res(6,3) = 1;
 	res(7,4) = 1;
 
-	return std::move(res);
+	return res;
 }
 
-MatrixXd DoughnutEmbedding::Derivative( const VectorXd &x ) const {
+MatrixXd DoughnutEmbedding::Derivative( const VectorXd& x ) const {
 	MatrixXd res;
 	res.setZero(eDim,oDim);
 
-	double cosphi = cos(x(0));
-	double costheta = cos(x(1));
-	double cospsi = cos(x(2));
 	double sinphi = sin(x(0));
+	double cosphi = cos(x(0));
 	double sintheta = sin(x(1));
+	double costheta = cos(x(1));
 	double sinpsi = sin(x(2));
+	double cospsi = cos(x(2));
 
 	res(0,0) = -sinphi*costheta*cospsi;
 	res(0,1) = -(R1+cosphi)*sintheta*cospsi;
@@ -96,23 +96,23 @@ MatrixXd DoughnutEmbedding::Derivative( const VectorXd &x ) const {
 	res(4,3) = 1;
 	res(5,4) = 1;
 	
-	return std::move(res);
+	return res;
 }
 
 
 // Embedding First Derivatives Adjoint
 
-MatrixXd FlatEmbedding::DerivativeAdjoint( const VectorXd &state ) const {
+MatrixXd FlatEmbedding::DerivativeAdjoint( const VectorXd& state ) const {
 	return Derivative(state).transpose();
 }
 
-MatrixXd DoughnutEmbedding::DerivativeAdjoint( const VectorXd &state ) const {
+MatrixXd DoughnutEmbedding::DerivativeAdjoint( const VectorXd& state ) const {
 	return Derivative(state).transpose(); // check me
 }
 
 // Embedding Second Derivatives
 
-MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
+MatrixXd FlatEmbedding::Derivative2( const VectorXd& x, uint32_t mu ) const {
 	MatrixXd res;
 	res.setZero(oDim,oDim);
 
@@ -137,10 +137,10 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 			break;
 	}
 
-	return std::move(res);
+	return res;
 }
 
-MatrixXd DoughnutEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
+MatrixXd DoughnutEmbedding::Derivative2( const VectorXd& x, uint32_t mu ) const {
 	MatrixXd res;
 	res.setZero(oDim,oDim);
 
@@ -178,22 +178,22 @@ MatrixXd DoughnutEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const 
 			break;
 	}
 
-	return std::move(res);
+	return res;
 }
 
 // Model Functions
 
-VectorXd Pendulum::VectorField( const VectorXd &state, const VectorXd &parameter ) {
+VectorXd Pendulum::operator()( const VectorXd& state ) const {
 	VectorXd res(dimension);
 	res(0) = phiDot(state);
 	res(1) = thetaDot(state);
-	res(2) = psiDot(parameter);
-	res(3) = vpDot(state,parameter);
-	res(4) = vtDot(state,parameter);
-	return std::move(res);
+	res(2) = psiDot();
+	res(3) = vpDot(state);
+	res(4) = vtDot(state);
+	return res;
 }
 
-MatrixXd Pendulum::Partials( const VectorXd &state, const VectorXd &parameter ) {
+MatrixXd Pendulum::Partials( const VectorXd& state ) const {
 	MatrixXd res;
 	res.setZero(dimension,dimension);
 
@@ -209,8 +209,8 @@ MatrixXd Pendulum::Partials( const VectorXd &state, const VectorXd &parameter ) 
 	double tf1d = f1d(state(0));
 	double tf2 = f2(state(0));
 	double tf2d = f2d(state(0));
-	double tf3 = f3(state(2),parameter);
-	double tf3d = f3d(state(2),parameter);
+	double tf3 = f3(state(2));
+	double tf3d = f3d(state(2));
 	double tg1 = g1(state(0));
 	double tg1d = g1d(state(0));
 	double tf4 = f4(state(0));
@@ -228,7 +228,7 @@ MatrixXd Pendulum::Partials( const VectorXd &state, const VectorXd &parameter ) 
 	res(4,3) = tf1*state(4) / tf4;
 	res(4,4) = (tf1*state(3) - delta1) / tf4;
 
-	return std::move(res);
+	return res;
 }
 
 double Pendulum::f1( double p ) const {
@@ -241,9 +241,8 @@ double Pendulum::f2( double p ) const {
 	return (mass+2.0)*length+cos(p);
 }
 
-double Pendulum::f3( double p, const VectorXd &b ) const {
-	double omega = b(0);
-	return 1.0 + A*omega*omega*cos(p);
+double Pendulum::f3( double p ) const {
+	return 1.0 + A*Omega*Omega*cos(p);
 }
 
 double Pendulum::f4( double p ) const {
@@ -255,25 +254,24 @@ inline double Pendulum::g1( double p ) const {
 	return f1(p)*0.5;
 }
 
-inline double Pendulum::phiDot( const VectorXd &x ) const {
+inline double Pendulum::phiDot( const VectorXd& x ) const {
 	return x(3);
 }
 
-inline double Pendulum::thetaDot( const VectorXd &x ) const {
+inline double Pendulum::thetaDot( const VectorXd& x ) const {
 	return x(4);
 }
 
-
-inline double Pendulum::psiDot( const VectorXd &b ) const {
-	return b(0);
+inline double Pendulum::psiDot() const {
+	return Omega;
 }
 
-double Pendulum::vpDot( const VectorXd &x, const VectorXd &b ) const {
-	return -g1(x[0])*x[4]*x[4] - delta2*x[3] - f3(x[2],b)*sin(x[0])*cos(x[1]);
+double Pendulum::vpDot( const VectorXd& x ) const {
+	return -g1(x[0])*x[4]*x[4] - delta2*x[3] - f3(x[2])*sin(x[0])*cos(x[1]);
 }
 
-double Pendulum::vtDot( const VectorXd &x, const VectorXd &b) const {
-	return (f1(x[0])*x[4]*x[3] - delta1*x[4] - f2(x[0])*f3(x[2],b)*sin(x[1]) )/f4(x[0]);
+double Pendulum::vtDot( const VectorXd& x ) const {
+	return (f1(x[0])*x[4]*x[3] - delta1*x[4] - f2(x[0])*f3(x[2])*sin(x[1]) )/f4(x[0]);
 }
 
 double Pendulum::f1d( double p ) const {
@@ -286,10 +284,8 @@ inline double Pendulum::f2d( double p ) const {
 	return -sin(p);
 }
 
-double Pendulum::f3d( double p, const VectorXd &b ) const {
-	double omega = b(0);
-	//double A = b(1);
-	return -A*omega*omega*sin(p);
+double Pendulum::f3d( double p ) const {
+	return -A*Omega*Omega*sin(p);
 }
 
 inline double Pendulum::f4d( double p ) const {
@@ -299,7 +295,6 @@ inline double Pendulum::f4d( double p ) const {
 inline double Pendulum::g1d( double p ) const {
 	return f1d(p)*0.5;
 }
-
 
 
 

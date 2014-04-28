@@ -1,11 +1,13 @@
 #ifndef INCLUDED_DYNAMICS_REDUCED_DATA
 #define INCLUDED_DYNAMICS_REDUCED_DATA
-#include "../types.h"
+#include <Eigen/SVD>
 #include "model.h"
 #include "../data/data_set.h"
 #include "../data/aabb.h"
 
 namespace DRDSP {
+
+	double eps( double x );
 
 	struct ReducedData {
 		vector<VectorXd> points, vectors;
@@ -31,7 +33,13 @@ namespace DRDSP {
 
 			for(uint32_t i=0;i<count;i++) {
 				points[i] = W.adjoint() * data.points[i];
+			}
+
+			for(uint32_t i=0;i<count;i++) {
 				vectors[i] = W.adjoint() * original( data.points[i] );
+			}
+
+			for(uint32_t i=0;i<count;i++) {
 				derivatives[i] = W.adjoint() * original.Partials( data.points[i] ) * W;
 			}
 			scales[0] = ComputeVectorScale();
@@ -47,10 +55,12 @@ namespace DRDSP {
 			MatrixXd A;
 
 			for(uint32_t i=0;i<count;i++) {
-
 				points[i] = W.adjoint() * original.embedding(data.points[i]);
+			}
+			for(uint32_t i=0;i<count;i++) {
 				vectors[i] = W.adjoint() * original( data.points[i] );
-
+			}
+			for(uint32_t i=0;i<count;i++) {
 				JacobiSVD<MatrixXd> svd(W.adjoint() * original.embedding.Derivative(data.points[i]),ComputeThinU);
 				uint32_t rank = 0;
 				double tolerance = original.model.dimension * eps(svd.singularValues()(0));
@@ -71,13 +81,12 @@ namespace DRDSP {
 			Create( (uint32_t)W.cols(), data.points.size() );
 
 			for(uint32_t i=0;i<count;i++) {
-
 				points[i] = W.adjoint() * data.points[i];
-
-				for(uint32_t j=0;j<dimension;j++)
-					for(uint32_t k=0;k<original.dimension;k++)
-						vectors[i](j) = W(k,j) * original( data.points[i], k );
-
+			}
+			for(uint32_t i=0;i<count;i++) {
+				vectors[i] = W.adjoint() * original( data.points[i] );
+			}
+			for(uint32_t i=0;i<count;i++) {
 				for(uint32_t c1=0;c1<original.dimension;c1++)
 					for(uint32_t c2=0;c2<original.dimension;c2++) {
 						double temp = original.Partials( data.points[i], c1, c2 );
@@ -93,21 +102,26 @@ namespace DRDSP {
 		}
 
 		template<typename Model,typename Embedded>
-		void ComputeDataEmbeddedCW( const ModelEmbedded<Model,Embedded>& original, const DataSet& data, const MatrixXd& W ) {
+		void ComputeDataEmbeddedCW( const ModelEmbeddedCW<Model,Embedded>& original, const DataSet& data, const MatrixXd& W ) {
 			Create( (uint16_t)W.cols(), data.points.size() );
 
 			static double stabilityFactor = 1.0;
 
 			MatrixXd A, dPhi, tempMatrix;
-	
+
+			for(uint32_t i=0;i<count;i++) {
+				points[i] = W.adjoint() * original.embedding( data.points[i] );
+			}
+			for(uint32_t i=0;i<count;i++) {
+				vectors[i] = W.adjoint() * original( data.points[i] );
+			}
+
 			for(uint32_t i=0;i<count;i++) {
 				dPhi.setZero(dimension,original.embedding.eDim);
 				tempMatrix.setZero(dimension,dimension);
 
-				points[i] = W.adjoint() * original.embedding(data.points[i]);
 				for(uint32_t j=0;j<dimension;j++)
 					for(uint32_t k=0;k<original.embedding.eDim;k++) {
-						vectors[i](j) = W(k,j) * original( data.points[i], k );
 						for(uint32_t c=0;c<original.embedding.oDim;c++)
 							dPhi(j,c) += W(k,j) * original.embedding.Derivative(data.points[i],k,c);
 					}

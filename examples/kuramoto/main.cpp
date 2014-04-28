@@ -12,16 +12,15 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(5000), maxPoints(0), targetDimension(4), numRBFs(50) {}
-	uint32_t numIterations, maxPoints;
-	uint16_t targetDimension, numRBFs;
+	Options() : numIterations(500), maxPoints(0), targetDimension(4), numRBFs(20) {}
+	uint32_t numIterations, maxPoints, targetDimension, numRBFs;
 };
 
 Options GetOptions( int argc, char** argv ) {
 	Options options;
 
-	if( argc >= 2 ) options.targetDimension = (uint16_t)atoi(argv[1]);
-	if( argc >= 3 ) options.numRBFs = (uint16_t)atoi(argv[2]);
+	if( argc >= 2 ) options.targetDimension = (uint32_t)atoi(argv[1]);
+	if( argc >= 3 ) options.numRBFs = (uint32_t)atoi(argv[2]);
 	if( argc >= 4 ) options.maxPoints = (uint32_t)atoi(argv[3]);
 	if( argc >= 5 ) options.numIterations = (uint32_t)atoi(argv[4]);
 
@@ -31,16 +30,18 @@ Options GetOptions( int argc, char** argv ) {
 void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
 	ofstream out("output/comparison.csv");
-	out << "Parameter,RMS,Max,Differences" << endl;
-	for(uint16_t i=0;i<reducedData.numParameters;++i) {
+	out << "Parameter,RMS,Max,MaxMin,Differences" << endl;
+	for(uint32_t i=0;i<reducedData.numParameters;++i) {
 		DataComparisonResult r = CompareData( reducedData.reducedData[i].points, rdata.dataSets[i].points );
 		cout << "Parameter " << rdata.parameters[i] << endl;
 		cout << "RMS: " << r.rmsDifference << endl;
 		cout << "Max: " << r.maxDifference << endl;
-		
+		cout << "MaxMin: " << r.maxMinDifference << endl;
+
 		out << rdata.parameters[i] << ",";
 		out << r.rmsDifference << ",";
 		out << r.maxDifference << ",";
+		out << r.maxMinDifference << ",";
 		for( const auto& x : r.differences )
 			out << x << ",";
 		out << endl;
@@ -48,30 +49,31 @@ void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
 }
 
+typedef Multiquadratic RadialType;
+
 int main( int argc, char** argv ) {
 
 	Options options = GetOptions(argc,argv);
 
 	// The kuramoto example
-	KuramotoBFlat kuramoto(100);
+	FamilyEmbedded<KuramotoAFamily,FlatEmbedding> kuramoto(KuramotoAFamily(100),FlatEmbedding(101));
 	
+	auto parameters = ParameterList( 1.0, 1.1, 6 );
+
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator dataGenerator(kuramoto.model);
-	dataGenerator.pMin = 2.0;
-	dataGenerator.pMax = 2.01;
-	dataGenerator.pDelta = 0.002;
+	DataGenerator<KuramotoAFamily,KuramotoASolver> dataGenerator(kuramoto.family);
 	dataGenerator.initial.setRandom();
 	dataGenerator.tStart = 50;
 	dataGenerator.tInterval = 7;
 	dataGenerator.print = 100;
-	dataGenerator.rk.dtMax = 0.001;
+	dataGenerator.dtMax = 0.001;
 
-	DataSystem data = dataGenerator.GenerateDataSystem();
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
 			
 	// Embed the data
 	cout << "Embedding data..." << endl;
-	DataSystem dataEmbedded = kuramoto.embedding.EmbedData(data);
+	DataSystem dataEmbedded = EmbedData( kuramoto.embedding, data );
 
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;
@@ -122,15 +124,15 @@ int main( int argc, char** argv ) {
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData(kuramoto,data,projSecant.W);
+	reducedData.ComputeDataEmbedded( kuramoto, data, projSecant.W );
 	reducedData.WritePointsCSV("output/p","-points.csv");
 	reducedData.WriteVectorsCSV("output/p","-points.csv");
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	
-	ModelReducedProducer producer(options.numRBFs);
-	ModelReduced reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
+	ModelReducedProducer<RadialType> producer(options.numRBFs);
+	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
 	
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
 	
@@ -143,15 +145,14 @@ int main( int argc, char** argv ) {
 	
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator rdataGenerator(reducedModel);
+	DataGenerator<ModelReduced<RadialType>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
-	rdataGenerator.initial = reducedData.reducedData[0].points[0];
+	rdataGenerator.tStart = 0.0;
 
-	DataSystem rdata = rdataGenerator.GenerateDataSystem();
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 
 	system("PAUSE");
-	return 0;
 }

@@ -1,34 +1,37 @@
 #ifndef INCLUDED_OPTIMIZATION_LINESEARCH
 #define INCLUDED_OPTIMIZATION_LINESEARCH
 #include <stdint.h>
+#include <iostream>
 #include <cmath>
 #include "../misc.h"
+
+using namespace std;
 
 namespace DRDSP {
 
 	struct LineSearch {
 		double alpha, alphaMax, mu, eta;
+		double S0, DS0;
 
 		LineSearch() : alpha(1.0e-2), alphaMax(1.0e6), mu(0.00001), eta(0.9) {}
 		
 		template<typename S,typename DS>
 		double Search( S&& cost, DS&& costDeriv ) {
-			double a, b, c, ga, gb, gc, Sc;
 			static const double ratio = 2.0;
 			static const uint8_t maxIterations = 5;
 
 			DS0 = std::forward<DS>(costDeriv)(0.0);
 			
 			if( DS0 >= 0.0 ) {
-				//cout << "LineSearch: Bad Tangent Vector." << endl;
+				cout << "LineSearch: Bad Tangent Vector." << endl;
 				return 0.0;
 			}
 
 			S0 = std::forward<S>(cost)(0.0);
-			a = 0.0;
-			ga = DS0;
-			c = alpha / ratio;
-
+			double a = 0.0;
+			double ga = DS0;
+			double c = alpha / ratio;
+			double gc;
 			do {
 				c = Clamp( c * ratio, 0.0, alphaMax );
 				gc = std::forward<DS>(costDeriv)(c);
@@ -43,8 +46,9 @@ namespace DRDSP {
 				}
 			} while( gc < 0.0 );
 
-			b = c;
-			gb = gc;
+			double b = c;
+			double gb = gc;
+			double Sc = 0.0;
 			for(uint8_t i=0;i<maxIterations;++i) {
 				c = Secant(a,b,ga,gb);
 				gc = std::forward<DS>(costDeriv)(c);
@@ -70,8 +74,7 @@ namespace DRDSP {
 			}
 		}
 
-	private:
-		double S0, DS0;
+	protected:
 
 		bool Wolfe( double Sc, double gc ) const {
 

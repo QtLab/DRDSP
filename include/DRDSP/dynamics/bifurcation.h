@@ -86,27 +86,27 @@ namespace DRDSP {
 		typedef typename Family::Parameter Parameter;
 		typedef double Value;
 
-		uint32_t numParams;
-		Parameter minParam, maxParam;
-		Time startTime, endTime, dt;
+		uint32_t pCount;
+		Parameter pMin, pMax;
+		Time tStart, tInterval, dt, dtMax;
 		State initial;
 		
 		template<typename Condition,typename GetValue>
 		BifurcationDiagram<Parameter,Value> Generate( Family& family, Condition&& condition, GetValue&& getValue ) const {
 			State prevState, newState;
+			Time tEnd = tStart + tInterval;
+			Parameter dp = ( pMax - pMin ) / ( pCount - 1 );
 
-			Parameter dParam = ( maxParam - minParam ) / ( numParams - 1 );
+			BifurcationDiagram<Parameter,Value> bifurcationDiagram( pCount );
 
-			BifurcationDiagram<Parameter,Value> bifurcationDiagram( numParams );
-
-			Parameter parameter = minParam;
-			for(uint32_t i=0;i<numParams;++i) {
+			Parameter parameter = pMin;
+			for(uint32_t i=0;i<pCount;++i) {
 				RKDynamicalSystem<SolverFunctionFromModel<Model>> system( SolverFunctionFromModel<Model>( family(parameter) ) );
 				system.state = initial;
-				system.dtMax = 0.0005;
-				system.Advance(startTime);
+				system.dtMax = dtMax;
+				system.Advance(tStart);
 				prevState = system.state;
-				for(Time t=startTime;t<endTime;t+=dt) {
+				for(Time t=tStart;t<=tEnd;t+=dt) {
 					system.Advance(dt);
 					newState = system.state;
 					if( condition(prevState,newState) ) {
@@ -114,7 +114,7 @@ namespace DRDSP {
 					}
 					prevState = newState;
 				}
-				parameter += dParam;
+				parameter += dp;
 			}
 			return bifurcationDiagram;
 		}

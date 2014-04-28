@@ -1,14 +1,16 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/optimization/gradient_descent.h>
+#include <DRDSP/optimization/conjugate_gradient.h>
 #include <DRDSP/geometry/grassmannian.h>
 
 using namespace std;
 using namespace DRDSP;
 
 
-double SecantCostFunction::operator()( const MatrixXd &X ) const {
+double SecantCostFunction::operator()( const MatrixXd& X ) const {
 	
 	double sum = 0.0;
 
@@ -28,18 +30,18 @@ double SecantCostFunction::operator()( const MatrixXd &X ) const {
 	return sum;
 }
 
-double SecantCostFunctionMulti::operator()( const MatrixXd &X ) const {
+double SecantCostFunctionMulti::operator()( const MatrixXd& X ) const {
 	
 	double sum = 0.0;
 
-	for(uint16_t i=0;i<N;i++) {
+	for(uint32_t i=0;i<N;i++) {
 		sum += SecantCostFunction(secants[i])(X);
 	}
 
 	return sum / N;
 }
 
-MatrixXd SecantCostGradient::operator()( const MatrixXd &X ) const {
+MatrixXd SecantCostGradient::operator()( const MatrixXd& X ) const {
 
 	MatrixXd sum;
 	sum.setZero(X.rows(),X.cols());
@@ -69,37 +71,38 @@ MatrixXd SecantCostGradient::operator()( const MatrixXd &X ) const {
 	return Grassmannian::HorizontalComponent( X, -sum );
 }
 
-MatrixXd SecantCostGradientMulti::operator()( const MatrixXd &X ) const {
+MatrixXd SecantCostGradientMulti::operator()( const MatrixXd& X ) const {
 	
 	MatrixXd sum = SecantCostGradient(secants[0])(X);
 
-	for(uint16_t i=1;i<N;i++)
+	for(uint32_t i=1;i<N;i++)
 		sum += SecantCostGradient(secants[i])(X);
 
 	return sum / N;
 }
 
-ProjSecant::ProjSecant() : targetMinProjectedLength(0.5),
-						   targetDimension(2),
-						   maxIterations(100) {
-}
+ProjSecant::ProjSecant() :
+	targetMinProjectedLength(0.5),
+	targetDimension(2),
+	maxIterations(100)
+{}
 
 void ProjSecant::Find( const SecantsPreComputed& secants ) {
 	SecantCostFunction S(secants);
 	SecantCostGradient gradS(secants);
 
-	GradientDescent<Grassmannian::Geodesic,SecantCostFunction,SecantCostGradient> optimiziation( S, gradS );
+	ConjugateGradient<Grassmannian::Geodesic,SecantCostFunction,SecantCostGradient> optimiziation( S, gradS );
 
 	optimiziation.maxSteps = maxIterations;
 	optimiziation.lineSearch.alpha = 2.0;
 	optimiziation.Optimize( W );
 }
 
-void ProjSecant::Find( const SecantsPreComputed* secants, uint16_t N ) {
+void ProjSecant::Find( const SecantsPreComputed* secants, uint32_t N ) {
 	SecantCostFunctionMulti S(secants,N);
 	SecantCostGradientMulti gradS(secants,N);
 
-	GradientDescent<Grassmannian::Geodesic,SecantCostFunctionMulti,SecantCostGradientMulti> optimiziation( S, gradS );
+	ConjugateGradient<Grassmannian::Geodesic,SecantCostFunctionMulti,SecantCostGradientMulti> optimiziation( S, gradS );
 
 	optimiziation.maxSteps = maxIterations;
 	optimiziation.lineSearch.alpha = 2.0;
@@ -109,9 +112,9 @@ void ProjSecant::Find( const SecantsPreComputed* secants, uint16_t N ) {
 void ProjSecant::GetInitial( const DataSet& data ) {
 	uint32_t n = data.dimension;
 
-	double *maxVal = new double [n];
-	double *minVal = new double [n];
-	double *spread = new double [n];
+	vector<double> maxVal(n);
+	vector<double> minVal(n);
+	vector<double> spread(n);
 	double val, bigVal;
 	uint32_t bigAxis;
 
@@ -130,14 +133,12 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 	for(uint32_t k=0;k<n;k++)
 		spread[k] = maxVal[k] - minVal[k];
 
-	delete[] maxVal;
-	delete[] minVal;
 
 	W.setZero(n,targetDimension);
 
 	cout << "Initial Condition: ( ";
 
-	for(uint16_t i=0;i<targetDimension;i++) {
+	for(uint32_t i=0;i<targetDimension;i++) {
 		bigVal = 0.0;
 		bigAxis = 0;
 		for(uint32_t k=0;k<n;k++) {
@@ -153,15 +154,14 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 	}
 	cout << " )" << endl;
 
-	delete[] spread;
 }
 
 void ProjSecant::GetInitial( const DataSystem& data ) {
 	uint32_t n = data.dimension;
 
-	double *maxVal = new double [n];
-	double *minVal = new double [n];
-	double *spread = new double [n];
+	vector<double> maxVal(n);
+	vector<double> minVal(n);
+	vector<double> spread(n);
 	double val, bigVal;
 	uint32_t bigAxis;
 
@@ -181,14 +181,11 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 	for(uint32_t k=0;k<n;k++)
 		spread[k] = maxVal[k] - minVal[k];
 
-	delete[] maxVal;
-	delete[] minVal;
-
 	W.setZero(n,targetDimension);
 
 	cout << "Initial Condition: ( ";
 
-	for(uint16_t i=0;i<targetDimension;i++) {
+	for(uint32_t i=0;i<targetDimension;i++) {
 		bigVal = 0.0;
 		bigAxis = 0;
 		for(uint32_t k=0;k<n;k++) {
@@ -204,13 +201,12 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 	}
 	cout << " )" << endl;
 
-	delete[] spread;
 }
 
-void ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, uint16_t N ) const {
+void ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, uint32_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
 	size_t numSecants = 0;
-	for(uint16_t i=0;i<N;i++) {
+	for(uint32_t i=0;i<N;i++) {
 		for(size_t j=0;j<secants[i].count;j++) {
 			len = ( W.adjoint() * secants[i].GetSecant(j) ).norm();
 			if( len < xMin ) xMin = len;
