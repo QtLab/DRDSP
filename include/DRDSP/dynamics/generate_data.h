@@ -84,7 +84,7 @@ namespace DRDSP {
 			solver.Advance(tStart);
 
 			Time t = 0.0;
-			Time dtPrint = tInterval / print;
+			Time dtPrint = tInterval / (print-1);
 			
 			if( binaryOutput ) {
 				outBin.write((char*)&print,sizeof(uint32_t));
@@ -120,7 +120,7 @@ namespace DRDSP {
 			solver.dtMax = dtMax;
 			solver.Advance(tStart);
 
-			Time dtPrint = tInterval / print;
+			Time dtPrint = tInterval / (print-1);
 
 			DataSet data( print, family.dimension );
 
@@ -137,6 +137,19 @@ namespace DRDSP {
 			
 			for(uint16_t i=0;i<parameters.size();i++) {
 				data.parameters[i] = parameters[i];
+				data.dataSets[i] = GenerateDataSet( parameters[i] );
+			}
+
+			return data;
+		}
+
+		DataSystem GenerateDataSystem( const vector<Parameter>& parameters, const vector<double>& periods ) {
+					
+			DataSystem data( family.dimension, (uint32_t)parameters.size(), family.parameterDimension );
+			
+			for(uint16_t i=0;i<parameters.size();i++) {
+				data.parameters[i] = parameters[i];
+				tInterval = periods[i];
 				data.dataSets[i] = GenerateDataSet( parameters[i] );
 			}
 

@@ -77,6 +77,27 @@ namespace DRDSP {
 			}
 		}
 
+		void ReadText( const char* filename ) {
+			ifstream in(filename);
+			if( !in )  {
+				cout << "ModelReduced::ReadText : file not found " << filename << endl;
+				return;
+			}
+			uint32_t numRBFs;
+			
+			in >> dimension >> numRBFs >> parameterDimension;
+			
+			affine = AffineParameterMap(dimension,numRBFs,parameterDimension);
+			model = ModelRBF<F>( dimension, numRBFs );
+
+			for(uint32_t i=0;i<affine.coeffs.rows();i++)
+				for(uint32_t j=0;j<affine.coeffs.cols();j++)
+					in >> affine.coeffs(i,j);
+			for(uint32_t i=0;i<numRBFs;i++)
+				for(uint32_t j=0;j<dimension;j++)
+					in >> model.rbfs[i].centre(j);
+		}
+
 	};
 }
 

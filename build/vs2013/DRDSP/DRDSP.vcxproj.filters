@@ -179,5 +179,8 @@
     <ClInclude Include="..\..\..\include\DRDSP\data\data_system.h">
       <Filter>Header Files\data</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\monodromy.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -52,6 +52,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\monodromy.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\radial_basis.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h" />
