@@ -22,17 +22,17 @@ namespace DRDSP {
 
 	struct SecantCostFunctionMulti {
 		const SecantsPreComputed* secants;
-		uint32_t N;
+		size_t N;
 
-		SecantCostFunctionMulti( const SecantsPreComputed* secants, uint32_t N ) : secants(secants), N(N) {}
+		SecantCostFunctionMulti( const SecantsPreComputed* secants, size_t N ) : secants(secants), N(N) {}
 		double operator()( const MatrixXd& X ) const;
 	};
 
 	struct SecantCostGradientMulti {
 		const SecantsPreComputed* secants;
-		uint32_t N;
+		size_t N;
 
-		SecantCostGradientMulti( const SecantsPreComputed* secants, uint32_t N ) : secants(secants), N(N) {}
+		SecantCostGradientMulti( const SecantsPreComputed* secants, size_t N ) : secants(secants), N(N) {}
 		MatrixXd operator()( const MatrixXd& X ) const;
 	};
 
@@ -45,9 +45,11 @@ namespace DRDSP {
 		void GetInitial( const DataSet& data );
 		void GetInitial( const DataSystem& data );
 		void Find( const SecantsPreComputed& secants );
-		void Find( const SecantsPreComputed* secants, uint32_t N );
+		void Find( const SecantsPreComputed* secants, size_t N );
+		void Find( const vector<SecantsPreComputed>& secants );
 		void AnalyseSecants( const SecantsPreComputed& secants ) const;
-		void AnalyseSecants( const SecantsPreComputed* secants, uint32_t N ) const;
+		void AnalyseSecants( const SecantsPreComputed* secants, size_t N ) const;
+		void AnalyseSecants( const vector<SecantsPreComputed>& secants ) const;
 		void WriteCSV( const char* filename ) const;
 		void WriteBinary( const char* filename ) const;
 		bool ReadBinary( const char* filename );

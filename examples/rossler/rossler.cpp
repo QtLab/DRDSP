@@ -1,3 +1,4 @@
+#pragma warning( disable : 4530 )
 #include "rossler.h"
 
 Vector3d RosslerModel::operator()( const Vector3d& x ) const {
@@ -23,7 +24,6 @@ Matrix3d RosslerModel::Partials( const Vector3d& x ) const {
 
 	return res;
 }
-
 
 Matrix3d RosslerJacobian::operator()( const Vector3d& x ) const {
 	Matrix3d res;

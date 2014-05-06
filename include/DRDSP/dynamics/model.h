@@ -83,39 +83,6 @@ namespace DRDSP {
 	};
 
 	/*!
-	 * \brief A model without parameters whose state space is embedded into R^n,
-	 * and whose derivates are to be evaluated component-wise.
-	 */
-	template<typename Model,typename Embedding>
-	struct ModelEmbeddedCW {
-		Model model;         //!< The underlying model
-		Embedding embedding; //!< An embedding into R^n
-
-		ModelEmbeddedCW() = default;
-		ModelEmbeddedCW( const Model& m, const Embedding& e ) : model(m), embedding(e) {}
-
-		double operator()( const VectorXd& state, uint32_t i ) const {
-			double result = 0.0;
-
-			for(uint32_t j=0;j<embedding.oDim;++j) {
-				result += embedding.Derivative(state,i,j) * model(state,j);
-			}
-			return result;
-		}
-
-		double Partials( const VectorXd& state, uint32_t i, uint32_t j ) const {
-			double result = 0.0;
-
-			for(uint32_t k=0;k<embedding.oDim;++k) {
-				result += embedding.Derivative2(state,i,k,j) * model(state,k);
-				result += embedding.Derivative(state,i,k) * model.Partials(state,k,j);
-			}
-			return result;
-		}
-	
-	};
-
-	/*!
 	 * \brief A model with parameters whose state space is embedded into R^n.
 	 */
 	template<typename Family,typename Embedding>
@@ -132,27 +99,6 @@ namespace DRDSP {
 
 		ModelEmbedded<Model,Embedding> operator()( const Parameter& parameter ) const {
 			return ModelEmbedded<Model,Embedding>( family(parameter), embedding );
-		}
-
-	};
-
-	/*!
-	 * \brief A model with parameters whose state space is embedded into R^n.
-	 */
-	template<typename Family,typename Embedding>
-	struct FamilyEmbeddedCW {
-		typedef typename Family::Model Model;
-		typedef typename Family::Parameter Parameter;
-		Family family;       //!< The underlying family
-		Embedding embedding; //!< An embedding into R^n
-
-		FamilyEmbeddedCW() = default;
-		explicit FamilyEmbeddedCW( const Family& f ) : family(f) {}
-		explicit FamilyEmbeddedCW( const Embedding& e ) : embedding(e) {}
-		FamilyEmbeddedCW( const Family& f, const Embedding& e ) : family(f), embedding(e) {}
-
-		ModelEmbeddedCW<Model,Embedding> operator()( const Parameter& parameter ) const {
-			return ModelEmbeddedCW<Model,Embedding>( family(parameter), embedding );
 		}
 
 	};

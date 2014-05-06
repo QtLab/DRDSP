@@ -1,7 +1,7 @@
-#ifndef INCLUDED_DYNAMICS_MODEL_REDUCED_PRODUCER
-#define INCLUDED_DYNAMICS_MODEL_REDUCED_PRODUCER
+#ifndef INCLUDED_DYNAMICS_RBF_FAMILY_PRODUCER
+#define INCLUDED_DYNAMICS_RBF_FAMILY_PRODUCER
 #include "model.h"
-#include "model_reduced.h"
+#include "rbf_family.h"
 #include "reduced_data_system.h"
 #include <cmath>
 #include <iostream>
@@ -14,18 +14,18 @@ using namespace std;
 
 namespace DRDSP {
 	template<typename F = ThinPlateSpline>
-	struct ModelReducedProducer {
+	struct RBFFamilyProducer {
 		double fitWeight[2], boxScale;
 		uint32_t numRBFs;
 
-		ModelReducedProducer() : ModelReducedProducer(30) {}
+		RBFFamilyProducer() : RBFFamilyProducer(30) {}
 
-		ModelReducedProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {
+		RBFFamilyProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {
 			fitWeight[0] = 0.5;
 			fitWeight[1] = 0.5;
 		}
 
-		void ComputeMatrices( const ModelRBF<F>& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
+		void ComputeMatrices( const RBFModel<F>& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
 
 			MatrixXd y1, y2, A1, A2, Lambda, X, Y;
 			uint32_t m = data.dimension + model.numRBFs;
@@ -62,7 +62,7 @@ namespace DRDSP {
 	
 		}
 
-		ModelReduced<F> ComputeModelReduced( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const {
+		RBFFamily<F> ComputeRBFFamily( const ReducedDataSystem& data, uint8_t parameterDimension, const VectorXd* parameters ) const {
 
 			uint32_t dimension = data.reducedData[0].dimension;
 
@@ -74,11 +74,11 @@ namespace DRDSP {
 			return reduced;
 		}
 
-		double ComputeTotalCost( ModelReduced<F>& family, const ReducedDataSystem& data, const VectorXd* parameters ) const {
+		double ComputeTotalCost( RBFFamily<F>& family, const ReducedDataSystem& data, const VectorXd* parameters ) const {
 			double T = 0.0;
 			for(uint32_t j=0;j<data.numParameters;j++) {
 				double S1 = 0.0, S2 = 0.0;
-				ModelRBF<F> modelRBF = family( parameters[j] );
+				RBFModel<F> modelRBF = family( parameters[j] );
 				for(uint32_t i=0;i<data.reducedData[j].count;i++) {
 					S1 += ( modelRBF(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
 					S2 += ( modelRBF.Partials(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
@@ -90,7 +90,7 @@ namespace DRDSP {
 			return T / data.numParameters;
 		}
 
-		void Fit( ModelReduced<F>& reduced, const ReducedDataSystem& data, uint32_t parameterDimension, const VectorXd* parameters ) const {
+		void Fit( RBFFamily<F>& reduced, const ReducedDataSystem& data, uint32_t parameterDimension, const VectorXd* parameters ) const {
 			MatrixXd A, B, Atemp, Btemp, z;
 
 			uint32_t dimension = data.reducedData[0].dimension;
@@ -121,11 +121,11 @@ namespace DRDSP {
 			}
 		}
 
-		ModelReduced<F> BruteForce( const ReducedDataSystem& data, uint32_t parameterDimension, const VectorXd* parameters, uint32_t numIterations ) const {
+		RBFFamily<F> BruteForce( const ReducedDataSystem& data, uint32_t parameterDimension, const VectorXd* parameters, uint32_t numIterations ) const {
 			double Sft = 0.0, Sf = -1.0;
 
-			ModelReduced<F> reduced( data.reducedData[0].dimension, parameterDimension, numRBFs);
-			ModelReduced<F> best;
+			RBFFamily<F> reduced( data.reducedData[0].dimension, parameterDimension, numRBFs);
+			RBFFamily<F> best;
 			AABB box = data.ComputeBoundingBox();
 			box.Scale(boxScale);
 			vector<double> costs(numIterations);

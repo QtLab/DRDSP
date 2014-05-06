@@ -22,7 +22,14 @@ namespace DRDSP {
 
 	template<typename Model>
 	EigenSolver<MatrixXd>::EigenvalueType ComputeFloquetMultipliers( Model&& model, const vector<VectorXd>& samples, double dt ) {
-		return EigenSolver<MatrixXd>( ComputeMonodromy( std::forward<Model>(model), samples, dt ), false ).eigenvalues();
+		return EigenSolver<MatrixXd>(
+			ComputeMonodromy(
+				std::forward<Model>( model ),
+				samples,
+				dt
+			),
+			false
+		).eigenvalues();
 	}
 
 }

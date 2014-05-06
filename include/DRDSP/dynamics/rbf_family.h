@@ -1,12 +1,12 @@
-#ifndef INCLUDED_MODEL_REDUCED
-#define INCLUDED_MODEL_REDUCED
+#ifndef INCLUDED_DYNAMICS_RBF_FAMILY
+#define INCLUDED_DYNAMICS_RBF_FAMILY
 #include <cmath>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include "../types.h"
 #include "affineParameterMap.h"
-#include "model_rbf.h"
+#include "rbf_model.h"
 #include "reduced_data_system.h"
 #include <Eigen/LU>
 
@@ -14,22 +14,22 @@ using namespace std;
 
 namespace DRDSP {
 	template<typename F = ThinPlateSpline>
-	struct ModelReduced : Family<ModelRBF<F>,VectorXd> {
+	struct RBFFamily : Family<RBFModel<F>,VectorXd> {
 		AffineParameterMap affine;
-		ModelRBF<F> model;
+		RBFModel<F> model;
 
-		ModelReduced() = default;
+		RBFFamily() = default;
 
-		ModelReduced( uint32_t dim, uint32_t paramDim, uint32_t nRBFs ) : 
-			Family<ModelRBF<F>,VectorXd>( dim, paramDim ),
+		RBFFamily( uint32_t dim, uint32_t paramDim, uint32_t nRBFs ) : 
+			Family<RBFModel<F>,VectorXd>( dim, paramDim ),
 			model(dim,nRBFs),
 			affine(dimension,nRBFs,paramDim)
 		{}
 
-		ModelRBF<F> operator()( const VectorXd& parameter ) const {
+		RBFModel<F> operator()( const VectorXd& parameter ) const {
 			MatrixXd z = affine.Evaluate(parameter);
 
-			ModelRBF<F> r = model;
+			RBFModel<F> r = model;
 
 			r.linear = z.block(0,0,dimension,dimension);
 
@@ -88,7 +88,7 @@ namespace DRDSP {
 			in >> dimension >> numRBFs >> parameterDimension;
 			
 			affine = AffineParameterMap(dimension,numRBFs,parameterDimension);
-			model = ModelRBF<F>( dimension, numRBFs );
+			model = RBFModel<F>( dimension, numRBFs );
 
 			for(uint32_t i=0;i<affine.coeffs.rows();i++)
 				for(uint32_t j=0;j<affine.coeffs.cols();j++)

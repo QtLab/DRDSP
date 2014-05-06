@@ -1,29 +1,27 @@
 #include <iostream>
+#include <memory>
 #include <DRDSP/data/data_set.h>
 #include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
-#include <DRDSP/dynamics/model_reduced_producer.h>
-#include <DRDSP/dynamics/generate_data.h>
+#include <DRDSP/dynamics/rbf_family_producer.h>
+#include <DRDSP/dynamics/data_generator.h>
 #include "brusselator.h"
 
 using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(1000), maxPoints(0), targetDimension(2), numRBFs(30) {}
 	uint32_t numIterations, maxPoints, targetDimension, numRBFs;
+
+	Options() : numIterations(1000), maxPoints(0), targetDimension(2), numRBFs(30) {}
+	
+	Options( int argc, char** argv ) : Options() {
+		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
+		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 ) maxPoints = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 ) numIterations = (uint32_t)atoi(argv[4]);
+	}
 };
-
-Options GetOptions( int argc, char** argv ) {
-	Options options;
-
-	if( argc >= 2 ) options.targetDimension = (uint32_t)atoi(argv[1]);
-	if( argc >= 3 ) options.numRBFs = (uint32_t)atoi(argv[2]);
-	if( argc >= 4 ) options.maxPoints = (uint32_t)atoi(argv[3]);
-	if( argc >= 5 ) options.numIterations = (uint32_t)atoi(argv[4]);
-
-	return options;
-}
 
 void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
@@ -51,35 +49,35 @@ typedef Multiquadratic RadialType;
 
 int main( int argc, char** argv ) {
 
-	Options options = GetOptions(argc,argv);
+	Options options(argc,argv);
 
 	// Dynamics
 	BrusselatorFamily brusselator;
 
-	auto parameters = ParameterList( 2.5, 2.6, 5 );
+	auto parameters = ParameterList( 2.1, 2.9, 9 );
 
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<BrusselatorFamily> dataGenerator;
 	dataGenerator.initial.setRandom(brusselator.dimension);
-	dataGenerator.tStart = 30;
-	dataGenerator.tInterval = 6.8;
-	dataGenerator.print = 100;
+	dataGenerator.tStart = 50;
+	dataGenerator.tInterval = 7.2;
+	dataGenerator.print = 200;
 	dataGenerator.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
 
 	// Pre-compute secants
-	SecantsPreComputed* secants = new SecantsPreComputed [data.numParameters];
-	SecantsPreComputed* newSecants = new SecantsPreComputed [data.numParameters];
-	for(uint16_t i=0;i<data.numParameters;i++)
+	vector<SecantsPreComputed> secants( data.numParameters );
+	for(uint16_t i=0;i<data.numParameters;++i)
 		secants[i].ComputeFromData( data.dataSets[i] );
 
 	// Secant culling
-	for(uint16_t i=0;i<data.numParameters;i++)
+	vector<SecantsPreComputed> newSecants( data.numParameters );
+	for(uint16_t i=0;i<data.numParameters;++i)
 		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
 
-	delete[] secants;
+	secants = vector<SecantsPreComputed>();
 
 	// Find a projection
 	ProjSecant projSecant;
@@ -87,42 +85,38 @@ int main( int argc, char** argv ) {
 	projSecant.targetMinProjectedLength = 0.7;
 
 	// Compute initial condition
-	projSecant.GetInitial(data);
+	projSecant.GetInitial( data );
 
 	// Optimize over Grassmannian
-	projSecant.Find(newSecants,data.numParameters);
+	projSecant.Find( newSecants );
 
 	// Print some statistics
-	projSecant.AnalyseSecants(newSecants,data.numParameters);
+	projSecant.AnalyseSecants( newSecants );
 
-	delete[] newSecants;
+	newSecants = vector<SecantsPreComputed>();
 
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteCSV("output/projection.csv");
-
 	
 	// Compute projected data
 	cout << endl << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( brusselator, data, projSecant.W );
-
 	reducedData.WritePointsCSV("output/p","-points.csv");
 	reducedData.WriteVectorsCSV("output/p","-vectors.csv");
 
-
 	// Obtain the reduced model
 	cout << endl << "Computing Reduced Model..." << endl;
-	ModelReducedProducer<RadialType> producer(options.numRBFs);
+	RBFFamilyProducer<RadialType> producer(options.numRBFs);
 	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
 
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
 
 	reducedModel.WriteCSV("output/reduced.csv");
 	
-
 	// Generate the data
 	cout << "Simulating the reduced model..." << endl;
-	DataGenerator<ModelReduced<RadialType>> rdataGenerator(reducedModel);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );

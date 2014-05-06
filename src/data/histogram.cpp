@@ -53,7 +53,7 @@ void Histogram::WriteCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) return;
 	uint32_t total = TotalFrequency();
-	for(const auto& bin : bins) {
+	for( const auto& bin : bins ) {
 		double freqDensity = bin.FrequencyDensity();
 		out << bin.Centre() << ",";
 		out << bin.frequency << ",";
@@ -76,7 +76,7 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 		
 	Histogram H(nBins);
 	
-	auto minmax = minmax_element(data,data+N);
+	auto minmax = std::minmax_element(data,data+N);
 	
 	double minVal = *minmax.first;
 	double maxVal = *minmax.second;

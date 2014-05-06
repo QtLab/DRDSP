@@ -2,8 +2,8 @@
 #include <DRDSP/data/data_set.h>
 #include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
-#include <DRDSP/dynamics/model_reduced_producer.h>
-#include <DRDSP/dynamics/generate_data.h>
+#include <DRDSP/dynamics/rbf_family_producer.h>
+#include <DRDSP/dynamics/data_generator.h>
 
 #include "pendulum.h"
 
@@ -11,20 +11,17 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(100) {}
 	uint32_t numIterations, maxPoints, targetDimension, numRBFs;
+
+	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(100) {}
+	
+	Options( int argc, char** argv ) : Options() {
+		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
+		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 ) maxPoints = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 ) numIterations = (uint32_t)atoi(argv[4]);
+	}
 };
-
-Options GetOptions( int argc, char** argv ) {
-	Options options;
-
-	if( argc >= 2 ) options.targetDimension = (uint32_t)atoi(argv[1]);
-	if( argc >= 3 ) options.numRBFs = (uint32_t)atoi(argv[2]);
-	if( argc >= 4 ) options.maxPoints = (uint32_t)atoi(argv[3]);
-	if( argc >= 5 ) options.numIterations = (uint32_t)atoi(argv[4]);
-
-	return options;
-}
 
 void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
@@ -52,7 +49,7 @@ typedef Multiquadratic RadialType;
 
 int main( int argc, char** argv ) {
 
-	Options options = GetOptions(argc,argv);
+	Options options(argc,argv);
 
 	// The pendulum example
 	FamilyEmbedded<PendulumFamily,FlatEmbedding> pendulum;
@@ -78,18 +75,18 @@ int main( int argc, char** argv ) {
 	
 	// Pre-compute secants
 	cout << "Computing secants..." << endl;
-	SecantsPreComputed* secants = new SecantsPreComputed [dataEmbedded.numParameters];
-	
+	vector<SecantsPreComputed> secants( dataEmbedded.numParameters );
+
 	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
 		secants[i].ComputeFromData( dataEmbedded.dataSets[i] );
 
 	// Secant culling
 	cout << "Culling secants..." << endl;
-	SecantsPreComputed* newSecants = new SecantsPreComputed [dataEmbedded.numParameters];
+	vector<SecantsPreComputed> newSecants( dataEmbedded.numParameters );
 	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
 		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
 
-	delete[] secants;
+	secants = vector<SecantsPreComputed>();
 
 	// Find a projection
 	cout << "Finding projection..." << endl;
@@ -98,15 +95,15 @@ int main( int argc, char** argv ) {
 	projSecant.targetMinProjectedLength = 0.7;
 
 	// Compute initial condition
-	projSecant.GetInitial(dataEmbedded);
+	projSecant.GetInitial( dataEmbedded );
 
 	// Optimize over Grassmannian
-	projSecant.Find( newSecants, dataEmbedded.numParameters );
+	projSecant.Find( newSecants );
 
 	// Print some statistics
-	projSecant.AnalyseSecants( newSecants, dataEmbedded.numParameters );
+	projSecant.AnalyseSecants( newSecants );
 
-	delete[] newSecants;
+	newSecants = vector<SecantsPreComputed>();
 
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteCSV("output/projection.csv");
@@ -123,7 +120,7 @@ int main( int argc, char** argv ) {
 	
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
-	ModelReducedProducer<RadialType> producer(options.numRBFs);
+	RBFFamilyProducer<RadialType> producer(options.numRBFs);
 	auto reducedModel = producer.BruteForce( reducedData,
 	                                         data.parameterDimension,
 	                                         data.parameters.data(),
@@ -137,7 +134,7 @@ int main( int argc, char** argv ) {
 
 	// Generate the data
 	cout << "Simulating the reduced model..." << endl;
-	DataGenerator<ModelReduced<RadialType>> rdataGenerator(reducedModel);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );

@@ -3,8 +3,8 @@
 #include <DRDSP/data/data_set.h>
 #include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
-#include <DRDSP/dynamics/model_reduced_producer.h>
-#include <DRDSP/dynamics/generate_data.h>
+#include <DRDSP/dynamics/rbf_family_producer.h>
+#include <DRDSP/dynamics/data_generator.h>
 #include <DRDSP/dynamics/bifurcation.h>
 #include <DRDSP/dynamics/rk.h>
 #include <DRDSP/dynamics/monodromy.h>
@@ -13,20 +13,33 @@
 using namespace std;
 using namespace DRDSP;
 
+typedef PolyharmonicSpline3 RadialType;
+
 struct Options {
-	Options() : numIterations(150), maxPoints(0), targetDimension(3), numRBFs(40) {}
 	uint32_t numIterations, maxPoints, targetDimension, numRBFs;
+
+	Options() : numIterations(150), maxPoints(0), targetDimension(3), numRBFs(40) {}
+	
+	Options( int argc, char** argv ) : Options() {
+		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
+		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 ) maxPoints = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 ) numIterations = (uint32_t)atoi(argv[4]);
+	}
 };
 
-Options GetOptions( int argc, char** argv ) {
-	Options options;
+void ComputeReduced( const Options& );
+void SimulateReduced();
+void OriginalFloquet();
+void ReducedFloquet();
 
-	if( argc >= 2 ) options.targetDimension = (uint32_t)atoi(argv[1]);
-	if( argc >= 3 ) options.numRBFs = (uint32_t)atoi(argv[2]);
-	if( argc >= 4 ) options.maxPoints = (uint32_t)atoi(argv[3]);
-	if( argc >= 5 ) options.numIterations = (uint32_t)atoi(argv[4]);
+int main( int argc, char** argv ) {
+	Options options(argc,argv);
 
-	return options;
+	ComputeReduced( options );
+	//SimulateReduced();
+	//OriginalFloquet();
+	//ReducedFloquet();
 }
 
 void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
@@ -51,12 +64,10 @@ void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
 }
 
-typedef PolyharmonicSpline3 RadialType;
 
 
-int main( int argc, char** argv ) {
 
-	Options options = GetOptions(argc,argv);
+void ReducedFloquet() {
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
 
@@ -67,12 +78,12 @@ int main( int argc, char** argv ) {
 		100.0
 	};
 
-	ModelReduced<RadialType> reducedModel;
+	RBFFamily<RadialType> reducedModel;
 	reducedModel.ReadText("reduced.txt");
 
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator<ModelReduced<RadialType>> dataGenerator(reducedModel);
+	DataGenerator<RBFFamily<RadialType>> dataGenerator(reducedModel);
 	dataGenerator.initial = Vector3d(7.0,0.0,0.5);
 	dataGenerator.tStart = 1000;
 	dataGenerator.tInterval = 100;
@@ -93,14 +104,11 @@ int main( int argc, char** argv ) {
 		out << endl;
 	}
 
-
 	system("PAUSE");
 }
 
-/*
-int main( int argc, char** argv ) {
 
-	Options options = GetOptions(argc,argv);
+void OriginalFloquet() {
 
 	// The example
 	RosslerFamily rossler;
@@ -140,12 +148,10 @@ int main( int argc, char** argv ) {
 
 	system("PAUSE");
 }
-*/
 
-/*
-int main( int argc, char** argv ) {
+void ComputeReduced( const Options& options ) {
 
-	Options options = GetOptions(argc,argv);
+	
 
 	// The example
 	RosslerFamily rossler;
@@ -174,7 +180,7 @@ int main( int argc, char** argv ) {
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	
-	ModelReducedProducer<RadialType> producer(options.numRBFs);
+	RBFFamilyProducer<RadialType> producer(options.numRBFs);
 	producer.boxScale = 1.6;
 	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
 	
@@ -184,7 +190,7 @@ int main( int argc, char** argv ) {
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<ModelReduced<RadialType>> rdataGenerator(reducedModel);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 
@@ -211,7 +217,7 @@ int main( int argc, char** argv ) {
 		).WriteBitmap("output/bifurcation-orig.bmp",720);
 	}
 	{
-		BifurcationDiagramGenerator<ModelReduced<RadialType>> bifurcationGenerator;
+		BifurcationDiagramGenerator<RBFFamily<RadialType>> bifurcationGenerator;
 		bifurcationGenerator.tStart = 500.0;
 		bifurcationGenerator.tInterval = 500.0;
 		bifurcationGenerator.dt = 0.001;
@@ -229,10 +235,7 @@ int main( int argc, char** argv ) {
 	system("PAUSE");
 }
 
-*/
-
-/*
-int main( int argc, char** argv ) {
+void SimulateReduced() {
 
 	// The example
 	RosslerFamily rossler;
@@ -255,13 +258,11 @@ int main( int argc, char** argv ) {
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3) );
-	reducedData.WritePointsCSV( "output/p", "-points.csv" );
-	reducedData.WriteVectorsCSV( "output/p", "-vectors.csv" );
 
-	ModelReduced<RadialType> reducedModel;
+	RBFFamily<RadialType> reducedModel;
 	reducedModel.ReadText("full-reducedModel.txt");
 
-	ModelReducedProducer<RadialType> producer( reducedModel.model.numRBFs );
+	RBFFamilyProducer<RadialType> producer( reducedModel.model.numRBFs );
 
 	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
 
@@ -273,7 +274,7 @@ int main( int argc, char** argv ) {
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<ModelReduced<RadialType>> rdataGenerator(reducedModel);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 
@@ -282,7 +283,7 @@ int main( int argc, char** argv ) {
 
 	Compare( reducedData, rdata );
 
-	BifurcationDiagramGenerator<ModelReduced<RadialType>> bifurcationGenerator;
+	BifurcationDiagramGenerator<RBFFamily<RadialType>> bifurcationGenerator;
 	bifurcationGenerator.tStart = 500.0;
 	bifurcationGenerator.tInterval = 500.0;
 	bifurcationGenerator.dt = 0.001;
@@ -297,5 +298,3 @@ int main( int argc, char** argv ) {
 	).WriteBitmap("output/bifurcation-red.bmp",720);
 
 }
-*/
-

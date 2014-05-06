@@ -29,22 +29,6 @@ namespace DRDSP {
 			}
 		}
 
-		template<typename Family>
-		void ComputeDataCW( Family&& family, const DataSystem& data, const MatrixXd& W ) {
-			Create( data.numParameters );
-			for(uint32_t i=0;i<numParameters;i++) {
-				reducedData[i].ComputeDataCW( family(data.parameters[i]), data.dataSets[i], W );
-			}
-		}
-
-		template<typename Family>
-		void ComputeDataEmbeddedCW( Family&& family, const DataSystem& data, const MatrixXd& W ) {
-			Create( data.numParameters );
-			for(uint32_t i=0;i<numParameters;i++) {
-				reducedData[i].ComputeDataEmbeddedCW( family(data.parameters[i]), data.dataSets[i], W );
-			}
-		}
-
 		AABB ComputeBoundingBox() const;
 		void WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const;
 		void WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;

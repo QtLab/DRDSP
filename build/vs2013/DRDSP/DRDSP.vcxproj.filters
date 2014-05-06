@@ -92,9 +92,6 @@
     <ClInclude Include="..\..\..\include\DRDSP\data\secants.h">
       <Filter>Header Files\data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h">
       <Filter>Header Files\geometry</Filter>
     </ClInclude>
@@ -122,9 +119,6 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\radial_basis.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
@@ -134,26 +128,17 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf_producer.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h">
       <Filter>Header Files\optimization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h">
       <Filter>Header Files\optimization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h">
       <Filter>Header Files\data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h">
-      <Filter>Header Files\dynamics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h">
       <Filter>Header Files\dynamics</Filter>
@@ -180,6 +165,21 @@
       <Filter>Header Files\data</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\monodromy.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\data_generator.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_family.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_family_producer.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model_producer.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
   </ItemGroup>

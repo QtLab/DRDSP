@@ -46,12 +46,12 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\bifurcation.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\generate_data.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf_producer.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\data_generator.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model_producer.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_rbf.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\model_reduced_producer.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_family.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_family_producer.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\monodromy.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\radial_basis.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h" />

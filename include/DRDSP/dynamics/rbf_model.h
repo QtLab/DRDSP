@@ -1,5 +1,5 @@
-#ifndef INCLUDED_DYNAMICS_MODEL_RBF
-#define INCLUDED_DYNAMICS_MODEL_RBF
+#ifndef INCLUDED_DYNAMICS_RBF_MODEL
+#define INCLUDED_DYNAMICS_RBF_MODEL
 #include "../types.h"
 #include "model.h"
 #include "radial_basis.h"
@@ -11,7 +11,7 @@ using namespace std;
 namespace DRDSP {
 
 	template<typename F = ThinPlateSpline>
-	struct ModelRBF : Model<VectorXd> {
+	struct RBFModel : Model<VectorXd> {
 		MatrixXd linear;
 		vector<VectorXd> weights;
 		vector<RadialFunction<F>> rbfs;
@@ -19,9 +19,9 @@ namespace DRDSP {
 		mt19937 mt;
 		uniform_real_distribution<double> dist;
 
-		ModelRBF() : numRBFs(0) {}
+		RBFModel() : numRBFs(0) {}
 		
-		ModelRBF( uint32_t dim, uint32_t nRBFs ) :
+		RBFModel( uint32_t dim, uint32_t nRBFs ) :
 			Model<VectorXd>(dim),
 			numRBFs(nRBFs),
 			weights(nRBFs),

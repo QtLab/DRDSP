@@ -1,6 +1,8 @@
 #ifndef INCLUDED_MISC
 #define INCLUDED_MISC
 #include "types.h"
+#include <numeric>
+#include <algorithm>
 
 namespace DRDSP {
 
@@ -19,18 +21,35 @@ namespace DRDSP {
 	}
 
 	template<typename T>
-	bool IsEven( T x ) {
+	inline bool IsEven( T x ) {
 		return (x % 2) == 0;
 	}
 
 	template<typename T>
-	bool IsOdd( T x ) {
+	inline bool IsOdd( T x ) {
 		return (x % 2) != 0;
 	}
 
 	template<typename T>
-	T Delta( uint32_t i, uint32_t j ) {
+	inline T Delta( uint32_t i, uint32_t j ) {
 		return (i==j)?T(1):T(0);
+	}
+
+	template<typename C,typename T>
+	inline T accumulate( const C& container, T&& value ) {
+		return std::accumulate(
+			std::cbegin( container ),
+			std::cend( container ),
+			std::forward<T>(value)
+		);
+	}
+
+	template<typename C>
+	inline auto minmax_element( const C& container ) -> decltype(std::minmax_element(std::cbegin(container),std::cend(container))) {
+		return std::minmax_element(
+			std::cbegin( container ),
+			std::cend( container )
+		);
 	}
 
 }

@@ -1,6 +1,6 @@
-#ifndef INCLUDED_DYNAMICS_MODEL_RBF_PRODUCER
-#define INCLUDED_DYNAMICS_MODEL_RBF_PRODUCER
-#include "model_rbf.h"
+#ifndef INCLUDED_DYNAMICS_RBF_MODEL_PRODUCER
+#define INCLUDED_DYNAMICS_RBF_MODEL_PRODUCER
+#include "rbf_model.h"
 #include "reduced_data.h"
 #include <cmath>
 #include <iostream>
@@ -11,31 +11,34 @@
 namespace DRDSP {
 
 	template<typename F>
-	struct ModelRBFProducer {
+	struct RBFModelProducer {
 		double fitWeight[2];
 		uint32_t numRBFs;
 
-		ModelRBFProducer() : ModelRBFProducer(30) {}
+		RBFModelProducer() : RBFModelProducer(30) {}
 
-		ModelRBFProducer( uint32_t nRBFs ) : numRBFs(nRBFs) {
+		RBFModelProducer( uint32_t nRBFs ) : numRBFs(nRBFs) {
 			fitWeight[0] = 0.5;
 			fitWeight[1] = 0.5;
 		}
 
-		double ComputeTotalCost( ModelRBF& model, const ReducedData& data ) const {
-			double S1 = 0.0, S2 = 0.0;
-			for(uint32_t i=0;i<data.count;i++) {
+		double ComputeTotalCost( const RBFModel<F>& model, const ReducedData& data ) const {
+			double S1 = 0.0;
+			for(uint32_t i=0;i<data.count;++i) {
 				S1 += ( model(data.points[i]) - data.vectors[i] ).squaredNorm();
-				S2 += ( model.Partials(data.points[i]) - data.derivatives[i] ).squaredNorm();
 			}
 			S1 /= data.count;
+			double S2 = 0.0;
+			for(uint32_t i=0;i<data.count;++i) {
+				S2 += ( model.Partials(data.points[i]) - data.derivatives[i] ).squaredNorm();
+			}
 			S2 /= data.count;
 			return (fitWeight[0]/data.scales[0]) * S1 + (fitWeight[1]/data.scales[1]) * S2;
 		}
 
-		ModelRBF<F> ComputeModelRBF( const ReducedData& data ) {
+		RBFModel<F> ComputeModelRBF( const ReducedData& data ) {
 
-			ModelRBF<F> model(data.dimension,numRBFs);
+			RBFModel<F> model(data.dimension,numRBFs);
 			model.SetCentresRandom( data.ComputeBoundingBox() );
 
 			Fit(model,data);
@@ -43,7 +46,7 @@ namespace DRDSP {
 			return model;
 		}
 
-		void Fit( ModelRBF<F>& model, const ReducedData& data ) const {
+		void Fit( RBFModel<F>& model, const ReducedData& data ) const {
 			MatrixXd y1, y2, A1, A2, z1, z2, z, P, PI;
 			uint32_t m = data.dimension + model.numRBFs;
 			VectorXd temp;
@@ -53,17 +56,17 @@ namespace DRDSP {
 			y2.setZero(data.dimension,data.count*data.dimension);
 			A2.setIdentity(m,data.count*data.dimension);
 
-			for(uint32_t j=0;j<data.count;j++) {
-				for(uint32_t i=0;i<data.dimension;i++) {
+			for(uint32_t j=0;j<data.count;++j) {
+				for(uint32_t i=0;i<data.dimension;++i) {
 					A1(i,j) = data.points[j](i);
 					y1(i,j) = data.vectors[j](i);
-					for(uint32_t k=0;k<data.dimension;k++)
+					for(uint32_t k=0;k<data.dimension;++k)
 						y2(i,data.dimension*j+k) = data.derivatives[j](i,k);
 				}
-				for(uint32_t i=0;i<model.numRBFs;i++) {
+				for(uint32_t i=0;i<model.numRBFs;++i) {
 					A1(i+data.dimension,j) = model.rbfs[i](data.points[j]);
 					temp = model.rbfs[i].Derivative(data.points[j]);
-					for(uint32_t k=0;k<data.dimension;k++)
+					for(uint32_t k=0;k<data.dimension;++k)
 						A2(i+data.dimension,data.dimension*j+k) = temp(k);
 				}
 			}
@@ -78,18 +81,18 @@ namespace DRDSP {
 			z = z1 * (fitWeight[0]/data.scales[0]) + z2 * (fitWeight[1]/data.scales[1]);
 
 			model.linear = z.block(0,0,data.dimension,data.dimension);
-			for(uint32_t a=0;a<model.numRBFs;a++)
+			for(uint32_t a=0;a<model.numRBFs;++a)
 				model.weights[a] = z.col(data.dimension+a);
 		}
 
-		ModelRBF<F> BruteForce( const ReducedData& data, uint32_t numIterations ) const {
+		RBFModel<F> BruteForce( const ReducedData& data, uint32_t numIterations ) const {
 			double Sft = 0.0, Sf = -1.0;
 
-			ModelRBF<F> model( data.dimension, numRBFs ), best;
+			RBFModel<F> model( data.dimension, numRBFs ), best;
 			AABB box = data.ComputeBoundingBox();
 			vector<double> costs(numIterations);
 
-			for(uint32_t i=0;i<numIterations;i++) {
+			for(uint32_t i=0;i<numIterations;++i) {
 				model.SetCentresRandom( box );
 				Fit(model,data);
 				Sft = ComputeTotalCost(model,data);
@@ -101,8 +104,7 @@ namespace DRDSP {
 				}
 			}
 
-			HistogramGenerator histogramGenerator(100);
-			histogramGenerator.Generate(costs,numIterations).WriteCSV("output/costs.csv");
+			HistogramGenerator(100).Generate(costs).WriteCSV("output/costs.csv");
 
 			return best;
 		}
