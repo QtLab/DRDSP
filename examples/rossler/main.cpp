@@ -60,9 +60,6 @@ void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
 }
 
-
-
-
 void ReducedFloquet() {
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
@@ -86,7 +83,7 @@ void ReducedFloquet() {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 10000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, 4 );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;
@@ -127,7 +124,7 @@ void OriginalFloquet() {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 10000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, 4 );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;
@@ -161,13 +158,13 @@ void ComputeReduced( const Options& options ) {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 1000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, 4 );
 	data.WriteDataSetsCSV("output/orig",".csv");
 
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3) );
+	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), 4 );
 	reducedData.WritePointsCSV( "output/p", "-points.csv" );
 	reducedData.WriteVectorsCSV( "output/p", "-vectors.csv" );
 
@@ -188,7 +185,7 @@ void ComputeReduced( const Options& options ) {
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, 4 );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
@@ -245,13 +242,13 @@ void SimulateReduced() {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 1000;
 
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, 4 );
 	data.WriteDataSetsCSV("output/orig",".csv");
 
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3) );
+	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), 4 );
 
 	RBFFamily<RadialType> reducedModel;
 	reducedModel.ReadText("reduced.txt");
@@ -272,7 +269,7 @@ void SimulateReduced() {
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, 4 );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );

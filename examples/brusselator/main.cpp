@@ -61,16 +61,16 @@ int main( int argc, char** argv ) {
 	dataGenerator.print = 200;
 	dataGenerator.dtMax = 0.001;
 
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, 4 );
 
 	// Pre-compute secants
 	vector<SecantsPreComputed> secants( data.numParameters );
-	for(uint16_t i=0;i<data.numParameters;++i)
+	for(uint32_t i=0;i<data.numParameters;++i)
 		secants[i].ComputeFromData( data.dataSets[i] );
 
 	// Secant culling
 	vector<SecantsPreComputed> newSecants( data.numParameters );
-	for(uint16_t i=0;i<data.numParameters;++i)
+	for(uint32_t i=0;i<data.numParameters;++i)
 		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
 
 	secants = vector<SecantsPreComputed>();
@@ -97,7 +97,7 @@ int main( int argc, char** argv ) {
 	// Compute projected data
 	cout << endl << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( brusselator, data, projSecant.W );
+	reducedData.ComputeData( brusselator, data, projSecant.W, 4 );
 	reducedData.WritePointsCSV("output/p","-points.csv");
 	reducedData.WriteVectorsCSV("output/p","-vectors.csv");
 
@@ -115,7 +115,7 @@ int main( int argc, char** argv ) {
 	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, 4 );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );

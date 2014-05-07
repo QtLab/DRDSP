@@ -61,7 +61,7 @@ int main( int argc, char** argv ) {
 	dataGenerator.print = 100;
 	dataGenerator.dtMax = 0.001;
 
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, 4 );
 			
 	// Embed the data
 	cout << "Embedding data..." << endl;
@@ -71,13 +71,13 @@ int main( int argc, char** argv ) {
 	cout << "Computing secants..." << endl;
 	vector<SecantsPreComputed> secants( dataEmbedded.numParameters );
 
-	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
+	for(uint32_t i=0;i<dataEmbedded.numParameters;++i)
 		secants[i].ComputeFromData( dataEmbedded.dataSets[i] );
 
 	// Secant culling
 	cout << "Culling secants..." << endl;
 	vector<SecantsPreComputed> newSecants( dataEmbedded.numParameters );
-	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
+	for(uint32_t i=0;i<dataEmbedded.numParameters;++i)
 		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
 
 	secants = vector<SecantsPreComputed>();
@@ -116,7 +116,7 @@ int main( int argc, char** argv ) {
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeDataEmbedded( kuramoto, data, projSecant.W );
+	reducedData.ComputeDataEmbedded( kuramoto, data, projSecant.W, 4 );
 	reducedData.WritePointsCSV("output/p","-points.csv");
 	reducedData.WriteVectorsCSV("output/p","-points.csv");
 
@@ -141,7 +141,7 @@ int main( int argc, char** argv ) {
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, 4 );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
