@@ -11,7 +11,7 @@ AffineParameterMap::AffineParameterMap( uint32_t dim, uint32_t numRBFs, uint32_t
 	coeffs.setZero(dimension,R);
 }
 
-MatrixXd AffineParameterMap::Evaluate( const VectorXd &parameter ) const {
+MatrixXd AffineParameterMap::operator()( const VectorXd &parameter ) const {
 	return coeffs * GetLambda(parameter);
 }
 

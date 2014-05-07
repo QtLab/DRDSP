@@ -1,7 +1,8 @@
-#ifndef INCLUDED_DYNAMICS_GENERATE_DATA
-#define INCLUDED_DYNAMICS_GENERATE_DATA
+#ifndef INCLUDED_DYNAMICS_DATA_GENERATOR
+#define INCLUDED_DYNAMICS_DATA_GENERATOR
 #include <iostream>
 #include <fstream>
+#include <future>
 #include "../types.h"
 #include "../data/data_system.h"
 #include "../dynamics/reduced_data_system.h"
@@ -109,10 +110,18 @@ namespace DRDSP {
 		}
 
 		DataSet GenerateDataSet( const Parameter& param ) const {
-			return GenerateDataSet(param,initial);
+			return GenerateDataSet(param,initial,tInterval);
 		}
-		
+
+		DataSet GenerateDataSet( const Parameter& param, Time period ) const {
+			return GenerateDataSet(param,initial,period);
+		}
+
 		DataSet GenerateDataSet( const Parameter& param, const State& init ) const {
+			return GenerateDataSet(param,init,tInterval);
+		}
+
+		DataSet GenerateDataSet( const Parameter& param, const State& init, Time period ) const {
 			cout << "Parameter " << param << endl;
 
 			Solver solver( SolverFunctionFromModel<Model>( family(param) ) );
@@ -120,11 +129,11 @@ namespace DRDSP {
 			solver.dtMax = dtMax;
 			solver.Advance(tStart);
 
-			Time dtPrint = tInterval / (print-1);
+			Time dtPrint = period / (print-1);
 
 			DataSet data( print, family.dimension );
 
-			for(uint32_t i=0;i<print;i++) {
+			for(uint32_t i=0;i<print;++i) {
 				data[i] = solver.state;
 				solver.Advance(dtPrint);
 			}
@@ -135,9 +144,36 @@ namespace DRDSP {
 					
 			DataSystem data( family.dimension, (uint32_t)parameters.size(), family.parameterDimension );
 			
-			for(uint16_t i=0;i<parameters.size();i++) {
-				data.parameters[i] = parameters[i];
+			data.parameters = parameters;
+
+			for(uint32_t i=0;i<parameters.size();i++) {
 				data.dataSets[i] = GenerateDataSet( parameters[i] );
+			}
+			return data;
+		}
+
+		DataSystem GenerateDataSystem( const vector<Parameter>& parameters, uint32_t numThreads ) const {
+			
+			uint32_t numParams = (uint32_t)parameters.size();
+			
+			DataSystem data( family.dimension, numParams, family.parameterDimension );
+			
+			data.parameters = parameters;
+			vector<future<void>> futures(numThreads);
+			
+			for(uint32_t i=0;i<numParams;i+=numThreads) {
+				uint32_t N = min( numParams - i, numThreads );
+				for(uint32_t j=0;j<N;++j) {
+					futures[j] = async( launch::async,
+						[this]( DataSet& dataSet, const Parameter& parameter ) {
+							dataSet = GenerateDataSet( parameter );
+						},
+						ref(data.dataSets[i+j]), cref(parameters[i+j])
+					);
+				}
+				for(uint32_t j=0;j<N;++j) {
+					futures[j].wait();
+				}
 			}
 
 			return data;
@@ -147,10 +183,36 @@ namespace DRDSP {
 					
 			DataSystem data( family.dimension, (uint32_t)parameters.size(), family.parameterDimension );
 			
+			data.parameters = parameters;
+			
 			for(uint16_t i=0;i<parameters.size();i++) {
-				data.parameters[i] = parameters[i];
-				tInterval = periods[i];
-				data.dataSets[i] = GenerateDataSet( parameters[i] );
+				data.dataSets[i] = GenerateDataSet( parameters[i], periods[i] );
+			}
+			return data;
+		}
+
+		DataSystem GenerateDataSystem( const vector<Parameter>& parameters, const vector<double>& periods, uint32_t numThreads ) {
+
+			uint32_t numParams = (uint32_t)parameters.size();
+			
+			DataSystem data( family.dimension, numParams, family.parameterDimension );
+			
+			data.parameters = parameters;
+			vector<future<void>> futures(numThreads);
+			
+			for(uint32_t i=0;i<numParams;i+=numThreads) {
+				uint32_t N = min( numParams - i, numThreads );
+				for(uint32_t j=0;j<N;++j) {
+					futures[j] = async( launch::async,
+						[this]( DataSet& dataSet, const Parameter& parameter, double period ) {
+							dataSet = GenerateDataSet( parameter, period );
+						},
+						ref(data.dataSets[i+j]), cref(parameters[i+j]), periods[i+j]
+					);
+				}
+				for(uint32_t j=0;j<N;++j) {
+					futures[j].wait();
+				}
 			}
 
 			return data;
@@ -162,8 +224,34 @@ namespace DRDSP {
 			
 			data.parameters = parameters;
 			
-			for(uint16_t i=0;i<parameters.size();i++) {
+			for(uint32_t i=0;i<data.numParameters;++i) {
 				data.dataSets[i] = GenerateDataSet( parameters[i], rdata.reducedData[i].points[0] );
+			}
+			return data;
+		}
+
+		DataSystem GenerateUsingInitials( const vector<Parameter>& parameters, const ReducedDataSystem& rdata, uint32_t numThreads ) const {
+			
+			uint32_t numParams = (uint32_t)parameters.size();
+			
+			DataSystem data( family.dimension, numParams, family.parameterDimension );
+			
+			data.parameters = parameters;
+			vector<future<void>> futures(numThreads);
+			
+			for(uint32_t i=0;i<numParams;i+=numThreads) {
+				uint32_t N = min( numParams - i, numThreads );
+				for(uint32_t j=0;j<N;++j) {
+					futures[j] = async( launch::async,
+						[this]( DataSet& dataSet, const Parameter& parameter, const VectorXd& init ) {
+							dataSet = GenerateDataSet( parameter, init );
+						},
+						ref(data.dataSets[i+j]), cref(parameters[i+j]), cref(rdata.reducedData[i+j].points[0])
+					);
+				}
+				for(uint32_t j=0;j<N;++j) {
+					futures[j].wait();
+				}
 			}
 
 			return data;

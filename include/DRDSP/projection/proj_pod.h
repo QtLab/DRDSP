@@ -2,7 +2,7 @@
 #define INCLUDED_PROJ_POD
 #include <DRDSP/types.h>
 #include <DRDSP/data/data_system.h>
-#include <Eigen/Dense>
+#include <Eigen/SVD>
 
 namespace DRDSP {
 
@@ -11,6 +11,7 @@ namespace DRDSP {
 		uint32_t targetDimension;
 
 		ProjPOD();
+		explicit ProjPOD( uint32_t targetDimension );
 		void Find( const DataSet& data );
 		void Find( const DataSystem& data );
 		void Write( const char* filename ) const;

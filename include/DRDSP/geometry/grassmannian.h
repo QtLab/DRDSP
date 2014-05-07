@@ -1,7 +1,7 @@
 #ifndef INCLUDED_GEOMETRY_GRASSMANNIAN
 #define INCLUDED_GEOMETRY_GRASSMANNIAN
-#include <Eigen/Dense>
 #pragma warning( disable : 4714 ) // function '...' marked as __forceinline not inlined
+#include <Eigen/Dense>
 #include "metric.h"
 
 using namespace Eigen;

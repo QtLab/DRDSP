@@ -13,6 +13,7 @@ namespace DRDSP {
 		typedef typename Model::State State;
 		Model model;
 		explicit SolverFunctionFromModel( const Model& model ) : model(model) {}
+		
 		template<typename Time>
 		State operator()( const State& x, Time ) const {
 			return model(x);
@@ -65,18 +66,13 @@ namespace DRDSP {
 		}
 
 		MatrixXd Partials( const State& state ) const {
-
 			MatrixXd result;
 			result.setZero(embedding.eDim,embedding.oDim);
-
 			VectorXd vector = model(state);
-
 			for(uint32_t i=0;i<embedding.eDim;++i) {
 				result.row(i) += embedding.Derivative2(state,i) * vector;
 			}
-
 			result += embedding.Derivative(state) * model.Partials(state);
-
 			return result;
 		}
 

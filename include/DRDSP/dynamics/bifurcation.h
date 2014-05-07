@@ -78,12 +78,13 @@ namespace DRDSP {
 
 	};
 
-	template<typename Family>
+	template<typename Family,typename Solver = RKDynamicalSystem<SolverFunctionFromModel<typename Family::Model>>>
 	struct BifurcationDiagramGenerator {
 		typedef double Time;
 		typedef typename Family::Model Model;
 		typedef typename Model::State State;
 		typedef typename Family::Parameter Parameter;
+		typedef Solver Solver;
 		typedef double Value;
 
 		uint32_t pCount;
@@ -101,7 +102,7 @@ namespace DRDSP {
 
 			Parameter parameter = pMin;
 			for(uint32_t i=0;i<pCount;++i) {
-				RKDynamicalSystem<SolverFunctionFromModel<Model>> system( SolverFunctionFromModel<Model>( family(parameter) ) );
+				Solver system( SolverFunctionFromModel<Model>( family(parameter) ) );
 				system.state = initial;
 				system.dtMax = dtMax;
 				system.Advance(tStart);

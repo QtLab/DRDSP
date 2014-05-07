@@ -1,13 +1,10 @@
 #ifndef INCLUDED_DYNAMICS_RBF_FAMILY
 #define INCLUDED_DYNAMICS_RBF_FAMILY
-#include <cmath>
 #include <iostream>
-#include <sstream>
 #include <fstream>
 #include "../types.h"
 #include "affineParameterMap.h"
 #include "rbf_model.h"
-#include "reduced_data_system.h"
 #include <Eigen/LU>
 
 using namespace std;
@@ -27,7 +24,7 @@ namespace DRDSP {
 		{}
 
 		RBFModel<F> operator()( const VectorXd& parameter ) const {
-			MatrixXd z = affine.Evaluate(parameter);
+			MatrixXd z = affine(parameter);
 
 			RBFModel<F> r = model;
 
@@ -40,7 +37,7 @@ namespace DRDSP {
 		}
 
 		VectorXd VectorField( const VectorXd& x, const VectorXd &parameter ) {
-			MatrixXd z = affine.Evaluate(parameter);
+			MatrixXd z = affine(parameter);
 
 			model.linear = z.block(0,0,dimension,dimension);
 
@@ -51,7 +48,7 @@ namespace DRDSP {
 		}
 
 		MatrixXd Partials( const VectorXd& x, const VectorXd& parameter ) {
-			MatrixXd z = affine.Evaluate(parameter);
+			MatrixXd z = affine(parameter);
 
 			model.linear = z.block(0,0,dimension,dimension);
 
@@ -80,14 +77,14 @@ namespace DRDSP {
 		void ReadText( const char* filename ) {
 			ifstream in(filename);
 			if( !in )  {
-				cout << "ModelReduced::ReadText : file not found " << filename << endl;
+				cout << "RBFFamily::ReadText : file not found " << filename << endl;
 				return;
 			}
 			uint32_t numRBFs;
 			
 			in >> dimension >> numRBFs >> parameterDimension;
 			
-			affine = AffineParameterMap(dimension,numRBFs,parameterDimension);
+			affine = AffineParameterMap( dimension, numRBFs, parameterDimension );
 			model = RBFModel<F>( dimension, numRBFs );
 
 			for(uint32_t i=0;i<affine.coeffs.rows();i++)

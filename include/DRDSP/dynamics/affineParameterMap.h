@@ -16,7 +16,7 @@ namespace DRDSP {
 	
 		AffineParameterMap() = default;
 		AffineParameterMap( uint32_t dim, uint32_t numRBFs, uint32_t paramDim );
-		MatrixXd Evaluate( const VectorXd &parameter ) const;          //!< Evaluate the parameter map
+		MatrixXd operator()( const VectorXd &parameter ) const;        //!< Evaluate the parameter map
 		MatrixXd GetLambda( const VectorXd &parameter ) const;         //!< Get the matrix version of the original parameter
 	};
 

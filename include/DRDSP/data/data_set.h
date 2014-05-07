@@ -11,8 +11,8 @@ namespace DRDSP {
 	 * \brief A set of data points
 	 */
 	struct DataSet {
-		vector<VectorXd> points;   //!< Array of data vectors
 		uint32_t dimension;        //!< Dimension of the space
+		vector<VectorXd> points;   //!< Array of data vectors
 		
 		DataSet() : dimension(0) {}
 		DataSet( size_t numPoints, uint32_t dim );

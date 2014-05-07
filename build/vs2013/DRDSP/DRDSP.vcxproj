@@ -42,6 +42,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\data\data_typed.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\histogram.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\secants.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dual.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\bifurcation.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h" />
@@ -56,10 +57,12 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\radial_basis.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h" />
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk4.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\eigen_dual.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\grassmannian.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\metric.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\trig.h" />
     <ClInclude Include="..\..\..\include\DRDSP\misc.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h" />
@@ -136,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -153,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -172,7 +175,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -191,7 +194,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\include</AdditionalIncludeDirectories>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

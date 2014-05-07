@@ -11,7 +11,7 @@ namespace DRDSP {
 		VectorXd bMin, //!< minimum bounds
 			     bMax; //!< maximum bounds
 
-		AABB( uint32_t dim );
+		explicit AABB( uint32_t dim );
 		double Volume() const;
 		void Scale( double factor );
 		void Translate( const VectorXd& delta );

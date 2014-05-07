@@ -184,12 +184,18 @@ MatrixXd DoughnutEmbedding::Derivative2( const VectorXd& x, uint32_t mu ) const 
 // Model Functions
 
 VectorXd Pendulum::operator()( const VectorXd& state ) const {
+	double sinphi = sin(state(0));
+	double cosphi = cos(state(0));
+	double sintheta = sin(state(1));
+	double costheta = cos(state(1));
+	double cospsi = cos(state(2));
+	
 	VectorXd res(dimension);
-	res(0) = phiDot(state);
-	res(1) = thetaDot(state);
-	res(2) = psiDot();
-	res(3) = vpDot(state);
-	res(4) = vtDot(state);
+	res(0) = state[3];
+	res(1) = state[4];
+	res(2) = Omega;
+	res(3) = vpDot( sinphi, cosphi, costheta, cospsi, state[3], state[4] );
+	res(4) = vtDot( sinphi, cosphi, sintheta, cospsi, state[3], state[4] );
 	return res;
 }
 
@@ -204,23 +210,23 @@ MatrixXd Pendulum::Partials( const VectorXd& state ) const {
 	double cosphi = cos(state(0));
 	double sintheta = sin(state(1));
 	double costheta = cos(state(1));
+	double sinpsi = sin(state(2));
+	double cospsi = cos(state(2));
 
-	double tf1 = f1(state(0));
-	double tf1d = f1d(state(0));
-	double tf2 = f2(state(0));
-	double tf2d = f2d(state(0));
-	double tf3 = f3(state(2));
-	double tf3d = f3d(state(2));
-	double tg1 = g1(state(0));
-	double tg1d = g1d(state(0));
-	double tf4 = f4(state(0));
-	double tf4d = f4d(state(0));
+	double tf1 = f1(sinphi,cosphi);
+	double tf1d = f1d(sinphi,cosphi);
+	double tf2 = f2(cosphi);
+	double tf2d = -sinphi;
+	double tf3 = f3(cospsi);
+	double tf3d = f3d(sinpsi);
+	double tf4 = f4(cosphi);
+	double tf4d = -tf1;
 
-	res(3,0) = -tg1d*state(4)*state(4)-tf3*cosphi*costheta;
+	res(3,0) = -0.5*tf1d*state(4)*state(4)-tf3*cosphi*costheta;
 	res(3,1) = tf3*sinphi*sintheta;
 	res(3,2) = -tf3d*sinphi*costheta;
 	res(3,3) = -delta2;
-	res(3,4) = -2.0*tg1*state(4);
+	res(3,4) = -tf1*state(4);
 
 	res(4,0) = ( tf1d*state(3)*state(4) - tf2d*tf3*sintheta )/tf4 - (( tf1*state(3)*state(4)-delta1*state(4)-tf2*tf3*sintheta )*tf4d )/(tf4*tf4);
 	res(4,1) = -tf2*tf3*costheta / tf4;
@@ -231,70 +237,36 @@ MatrixXd Pendulum::Partials( const VectorXd& state ) const {
 	return res;
 }
 
-double Pendulum::f1( double p ) const {
-	double s = sin(p);
-	double c = cos(p);
-	return (3.0*length+2.0*c)*s;
+double Pendulum::f1( double sinphi, double cosphi ) const {
+	return (3.0*length+2.0*cosphi)*sinphi;
 }
 
-double Pendulum::f2( double p ) const {
-	return (mass+2.0)*length+cos(p);
+double Pendulum::f2( double cosphi ) const {
+	return (mass+2.0)*length+cosphi;
 }
 
-double Pendulum::f3( double p ) const {
-	return 1.0 + A*Omega*Omega*cos(p);
+double Pendulum::f3( double cospsi ) const {
+	return 1.0 + A*Omega*Omega*cospsi;
 }
 
-double Pendulum::f4( double p ) const {
-	double c = cos(p);
-	return (mass+3.0)*length*length + 3.0*length*c + c*c;
+double Pendulum::f4( double cosphi ) const {
+	return (mass+3.0)*length*length + 3.0*length*cosphi + cosphi*cosphi;
 }
 
-inline double Pendulum::g1( double p ) const {
-	return f1(p)*0.5;
+double Pendulum::vpDot( double sinphi, double cosphi, double costheta, double cospsi, double vp, double vt ) const {
+	return -0.5*f1(sinphi,cosphi)*vt*vt - delta2*vp - f3(cospsi)*sinphi*costheta;
 }
 
-inline double Pendulum::phiDot( const VectorXd& x ) const {
-	return x(3);
+double Pendulum::vtDot( double sinphi, double cosphi, double sintheta, double cospsi, double vp, double vt ) const {
+	return (f1(sinphi,cosphi)*vt*vp - delta1*vt - f2(cosphi)*f3(cospsi)*sintheta )/f4(cosphi);
 }
 
-inline double Pendulum::thetaDot( const VectorXd& x ) const {
-	return x(4);
+double Pendulum::f1d( double sinphi, double cosphi ) const {
+	return (3.0*length+2.0*cosphi)*cosphi - 2.0*sinphi*sinphi;
 }
 
-inline double Pendulum::psiDot() const {
-	return Omega;
+double Pendulum::f3d( double sinpsi ) const {
+	return -A*Omega*Omega*sinpsi;
 }
-
-double Pendulum::vpDot( const VectorXd& x ) const {
-	return -g1(x[0])*x[4]*x[4] - delta2*x[3] - f3(x[2])*sin(x[0])*cos(x[1]);
-}
-
-double Pendulum::vtDot( const VectorXd& x ) const {
-	return (f1(x[0])*x[4]*x[3] - delta1*x[4] - f2(x[0])*f3(x[2])*sin(x[1]) )/f4(x[0]);
-}
-
-double Pendulum::f1d( double p ) const {
-	double s = sin(p);
-	double c = cos(p);
-	return (3.0*length+2.0*c)*c - 2.0*s*s;
-}
-
-inline double Pendulum::f2d( double p ) const {
-	return -sin(p);
-}
-
-double Pendulum::f3d( double p ) const {
-	return -A*Omega*Omega*sin(p);
-}
-
-inline double Pendulum::f4d( double p ) const {
-	return -f1(p);
-}
-
-inline double Pendulum::g1d( double p ) const {
-	return f1d(p)*0.5;
-}
-
 
 

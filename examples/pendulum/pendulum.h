@@ -2,7 +2,6 @@
 #define INCLUDED_PENDULUM
 #include <DRDSP/types.h>
 #include <DRDSP/dynamics/model.h>
-#include <DRDSP/dynamics/dynamicalSystem.h>
 
 using namespace DRDSP;
 
@@ -24,27 +23,16 @@ protected:
 	// parameters
 	double Omega, length, mass, A, delta1, delta2;
 
-	double f1( double p ) const;
-	double f2( double p ) const;
-	double f3( double p ) const;
-	double f4( double p ) const;
-	double g1( double p ) const;
+	double f1( double sinphi, double cosphi ) const;
+	double f2( double cosphi ) const;
+	double f3( double cospsi ) const;
+	double f4( double cosphi ) const;
 
-	double phiDot( const VectorXd& x ) const;
-	double thetaDot( const VectorXd& x ) const;
-	double psiDot() const;
-	double vpDot( const VectorXd& x ) const;
-	double vtDot( const VectorXd& x ) const;
+	double vpDot( double sinphi, double cosphi, double costheta, double cospsi, double vp, double vt ) const;
+	double vtDot( double sinphi, double cosphi, double sintheta, double cospsi, double vp, double vt ) const;
 
-	VectorXd G( const VectorXd& theta ) const;
-	MatrixXd DG( const VectorXd& x ) const;
-
-	double f1d( double p ) const;
-	double f2d( double p ) const;
-	double f3d( double p ) const;
-	double f4d( double p ) const;
-	double g1d( double p ) const;
-
+	double f1d( double sinphi, double cosphi ) const;
+	double f3d( double sinpsi ) const;
 };
 
 struct PendulumFamily : Family<Pendulum> {

@@ -140,9 +140,6 @@
     <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h">
       <Filter>Header Files\data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\dynamicalSystem.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
@@ -181,6 +178,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model_producer.h">
       <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk4.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\trig.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\eigen_dual.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,10 +1,6 @@
-#include <iostream>
-#include <DRDSP/data/data_set.h>
-#include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
-
 #include "goodfellow.h"
 
 using namespace std;
@@ -116,9 +112,9 @@ int main( int argc, char** argv ) {
 	cout << "Computing Reduced Model..." << endl;
 	
 	RBFFamilyProducer<RadialType> producer(options.numRBFs);
-	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
+	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 	
 	reducedModel.WriteCSV("output/reduced.csv");
 

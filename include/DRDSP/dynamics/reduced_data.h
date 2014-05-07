@@ -28,7 +28,7 @@ namespace DRDSP {
 		void WriteVectorsCSV( const char* filename ) const;
 
 		template<typename Model>
-		void ComputeData( Model&& original, const DataSet& data, const MatrixXd& W ) {
+		ReducedData& ComputeData( Model&& original, const DataSet& data, const MatrixXd& W ) {
 			Create( (uint32_t)W.cols(), data.points.size() );
 
 			for(uint32_t i=0;i<count;++i) {
@@ -44,10 +44,11 @@ namespace DRDSP {
 			}
 			scales[0] = ComputeVectorScale();
 			scales[1] = ComputeDerivativeScale();
+			return *this;
 		}
 
 		template<typename Model,typename Embedded>
-		void ComputeDataEmbedded( const ModelEmbedded<Model,Embedded>& original, const DataSet& data, const MatrixXd& W ) {
+		ReducedData& ComputeDataEmbedded( const ModelEmbedded<Model,Embedded>& original, const DataSet& data, const MatrixXd& W ) {
 			Create( (uint32_t)W.cols(), data.points.size() );
 
 			static double stabilityFactor = 1.0;
@@ -74,6 +75,7 @@ namespace DRDSP {
 			}
 			scales[0] = ComputeVectorScale();
 			scales[1] = ComputeDerivativeScale();
+			return *this;
 		}
 
 	};

@@ -8,11 +8,11 @@ namespace DRDSP {
 	 * \brief A family of data sets with corresponding parameter values
 	 */
 	struct DataSystem {
-		vector<DataSet> dataSets;     //!< Array of data sets
-		vector<VectorXd> parameters; //!< Array of parameter values
 		uint32_t dimension,           //!< Dimension of the space in which the data points live
 		         numParameters,       //!< Number of parameters/data sets in the family
 		         parameterDimension;  //!< Dimension of the parameter space
+		vector<DataSet> dataSets;     //!< Array of data sets
+		vector<VectorXd> parameters;  //!< Array of parameter values
 
 		DataSystem();
 

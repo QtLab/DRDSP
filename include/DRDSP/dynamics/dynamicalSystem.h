@@ -1,7 +1,7 @@
 #ifndef INCLUDED_DYNAMICS_DYNAMICALSYSTEM
 #define INCLUDED_DYNAMICS_DYNAMICALSYSTEM
 #include <stdint.h>
-#include "rk.h"
+#include "rk4.h"
 
 namespace DRDSP {
 
@@ -59,8 +59,8 @@ namespace DRDSP {
 	};
 
 	template<typename F,typename WrapFunction = IdentityWrapFunction>
-	struct RKDynamicalSystem : ContinuousDynamicalSystem<RK<F>,WrapFunction> {
-		explicit RKDynamicalSystem( const F& f ) : ContinuousDynamicalSystem<RK<F>,WrapFunction>(RK<F>(f)) {}
+	struct RKDynamicalSystem : ContinuousDynamicalSystem<RK4<F>,WrapFunction> {
+		explicit RKDynamicalSystem( const F& f ) : ContinuousDynamicalSystem<RK4<F>,WrapFunction>(RK4<F>(f)) {}
 	};
 
 }

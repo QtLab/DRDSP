@@ -1,10 +1,6 @@
-#include <iostream>
-#include <DRDSP/data/data_set.h>
-#include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
-
 #include "pendulum.h"
 
 using namespace std;
@@ -13,7 +9,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t numIterations, maxPoints, targetDimension, numRBFs;
 
-	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(100) {}
+	Options() : numIterations(1000), maxPoints(0), targetDimension(4), numRBFs(40) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -54,19 +50,19 @@ int main( int argc, char** argv ) {
 	// The pendulum example
 	FamilyEmbedded<PendulumFamily,FlatEmbedding> pendulum;
 
-	auto parameters = ParameterList( 1.8, 1.82, 5 );
+	auto parameters = ParameterList( 1.42, 1.43, 11 );
 
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<PendulumFamily,PendulumSolver> dataGenerator;
 	dataGenerator.initial.setZero(pendulum.family.dimension);
 	dataGenerator.initial(1) = -0.422;
-	dataGenerator.tStart = 1000;
-	dataGenerator.tInterval = 7;
-	dataGenerator.print = 100;
+	dataGenerator.tStart = 1500;
+	dataGenerator.tInterval = 12;
+	dataGenerator.print = 200;
 	dataGenerator.dtMax = 0.001;
 
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, 4 );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
 	// Embed the data
@@ -77,13 +73,13 @@ int main( int argc, char** argv ) {
 	cout << "Computing secants..." << endl;
 	vector<SecantsPreComputed> secants( dataEmbedded.numParameters );
 
-	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
+	for(uint32_t i=0;i<dataEmbedded.numParameters;i++)
 		secants[i].ComputeFromData( dataEmbedded.dataSets[i] );
 
 	// Secant culling
 	cout << "Culling secants..." << endl;
 	vector<SecantsPreComputed> newSecants( dataEmbedded.numParameters );
-	for(uint16_t i=0;i<dataEmbedded.numParameters;i++)
+	for(uint32_t i=0;i<dataEmbedded.numParameters;i++)
 		newSecants[i] = secants[i].CullSecantsDegrees( 10.0 );
 
 	secants = vector<SecantsPreComputed>();
@@ -108,26 +104,24 @@ int main( int argc, char** argv ) {
 	projSecant.WriteBinary("output/projection.bin");
 	projSecant.WriteCSV("output/projection.csv");
 
-
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeDataEmbedded( pendulum, data, projSecant.W );
+	reducedData.ComputeDataEmbedded( pendulum, data, projSecant.W, 4 );
 
 	reducedData.WritePointsCSV("output/p","-points.csv");
 	reducedData.WriteVectorsCSV("output/p","-vectors.csv");
 
-	
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	RBFFamilyProducer<RadialType> producer(options.numRBFs);
 	auto reducedModel = producer.BruteForce( reducedData,
 	                                         data.parameterDimension,
-	                                         data.parameters.data(),
+	                                         data.parameters,
 	                                         options.numIterations );
 
 	cout << "Total Cost = "
-		 << producer.ComputeTotalCost( reducedModel, reducedData, data.parameters.data() )
+		 << producer.ComputeTotalCost( reducedModel, reducedData, data.parameters )
 		 << endl;
 
 	reducedModel.WriteCSV("output/reduced.csv");
@@ -137,7 +131,8 @@ int main( int argc, char** argv ) {
 	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData );
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, 4 );
+	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 

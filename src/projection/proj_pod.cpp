@@ -4,9 +4,9 @@
 using namespace std;
 using namespace DRDSP;
 
-ProjPOD::ProjPOD() : targetDimension(2) {
-	
-}
+ProjPOD::ProjPOD() : targetDimension(2) {}
+
+ProjPOD::ProjPOD( uint32_t targetDimension ) : targetDimension(targetDimension) {}
 
 void ProjPOD::Find( const DataSet& data ) {
 

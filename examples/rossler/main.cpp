@@ -1,12 +1,8 @@
 #pragma warning( disable : 4530 )
-#include <iostream>
-#include <DRDSP/data/data_set.h>
-#include <DRDSP/data/secants.h>
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
 #include <DRDSP/dynamics/bifurcation.h>
-#include <DRDSP/dynamics/rk.h>
 #include <DRDSP/dynamics/monodromy.h>
 #include "rossler.h"
 
@@ -36,8 +32,8 @@ void ReducedFloquet();
 int main( int argc, char** argv ) {
 	Options options(argc,argv);
 
-	ComputeReduced( options );
-	//SimulateReduced();
+	//ComputeReduced( options );
+	SimulateReduced();
 	//OriginalFloquet();
 	//ReducedFloquet();
 }
@@ -151,8 +147,6 @@ void OriginalFloquet() {
 
 void ComputeReduced( const Options& options ) {
 
-	
-
 	// The example
 	RosslerFamily rossler;
 
@@ -182,9 +176,9 @@ void ComputeReduced( const Options& options ) {
 	
 	RBFFamilyProducer<RadialType> producer(options.numRBFs);
 	producer.boxScale = 1.6;
-	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters.data(),options.numIterations);
+	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 	
 	reducedModel.WriteCSV("output/reduced.csv");
 
@@ -260,15 +254,15 @@ void SimulateReduced() {
 	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3) );
 
 	RBFFamily<RadialType> reducedModel;
-	reducedModel.ReadText("full-reducedModel.txt");
+	reducedModel.ReadText("reduced.txt");
 
 	RBFFamilyProducer<RadialType> producer( reducedModel.model.numRBFs );
 
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 
-	producer.Fit( reducedModel, reducedData, rossler.parameterDimension, data.parameters.data() );
+	producer.Fit( reducedModel, reducedData, rossler.parameterDimension, data.parameters );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters.data()) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 	
 	reducedModel.WriteCSV("output/reduced.csv");
 
