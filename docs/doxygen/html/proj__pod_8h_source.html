@@ -90,8 +90,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef INCLUDED_PROJ_POD</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INCLUDED_PROJ_POD</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;DRDSP/types.h&gt;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;DRDSP/data/data_set.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;Eigen/Dense&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;DRDSP/data/data_system.h&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;Eigen/SVD&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
@@ -100,25 +100,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        uint32_t targetDimension;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_proj_p_o_d.html">ProjPOD</a>();</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keywordtype">void</span> Find( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data );</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">void</span> Find( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; data );</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">void</span> Write( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        MatrixXd dataMatrix;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        JacobiSVD&lt;MatrixXd&gt; svd;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    };</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></div><div class="ttdoc">A family of data sets with corresponding parameter values. </div><div class="ttdef"><b>Definition:</b> data_set.h:44</div></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_p_o_d.html">ProjPOD</a>( uint32_t targetDimension );</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">void</span> Find( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data );</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">void</span> Find( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; data );</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> Write( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        MatrixXd dataMatrix;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        JacobiSVD&lt;MatrixXd&gt; svd;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    };</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></div><div class="ttdoc">A family of data sets with corresponding parameter values. </div><div class="ttdef"><b>Definition:</b> data_system.h:10</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdoc">A set of data points. </div><div class="ttdef"><b>Definition:</b> data_set.h:13</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_proj_p_o_d_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_proj_p_o_d.html">DRDSP::ProjPOD</a></div><div class="ttdef"><b>Definition:</b> proj_pod.h:9</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 23 2013 00:20:13 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 8 2014 11:34:12 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

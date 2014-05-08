@@ -116,14 +116,14 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a1c1383e3f4eca99473eba63d7a50a024">SetData</a> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;dataSet)</td></tr>
 <tr class="memdesc:a1c1383e3f4eca99473eba63d7a50a024"><td class="mdescLeft">&#160;</td><td class="mdescRight">Associate this object with the given data set. <br/></td></tr>
 <tr class="separator:a1c1383e3f4eca99473eba63d7a50a024"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b94a05552fbbf08335ff1d4270ef13a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7b94a05552fbbf08335ff1d4270ef13a"></a>
-VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a7b94a05552fbbf08335ff1d4270ef13a">GetSecant</a> (uint32_t k) const </td></tr>
-<tr class="memdesc:a7b94a05552fbbf08335ff1d4270ef13a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute and return the kth secant. <br/></td></tr>
-<tr class="separator:a7b94a05552fbbf08335ff1d4270ef13a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a208053eededd620c2e32633aeb1ccb65"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a208053eededd620c2e32633aeb1ccb65"></a>
-VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a208053eededd620c2e32633aeb1ccb65">GetSecantNoNormalize</a> (uint32_t k) const </td></tr>
-<tr class="memdesc:a208053eededd620c2e32633aeb1ccb65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute and return the kth secant without normalizing. <br/></td></tr>
-<tr class="separator:a208053eededd620c2e32633aeb1ccb65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82585a040aebaa63bc5b1b40a79f99eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82585a040aebaa63bc5b1b40a79f99eb"></a>
+VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a82585a040aebaa63bc5b1b40a79f99eb">GetSecant</a> (size_t k) const </td></tr>
+<tr class="memdesc:a82585a040aebaa63bc5b1b40a79f99eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute and return the kth secant. <br/></td></tr>
+<tr class="separator:a82585a040aebaa63bc5b1b40a79f99eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17468fc67c5ae42306af7fecee7b7dc9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a17468fc67c5ae42306af7fecee7b7dc9"></a>
+VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a17468fc67c5ae42306af7fecee7b7dc9">GetSecantNoNormalize</a> (size_t k) const </td></tr>
+<tr class="memdesc:a17468fc67c5ae42306af7fecee7b7dc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute and return the kth secant without normalizing. <br/></td></tr>
+<tr class="separator:a17468fc67c5ae42306af7fecee7b7dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_struct_d_r_d_s_p_1_1_secants"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_d_r_d_s_p_1_1_secants')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td></tr>
 <tr class="memitem:a9b6763bc1541a775e842e437448200ef inherit pub_methods_struct_d_r_d_s_p_1_1_secants"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b6763bc1541a775e842e437448200ef"></a>
 virtual <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CullSecants</b> (double tolerance) const </td></tr>
@@ -137,12 +137,12 @@ virtual <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">Seca
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:abd9b205c7f0555f87195b241225e988b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd9b205c7f0555f87195b241225e988b"></a>
-static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetIndexI</b> (uint32_t k, uint32_t N)</td></tr>
-<tr class="separator:abd9b205c7f0555f87195b241225e988b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a609eef6b36cdd56d4920e312cc310e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a609eef6b36cdd56d4920e312cc310e"></a>
-static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetIndexJ</b> (uint32_t k, uint32_t i, uint32_t N)</td></tr>
-<tr class="separator:a7a609eef6b36cdd56d4920e312cc310e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79349cda54663e51ff26f79d97b30e43"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79349cda54663e51ff26f79d97b30e43"></a>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetIndexI</b> (size_t k, size_t N)</td></tr>
+<tr class="separator:a79349cda54663e51ff26f79d97b30e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4382e9c8861f3a10e031495eda2c998"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4382e9c8861f3a10e031495eda2c998"></a>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetIndexJ</b> (size_t k, size_t i, size_t N)</td></tr>
+<tr class="separator:ae4382e9c8861f3a10e031495eda2c998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -151,10 +151,10 @@ const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> *&#160
 <tr class="memdesc:a1f2646fe6bfc11fdcf779344fc8d532c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html" title="A set of data points. ">DataSet</a> generating the secants. <br/></td></tr>
 <tr class="separator:a1f2646fe6bfc11fdcf779344fc8d532c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_struct_d_r_d_s_p_1_1_secants"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_struct_d_r_d_s_p_1_1_secants')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">DRDSP::Secants</a></td></tr>
-<tr class="memitem:a0c6a707afa517ee01f1a2a76e1ed76bf inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c6a707afa517ee01f1a2a76e1ed76bf"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a0c6a707afa517ee01f1a2a76e1ed76bf">count</a></td></tr>
-<tr class="memdesc:a0c6a707afa517ee01f1a2a76e1ed76bf inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of secants in the data set. <br/></td></tr>
-<tr class="separator:a0c6a707afa517ee01f1a2a76e1ed76bf inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a821f5d19109ca4f94a7fb593614ac173 inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a821f5d19109ca4f94a7fb593614ac173"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a821f5d19109ca4f94a7fb593614ac173">count</a></td></tr>
+<tr class="memdesc:a821f5d19109ca4f94a7fb593614ac173 inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of secants in the data set. <br/></td></tr>
+<tr class="separator:a821f5d19109ca4f94a7fb593614ac173 inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a950d625f7d298f93eaad20062f79db1b inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a950d625f7d298f93eaad20062f79db1b"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a950d625f7d298f93eaad20062f79db1b">dimension</a></td></tr>
 <tr class="memdesc:a950d625f7d298f93eaad20062f79db1b inherit pub_attribs_struct_d_r_d_s_p_1_1_secants"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the space. <br/></td></tr>
@@ -170,7 +170,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 23 2013 00:20:14 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 8 2014 11:34:16 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.5"/>
-<title>DRDSP: DRDSP::GradientDescent&lt; TGeo, TMet &gt; Struct Template Reference</title>
+<title>DRDSP: DRDSP::GradientDescent&lt; Geodesic, S, DS &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -87,52 +87,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="struct_d_r_d_s_p_1_1_gradient_descent-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DRDSP::GradientDescent&lt; TGeo, TMet &gt; Struct Template Reference</div>  </div>
+<div class="title">DRDSP::GradientDescent&lt; Geodesic, S, DS &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Inheritance diagram for DRDSP::GradientDescent&lt; TGeo, TMet &gt;:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="struct_d_r_d_s_p_1_1_gradient_descent.png" usemap="#DRDSP::GradientDescent&lt; TGeo, TMet &gt;_map" alt=""/>
-  <map id="DRDSP::GradientDescent&lt; TGeo, TMet &gt;_map" name="DRDSP::GradientDescent&lt; TGeo, TMet &gt;_map">
-<area href="struct_d_r_d_s_p_1_1_optimization.html" alt="DRDSP::Optimization&lt; TGeo, TMet &gt;" shape="rect" coords="0,0,245,24"/>
-</map>
- </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a55e418414059f2b9f839c1ea59d2bd44"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55e418414059f2b9f839c1ea59d2bd44"></a>
+typedef Geodesic::Metric&#160;</td><td class="memItemRight" valign="bottom"><b>Metric</b></td></tr>
+<tr class="separator:a55e418414059f2b9f839c1ea59d2bd44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93a9eb83c41f78b67a02dd0fd96cb996"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a93a9eb83c41f78b67a02dd0fd96cb996"></a>
+typedef Metric::Point&#160;</td><td class="memItemRight" valign="bottom"><b>Point</b></td></tr>
+<tr class="separator:a93a9eb83c41f78b67a02dd0fd96cb996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3e383660a94762cbee8bf8713c419dda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e383660a94762cbee8bf8713c419dda"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>Step</b> (TVec &amp;X)</td></tr>
-<tr class="separator:a3e383660a94762cbee8bf8713c419dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_struct_d_r_d_s_p_1_1_optimization"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_d_r_d_s_p_1_1_optimization')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_d_r_d_s_p_1_1_optimization.html">DRDSP::Optimization&lt; TGeo, TMet &gt;</a></td></tr>
-<tr class="memitem:ac0186a6fcfb176a49b3573728f6b17ce inherit pub_methods_struct_d_r_d_s_p_1_1_optimization"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0186a6fcfb176a49b3573728f6b17ce"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>Optimize</b> (TVec &amp;X)</td></tr>
-<tr class="separator:ac0186a6fcfb176a49b3573728f6b17ce inherit pub_methods_struct_d_r_d_s_p_1_1_optimization"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3634101c3538e592d42cf2a3e11624e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3634101c3538e592d42cf2a3e11624e9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>GradientDescent</b> (const S &amp;cost, const DS &amp;gradient)</td></tr>
+<tr class="separator:a3634101c3538e592d42cf2a3e11624e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1857bebfa12e9455853995452195461b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1857bebfa12e9455853995452195461b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Step</b> (Point &amp;x)</td></tr>
+<tr class="separator:a1857bebfa12e9455853995452195461b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4ac6a7f56e4aec9ddbdeb651e8ffdbf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad4ac6a7f56e4aec9ddbdeb651e8ffdbf"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>Optimize</b> (Point &amp;x)</td></tr>
+<tr class="separator:ad4ac6a7f56e4aec9ddbdeb651e8ffdbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_struct_d_r_d_s_p_1_1_optimization"><td colspan="2" onclick="javascript:toggleInherit('pub_types_struct_d_r_d_s_p_1_1_optimization')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="struct_d_r_d_s_p_1_1_optimization.html">DRDSP::Optimization&lt; TGeo, TMet &gt;</a></td></tr>
-<tr class="memitem:ad6d026546d45eb190013c6d7645b3694 inherit pub_types_struct_d_r_d_s_p_1_1_optimization"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad6d026546d45eb190013c6d7645b3694"></a>
-typedef TMet::TVec&#160;</td><td class="memItemRight" valign="bottom"><b>TVec</b></td></tr>
-<tr class="separator:ad6d026546d45eb190013c6d7645b3694 inherit pub_types_struct_d_r_d_s_p_1_1_optimization"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_struct_d_r_d_s_p_1_1_optimization"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_struct_d_r_d_s_p_1_1_optimization')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="struct_d_r_d_s_p_1_1_optimization.html">DRDSP::Optimization&lt; TGeo, TMet &gt;</a></td></tr>
-<tr class="memitem:a868b3e8e79ef495f081147505ab908be inherit pub_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a868b3e8e79ef495f081147505ab908be"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_line_search.html">LineSearch</a>&lt; TMet &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>lineSearch</b></td></tr>
-<tr class="separator:a868b3e8e79ef495f081147505ab908be inherit pub_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b66199eaeee602f929cdf762ffce5ad inherit pub_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b66199eaeee602f929cdf762ffce5ad"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>n</b></td></tr>
-<tr class="separator:a4b66199eaeee602f929cdf762ffce5ad inherit pub_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7649b04369aa08774cb1dcb9ecbac98c inherit pub_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7649b04369aa08774cb1dcb9ecbac98c"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:ae37db7d5f8203c9636421950402012ee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae37db7d5f8203c9636421950402012ee"></a>
+const S &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>cost</b></td></tr>
+<tr class="separator:ae37db7d5f8203c9636421950402012ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27e280693a2ea49c5978a9fbec467384"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a27e280693a2ea49c5978a9fbec467384"></a>
+const DS &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>gradient</b></td></tr>
+<tr class="separator:a27e280693a2ea49c5978a9fbec467384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f52cc0847b60f167b8b7dcdbc15c211"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f52cc0847b60f167b8b7dcdbc15c211"></a>
+Metric&#160;</td><td class="memItemRight" valign="bottom"><b>metric</b></td></tr>
+<tr class="separator:a9f52cc0847b60f167b8b7dcdbc15c211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64f328d922bca75d2cd7581c380c50f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64f328d922bca75d2cd7581c380c50f0"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_line_search.html">LineSearch</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lineSearch</b></td></tr>
+<tr class="separator:a64f328d922bca75d2cd7581c380c50f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ba95b5390365497175372184f0d6b5c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ba95b5390365497175372184f0d6b5c"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>maxSteps</b></td></tr>
-<tr class="separator:a7649b04369aa08774cb1dcb9ecbac98c inherit pub_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_struct_d_r_d_s_p_1_1_optimization"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_struct_d_r_d_s_p_1_1_optimization')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="struct_d_r_d_s_p_1_1_optimization.html">DRDSP::Optimization&lt; TGeo, TMet &gt;</a></td></tr>
-<tr class="memitem:ac12c54ff1526af07708cfa1ca818c133 inherit pro_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac12c54ff1526af07708cfa1ca818c133"></a>
-TGeo&#160;</td><td class="memItemRight" valign="bottom"><b>geodesic</b></td></tr>
-<tr class="separator:ac12c54ff1526af07708cfa1ca818c133 inherit pro_attribs_struct_d_r_d_s_p_1_1_optimization"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a7ba95b5390365497175372184f0d6b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/DRDSP/optimization/<a class="el" href="gradient__descent_8h_source.html">gradient_descent.h</a></li>
@@ -140,7 +141,7 @@ TGeo&#160;</td><td class="memItemRight" valign="bottom"><b>geodesic</b></td></tr
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 23 2013 00:20:19 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 8 2014 11:34:17 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

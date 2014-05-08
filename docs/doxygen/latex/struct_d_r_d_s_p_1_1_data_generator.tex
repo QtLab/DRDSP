@@ -1,67 +1,98 @@
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator}{\section{D\-R\-D\-S\-P\-:\-:Data\-Generator Struct Reference}
-\label{struct_d_r_d_s_p_1_1_data_generator}\index{D\-R\-D\-S\-P\-::\-Data\-Generator@{D\-R\-D\-S\-P\-::\-Data\-Generator}}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator}{\section{D\-R\-D\-S\-P\-:\-:Data\-Generator$<$ Family, Solver $>$ Struct Template Reference}
+\label{struct_d_r_d_s_p_1_1_data_generator}\index{D\-R\-D\-S\-P\-::\-Data\-Generator$<$ Family, Solver $>$@{D\-R\-D\-S\-P\-::\-Data\-Generator$<$ Family, Solver $>$}}
 }
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_ac2994c6f0175091fbcd8e931d21783f4}{typedef Family\-::\-Parameter {\bfseries Parameter}}\label{struct_d_r_d_s_p_1_1_data_generator_ac2994c6f0175091fbcd8e931d21783f4}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a4049930241fd311c5e5822e55a1754fd}{typedef Family\-::\-Model {\bfseries Model}}\label{struct_d_r_d_s_p_1_1_data_generator_a4049930241fd311c5e5822e55a1754fd}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a99095b39d8997f9eba9f2749b0ceedfb}{typedef Model\-::\-State {\bfseries State}}\label{struct_d_r_d_s_p_1_1_data_generator_a99095b39d8997f9eba9f2749b0ceedfb}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a21ae5beadec290a4541c67338853cb5d}{typedef Solver\-::\-Time {\bfseries Time}}\label{struct_d_r_d_s_p_1_1_data_generator_a21ae5beadec290a4541c67338853cb5d}
+
+\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a0e9088e0c4d4953e93a47b9bf9d7669c}{{\bfseries Data\-Generator} (\hyperlink{struct_d_r_d_s_p_1_1_model_parameterized}{Model\-Parameterized} \&m)}\label{struct_d_r_d_s_p_1_1_data_generator_a0e9088e0c4d4953e93a47b9bf9d7669c}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a4a4cf90cd34a5a39391e300297066983}{{\bfseries Data\-Generator} (const \hyperlink{struct_d_r_d_s_p_1_1_family}{Family} \&f)}\label{struct_d_r_d_s_p_1_1_data_generator_a4a4cf90cd34a5a39391e300297066983}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a63fda985506ece1413442a01802a0ac8}{void {\bfseries Generate\-Single\-File} (double param)}\label{struct_d_r_d_s_p_1_1_data_generator_a63fda985506ece1413442a01802a0ac8}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a5a941cc6ff7879e3575044db26ef9fd1}{{\bfseries Data\-Generator} (const \hyperlink{struct_d_r_d_s_p_1_1_family}{Family} \&f, const State \&init)}\label{struct_d_r_d_s_p_1_1_data_generator_a5a941cc6ff7879e3575044db26ef9fd1}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_af380aae927456c37efd68a2b2ba9ea4a}{void {\bfseries Generate\-Files} ()}\label{struct_d_r_d_s_p_1_1_data_generator_af380aae927456c37efd68a2b2ba9ea4a}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_af375f81e326785a741c508552eb8f247}{void {\bfseries Generate\-Files} (const vector$<$ Parameter $>$ \&parameters) const }\label{struct_d_r_d_s_p_1_1_data_generator_af375f81e326785a741c508552eb8f247}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a76849673b1f778bc3187edf4f93dd3f9}{\hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} {\bfseries Generate\-Data\-Set} (double param)}\label{struct_d_r_d_s_p_1_1_data_generator_a76849673b1f778bc3187edf4f93dd3f9}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_af2ed6178fcdd9e170695c81861dd5e60}{void {\bfseries Generate\-Single\-File} (Parameter param) const }\label{struct_d_r_d_s_p_1_1_data_generator_af2ed6178fcdd9e170695c81861dd5e60}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a1d37b6ff27ff19c6709b4b8c3b60ffdf}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Generate\-Data\-System} ()}\label{struct_d_r_d_s_p_1_1_data_generator_a1d37b6ff27ff19c6709b4b8c3b60ffdf}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a2527e7273aaf2d4752ddd8a0272d7cd5}{\hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} {\bfseries Generate\-Data\-Set} (const Parameter \&param) const }\label{struct_d_r_d_s_p_1_1_data_generator_a2527e7273aaf2d4752ddd8a0272d7cd5}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a6eed5c243e6a56c95529e9f94d93f990}{void {\bfseries Match\-Settings} (const \hyperlink{struct_d_r_d_s_p_1_1_data_generator}{Data\-Generator} \&gen)}\label{struct_d_r_d_s_p_1_1_data_generator_a6eed5c243e6a56c95529e9f94d93f990}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_ab8e0ad4602c07ebfe6d4081ea0a60e01}{\hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} {\bfseries Generate\-Data\-Set} (const Parameter \&param, Time period) const }\label{struct_d_r_d_s_p_1_1_data_generator_ab8e0ad4602c07ebfe6d4081ea0a60e01}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a065083b18b9e8256873b3db6ac4af502}{\hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} {\bfseries Generate\-Data\-Set} (const Parameter \&param, const State \&init) const }\label{struct_d_r_d_s_p_1_1_data_generator_a065083b18b9e8256873b3db6ac4af502}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a19239aced22c8f7a4796881c2dcc9509}{\hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} {\bfseries Generate\-Data\-Set} (const Parameter \&param, const State \&init, Time period) const }\label{struct_d_r_d_s_p_1_1_data_generator_a19239aced22c8f7a4796881c2dcc9509}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a1fbe19665008e167d89c1eff0486f97f}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Generate\-Data\-System} (const vector$<$ Parameter $>$ \&parameters) const }\label{struct_d_r_d_s_p_1_1_data_generator_a1fbe19665008e167d89c1eff0486f97f}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a3ec35ebf85e8b1bef8d918858a4a17ee}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Generate\-Data\-System} (const vector$<$ Parameter $>$ \&parameters, uint32\-\_\-t num\-Threads) const }\label{struct_d_r_d_s_p_1_1_data_generator_a3ec35ebf85e8b1bef8d918858a4a17ee}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a376347b59afc8bcad1fb7d053fa28880}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Generate\-Data\-System} (const vector$<$ Parameter $>$ \&parameters, const vector$<$ double $>$ \&periods)}\label{struct_d_r_d_s_p_1_1_data_generator_a376347b59afc8bcad1fb7d053fa28880}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_abed4f9d56ca01b753a5f813a59ce80d5}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Generate\-Data\-System} (const vector$<$ Parameter $>$ \&parameters, const vector$<$ double $>$ \&periods, uint32\-\_\-t num\-Threads)}\label{struct_d_r_d_s_p_1_1_data_generator_abed4f9d56ca01b753a5f813a59ce80d5}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_aa07aa07557b333be8ebf7cadc885187d}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Generate\-Using\-Initials} (const vector$<$ Parameter $>$ \&parameters, const \hyperlink{struct_d_r_d_s_p_1_1_reduced_data_system}{Reduced\-Data\-System} \&rdata) const }\label{struct_d_r_d_s_p_1_1_data_generator_aa07aa07557b333be8ebf7cadc885187d}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a45aed00995e71fba7eeaabd116afdf4a}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Generate\-Using\-Initials} (const vector$<$ Parameter $>$ \&parameters, const \hyperlink{struct_d_r_d_s_p_1_1_reduced_data_system}{Reduced\-Data\-System} \&rdata, uint32\-\_\-t num\-Threads) const }\label{struct_d_r_d_s_p_1_1_data_generator_a45aed00995e71fba7eeaabd116afdf4a}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a617736ea54c49cca045295fd584f575b}{{\footnotesize template$<$typename F2 , typename S2 $>$ }\\void {\bfseries Match\-Settings} (const \hyperlink{struct_d_r_d_s_p_1_1_data_generator}{Data\-Generator}$<$ F2, S2 $>$ \&gen)}\label{struct_d_r_d_s_p_1_1_data_generator_a617736ea54c49cca045295fd584f575b}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a771034ca8f046f91d8332819cba3933f}{double {\bfseries p\-Min}}\label{struct_d_r_d_s_p_1_1_data_generator_a771034ca8f046f91d8332819cba3933f}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a1c66f08a6c5e15f721dfd5cf05de44cc}{\hyperlink{struct_d_r_d_s_p_1_1_family}{Family} {\bfseries family}}\label{struct_d_r_d_s_p_1_1_data_generator_a1c66f08a6c5e15f721dfd5cf05de44cc}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a4c104e3da0e0bd9bb92a02162e34fe4d}{double {\bfseries p\-Max}}\label{struct_d_r_d_s_p_1_1_data_generator_a4c104e3da0e0bd9bb92a02162e34fe4d}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a452f2752ccfcbe601ab4f06c09971cc5}{State {\bfseries initial}}\label{struct_d_r_d_s_p_1_1_data_generator_a452f2752ccfcbe601ab4f06c09971cc5}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a994048a122d95b5b7e1d794a24f3b2bd}{double {\bfseries p\-Delta}}\label{struct_d_r_d_s_p_1_1_data_generator_a994048a122d95b5b7e1d794a24f3b2bd}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a31210577ff8d44eb4bdebfdbf7204260}{Time {\bfseries t\-Start}}\label{struct_d_r_d_s_p_1_1_data_generator_a31210577ff8d44eb4bdebfdbf7204260}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_abe05b419d5ee0549ba7b0351bd351a60}{double {\bfseries t\-Start}}\label{struct_d_r_d_s_p_1_1_data_generator_abe05b419d5ee0549ba7b0351bd351a60}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a721cb3f6a161a1576ebbf63386ec6f87}{Time {\bfseries t\-Interval}}\label{struct_d_r_d_s_p_1_1_data_generator_a721cb3f6a161a1576ebbf63386ec6f87}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a2154e8c92e11f171fc0f807da08d1dfc}{double {\bfseries t\-Interval}}\label{struct_d_r_d_s_p_1_1_data_generator_a2154e8c92e11f171fc0f807da08d1dfc}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_ad0930651c1f8a0b7806809777119d735}{Time {\bfseries dt\-Max}}\label{struct_d_r_d_s_p_1_1_data_generator_ad0930651c1f8a0b7806809777119d735}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_ac579a463fe631b1fa0e00dc1d58bc458}{uint32\-\_\-t {\bfseries print}}\label{struct_d_r_d_s_p_1_1_data_generator_ac579a463fe631b1fa0e00dc1d58bc458}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a8b22578311e44bfa08a8c40ad70bd337}{uint32\-\_\-t {\bfseries print}}\label{struct_d_r_d_s_p_1_1_data_generator_a8b22578311e44bfa08a8c40ad70bd337}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a248a205ee9fda5d082a6706e4a8791f5}{bool {\bfseries binary\-Output}}\label{struct_d_r_d_s_p_1_1_data_generator_a248a205ee9fda5d082a6706e4a8791f5}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a38c700048ca17d6cf0396bd48fef23bd}{bool {\bfseries binary\-Output}}\label{struct_d_r_d_s_p_1_1_data_generator_a38c700048ca17d6cf0396bd48fef23bd}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_ab8bb2f4c082e690816a524b6d4de70ee}{bool {\bfseries text\-Output}}\label{struct_d_r_d_s_p_1_1_data_generator_ab8bb2f4c082e690816a524b6d4de70ee}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a807b5b7fffa6cb5a13bcd360bfcb2abd}{Vector\-Xd {\bfseries initial}}\label{struct_d_r_d_s_p_1_1_data_generator_a807b5b7fffa6cb5a13bcd360bfcb2abd}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_adcfa6b6a64dd3da8544234dac3585be8}{\hyperlink{struct_d_r_d_s_p_1_1_model_parameterized_interface}{Model\-Parameterized\-Interface} {\bfseries model}}\label{struct_d_r_d_s_p_1_1_data_generator_adcfa6b6a64dd3da8544234dac3585be8}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_data_generator_a158608e79fdaecc9037fa16f0efe1a16}{\hyperlink{struct_d_r_d_s_p_1_1_r_k_dynamical_system}{R\-K\-Dynamical\-System}$<$ double, \\*
-Vector\-Xd $>$ {\bfseries rk}}\label{struct_d_r_d_s_p_1_1_data_generator_a158608e79fdaecc9037fa16f0efe1a16}
+\hypertarget{struct_d_r_d_s_p_1_1_data_generator_aa1309d8accdd86f65bc8157362cda342}{bool {\bfseries text\-Output}}\label{struct_d_r_d_s_p_1_1_data_generator_aa1309d8accdd86f65bc8157362cda342}
 
 \end{DoxyCompactItemize}
 
 
-The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 
-include/\-D\-R\-D\-S\-P/dynamics/generate\-\_\-data.\-h\item 
-src/dynamics/generate\-\_\-data.\-cpp\end{DoxyCompactItemize}
+include/\-D\-R\-D\-S\-P/dynamics/data\-\_\-generator.\-h\end{DoxyCompactItemize}

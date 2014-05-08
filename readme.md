@@ -21,9 +21,11 @@ The steps involved in the method are:
 Extra Features
 --------------
 
-* DataGenerator -- Performs simulations for multiple parameter values. A custom integrator may be specified (RK4 by default).
+* `DataGenerator` -- Performs simulations for multiple parameter values. A custom integrator may be specified (RK4 by default).
 
-* BifurcationDiagramGenerator -- Performs simulations for multiple parameter values and samples values to be plotted on a bifurcation diagram. The sampling condition and value functions must be specified. A custom integrator may also be specified (RK4 by default).
+* `HistogramGenerator` -- Generates a histogram from a data set.
+
+* `BifurcationDiagramGenerator` -- Performs simulations for multiple parameter values and samples values to be plotted on a bifurcation diagram. The sampling condition and value functions must be specified. A custom integrator may also be specified (RK4 by default).
 
 
 Usage
@@ -100,7 +102,6 @@ struct ExampleEmbedding : Embedding {
 	
 	// The second partial derivatives of the ith component of the embedding.
 	MatrixXd Derivative2( const VectorXd& state, uint32_t i ) const;
-	
 };
 ```
 

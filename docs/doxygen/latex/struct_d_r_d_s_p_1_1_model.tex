@@ -1,52 +1,39 @@
-\hypertarget{struct_d_r_d_s_p_1_1_model}{\section{D\-R\-D\-S\-P\-:\-:Model Struct Reference}
-\label{struct_d_r_d_s_p_1_1_model}\index{D\-R\-D\-S\-P\-::\-Model@{D\-R\-D\-S\-P\-::\-Model}}
+\hypertarget{struct_d_r_d_s_p_1_1_model}{\section{D\-R\-D\-S\-P\-:\-:Model$<$ State $>$ Struct Template Reference}
+\label{struct_d_r_d_s_p_1_1_model}\index{D\-R\-D\-S\-P\-::\-Model$<$ State $>$@{D\-R\-D\-S\-P\-::\-Model$<$ State $>$}}
 }
 
 
-Interface for a model without parameters.  
+Base for model without parameters.  
 
 
 
 
 {\ttfamily \#include $<$model.\-h$>$}
 
-Inheritance diagram for D\-R\-D\-S\-P\-:\-:Model\-:\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[height=2.000000cm]{struct_d_r_d_s_p_1_1_model}
-\end{center}
-\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_model_a30ca6d1a4dbcb6801ccb5a2421cbc434}{typedef State {\bfseries State}}\label{struct_d_r_d_s_p_1_1_model_a30ca6d1a4dbcb6801ccb5a2421cbc434}
+
+\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_af9ab80237f807fecc435534c8705ea8c}{{\bfseries Model} (const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ Vector\-Xd $>$ $\ast$wrap\-Func)}\label{struct_d_r_d_s_p_1_1_model_af9ab80237f807fecc435534c8705ea8c}
+\hypertarget{struct_d_r_d_s_p_1_1_model_a9b0653f18d73cbb266b26e13bf46e500}{{\bfseries Model} (uint32\-\_\-t dim)}\label{struct_d_r_d_s_p_1_1_model_a9b0653f18d73cbb266b26e13bf46e500}
 
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_a79dabe991f920ca21ac23066270ab1b7}{{\bfseries Model} (uint32\-\_\-t dim)}\label{struct_d_r_d_s_p_1_1_model_a79dabe991f920ca21ac23066270ab1b7}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_a6e682e5b23ddca692c45a3bc6be9dd15}{{\bfseries Model} (const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ Vector\-Xd $>$ $\ast$wrap\-Func, uint32\-\_\-t dim)}\label{struct_d_r_d_s_p_1_1_model_a6e682e5b23ddca692c45a3bc6be9dd15}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_a3dd65a7f5c3b1e5e89920a309ff2abec}{virtual Vector\-Xd \hyperlink{struct_d_r_d_s_p_1_1_model_a3dd65a7f5c3b1e5e89920a309ff2abec}{Vector\-Field} (const Vector\-Xd \&state)=0}\label{struct_d_r_d_s_p_1_1_model_a3dd65a7f5c3b1e5e89920a309ff2abec}
-
-\begin{DoxyCompactList}\small\item\em The vector field. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_a36f5e07d59e484b0ddfc12ed820e55d1}{virtual Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_model_a36f5e07d59e484b0ddfc12ed820e55d1}{Partials} (const Vector\-Xd \&state)=0}\label{struct_d_r_d_s_p_1_1_model_a36f5e07d59e484b0ddfc12ed820e55d1}
-
-\begin{DoxyCompactList}\small\item\em The partial derivatives of the vector field. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_a286bbeaa673d5e756b1b4e97bdab30f6}{const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ Vector\-Xd $>$ $\ast$ {\bfseries wrap\-Function}}\label{struct_d_r_d_s_p_1_1_model_a286bbeaa673d5e756b1b4e97bdab30f6}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_af1e4d4ae5a0dec4460845a58dbd312e9}{uint32\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_model_af1e4d4ae5a0dec4460845a58dbd312e9}{dimension}}\label{struct_d_r_d_s_p_1_1_model_af1e4d4ae5a0dec4460845a58dbd312e9}
+\hypertarget{struct_d_r_d_s_p_1_1_model_afad2b55b6940509a05759d223a168841}{uint32\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_model_afad2b55b6940509a05759d223a168841}{dimension}}\label{struct_d_r_d_s_p_1_1_model_afad2b55b6940509a05759d223a168841}
 
 \begin{DoxyCompactList}\small\item\em Dimension of the model's state space. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-Interface for a model without parameters. 
+\subsubsection*{template$<$typename State = Vector\-Xd$>$struct D\-R\-D\-S\-P\-::\-Model$<$ State $>$}
+
+Base for model without parameters. 
 
 The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 

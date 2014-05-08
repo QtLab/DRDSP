@@ -1,5 +1,0 @@
-var searchData=
-[
-  ['embeddata',['EmbedData',['../struct_d_r_d_s_p_1_1_embedding.html#a71acf702383901f9d4aa6fb198dc0892',1,'DRDSP::Embedding::EmbedData(const DataSet &amp;data) const '],['../struct_d_r_d_s_p_1_1_embedding.html#abdf67b0ed050b58fc9a0943d604093ef',1,'DRDSP::Embedding::EmbedData(const DataSystem &amp;data) const '],['../struct_d_r_d_s_p_1_1_embedding_c_w.html#ad63dfe0eeab18767684e46cd3000ef83',1,'DRDSP::EmbeddingCW::EmbedData(const DataSet &amp;data) const '],['../struct_d_r_d_s_p_1_1_embedding_c_w.html#a3ac7659dca082002fef531dd9403ee1f',1,'DRDSP::EmbeddingCW::EmbedData(const DataSystem &amp;data) const ']]],
-  ['evaluate',['Evaluate',['../struct_d_r_d_s_p_1_1_affine_parameter_map.html#a185c0b51a2ac97fadcfd137f8b35cd98',1,'DRDSP::AffineParameterMap::Evaluate()'],['../struct_d_r_d_s_p_1_1_embedding.html#a128ada65c8aafc9348dafd8c89add0da',1,'DRDSP::Embedding::Evaluate()'],['../struct_d_r_d_s_p_1_1_embedding_c_w.html#a630cb32ea4cf52cc278c89322a944257',1,'DRDSP::EmbeddingCW::Evaluate()']]]
-];

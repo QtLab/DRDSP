@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['function',['Function',['../struct_d_r_d_s_p_1_1_function.html',1,'DRDSP']]]
+  ['family',['Family',['../struct_d_r_d_s_p_1_1_family.html',1,'DRDSP']]],
+  ['family',['family',['../struct_d_r_d_s_p_1_1_family_embedded.html#ad5b617f51f00bbcaa9a73165852c7480',1,'DRDSP::FamilyEmbedded']]],
+  ['family_3c_20rbfmodel_3c_20f_20_3e_2c_20vectorxd_20_3e',['Family&lt; RBFModel&lt; F &gt;, VectorXd &gt;',['../struct_d_r_d_s_p_1_1_family.html',1,'DRDSP']]],
+  ['familyembedded',['FamilyEmbedded',['../struct_d_r_d_s_p_1_1_family_embedded.html',1,'DRDSP']]],
+  ['frobeniusinnerproduct',['FrobeniusInnerProduct',['../struct_d_r_d_s_p_1_1_frobenius_inner_product.html',1,'DRDSP']]]
 ];

@@ -89,64 +89,101 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef INCLUDED_DYNAMICS_REDUCED_DATA</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define INCLUDED_DYNAMICS_REDUCED_DATA</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &quot;../types.h&quot;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;Eigen/SVD&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;model.h&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;../data/data_set.h&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;../data/aabb.h&quot;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_reduced_data.html">   10</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        VectorXd *points, *vectors;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        MatrixXd *derivatives;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">double</span> scales[2];</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        uint32_t count;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        uint16_t dimension;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>( uint16_t dim, uint32_t numPoints );</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; rhs );</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>( <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp;&amp; rhs );</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        ~<a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>();</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; operator=( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; rhs );</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; operator=( <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp;&amp; rhs );</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordtype">void</span> Create( uint16_t dim, uint32_t numPoints );</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordtype">void</span> Destroy();</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordtype">void</span> ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model.html">Model</a>&amp; model, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W );</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordtype">void</span> ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model_c_w.html">ModelCW</a>&amp; model, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W );</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">void</span> ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model_parameterized.html">ModelParameterized</a>&amp; model, <span class="keyword">const</span> VectorXd&amp; parameter, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W );</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordtype">void</span> ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model_parameterized_c_w.html">ModelParameterizedCW</a>&amp; model, <span class="keyword">const</span> VectorXd&amp; parameter, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W );</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordtype">void</span> ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model_embedded.html">ModelEmbedded</a>&amp; model, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W );</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordtype">void</span> ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model_parameterized_embedded.html">ModelParameterizedEmbedded</a>&amp; model, <span class="keyword">const</span> VectorXd&amp; parameter, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W );</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordtype">void</span> ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model_parameterized_embedded_c_w.html">ModelParameterizedEmbeddedCW</a>&amp; model, <span class="keyword">const</span> VectorXd&amp; parameter, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W );</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> ComputeBoundingBox() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordtype">double</span> ComputeVectorScale();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordtype">double</span> ComputeDerivativeScale();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">void</span> WriteData( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">bool</span> ReadData( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename );</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">void</span> WritePointsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> WriteVectorsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    };</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keywordtype">double</span> eps( <span class="keywordtype">double</span> x );</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_reduced_data.html">   12</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        vector&lt;VectorXd&gt; points, vectors;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        vector&lt;MatrixXd&gt; derivatives;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">double</span> scales[2];</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">size_t</span> count;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        uint32_t dimension;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>();</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>( uint32_t dim, <span class="keywordtype">size_t</span> numPoints );</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">void</span> Create( uint32_t dim, <span class="keywordtype">size_t</span> numPoints );</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> ComputeBoundingBox() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordtype">double</span> ComputeVectorScale();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordtype">double</span> ComputeDerivativeScale();</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordtype">void</span> WriteData( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordtype">bool</span> ReadData( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename );</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordtype">void</span> WritePointsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordtype">void</span> WriteVectorsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Model&gt;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_model.html">Model</a>&amp;&amp; original, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W ) {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            Create( (uint32_t)W.cols(), data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>.size() );</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;count;++i) {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                points[i] = W.adjoint() * data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i];</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            }</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;count;++i) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                vectors[i] = W.adjoint() * original( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i] );</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;count;++i) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                derivatives[i] = W.adjoint() * original.Partials( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i] ) * W;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            scales[0] = ComputeVectorScale();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            scales[1] = ComputeDerivativeScale();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Model,<span class="keyword">typename</span> Embedded&gt;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; ComputeDataEmbedded( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_model_embedded.html">ModelEmbedded&lt;Model,Embedded&gt;</a>&amp; original, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W ) {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            Create( (uint32_t)W.cols(), data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>.size() );</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keyword">static</span> <span class="keywordtype">double</span> stabilityFactor = 1.0;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            MatrixXd A;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;count;++i) {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                points[i] = W.adjoint() * original.<a class="code" href="struct_d_r_d_s_p_1_1_model_embedded.html#a5e49fc6c38129bbd5721ec97b7d19230">embedding</a>(data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i]);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;count;++i) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                vectors[i] = W.adjoint() * original( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i] );</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;count;++i) {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                JacobiSVD&lt;MatrixXd&gt; svd(W.adjoint() * original.<a class="code" href="struct_d_r_d_s_p_1_1_model_embedded.html#a5e49fc6c38129bbd5721ec97b7d19230">embedding</a>.Derivative(data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i]),ComputeThinU);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                uint32_t rank = 0;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                <span class="keywordtype">double</span> tolerance = original.<a class="code" href="struct_d_r_d_s_p_1_1_model_embedded.html#a14709f8929a887ffba4b019182838fe3">model</a>.dimension * eps(svd.singularValues()(0));</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=0;j&lt;svd.nonzeroSingularValues();++j) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                    <span class="keywordflow">if</span>( svd.singularValues()(j) &gt; tolerance )</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                        ++rank;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                A = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                derivatives[i] = W.adjoint() * original.Partials( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i] ) * original.<a class="code" href="struct_d_r_d_s_p_1_1_model_embedded.html#a5e49fc6c38129bbd5721ec97b7d19230">embedding</a>.DerivativeAdjoint(data.<a class="code" href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">points</a>[i]) * W * A - stabilityFactor * ( MatrixXd::Identity(A.rows(),A.cols()) - A );</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            scales[0] = ComputeVectorScale();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            scales[1] = ComputeDerivativeScale();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    };</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdoc">An axis-aligned bounding box in n-dimensions. </div><div class="ttdef"><b>Definition:</b> aabb.h:10</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_embedded.html">DRDSP::ModelParameterizedEmbedded</a></div><div class="ttdoc">A model with parameters whose state space is embedded into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:111</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html_a5e49fc6c38129bbd5721ec97b7d19230"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html#a5e49fc6c38129bbd5721ec97b7d19230">DRDSP::ModelEmbedded::embedding</a></div><div class="ttdeci">Embedding embedding</div><div class="ttdoc">An embedding into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:44</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdoc">A set of data points. </div><div class="ttdef"><b>Definition:</b> data_set.h:13</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></div><div class="ttdoc">Interface for a model without parameters. </div><div class="ttdef"><b>Definition:</b> model.h:11</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data.html">DRDSP::ReducedData</a></div><div class="ttdef"><b>Definition:</b> reduced_data.h:10</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_c_w.html">DRDSP::ModelCW</a></div><div class="ttdoc">Interface for a model without parameters, whose derivatives are to be evaluated component-wise. </div><div class="ttdef"><b>Definition:</b> model.h:34</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_embedded_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_embedded_c_w.html">DRDSP::ModelParameterizedEmbeddedCW</a></div><div class="ttdoc">A model with parameters whose state space is embedded into R^n, and whose derivatives are to be evalu...</div><div class="ttdef"><b>Definition:</b> model.h:124</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_c_w_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized_c_w.html">DRDSP::ModelParameterizedCW</a></div><div class="ttdoc">Interface for a model with parameters, whose derivatives are to be evaluated component-wise. </div><div class="ttdef"><b>Definition:</b> model.h:70</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_parameterized_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_parameterized.html">DRDSP::ModelParameterized</a></div><div class="ttdoc">Interface for a model with parameters. </div><div class="ttdef"><b>Definition:</b> model.h:49</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html">DRDSP::ModelEmbedded</a></div><div class="ttdoc">A model without parameters whose state space is embedded into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:86</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></div><div class="ttdoc">Base for model without parameters. </div><div class="ttdef"><b>Definition:</b> model.h:12</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html_ac486c907dea215957d503dc4dc9d76e3"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">DRDSP::DataSet::points</a></div><div class="ttdeci">vector&lt; VectorXd &gt; points</div><div class="ttdoc">Array of data vectors. </div><div class="ttdef"><b>Definition:</b> data_set.h:15</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html_a14709f8929a887ffba4b019182838fe3"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html#a14709f8929a887ffba4b019182838fe3">DRDSP::ModelEmbedded::model</a></div><div class="ttdeci">Model model</div><div class="ttdoc">The underlying model. </div><div class="ttdef"><b>Definition:</b> model.h:43</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data.html">DRDSP::ReducedData</a></div><div class="ttdef"><b>Definition:</b> reduced_data.h:12</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html">DRDSP::ModelEmbedded</a></div><div class="ttdoc">A model without parameters whose state space is embedded into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:41</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 23 2013 00:20:13 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 8 2014 11:34:12 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

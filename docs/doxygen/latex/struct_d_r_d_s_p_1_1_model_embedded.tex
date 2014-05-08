@@ -1,5 +1,5 @@
-\hypertarget{struct_d_r_d_s_p_1_1_model_embedded}{\section{D\-R\-D\-S\-P\-:\-:Model\-Embedded Struct Reference}
-\label{struct_d_r_d_s_p_1_1_model_embedded}\index{D\-R\-D\-S\-P\-::\-Model\-Embedded@{D\-R\-D\-S\-P\-::\-Model\-Embedded}}
+\hypertarget{struct_d_r_d_s_p_1_1_model_embedded}{\section{D\-R\-D\-S\-P\-:\-:Model\-Embedded$<$ Model, Embedding $>$ Struct Template Reference}
+\label{struct_d_r_d_s_p_1_1_model_embedded}\index{D\-R\-D\-S\-P\-::\-Model\-Embedded$<$ Model, Embedding $>$@{D\-R\-D\-S\-P\-::\-Model\-Embedded$<$ Model, Embedding $>$}}
 }
 
 
@@ -10,33 +10,40 @@ A model without parameters whose state space is embedded into R$^\wedge$n.
 
 {\ttfamily \#include $<$model.\-h$>$}
 
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a73b0431c1e0415e54e821138654e7414}{typedef Model\-::\-State {\bfseries State}}\label{struct_d_r_d_s_p_1_1_model_embedded_a73b0431c1e0415e54e821138654e7414}
+
+\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_aac8110fc1d52b006311cc1ca9377a8d4}{{\bfseries Model\-Embedded} (\hyperlink{struct_d_r_d_s_p_1_1_model}{Model} \&m, \hyperlink{struct_d_r_d_s_p_1_1_embedding}{Embedding} \&e)}\label{struct_d_r_d_s_p_1_1_model_embedded_aac8110fc1d52b006311cc1ca9377a8d4}
+\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_af20ae481d1c0f06921d5a3afc61e4925}{{\bfseries Model\-Embedded} (const \hyperlink{struct_d_r_d_s_p_1_1_model}{Model} \&m, const \hyperlink{struct_d_r_d_s_p_1_1_embedding}{Embedding} \&e)}\label{struct_d_r_d_s_p_1_1_model_embedded_af20ae481d1c0f06921d5a3afc61e4925}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a4f33e3c6473e997ae92c75771aa918fd}{Vector\-Xd \hyperlink{struct_d_r_d_s_p_1_1_model_embedded_a4f33e3c6473e997ae92c75771aa918fd}{Vector\-Field} (const Vector\-Xd \&state)}\label{struct_d_r_d_s_p_1_1_model_embedded_a4f33e3c6473e997ae92c75771aa918fd}
+\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a06fcd458e8e94ee5935df587b639be97}{Vector\-Xd {\bfseries operator()} (const State \&state) const }\label{struct_d_r_d_s_p_1_1_model_embedded_a06fcd458e8e94ee5935df587b639be97}
 
-\begin{DoxyCompactList}\small\item\em The vector field on R$^\wedge$n. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a6aaa71ce7c8a2b11f86e7950498249c0}{Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_model_embedded_a6aaa71ce7c8a2b11f86e7950498249c0}{Partials} (const Vector\-Xd \&state)}\label{struct_d_r_d_s_p_1_1_model_embedded_a6aaa71ce7c8a2b11f86e7950498249c0}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a8de87caf0f79a27021a122c9ff8bd54c}{Matrix\-Xd {\bfseries Partials} (const State \&state) const }\label{struct_d_r_d_s_p_1_1_model_embedded_a8de87caf0f79a27021a122c9ff8bd54c}
 
-\begin{DoxyCompactList}\small\item\em The partial derivative of the vector field on R$^\wedge$n with respect to the underlying state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a2d021cf215cdd084fde36bbd46101cc5}{\hyperlink{struct_d_r_d_s_p_1_1_model}{Model} \& \hyperlink{struct_d_r_d_s_p_1_1_model_embedded_a2d021cf215cdd084fde36bbd46101cc5}{model}}\label{struct_d_r_d_s_p_1_1_model_embedded_a2d021cf215cdd084fde36bbd46101cc5}
+\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a14709f8929a887ffba4b019182838fe3}{\hyperlink{struct_d_r_d_s_p_1_1_model}{Model} \hyperlink{struct_d_r_d_s_p_1_1_model_embedded_a14709f8929a887ffba4b019182838fe3}{model}}\label{struct_d_r_d_s_p_1_1_model_embedded_a14709f8929a887ffba4b019182838fe3}
 
 \begin{DoxyCompactList}\small\item\em The underlying model. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a22aeda6bb7f303b3e79a6f133887439b}{\hyperlink{struct_d_r_d_s_p_1_1_embedding}{Embedding} \& \hyperlink{struct_d_r_d_s_p_1_1_model_embedded_a22aeda6bb7f303b3e79a6f133887439b}{embedding}}\label{struct_d_r_d_s_p_1_1_model_embedded_a22aeda6bb7f303b3e79a6f133887439b}
+\hypertarget{struct_d_r_d_s_p_1_1_model_embedded_a5e49fc6c38129bbd5721ec97b7d19230}{\hyperlink{struct_d_r_d_s_p_1_1_embedding}{Embedding} \hyperlink{struct_d_r_d_s_p_1_1_model_embedded_a5e49fc6c38129bbd5721ec97b7d19230}{embedding}}\label{struct_d_r_d_s_p_1_1_model_embedded_a5e49fc6c38129bbd5721ec97b7d19230}
 
 \begin{DoxyCompactList}\small\item\em An embedding into R$^\wedge$n. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
+\subsubsection*{template$<$typename Model, typename Embedding$>$struct D\-R\-D\-S\-P\-::\-Model\-Embedded$<$ Model, Embedding $>$}
+
 A model without parameters whose state space is embedded into R$^\wedge$n. 
 
-The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 
-include/\-D\-R\-D\-S\-P/dynamics/model.\-h\item 
-src/dynamics/model.\-cpp\end{DoxyCompactItemize}
+include/\-D\-R\-D\-S\-P/dynamics/model.\-h\end{DoxyCompactItemize}

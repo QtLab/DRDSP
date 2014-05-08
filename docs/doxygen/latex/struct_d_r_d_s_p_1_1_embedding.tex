@@ -3,40 +3,25 @@
 }
 
 
-An embedding of a state space into R$^\wedge$n.  
+Base for an embedding of a state space into R$^\wedge$n.  
 
 
 
 
 {\ttfamily \#include $<$embedding.\-h$>$}
 
+Inheritance diagram for D\-R\-D\-S\-P\-:\-:Embedding\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{struct_d_r_d_s_p_1_1_embedding}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_a044e60ce685c03b1e31a080455a47a43}{{\bfseries Embedding} (uint32\-\_\-t orig\-Dim, uint32\-\_\-t embed\-Dim)}\label{struct_d_r_d_s_p_1_1_embedding_a044e60ce685c03b1e31a080455a47a43}
+\hypertarget{struct_d_r_d_s_p_1_1_embedding_a03a9777076d129e3330a7c69e3ff48e3}{{\bfseries Embedding} (uint32\-\_\-t original\-Dimension, uint32\-\_\-t embedded\-Dimension)}\label{struct_d_r_d_s_p_1_1_embedding_a03a9777076d129e3330a7c69e3ff48e3}
 
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_a128ada65c8aafc9348dafd8c89add0da}{virtual Vector\-Xd \hyperlink{struct_d_r_d_s_p_1_1_embedding_a128ada65c8aafc9348dafd8c89add0da}{Evaluate} (const Vector\-Xd \&x) const }\label{struct_d_r_d_s_p_1_1_embedding_a128ada65c8aafc9348dafd8c89add0da}
-
-\begin{DoxyCompactList}\small\item\em Embeds the given state. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_a18d562ec89da43df7dd66b1b8b694e85}{virtual Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_embedding_a18d562ec89da43df7dd66b1b8b694e85}{Derivative} (const Vector\-Xd \&x) const }\label{struct_d_r_d_s_p_1_1_embedding_a18d562ec89da43df7dd66b1b8b694e85}
-
-\begin{DoxyCompactList}\small\item\em The partial derivatives of the embedding with respect to the state. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_a010327f5b83006a24e466deabad5a852}{virtual Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_embedding_a010327f5b83006a24e466deabad5a852}{Derivative\-Adjoint} (const Vector\-Xd \&x) const }\label{struct_d_r_d_s_p_1_1_embedding_a010327f5b83006a24e466deabad5a852}
-
-\begin{DoxyCompactList}\small\item\em The linear algebraic adjoint of the derivative. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_ae651c3ad18c8ad3dbbfea1577d7d395f}{virtual Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_embedding_ae651c3ad18c8ad3dbbfea1577d7d395f}{Derivative2} (const Vector\-Xd \&x, uint32\-\_\-t i) const }\label{struct_d_r_d_s_p_1_1_embedding_ae651c3ad18c8ad3dbbfea1577d7d395f}
-
-\begin{DoxyCompactList}\small\item\em The second partial derivatives of the ith component with respect to the state. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_a5d28c64ee0aa19fb2481f16795b31765}{Matrix\-Xd \hyperlink{struct_d_r_d_s_p_1_1_embedding_a5d28c64ee0aa19fb2481f16795b31765}{Compute\-Induced\-Metric} (const Vector\-Xd \&x) const }\label{struct_d_r_d_s_p_1_1_embedding_a5d28c64ee0aa19fb2481f16795b31765}
-
-\begin{DoxyCompactList}\small\item\em The pullback metric on the state space from R$^\wedge$n. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_a71acf702383901f9d4aa6fb198dc0892}{\hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} \hyperlink{struct_d_r_d_s_p_1_1_embedding_a71acf702383901f9d4aa6fb198dc0892}{Embed\-Data} (const \hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} \&data) const }\label{struct_d_r_d_s_p_1_1_embedding_a71acf702383901f9d4aa6fb198dc0892}
-
-\begin{DoxyCompactList}\small\item\em Apply this embedding to the data set. \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_embedding_abdf67b0ed050b58fc9a0943d604093ef}{\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \hyperlink{struct_d_r_d_s_p_1_1_embedding_abdf67b0ed050b58fc9a0943d604093ef}{Embed\-Data} (const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&data) const }\label{struct_d_r_d_s_p_1_1_embedding_abdf67b0ed050b58fc9a0943d604093ef}
-
-\begin{DoxyCompactList}\small\item\em Apply this embedding to the data system. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -49,9 +34,8 @@ An embedding of a state space into R$^\wedge$n.
 
 
 \subsection{Detailed Description}
-An embedding of a state space into R$^\wedge$n. 
+Base for an embedding of a state space into R$^\wedge$n. 
 
-The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 
-include/\-D\-R\-D\-S\-P/dynamics/embedding.\-h\item 
-src/dynamics/embedding.\-cpp\end{DoxyCompactItemize}
+include/\-D\-R\-D\-S\-P/dynamics/embedding.\-h\end{DoxyCompactItemize}

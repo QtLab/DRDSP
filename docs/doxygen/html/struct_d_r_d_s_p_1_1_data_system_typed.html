@@ -102,49 +102,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aeca993ba97569b6cce26575df8fd71a2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeca993ba97569b6cce26575df8fd71a2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>DataSystemTyped</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html">DataSystemTyped</a> &amp;rhs)</td></tr>
-<tr class="separator:aeca993ba97569b6cce26575df8fd71a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36dcf2bd60c1e177507d1215ab8baf57"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36dcf2bd60c1e177507d1215ab8baf57"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>DataSystemTyped</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html">DataSystemTyped</a> &amp;&amp;rhs)</td></tr>
-<tr class="separator:a36dcf2bd60c1e177507d1215ab8baf57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc04596b19fc88c69fcf404573e6dc3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc04596b19fc88c69fcf404573e6dc3a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Create</b> (uint32_t dim, uint16_t numParams, uint8_t paramDim)</td></tr>
-<tr class="separator:acc04596b19fc88c69fcf404573e6dc3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ebf2395136854994f8dbc876b27ef16"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ebf2395136854994f8dbc876b27ef16"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Destroy</b> ()</td></tr>
-<tr class="separator:a0ebf2395136854994f8dbc876b27ef16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98e789d6a53c5d8e0b78b53421d24164"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a98e789d6a53c5d8e0b78b53421d24164"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a98e789d6a53c5d8e0b78b53421d24164">Load</a> (const char *filename)</td></tr>
-<tr class="memdesc:a98e789d6a53c5d8e0b78b53421d24164"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a data system described by the given text file. <br/></td></tr>
-<tr class="separator:a98e789d6a53c5d8e0b78b53421d24164"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a771a4fb04c009cab7a220aea627b68b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a771a4fb04c009cab7a220aea627b68b3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a771a4fb04c009cab7a220aea627b68b3">LoadSetBinary</a> (const char *filename, uint32_t i)</td></tr>
-<tr class="memdesc:a771a4fb04c009cab7a220aea627b68b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the ith data set from the given file in binary format. <br/></td></tr>
-<tr class="separator:a771a4fb04c009cab7a220aea627b68b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a895514d71f542392931a54125bc69a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a895514d71f542392931a54125bc69a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a7a895514d71f542392931a54125bc69a">LoadSetText</a> (const char *filename, uint32_t i)</td></tr>
-<tr class="memdesc:a7a895514d71f542392931a54125bc69a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the ith data set from the given file in text format (space separated) <br/></td></tr>
-<tr class="separator:a7a895514d71f542392931a54125bc69a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a2e1c728062460a99bd8439b1030122"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a2e1c728062460a99bd8439b1030122"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DataSystemTyped</b> (uint32_t dim, uint16_t numParams, uint8_t paramDim)</td></tr>
+<tr class="separator:a0a2e1c728062460a99bd8439b1030122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ca9677e046e5e0217b5a85a1609ab12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ca9677e046e5e0217b5a85a1609ab12"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a5ca9677e046e5e0217b5a85a1609ab12">Load</a> (const char *filename, uint32_t maxPoints=0)</td></tr>
+<tr class="memdesc:a5ca9677e046e5e0217b5a85a1609ab12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a data system described by the given text file. <br/></td></tr>
+<tr class="separator:a5ca9677e046e5e0217b5a85a1609ab12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3009201b319094aaf57481c6554a45f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3009201b319094aaf57481c6554a45f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#af3009201b319094aaf57481c6554a45f">LoadSetBinary</a> (const char *filename, uint32_t i, uint32_t maxPoints=0)</td></tr>
+<tr class="memdesc:af3009201b319094aaf57481c6554a45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the ith data set from the given file in binary format. <br/></td></tr>
+<tr class="separator:af3009201b319094aaf57481c6554a45f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83d7c0da126fdd1edd9d569b3eee2ee0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83d7c0da126fdd1edd9d569b3eee2ee0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a83d7c0da126fdd1edd9d569b3eee2ee0">LoadSetText</a> (const char *filename, uint32_t i, uint32_t maxPoints=0)</td></tr>
+<tr class="memdesc:a83d7c0da126fdd1edd9d569b3eee2ee0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the ith data set from the given file in text format (space separated) <br/></td></tr>
+<tr class="separator:a83d7c0da126fdd1edd9d569b3eee2ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a19267fafd70c07c177b9992468704504"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a19267fafd70c07c177b9992468704504"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_data_set_typed.html">DataSetTyped</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a19267fafd70c07c177b9992468704504">dataSets</a></td></tr>
-<tr class="memdesc:a19267fafd70c07c177b9992468704504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of typed data sets. <br/></td></tr>
-<tr class="separator:a19267fafd70c07c177b9992468704504"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14e96a1e32444f7a799e3d5552317aa5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a14e96a1e32444f7a799e3d5552317aa5"></a>
-VectorXd *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a14e96a1e32444f7a799e3d5552317aa5">parameters</a></td></tr>
-<tr class="memdesc:a14e96a1e32444f7a799e3d5552317aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of parameters. <br/></td></tr>
-<tr class="separator:a14e96a1e32444f7a799e3d5552317aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99939d1840632745127aa328eb4845f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99939d1840632745127aa328eb4845f8"></a>
+vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_data_set_typed.html">DataSetTyped</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a99939d1840632745127aa328eb4845f8">dataSets</a></td></tr>
+<tr class="memdesc:a99939d1840632745127aa328eb4845f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of typed data sets. <br/></td></tr>
+<tr class="separator:a99939d1840632745127aa328eb4845f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68a32ce5ca326ebe2eadab955cdaf020"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68a32ce5ca326ebe2eadab955cdaf020"></a>
+vector&lt; VectorXd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a68a32ce5ca326ebe2eadab955cdaf020">parameters</a></td></tr>
+<tr class="memdesc:a68a32ce5ca326ebe2eadab955cdaf020"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of parameters. <br/></td></tr>
+<tr class="separator:a68a32ce5ca326ebe2eadab955cdaf020"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b4eaddeb36714703850fdb92050ca0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b4eaddeb36714703850fdb92050ca0a"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a2b4eaddeb36714703850fdb92050ca0a">dimension</a></td></tr>
 <tr class="memdesc:a2b4eaddeb36714703850fdb92050ca0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the space in which the data points live. <br/></td></tr>
 <tr class="separator:a2b4eaddeb36714703850fdb92050ca0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02ab7e32e3df6e667e176144520c339c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a02ab7e32e3df6e667e176144520c339c"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a02ab7e32e3df6e667e176144520c339c">maxPoints</a></td></tr>
-<tr class="memdesc:a02ab7e32e3df6e667e176144520c339c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper limit on the number of data points to read from file. <br/></td></tr>
-<tr class="separator:a02ab7e32e3df6e667e176144520c339c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a965e1066f9c4449413add3978a4cb0af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a965e1066f9c4449413add3978a4cb0af"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system_typed.html#a965e1066f9c4449413add3978a4cb0af">numParameters</a></td></tr>
 <tr class="memdesc:a965e1066f9c4449413add3978a4cb0af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of parameters/data sets in the family. <br/></td></tr>
@@ -163,7 +150,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 23 2013 00:20:13 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 8 2014 11:34:16 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

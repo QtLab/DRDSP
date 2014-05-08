@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.5"/>
-<title>DRDSP: DRDSP::ModelEmbedded Struct Reference</title>
+<title>DRDSP: DRDSP::ModelEmbedded&lt; Model, Embedding &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -87,11 +87,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="struct_d_r_d_s_p_1_1_model_embedded-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DRDSP::ModelEmbedded Struct Reference</div>  </div>
+<div class="title">DRDSP::ModelEmbedded&lt; Model, Embedding &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -100,41 +101,47 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><code>#include &lt;<a class="el" href="model_8h_source.html">model.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a73b0431c1e0415e54e821138654e7414"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73b0431c1e0415e54e821138654e7414"></a>
+typedef Model::State&#160;</td><td class="memItemRight" valign="bottom"><b>State</b></td></tr>
+<tr class="separator:a73b0431c1e0415e54e821138654e7414"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aac8110fc1d52b006311cc1ca9377a8d4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac8110fc1d52b006311cc1ca9377a8d4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ModelEmbedded</b> (<a class="el" href="struct_d_r_d_s_p_1_1_model.html">Model</a> &amp;m, <a class="el" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a> &amp;e)</td></tr>
-<tr class="separator:aac8110fc1d52b006311cc1ca9377a8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f33e3c6473e997ae92c75771aa918fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f33e3c6473e997ae92c75771aa918fd"></a>
-VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_embedded.html#a4f33e3c6473e997ae92c75771aa918fd">VectorField</a> (const VectorXd &amp;state)</td></tr>
-<tr class="memdesc:a4f33e3c6473e997ae92c75771aa918fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vector field on R^n. <br/></td></tr>
-<tr class="separator:a4f33e3c6473e997ae92c75771aa918fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6aaa71ce7c8a2b11f86e7950498249c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6aaa71ce7c8a2b11f86e7950498249c0"></a>
-MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_embedded.html#a6aaa71ce7c8a2b11f86e7950498249c0">Partials</a> (const VectorXd &amp;state)</td></tr>
-<tr class="memdesc:a6aaa71ce7c8a2b11f86e7950498249c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The partial derivative of the vector field on R^n with respect to the underlying state. <br/></td></tr>
-<tr class="separator:a6aaa71ce7c8a2b11f86e7950498249c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af20ae481d1c0f06921d5a3afc61e4925"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af20ae481d1c0f06921d5a3afc61e4925"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ModelEmbedded</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_model.html">Model</a> &amp;m, const <a class="el" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a> &amp;e)</td></tr>
+<tr class="separator:af20ae481d1c0f06921d5a3afc61e4925"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06fcd458e8e94ee5935df587b639be97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06fcd458e8e94ee5935df587b639be97"></a>
+VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const State &amp;state) const </td></tr>
+<tr class="separator:a06fcd458e8e94ee5935df587b639be97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8de87caf0f79a27021a122c9ff8bd54c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8de87caf0f79a27021a122c9ff8bd54c"></a>
+MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>Partials</b> (const State &amp;state) const </td></tr>
+<tr class="separator:a8de87caf0f79a27021a122c9ff8bd54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2d021cf215cdd084fde36bbd46101cc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d021cf215cdd084fde36bbd46101cc5"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_model.html">Model</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_embedded.html#a2d021cf215cdd084fde36bbd46101cc5">model</a></td></tr>
-<tr class="memdesc:a2d021cf215cdd084fde36bbd46101cc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The underlying model. <br/></td></tr>
-<tr class="separator:a2d021cf215cdd084fde36bbd46101cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22aeda6bb7f303b3e79a6f133887439b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22aeda6bb7f303b3e79a6f133887439b"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_embedded.html#a22aeda6bb7f303b3e79a6f133887439b">embedding</a></td></tr>
-<tr class="memdesc:a22aeda6bb7f303b3e79a6f133887439b"><td class="mdescLeft">&#160;</td><td class="mdescRight">An embedding into R^n. <br/></td></tr>
-<tr class="separator:a22aeda6bb7f303b3e79a6f133887439b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14709f8929a887ffba4b019182838fe3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a14709f8929a887ffba4b019182838fe3"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_model.html">Model</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_embedded.html#a14709f8929a887ffba4b019182838fe3">model</a></td></tr>
+<tr class="memdesc:a14709f8929a887ffba4b019182838fe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The underlying model. <br/></td></tr>
+<tr class="separator:a14709f8929a887ffba4b019182838fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e49fc6c38129bbd5721ec97b7d19230"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e49fc6c38129bbd5721ec97b7d19230"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_model_embedded.html#a5e49fc6c38129bbd5721ec97b7d19230">embedding</a></td></tr>
+<tr class="memdesc:a5e49fc6c38129bbd5721ec97b7d19230"><td class="mdescLeft">&#160;</td><td class="mdescRight">An embedding into R^n. <br/></td></tr>
+<tr class="separator:a5e49fc6c38129bbd5721ec97b7d19230"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A model without parameters whose state space is embedded into R^n. </p>
-</div><hr/>The documentation for this struct was generated from the following files:<ul>
+<div class="textblock"><h3>template&lt;typename Model, typename Embedding&gt;<br/>
+struct DRDSP::ModelEmbedded&lt; Model, Embedding &gt;</h3>
+
+<p>A model without parameters whose state space is embedded into R^n. </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/DRDSP/dynamics/<a class="el" href="model_8h_source.html">model.h</a></li>
-<li>src/dynamics/model.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 23 2013 00:20:15 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu May 8 2014 11:34:17 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

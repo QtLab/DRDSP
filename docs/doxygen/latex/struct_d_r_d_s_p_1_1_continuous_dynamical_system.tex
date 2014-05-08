@@ -1,34 +1,40 @@
-\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system}{\section{D\-R\-D\-S\-P\-:\-:Continuous\-Dynamical\-System$<$ T\-Time, T\-State $>$ Struct Template Reference}
-\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system}\index{D\-R\-D\-S\-P\-::\-Continuous\-Dynamical\-System$<$ T\-Time, T\-State $>$@{D\-R\-D\-S\-P\-::\-Continuous\-Dynamical\-System$<$ T\-Time, T\-State $>$}}
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system}{\section{D\-R\-D\-S\-P\-:\-:Continuous\-Dynamical\-System$<$ Solver, Wrap\-Function $>$ Struct Template Reference}
+\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system}\index{D\-R\-D\-S\-P\-::\-Continuous\-Dynamical\-System$<$ Solver, Wrap\-Function $>$@{D\-R\-D\-S\-P\-::\-Continuous\-Dynamical\-System$<$ Solver, Wrap\-Function $>$}}
 }
-Inheritance diagram for D\-R\-D\-S\-P\-:\-:Continuous\-Dynamical\-System$<$ T\-Time, T\-State $>$\-:\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[height=2.537765cm]{struct_d_r_d_s_p_1_1_continuous_dynamical_system}
-\end{center}
-\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_ac13a0e7c10ab1e64992bdf5e8a90c4ca}{typedef double {\bfseries Time}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_ac13a0e7c10ab1e64992bdf5e8a90c4ca}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a248356acb4acbfd94c55fb6d905b0e39}{typedef Solver\-::\-State {\bfseries State}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a248356acb4acbfd94c55fb6d905b0e39}
+
+\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_acc32849f074ae91f4d46cfbd26f34fa3}{{\bfseries Continuous\-Dynamical\-System} (\hyperlink{struct_d_r_d_s_p_1_1_solver}{Solver}$<$ T\-Time, T\-State $>$ \&S)}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_acc32849f074ae91f4d46cfbd26f34fa3}
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a54d146f2c7d24db193840453aaeab0c6}{{\bfseries Continuous\-Dynamical\-System} (const Solver \&solver)}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a54d146f2c7d24db193840453aaeab0c6}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a20bfbacb5264a804b11c950439fe4c08}{{\bfseries Continuous\-Dynamical\-System} (\hyperlink{struct_d_r_d_s_p_1_1_solver}{Solver}$<$ T\-Time, T\-State $>$ \&S, const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ T\-State $>$ \&W)}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a20bfbacb5264a804b11c950439fe4c08}
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a7654747aeb3a95822d4fa9f5196fed00}{{\bfseries Continuous\-Dynamical\-System} (const Solver \&solver, const State \&state)}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a7654747aeb3a95822d4fa9f5196fed00}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_ac6b77bbecb35c1da88497de317a3b50d}{void {\bfseries Advance} (T\-Time dt)}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_ac6b77bbecb35c1da88497de317a3b50d}
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a242ddd4252b8a2ba9491f7df3ca4cf9c}{void {\bfseries Advance} (double dt)}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a242ddd4252b8a2ba9491f7df3ca4cf9c}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a2fd6dbc179354bd4972c19c0c39de7ca}{\hyperlink{struct_d_r_d_s_p_1_1_solver}{Solver}$<$ T\-Time, T\-State $>$ \& {\bfseries solver}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a2fd6dbc179354bd4972c19c0c39de7ca}
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a0704c63204b6786fdc4299591f14baf9}{State {\bfseries state}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a0704c63204b6786fdc4299591f14baf9}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a1aef26b908300f0d10d0fd8f8e92d974}{const \hyperlink{struct_d_r_d_s_p_1_1_wrap_function}{Wrap\-Function}$<$ T\-State $>$ \& {\bfseries wrap\-Function}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a1aef26b908300f0d10d0fd8f8e92d974}
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a069c1e6770595fc96296bfa8422a259c}{Solver {\bfseries solver}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a069c1e6770595fc96296bfa8422a259c}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a1b58189b0f6cfd9ebfe3eea51695276a}{double {\bfseries dt\-Max}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a1b58189b0f6cfd9ebfe3eea51695276a}
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a3232d59b102cd9188b9c992f12faa579}{Wrap\-Function {\bfseries wrap}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a3232d59b102cd9188b9c992f12faa579}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a610a818a2582ed4ccbbba905e84d0616}{double {\bfseries dt\-Max}}\label{struct_d_r_d_s_p_1_1_continuous_dynamical_system_a610a818a2582ed4ccbbba905e84d0616}
 
 \end{DoxyCompactItemize}
 
