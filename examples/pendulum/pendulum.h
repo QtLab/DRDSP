@@ -10,7 +10,6 @@ struct PendulumWrap {
 };
 
 struct Pendulum : Model<> {
-	PendulumWrap pendulumWrap;
 
 	Pendulum() : Pendulum(1.8) {}
 
@@ -62,6 +61,6 @@ struct DoughnutEmbedding : Embedding {
 	MatrixXd Derivative2( const VectorXd& x, uint32_t mu ) const;
 };
 
-typedef RKDynamicalSystem<SolverFunctionFromModel<Pendulum>,PendulumWrap> PendulumSolver;
+typedef RKDynamicalSystem<Pendulum,PendulumWrap> PendulumSolver;
 
 #endif

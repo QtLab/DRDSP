@@ -22,6 +22,18 @@ namespace DRDSP {
 			t += dt;
 		}
 
+		// Autonomous version
+		void Integrate( State& x, double dt ) {
+			double halfdt = 0.5 * dt;
+
+			RKt[0] = f( x );
+			RKt[1] = f( x + halfdt * RKt[0] );
+			RKt[2] = f( x + halfdt * RKt[1] );
+			RKt[3] = f( x + dt * RKt[2] );
+
+			x += ( RKt[0] + 2.0 * RKt[1] + 2.0 * RKt[2] + RKt[3] ) * (dt / 6.0);
+		}
+
 	protected:
 		State RKt[4];
 	};

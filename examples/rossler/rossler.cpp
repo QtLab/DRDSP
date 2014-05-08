@@ -24,19 +24,3 @@ Matrix3d RosslerModel::Partials( const Vector3d& x ) const {
 
 	return res;
 }
-
-Matrix3d RosslerJacobian::operator()( const Vector3d& x ) const {
-	Matrix3d res;
-
-	res(0,0) = 0.0;
-	res(0,1) = -1.0;
-	res(0,2) = -1.0;
-	res(1,0) = 1.0;
-	res(1,1) = a;
-	res(1,2) = 0.0;
-	res(2,0) = x(2);
-	res(2,1) = 0.0;
-	res(2,2) = x(0) - c;
-
-	return res;
-}

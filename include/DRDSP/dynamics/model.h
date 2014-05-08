@@ -6,21 +6,6 @@
 namespace DRDSP {
 
 	/*!
-	 * \brief Wrapper for a Model that can be used as a SolverFunction
-	 */
-	template<typename Model>
-	struct SolverFunctionFromModel {
-		typedef typename Model::State State;
-		Model model;
-		explicit SolverFunctionFromModel( const Model& model ) : model(model) {}
-		
-		template<typename Time>
-		State operator()( const State& x, Time ) const {
-			return model(x);
-		}
-	};
-
-	/*!
 	 * \brief Base for model without parameters.
 	 */
 	template<typename State = VectorXd>

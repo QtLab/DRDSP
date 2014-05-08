@@ -11,7 +11,7 @@ using namespace std;
 
 namespace DRDSP {
 
-	template<typename Family,typename Solver = RKDynamicalSystem<SolverFunctionFromModel<typename Family::Model>>>
+	template<typename Family,typename Solver = RKDynamicalSystem<typename Family::Model>>
 	struct DataGenerator {
 		typedef typename Family::Parameter Parameter;
 		typedef typename Family::Model Model;
@@ -124,7 +124,7 @@ namespace DRDSP {
 		DataSet GenerateDataSet( const Parameter& param, const State& init, Time period ) const {
 			cout << "Parameter " << param << endl;
 
-			Solver solver( SolverFunctionFromModel<Model>( family(param) ) );
+			Solver solver( family(param) );
 			solver.state = init;
 			solver.dtMax = dtMax;
 			solver.Advance(tStart);

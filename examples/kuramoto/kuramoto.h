@@ -84,7 +84,7 @@ struct KuramotoBFamily : Family<KuramotoB> {
 	}
 };
 
-typedef RKDynamicalSystem<SolverFunctionFromModel<KuramotoA>,KuramotoWrap> KuramotoASolver;
-typedef RKDynamicalSystem<SolverFunctionFromModel<KuramotoB>,KuramotoWrap> KuramotoBSolver;
+typedef RKDynamicalSystem<KuramotoA,KuramotoWrap> KuramotoASolver;
+typedef RKDynamicalSystem<KuramotoB,KuramotoWrap> KuramotoBSolver;
 
 #endif

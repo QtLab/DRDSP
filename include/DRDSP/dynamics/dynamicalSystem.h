@@ -44,14 +44,14 @@ namespace DRDSP {
 		ContinuousDynamicalSystem( const Solver& solver, const State& state ) : solver(solver), state(state), dtMax(0) {}
 
 		void Advance( double dt ) {
-			double t = 0.0, dta = dt;
+			double dta = dt;
 			uint32_t n = 1;
 			if( dt > dtMax && dtMax > 0.0 ) {
 				n = uint32_t(dt / dtMax + 1.0);
 				dta = dt / n;
 			}
 			for(uint32_t i=0;i<n;++i) {
-				solver.Integrate(state,t,dta);
+				solver.Integrate(state,dta);
 				wrap(state);
 			}
 		}
