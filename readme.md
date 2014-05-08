@@ -67,12 +67,12 @@ A base class `Family` is provided in `DRDSP/dynamics/model.h`. Inherit from this
 struct ExampleFamily : Family<ExampleModel> {
 
 	ExampleFamily() :
-		Family<ExampleModel>(10,1)       // set the dimension of the state space and parameter space
+		Family<ExampleModel>(10,1)    // set the dimension of the state space and parameter space
 	{}
 	
 	ExampleModel operator()( const VectorXd& parameter ) const {
 		ExampleModel model;
-		model.c = parameter[0];         // in this family we are investigating the `c` parameter.
+		model.c = parameter[0];      // in this family we are investigating the c parameter.
 		return model;
 	}
 };

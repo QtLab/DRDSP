@@ -12,55 +12,35 @@ using namespace DRDSP;
 typedef PolyharmonicSpline3 RadialType;
 
 struct Options {
-	uint32_t numIterations, maxPoints, targetDimension, numRBFs;
+	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : numIterations(150), maxPoints(0), targetDimension(3), numRBFs(40) {}
+	Options() : targetDimension(3), numRBFs(40), numIterations(150), numThreads(4) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
 		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
-		if( argc >= 4 ) maxPoints = (uint32_t)atoi(argv[3]);
-		if( argc >= 5 ) numIterations = (uint32_t)atoi(argv[4]);
+		if( argc >= 4 ) numIterations = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 ) numThreads = (uint32_t)atoi(argv[4]);
 	}
 };
 
 void ComputeReduced( const Options& );
-void SimulateReduced();
-void OriginalFloquet();
-void ReducedFloquet();
+void SimulateReduced( const Options& );
+void OriginalFloquet( const Options& );
+void ReducedFloquet( const Options& );
 
 int main( int argc, char** argv ) {
 	Options options(argc,argv);
 
 	//ComputeReduced( options );
-	SimulateReduced();
-	//OriginalFloquet();
-	//ReducedFloquet();
+	SimulateReduced( options );
+	//OriginalFloquet( options );
+	//ReducedFloquet( options );
+
+	cout << "Press any key to continue . . . "; cin.get();
 }
 
-void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
-
-	ofstream out("output/comparison.csv");
-	out << "Parameter,RMS,Max,MaxMin,Differences" << endl;
-	for(uint32_t i=0;i<reducedData.numParameters;++i) {
-		DataComparisonResult r = CompareData( reducedData.reducedData[i].points, rdata.dataSets[i].points );
-		cout << "Parameter " << rdata.parameters[i] << endl;
-		cout << "RMS: " << r.rmsDifference << endl;
-		cout << "Max: " << r.maxDifference << endl;
-		cout << "MaxMin: " << r.maxMinDifference << endl;
-
-		out << rdata.parameters[i] << ",";
-		out << r.rmsDifference << ",";
-		out << r.maxDifference << ",";
-		out << r.maxMinDifference << ",";
-		for( const auto& x : r.differences )
-			out << x << ",";
-		out << endl;
-	}
-
-}
-
-void ReducedFloquet() {
+void ReducedFloquet( const Options& options ) {
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
 
@@ -83,7 +63,7 @@ void ReducedFloquet() {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 10000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, 4 );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;
@@ -96,12 +76,10 @@ void ReducedFloquet() {
 			out << floquet[j].real() << "," << floquet[j].imag() << ",";
 		out << endl;
 	}
-
-	system("PAUSE");
 }
 
 
-void OriginalFloquet() {
+void OriginalFloquet( const Options& options ) {
 
 	// The example
 	RosslerFamily rossler;
@@ -124,7 +102,7 @@ void OriginalFloquet() {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 10000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, 4 );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;
@@ -137,9 +115,6 @@ void OriginalFloquet() {
 			out << floquet[j].real() << "," << floquet[j].imag() << ",";
 		out << endl;
 	}
-
-
-	system("PAUSE");
 }
 
 void ComputeReduced( const Options& options ) {
@@ -158,13 +133,13 @@ void ComputeReduced( const Options& options ) {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 1000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, 4 );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), 4 );
+	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads );
 	reducedData.WritePointsCSV( "output/p", "-points.csv" );
 	reducedData.WriteVectorsCSV( "output/p", "-vectors.csv" );
 
@@ -185,7 +160,7 @@ void ComputeReduced( const Options& options ) {
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, 4 );
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
@@ -222,11 +197,9 @@ void ComputeReduced( const Options& options ) {
 			[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; }
 		).WriteBitmap("output/bifurcation-red.bmp",720);
 	}
-
-	system("PAUSE");
 }
 
-void SimulateReduced() {
+void SimulateReduced( const Options& options ) {
 
 	// The example
 	RosslerFamily rossler;
@@ -242,13 +215,13 @@ void SimulateReduced() {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 1000;
 
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, 4 );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), 4 );
+	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads );
 
 	RBFFamily<RadialType> reducedModel;
 	reducedModel.ReadText("reduced.txt");
@@ -269,7 +242,7 @@ void SimulateReduced() {
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, 4 );
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );

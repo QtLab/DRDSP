@@ -9,12 +9,8 @@ namespace DRDSP {
 	struct DiscreteDynamicalSystem {
 		State state;
 		Map map;
-
-		DiscreteDynamicalSystem() = default;
 		
 		explicit DiscreteDynamicalSystem( const Map& map ) : map(map) {}
-
-		explicit DiscreteDynamicalSystem( const State& state ) : state(state) {}
 
 		DiscreteDynamicalSystem( const Map& map, const State& state ) : map(map), state(state) {}
 

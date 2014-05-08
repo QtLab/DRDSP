@@ -170,3 +170,59 @@ size_t SecantsData::GetIndexI( size_t k, size_t N ) {
 size_t SecantsData::GetIndexJ( size_t k, size_t i, size_t N ) {
 	return (k + 1 + (i*(i-1))/2) - i*(N-2);
 }
+
+vector<SecantsPreComputed> DRDSP::ComputeSecants( const DataSystem& data ) {
+	vector<SecantsPreComputed> secants( data.numParameters );
+	for(uint32_t i=0;i<data.numParameters;++i)
+		secants[i].ComputeFromData( data.dataSets[i] );
+	return secants;
+}
+
+vector<SecantsPreComputed> DRDSP::ComputeSecants( const DataSystem& data, uint32_t numThreads ) {
+	vector<SecantsPreComputed> secants( data.numParameters );
+	vector<future<void>> futures(numThreads);
+			
+	for(uint32_t i=0;i<data.numParameters;i+=numThreads) {
+		uint32_t N = min( data.numParameters - i, numThreads );
+		for(uint32_t j=0;j<N;++j) {
+			futures[j] = async( launch::async,
+				[]( SecantsPreComputed& secants, const DataSet& dataSet ) {
+					secants.ComputeFromData( dataSet );
+				},
+				ref(secants[i+j]), cref(data.dataSets[i+j])
+			);
+		}
+		for(uint32_t j=0;j<N;++j) {
+			futures[j].wait();
+		}
+	}
+	return secants;
+}
+
+vector<SecantsPreComputed> DRDSP::CullSecants( const vector<SecantsPreComputed>& secants, double degrees ) {
+	vector<SecantsPreComputed> culledSecants( secants.size() );
+	for(size_t i=0;i<secants.size();++i)
+		culledSecants[i] = secants[i].CullSecantsDegrees( degrees );
+	return culledSecants;
+}
+
+vector<SecantsPreComputed> DRDSP::CullSecants( const vector<SecantsPreComputed>& secants, double degrees, uint32_t numThreads ) {
+	vector<SecantsPreComputed> culledSecants( secants.size() );
+	vector<future<void>> futures(numThreads);
+	uint32_t numParams = (uint32_t)secants.size();
+	for(uint32_t i=0;i<numParams;i+=numThreads) {
+		uint32_t N = min( numParams - i, numThreads );
+		for(uint32_t j=0;j<N;++j) {
+			futures[j] = async( launch::async,
+				[degrees]( SecantsPreComputed& culled, const SecantsPreComputed& sec ) {
+					culled = sec.CullSecantsDegrees( degrees );
+				},
+				ref(culledSecants[i+j]), cref(secants[i+j])
+			);
+		}
+		for(uint32_t j=0;j<N;++j) {
+			futures[j].wait();
+		}
+	}
+	return culledSecants;
+}

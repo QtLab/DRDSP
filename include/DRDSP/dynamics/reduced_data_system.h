@@ -85,6 +85,8 @@ namespace DRDSP {
 		void WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;
 	};
 
+	void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata );
+
 }
 
 #endif

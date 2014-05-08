@@ -43,10 +43,34 @@ namespace DRDSP {
 		for(uint32_t i=0;i<r.numParameters;++i) {
 			r.dataSets[i].points.resize( data.dataSets[i].points.size() );
 
-			for(uint32_t j=0;j<r.dataSets[i].points.size();++j)
+			for(size_t j=0;j<r.dataSets[i].points.size();++j)
 				r.dataSets[i][j] = embedding(data.dataSets[i][j]);
 		}
 
+		return r;
+	}
+
+	template<typename E>
+	DataSystem EmbedData( const E& embedding, const DataSystem& data, uint32_t numThreads ) {
+		DataSystem r( embedding.eDim, data.numParameters, data.parameterDimension );
+		r.parameters = data.parameters;
+		vector<future<void>> futures(numThreads);
+		for(uint32_t i=0;i<data.numParameters;i+=numThreads) {
+			uint32_t N = min( data.numParameters - i, numThreads );
+			for(uint32_t j=0;j<N;++j) {
+				futures[j] = async( launch::async,
+					[&]( DataSet& embedded, const DataSet& original ) {
+						embedded.points.resize( original.points.size() );
+						for(size_t k=0;k<embedded.points.size();++k)
+							embedded[k] = embedding( original[k] );
+					},
+					ref(r.dataSets[i+j]), cref(data.dataSets[i+j])
+				);
+			}
+			for(uint32_t j=0;j<N;++j) {
+				futures[j].wait();
+			}
+		}
 		return r;
 	}
 

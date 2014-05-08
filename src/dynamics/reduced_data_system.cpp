@@ -1,5 +1,7 @@
 #include <DRDSP/dynamics/reduced_data_system.h>
 #include <sstream>
+#include <fstream>
+#include <iostream>
 
 using namespace DRDSP;
 using namespace std;
@@ -44,3 +46,24 @@ void ReducedDataSystem::WriteVectorsCSV( const char* filePrefix, const char* fil
 	}
 }
 
+void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
+
+	ofstream out("output/comparison.csv");
+	out << "Parameter,RMS,Max,MaxMin,Differences" << endl;
+	for(uint32_t i=0;i<reducedData.numParameters;++i) {
+		DataComparisonResult r = CompareData( reducedData.reducedData[i].points, rdata.dataSets[i].points );
+		cout << "Parameter " << rdata.parameters[i] << endl;
+		cout << "RMS: " << r.rmsDifference << endl;
+		cout << "Max: " << r.maxDifference << endl;
+		cout << "MaxMin: " << r.maxMinDifference << endl;
+
+		out << rdata.parameters[i] << ",";
+		out << r.rmsDifference << ",";
+		out << r.maxDifference << ",";
+		out << r.maxMinDifference << ",";
+		for( const auto& x : r.differences )
+			out << x << ",";
+		out << endl;
+	}
+
+}

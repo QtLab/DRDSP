@@ -1,8 +1,12 @@
 #ifndef INCLUDED_DATA_SECANTS
 #define INCLUDED_DATA_SECANTS
 #include "../types.h"
-#include "data_set.h"
+#include "data_system.h"
 #include <cmath>
+#include <future>
+#include <algorithm>
+
+using namespace std;
 
 namespace DRDSP {
 
@@ -55,7 +59,14 @@ namespace DRDSP {
 		static size_t GetIndexJ( size_t k, size_t i, size_t N );
 	};
 
+	vector<SecantsPreComputed> ComputeSecants( const DataSystem& data );
+
+	vector<SecantsPreComputed> ComputeSecants( const DataSystem& data, uint32_t numThreads );
+
+	vector<SecantsPreComputed> CullSecants( const vector<SecantsPreComputed>& secants, double degrees );
+
+	vector<SecantsPreComputed> CullSecants( const vector<SecantsPreComputed>& secants, double degrees, uint32_t numThreads );
+
 }
 
 #endif
-
