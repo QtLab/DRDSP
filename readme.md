@@ -18,16 +18,6 @@ The steps involved in the method are:
 6. Use the reduced data to obtain the reduced model.
 
 
-Extra Features
---------------
-
-* `DataGenerator` -- Performs simulations for multiple parameter values. A custom integrator may be specified (RK4 by default).
-
-* `HistogramGenerator` -- Generates a histogram from a data set.
-
-* `BifurcationDiagramGenerator` -- Performs simulations for multiple parameter values and samples values to be plotted on a bifurcation diagram. The sampling condition and value functions must be specified. A custom integrator may also be specified (RK4 by default).
-
-
 Usage
 -----
 
@@ -153,9 +143,28 @@ To use a custom solver, use `DataGenerator<ExampleFamily,ExampleSolver>`.
 
 Once data has been obtained, the secants are computed using the `Secants` class.
 
-Secants can be culled using one of the `Secants::CullSecants*` methods. Culling reduces the total number of secants in order to lower the computational cost of finding a projection. This is an optional, but recommended, step.
+```cpp
+// Compute secants from the data set using 4 threads.
+vector<SecantsPreComputed> secants = ComputeSecants( data, 4 );
+```
+
+Secants can be culled using one of the `CullSecants` function. Culling reduces the total number of secants in order to lower the computational cost of finding a projection. This is an optional, but recommended, step.
+
+```cpp
+// Cull secants with 10 degree tolerance using 4 threads.
+vector<SecantsPreComputed> newSecants = CullSecants( secants, 10.0, 4 );
+```
 
 The `ProjSecant` class determines a projection from a set of secants. The projection is encoded in an orthonormal matrix, `ProjSecant::W`.
+
+```cpp
+// Find a projection
+ProjSecant projSecant;
+projSecant.targetDimension = 2;  // Set the dimension of the projection
+projSecant.GetInitial( data );   // Compute initial condition
+projSecant.Find( newSecants );   // Find a projection using the secants
+```
+
 
 ### Computing Reduced Data
 
@@ -163,7 +172,7 @@ The `ProjSecant` class determines a projection from a set of secants. The projec
 
 ### Find Reduced Model
 
-The `RBFModelProducer` class takes a `ReducedData` and produces a `BRFModel`.
+The `RBFModelProducer` class takes a `ReducedData` and produces a `RBFModel`.
 The `RBFFamilyProducer` class takes a `ReducedDataSystem` and produces a `RBFFamily`.
 
 Examples
@@ -175,6 +184,15 @@ Examples are provided in `examples/`.
 * `examples/pendulum/` -- A double pendulum with friction and external forcing.
 * `examples/brusselator/` -- The Brusselator PDE on a 2D physical space with a 64x64 discretization.
 * `examples/kuramoto/` -- The Kuramoto model. Coupled oscillators with external forcing.
+
+
+Extra Features
+--------------
+
+* `HistogramGenerator` -- Generates a histogram from a data set.
+
+* `BifurcationDiagramGenerator` -- Performs simulations for multiple parameter values and samples values to be plotted on a bifurcation diagram. The sampling condition and value functions must be specified. A custom integrator may also be specified (RK4 by default).
+
 
 Build
 -----
