@@ -68,27 +68,45 @@ namespace DRDSP {
 			return *this;
 		}
 
-		dual<T> operator*( T a ) const {
-			return dual<T>(x*a,y*a);
+		dual<T> operator+( T rhs ) const {
+			return dual<T>(x+rhs,y);
 		}
 
-		dual<T>& operator*=( T a ) {
-			x *= a;
-			y *= a;
+		dual<T> operator-( T rhs ) const {
+			return dual<T>(x-rhs,y);
+		}
+
+		dual<T> operator*( T rhs ) const {
+			return dual<T>(x*rhs,y*rhs);
+		}
+
+		dual<T> operator/( T rhs ) const {
+			return dual<T>(x/rhs,y/rhs);
+		}
+		
+		dual<T>& operator+=( T rhs ) {
+			x += rhs;
+			return *this;
+		}
+		
+		dual<T>& operator-=( T rhs ) {
+			x -= rhs;
 			return *this;
 		}
 
-		dual<T> operator/( T a ) const {
-			return dual<T>(x/a,y/a);
-		}
-
-		dual<T>& operator/=( T a ) {
-			x /= a;
-			y /= a;
+		dual<T>& operator*=( T rhs ) {
+			x *= rhs;
+			y *= rhs;
 			return *this;
 		}
 
-		T real_part() const {
+		dual<T>& operator/=( T rhs ) {
+			x /= rhs;
+			y /= rhs;
+			return *this;
+		}
+
+		T real() const {
 			return x;
 		}
 
@@ -98,18 +116,44 @@ namespace DRDSP {
 	};
 
 	template<typename T>
-	dual<T> operator*( T a, const dual<T>& rhs ) {
-		return rhs*a;
+	dual<T> operator+( T lhs, const dual<T>& rhs ) {
+		return rhs + lhs;
 	}
 
 	template<typename T>
-	dual<T> conjugate( const dual<T>& d ) {
+	dual<T> operator-( T lhs, const dual<T>& rhs ) {
+		return -rhs + lhs;
+	}
+
+	template<typename T>
+	dual<T> operator*( T lhs, const dual<T>& rhs ) {
+		return rhs * lhs;
+	}
+
+	template<typename T>
+	dual<T> operator/( T lhs, const dual<T>& rhs ) {
+		return dual<T>(lhs) / rhs;
+	}
+
+	template<typename T>
+	T real( const dual<T>& d ) {
+		return d.real();
+	}
+
+	template<typename T>
+	T dual_part( const dual<T>& d ) {
+		return d.dual_part();
+	}
+
+	template<typename T>
+	dual<T> conj( const dual<T>& d ) {
 		return dual<T>(d.x,-d.y);
 	}
 
 	template<typename T>
-	T modulus( const dual<T>& d ) {
-		return d.x;
+	dual<T> abs( const dual<T>& d ) {
+		T m = abs(d.x);
+		return dual<T>(m,d.y*d.x/m);
 	}
 
 	template<typename T>
@@ -131,25 +175,21 @@ namespace DRDSP {
 
 	template<typename T>
 	dual<T> log( const dual<T>& d ) {
-		T m = modulus(d);
-		T a = Arg(d);
-		return dual<T>(log(m),a);
+		return dual<T>(log(d.x),d.y/d.x);
 	}
 
 	template<typename T>
 	dual<T> pow( const dual<T>& d, const dual<T>& p ) {
-		T r = modulus(d);
-		T rp = pow(r,p.x);
-		return dual<T>(rp,rp * (p.x*Arg(d)+p.y*log(r)) );
+		if( d.x == T(0) ) return dual<T>(0,0);
+		T rp = pow(d.x,p.x);
+		return dual<T>( rp, rp*( p.y*log(d.x) + p.x*d.y/d.x ) );
 	}
 
 	template<typename T>
 	dual<T> pow( const dual<T>& d, T p ) {
-		if( d.x == T(0) ) {
-			return dual<T>(0,0);
-		}
-		T rp = pow(d.x,p);
-		return dual<T>(rp,rp*p*d.y/d.x);
+		if( d.x == T(0) ) return dual<T>(0,0);
+		T rp = pow(d.x,p.x);
+		return dual<T>( rp, (rp*p*d.y)/d.x );
 	}
 
 	template<typename T>
@@ -163,7 +203,7 @@ namespace DRDSP {
 	}
 
 	template<typename T>
-	dual<T> Tan( const dual<T>& d ) {
+	dual<T> tan( const dual<T>& d ) {
 		T t = tan(d.x);
 		return dual<T>(t,d.y*(T(1)+t*t));
 	}
@@ -188,32 +228,96 @@ namespace DRDSP {
 
 	template<typename T>
 	dual<T> asin( const dual<T>& d ) {
-		return dual<T>( asin(d.x), d.y*dasin(x) );
+		return dual<T>( asin(d.x), d.y*dasin(d.x) );
 	}
 
 	template<typename T>
 	dual<T> acos( const dual<T>& d ) {
-		return dual<T>( acos(d.x), d.y*dacos(x) );
+		return dual<T>( acos(d.x), d.y*dacos(d.x) );
 	}
 
 	template<typename T>
 	dual<T> atan( const dual<T>& d ) {
-		return dual<T>( atan(d.x), d.y*datan(x) );
+		return dual<T>( atan(d.x), d.y*datan(d.x) );
 	}
 
 	template<typename T>
 	dual<T> asec( const dual<T>& d ) {
-		return dual<T>( asec(d.x), d.y*dasec(x) );
+		return dual<T>( asec(d.x), d.y*dasec(d.x) );
 	}
 
 	template<typename T>
 	dual<T> acsc( const dual<T>& d ) {
-		return dual<T>( acsc(d.x), d.y*dacsc(x) );
+		return dual<T>( acsc(d.x), d.y*dacsc(d.x) );
 	}
 
 	template<typename T>
 	dual<T> acot( const dual<T>& d ) {
-		return dual<T>( acot(d.x), d.y*dacot(x) );
+		return dual<T>( acot(d.x), d.y*dacot(d.x) );
+	}
+
+	template<typename T>
+	dual<T> sinh( const dual<T>& d ) {
+		return dual<T>( sinh(d.x), d.y*cosh(d.x) );
+	}
+
+	template<typename T>
+	dual<T> cosh( const dual<T>& d ) {
+		return dual<T>( cosh(d.x), d.y*sinh(d.x) );
+	}
+
+	template<typename T>
+	dual<T> tanh( const dual<T>& d ) {
+		T t = tanh(d.x);
+		return dual<T>( t, d.y*(T(1)-t*t) );
+	}
+
+	template<typename T>
+	dual<T> coth( const dual<T>& d ) {
+		T t = coth(d.x);
+		return dual<T>( t, d.y*(T(1)-t*t) );
+	}
+
+	template<typename T>
+	dual<T> csch( const dual<T>& d ) {
+		T c = csch(d.x);
+		return dual<T>( c, -d.y*c*coth(d.x) );
+	}
+
+	template<typename T>
+	dual<T> sech( const dual<T>& d ) {
+		T s = sech(d.x);
+		return dual<T>( s, -d.y*s*tanh(d.x) );
+	}
+
+	template<typename T>
+	dual<T> asinh( const dual<T>& d ) {
+		return dual<T>( asinh(d.x), d.y*dasinh(d.x) );
+	}
+
+	template<typename T>
+	dual<T> acosh( const dual<T>& d ) {
+		return dual<T>( acosh(d.x), d.y*dacosh(d.x) );
+	}
+
+	template<typename T>
+	dual<T> atanh( const dual<T>& d ) {
+		return dual<T>( atanh(d.x), d.y*datanh(d.x) );
+	}
+
+	template<typename T>
+	dual<T> acsch( const dual<T>& d ) {
+		return dual<T>( acsch(d.x), d.y*dacsch(d.x) );
+	}
+
+	template<typename T>
+	dual<T> asech( const dual<T>& d ) {
+		return dual<T>( asech(d.x), d.y*dasech(d.x) );
+	}
+
+	template<typename T>
+	dual<T> acoth( const dual<T>& d ) {
+		return dual<T>( acoth(d.x), d.y*dacoth(d.x) );
 	}
 
 	typedef dual<double> duald;

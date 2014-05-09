@@ -26,6 +26,7 @@ namespace DRDSP {
 		bool ReadData( const char* filename );
 		void WritePointsCSV( const char* filename ) const;
 		void WriteVectorsCSV( const char* filename ) const;
+		void WriteDerivativesCSV( const char* filename ) const;
 
 		template<typename Model>
 		ReducedData& ComputeData( Model&& original, const DataSet& data, const MatrixXd& W ) {

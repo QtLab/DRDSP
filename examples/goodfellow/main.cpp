@@ -9,7 +9,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(4), numRBFs(50), numIterations(1000), numThreads(4) {}
+	Options() : targetDimension(5), numRBFs(50), numIterations(500), numThreads(3) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -19,25 +19,25 @@ struct Options {
 	}
 };
 
-typedef Multiquadratic RadialType;
+typedef ThinPlateSpline RadialType;
 
 int main( int argc, char** argv ) {
 
 	Options options(argc,argv);
 
 	// The example
-	Goodfellow goodfellow(100);
+	GoodfellowFamily goodfellow(100);
 
 	auto parameters = ParameterList( 4.9, 5.5, 21 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator<Goodfellow> dataGenerator(goodfellow);
+	DataGenerator<GoodfellowFamily> dataGenerator(goodfellow);
 	dataGenerator.initial.setRandom();
 	dataGenerator.initial -= 0.5 * VectorXd::Ones(goodfellow.dimension);
 	dataGenerator.initial *= 2.0;
-	dataGenerator.tStart = 100;
-	dataGenerator.tInterval = 2;
+	dataGenerator.tStart = 200;
+	dataGenerator.tInterval = 1;
 	dataGenerator.print = 200;
 	dataGenerator.dtMax = 0.001;
 
@@ -80,6 +80,7 @@ int main( int argc, char** argv ) {
 	reducedData.ComputeData( goodfellow, data, projSecant.W, options.numThreads );
 	reducedData.WritePointsCSV("output/p","-points.csv");
 	reducedData.WriteVectorsCSV("output/p","-vectors.csv");
+	reducedData.WriteDerivativesCSV("output/p","-derivatives.csv");
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;

@@ -9,8 +9,8 @@ VectorXd FlatEmbedding::operator()( const VectorXd &state ) const {
 	
 	uint32_t k=0;
 	for(uint32_t i=0;i<oDim;i++) {
-		X(k++) = cos(state(i));
-		X(k++) = sin(state(i));
+		X(k++) = cos(state[i]);
+		X(k++) = sin(state[i]);
 	}
 
 	return X;
@@ -24,8 +24,8 @@ MatrixXd FlatEmbedding::Derivative( const VectorXd &state ) const {
 
 	uint32_t k=0;
 	for(uint32_t i=0;i<oDim;i++) {
-		res(k,i) = -X(k+1);
-		res(k+1,i) = X(k);
+		res(k,i) = -X[k+1];
+		res(k+1,i) = X[k];
 		k += 2;
 	}
 
@@ -43,9 +43,9 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 	uint32_t k = mu / 2;
 
 	if( IsOdd(mu) ) {
-		res(k,k) = -sin(x(k));
+		res(k,k) = -sin(x[k]);
 	} else {
-		res(k,k) = -cos(x(k));
+		res(k,k) = -cos(x[k]);
 	}
 
 	return res;
@@ -53,21 +53,20 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 
 void KuramotoWrap::operator()( VectorXd& state ) const {
 	for(int i=0;i<state.size();i++)
-		Wrap(state(i),-M_PI,M_PI);
+		Wrap(state[i],-M_PI,M_PI);
 }
-
 
 
 double KuramotoBase::Forcing( const VectorXd& state ) const {
-	return sin( state(numOscillators) );
+	return sin( state[numOscillators] );
 }
 
 double KuramotoBase::ForcingDerivative( const VectorXd& state ) const {
-	return cos( state(numOscillators) );
+	return cos( state[numOscillators] );
 }
 
 double KuramotoBase::Phase( uint32_t i, const VectorXd& state ) const {
-	return state(i);
+	return state[i];
 }
 	
 complex<double> KuramotoBase::ComplexOrderParameter( const VectorXd& state ) const {
@@ -110,9 +109,9 @@ MatrixXd KuramotoA::Partials( const VectorXd& state ) const {
 	double forcing = Forcing(state);
 	for(uint32_t i=0;i<numOscillators;i++) {
 		for(uint32_t j=0;j<numOscillators;j++) {
-			res(i,j) = interactionStrengths(i) * forcing + K * MeanAmplitudeDerivative(j,state,psi) * sin( psi - Phase(i,state) ) + K  * cos( psi - Phase(i,state) ) * ( MeanPhaseDerivative(j,state,psi) - Delta<double>(i,j) * r );
+			res(i,j) = interactionStrengths[i] * forcing + K * MeanAmplitudeDerivative(j,state,psi) * sin( psi - Phase(i,state) ) + K  * cos( psi - Phase(i,state) ) * ( MeanPhaseDerivative(j,state,psi) - Delta<double>(i,j) * r );
 		}
-		res(i,dimension-1) = interactionStrengths(i) * ForcingDerivative(state);
+		res(i,dimension-1) = interactionStrengths[i] * ForcingDerivative(state);
 	}
 	return res;
 }
@@ -142,9 +141,9 @@ MatrixXd KuramotoB::Partials( const VectorXd& state ) const {
 		double sinPsiThetai = sin( psi - Phase(i,state) );
 		double cosPsiThetai = cos( psi - Phase(i,state) );
 		for(uint32_t j=0;j<numOscillators;j++) {
-			res(i,j) = (interactionStrengths(i) * forcing + K ) * ( MeanAmplitudeDerivative(j,state,psi) * sinPsiThetai + cosPsiThetai * ( MeanPhaseDerivative(j,state,psi) - Delta<double>(i,j) * r ) );
+			res(i,j) = (interactionStrengths[i] * forcing + K ) * ( MeanAmplitudeDerivative(j,state,psi) * sinPsiThetai + cosPsiThetai * ( MeanPhaseDerivative(j,state,psi) - Delta<double>(i,j) * r ) );
 		}
-		res(i,dimension-1) = interactionStrengths(i) * ForcingDerivative(state) * r * sinPsiThetai;
+		res(i,dimension-1) = interactionStrengths[i] * ForcingDerivative(state) * r * sinPsiThetai;
 	}
 	return res;
 }

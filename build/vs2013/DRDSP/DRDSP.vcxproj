@@ -35,6 +35,7 @@
     <ClCompile Include="..\..\..\src\projection\proj_secant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\DRDSP\auto_diff.h" />
     <ClInclude Include="..\..\..\include\DRDSP\bitmap.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\aabb.h" />
     <ClInclude Include="..\..\..\include\DRDSP\data\data_set.h" />

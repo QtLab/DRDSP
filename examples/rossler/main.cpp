@@ -32,8 +32,8 @@ void ReducedFloquet( const Options& );
 int main( int argc, char** argv ) {
 	Options options(argc,argv);
 
-	//ComputeReduced( options );
-	SimulateReduced( options );
+	ComputeReduced( options );
+	//SimulateReduced( options );
 	//OriginalFloquet( options );
 	//ReducedFloquet( options );
 
@@ -142,6 +142,7 @@ void ComputeReduced( const Options& options ) {
 	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads );
 	reducedData.WritePointsCSV( "output/p", "-points.csv" );
 	reducedData.WriteVectorsCSV( "output/p", "-vectors.csv" );
+	reducedData.WriteDerivativesCSV( "output/p", "-derivatives.csv" );
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;

@@ -191,5 +191,8 @@
     <ClInclude Include="..\..\..\include\DRDSP\eigen_dual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\auto_diff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

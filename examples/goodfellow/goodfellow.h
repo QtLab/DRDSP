@@ -1,94 +1,81 @@
 #ifndef INCLUDED_GOODFELLOW
 #define INCLUDED_GOODFELLOW
 #include <DRDSP/dynamics/model.h>
+#include <DRDSP/auto_diff.h>
 
 using namespace DRDSP;
 
-struct GoodfellowModel : Model<> {
+struct Goodfellow : Model<> {
 	MatrixXd adjacency;
 	VectorXd mu;
 	double omega, a, b, c, d, p;
 	uint32_t N;
 
-	//GoodfellowModel();
-	explicit GoodfellowModel( uint32_t numCompartments );
+	Goodfellow();
+	explicit Goodfellow( uint32_t numCompartments );
 	void Create( uint32_t numCompartments );
-	VectorXd operator()( const VectorXd& state ) const;
-	MatrixXd Partials( const VectorXd& state ) const;
 
-	
-	double poly( const VectorXd& state, uint32_t i ) const {
-		return mu(i) - a * r2(state,i) + b * r4(state,i) - c * r6(state,i);
+	MatrixXd Partials( const VectorXd& x ) const {
+		return Derivative( *this, x );
 	}
 
-	double dpolydx( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return - a * dr2dx(state,i,j) + b * dr4dx(state,i,j) - c * dr6dx(state,i,j);
+	template<typename Derived>
+	Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& state ) const {
+		typedef typename Derived::Scalar Scalar;
+		Matrix<Scalar,-1,1> res(2*N);
+		for(uint32_t i=0;i<N;i++) {
+			Scalar temp1 = omega - d * r2(state,i);
+			Scalar temp2 = poly(state,i);
+			res(i) = y(state,i) * temp1 + x(state,i) * temp2;
+			res(N+i) = -x(state,i) * temp1 + y(state,i) * temp2;
+		}
+		res.head(N) += p / N * (adjacency * state.head(N));
+		return res;
 	}
 
-	double dpolydy( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return - a * dr2dy(state,i,j) + b * dr4dy(state,i,j) - c * dr6dy(state,i,j);
+	template<typename Derived>
+	typename Derived::Scalar x( const MatrixBase<Derived>& state, uint32_t i ) const {
+		return state[i];
 	}
 
-	double x( const VectorXd& state, uint32_t i ) const {
-		return state(i);
+	template<typename Derived>
+	typename Derived::Scalar y( const MatrixBase<Derived>& state, uint32_t i ) const {
+		return state[N+i];
 	}
 
-	double y( const VectorXd& state, uint32_t i ) const {
-		return state(N+i);
-	}
-
-	double r2( const VectorXd& state, uint32_t i ) const {
+	template<typename Derived>
+	typename Derived::Scalar r2( const MatrixBase<Derived>& state, uint32_t i ) const {
 		return x(state,i)*x(state,i) + y(state,i)*y(state,i);
 	}
 
-	double r4( const VectorXd& state, uint32_t i ) const {
+	template<typename Derived>
+	typename Derived::Scalar r4( const MatrixBase<Derived>& state, uint32_t i ) const {
 		return r2(state,i)*r2(state,i);
 	}
 
-	double r6( const VectorXd& state, uint32_t i ) const {
+	template<typename Derived>
+	typename Derived::Scalar r6( const MatrixBase<Derived>& state, uint32_t i ) const {
 		return r4(state,i)*r2(state,i);
 	}
 
-	double dr2dx( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return delta(i,j) * 2.0 * x(state,i);
-	}
-
-	double dr4dx( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return delta(i,j) * 4.0 * x(state,i) * r2(state,i);
-	}
-
-	double dr6dx( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return delta(i,j) * 6.0 * x(state,i) * r4(state,i);
-	}
-
-	double dr2dy( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return delta(i,j) * 2.0 * y(state,i);
-	}
-
-	double dr4dy( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return delta(i,j) * 4.0 * y(state,i) * r2(state,i);
-	}
-
-	double dr6dy( const VectorXd& state, uint32_t i, uint32_t j ) const {
-		return delta(i,j) * 6.0 * y(state,i) * r4(state,i);
-	}
-
-	double delta( uint32_t i, uint32_t j ) const {
-		return (i==j)?1.0:0.0;
+	template<typename Derived>
+	typename Derived::Scalar poly( const MatrixBase<Derived>& state, uint32_t i ) const {
+		return mu(i) - a * r2(state,i) + b * r4(state,i) - c * r6(state,i);
 	}
 
 };
 
-struct Goodfellow : Family<GoodfellowModel> {
+struct GoodfellowFamily : Family<Goodfellow> {
 	uint32_t N;
 
-	explicit Goodfellow( uint32_t N ) : Family<GoodfellowModel>(2*N,1), N(N) {}
+	explicit GoodfellowFamily( uint32_t N ) : Family<Goodfellow>(2*N,1), N(N) {}
 
-	GoodfellowModel operator()( const VectorXd& parameter ) const {
-		GoodfellowModel model( N );
+	Goodfellow operator()( const VectorXd& parameter ) const {
+		Goodfellow model( N );
 		model.p = parameter[0];
 		return model;
 	}
 	
 };
+
 #endif

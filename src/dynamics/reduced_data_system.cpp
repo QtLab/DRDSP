@@ -46,6 +46,15 @@ void ReducedDataSystem::WriteVectorsCSV( const char* filePrefix, const char* fil
 	}
 }
 
+void ReducedDataSystem::WriteDerivativesCSV( const char* filePrefix, const char* fileSuffix ) const {
+	stringstream name;
+	for(uint32_t i=0;i<numParameters;++i) {
+		name.str("");
+		name << filePrefix << i << fileSuffix;
+		reducedData[i].WriteDerivativesCSV(name.str().c_str());
+	}
+}
+
 void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
 	ofstream out("output/comparison.csv");

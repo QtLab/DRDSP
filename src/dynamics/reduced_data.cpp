@@ -101,7 +101,7 @@ void ReducedData::WriteData( const char* filename ) const {
 void ReducedData::WritePointsCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
-		cout << "ReducedData::WritePointsText : file error" << endl;
+		cout << "ReducedData::WritePointsCSV : file error" << endl;
 		return;
 	}
 	for(uint32_t i=0;i<count;i++) {
@@ -114,13 +114,26 @@ void ReducedData::WritePointsCSV( const char* filename ) const {
 void ReducedData::WriteVectorsCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
-		cout << "ReducedData::WriteVectorsText : file error" << endl;
+		cout << "ReducedData::WriteVectorsCSV : file error" << endl;
 		return;
 	}
-	for(uint32_t i=0;i<count;i++) {
-		for(uint32_t j=0;j<dimension;j++)
+	for(uint32_t i=0;i<count;++i) {
+		for(uint32_t j=0;j<dimension;++j)
 			out << vectors[i](j) << ",";
 		out << endl;
 	}
 }
 
+void ReducedData::WriteDerivativesCSV( const char* filename ) const {
+	ofstream out(filename);
+	if( !out ) {
+		cout << "ReducedData::WriteDerivativesCSV : file error" << endl;
+		return;
+	}
+	for(uint32_t i=0;i<count;++i) {
+		for(uint32_t j=0;j<dimension;++j)
+			for(uint32_t k=0;k<dimension;++k)
+				out << derivatives[i](j,k) << ",";
+		out << endl;
+	}
+}
