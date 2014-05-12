@@ -39,15 +39,15 @@ namespace DRDSP {
 
 		double ComputeTotalCost( const RBFFamily<F>& family, const ReducedDataSystem& data, const vector<VectorXd>& parameters ) const {
 			double T = 0.0;
-			for(uint32_t j=0;j<data.numParameters;j++) {
+			for(uint32_t j=0;j<data.numParameters;++j) {
 				RBFModel<F> modelRBF = family( parameters[j] );
 				double S1 = 0.0;
-				for(uint32_t i=0;i<data.reducedData[j].count;i++) {
+				for(uint32_t i=0;i<data.reducedData[j].count;++i) {
 					S1 += ( modelRBF(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
 				}
 				S1 /= data.reducedData[j].count;
 				double S2 = 0.0;
-				for(uint32_t i=0;i<data.reducedData[j].count;i++) {
+				for(uint32_t i=0;i<data.reducedData[j].count;++i) {
 					S2 += ( modelRBF.Partials(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
 				}
 				
@@ -66,7 +66,7 @@ namespace DRDSP {
 			A.setZero(m*(parameterDimension+1),m*(parameterDimension+1));
 			B.setZero(m*(parameterDimension+1),dimension);
 
-			for(uint32_t i=0;i<data.numParameters;i++) {
+			for(uint32_t i=0;i<data.numParameters;++i) {
 				ComputeMatrices( reduced.model, data.reducedData[i], parameters[i], Atemp, Btemp );
 				B += Btemp;
 				A += Atemp;
@@ -79,10 +79,10 @@ namespace DRDSP {
 				reduced.affine.coeffs = lu.solve(B).transpose();
 			}
 
-			for(uint32_t i=0;i<data.numParameters;i++) {
+			for(uint32_t i=0;i<data.numParameters;++i) {
 				z = reduced.affine(parameters[i]);
 				reduced.model.linear = z.block(0,0,dimension,dimension);
-				for(uint32_t j=0;j<numRBFs;j++) {
+				for(uint32_t j=0;j<numRBFs;++j) {
 					reduced.model.weights[j] = z.col(dimension+j);
 				}
 			}
@@ -97,7 +97,7 @@ namespace DRDSP {
 			box.Scale(boxScale);
 			vector<double> costs(numIterations);
 
-			for(uint32_t i=0;i<numIterations;i++) {
+			for(uint32_t i=0;i<numIterations;++i) {
 				reduced.model.SetCentresRandom( box );
 				Fit(reduced,data,parameterDimension,parameters);
 				Sft = ComputeTotalCost(reduced,data,parameters);
@@ -130,17 +130,17 @@ namespace DRDSP {
 			y2.setZero(data.dimension,data.count*data.dimension);
 			A2.setIdentity(m,data.count*data.dimension);
 
-			for(uint32_t j=0;j<data.count;j++) {
-				for(uint32_t i=0;i<data.dimension;i++) {
+			for(uint32_t j=0;j<data.count;++j) {
+				for(uint32_t i=0;i<data.dimension;++i) {
 					A1(i,j) = data.points[j](i);
 					y1(i,j) = data.vectors[j](i);
-					for(uint32_t k=0;k<data.dimension;k++)
+					for(uint32_t k=0;k<data.dimension;++k)
 						y2(i,data.dimension*j+k) = data.derivatives[j](i,k);
 				}
-				for(uint32_t i=0;i<model.numRBFs;i++) {
+				for(uint32_t i=0;i<model.numRBFs;++i) {
 					A1(i+data.dimension,j) = model.rbfs[i](data.points[j]);
 					temp = model.rbfs[i].Derivative(data.points[j]);
-					for(uint32_t k=0;k<data.dimension;k++)
+					for(uint32_t k=0;k<data.dimension;++k)
 						A2(i+data.dimension,data.dimension*j+k) = temp(k);
 				}
 			}

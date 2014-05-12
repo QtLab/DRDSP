@@ -45,7 +45,7 @@ bool DataSystemTyped::Load( const char* filename, uint32_t maxPoints ) {
 	parameters.resize(numParameters);
 
 	char* setPath = new char [256];
-	for(uint16_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;++i) {
 		in >> setPath;
 		if(binary) LoadSetBinary(setPath,i,maxPoints);
 		else LoadSetText(setPath,i,maxPoints);
@@ -69,7 +69,7 @@ bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i, uint32_t 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 	
 	parameters[i].setZero(parameterDimension);
-	for(uint16_t j=0;j<parameterDimension;j++) {
+	for(uint16_t j=0;j<parameterDimension;++j) {
 		in.read((char*)&parameters[i](j),sizeof(double));
 	}
 	
@@ -86,7 +86,7 @@ bool DataSystemTyped::LoadSetBinary( const char* filename, uint32_t i, uint32_t 
 			in.read((char*)&dataSets[i].points[k](j++),sizeof(double));
 		}
 		in.read((char*)&dataSets[i].types[k],sizeof(uint8_t));
-		k++;
+		++k;
 	}
 	return true;
 }
@@ -106,7 +106,7 @@ bool DataSystemTyped::LoadSetText( const char* filename, uint32_t i, uint32_t ma
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 	
 	parameters[i].setZero(parameterDimension);
-	for(uint16_t j=0;j<parameterDimension;j++) {
+	for(uint16_t j=0;j<parameterDimension;++j) {
 		in >> parameters[i](j);
 	}
 	
@@ -123,7 +123,7 @@ bool DataSystemTyped::LoadSetText( const char* filename, uint32_t i, uint32_t ma
 			in >> dataSets[i].points[k](j++);
 		}
 		in >> dataSets[i].types[k];
-		k++;
+		++k;
 	}
 	return true;
 }

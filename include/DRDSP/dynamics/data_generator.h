@@ -146,7 +146,7 @@ namespace DRDSP {
 			
 			data.parameters = parameters;
 
-			for(uint32_t i=0;i<parameters.size();i++) {
+			for(uint32_t i=0;i<parameters.size();++i) {
 				data.dataSets[i] = GenerateDataSet( parameters[i] );
 			}
 			return data;
@@ -185,7 +185,7 @@ namespace DRDSP {
 			
 			data.parameters = parameters;
 			
-			for(uint16_t i=0;i<parameters.size();i++) {
+			for(uint16_t i=0;i<parameters.size();++i) {
 				data.dataSets[i] = GenerateDataSet( parameters[i], periods[i] );
 			}
 			return data;

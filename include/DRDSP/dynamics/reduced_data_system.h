@@ -19,7 +19,7 @@ namespace DRDSP {
 		template<typename Family>
 		ReducedDataSystem& ComputeData( Family&& family, const DataSystem& data, const MatrixXd& W ) {
 			Create( data.numParameters );
-			for(uint32_t i=0;i<numParameters;i++) {
+			for(uint32_t i=0;i<numParameters;++i) {
 				reducedData[i].ComputeData( family(data.parameters[i]), data.dataSets[i], W );
 			}
 			return *this;
@@ -51,7 +51,7 @@ namespace DRDSP {
 		template<typename Family>
 		ReducedDataSystem& ComputeDataEmbedded( Family&& family, const DataSystem& data, const MatrixXd& W ) {
 			Create( data.numParameters );
-			for(uint32_t i=0;i<numParameters;i++) {
+			for(uint32_t i=0;i<numParameters;++i) {
 				reducedData[i].ComputeDataEmbedded( family(data.parameters[i]), data.dataSets[i], W );
 			}
 			return *this;

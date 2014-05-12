@@ -24,13 +24,13 @@ void Goodfellow::Create( uint32_t numCompartments ) {
 	mu(0) = 0.6;
 	if( N >= 2 ) {
 		mu(1) = muMax;
-		for(uint32_t i=2;i<N;i++)
+		for(uint32_t i=2;i<N;++i)
 			mu(i) = muMax - ((muMax-muMin)*i)/(N-1);
 	}
 
 	adjacency.setZero(N,N);
-	for(uint32_t i=0;i<N;i++)
-		for(uint32_t j=0;j<N;j++)
+	for(uint32_t i=0;i<N;++i)
+		for(uint32_t j=0;j<N;++j)
 			adjacency(i,j) = (i==j)?0.0:1.0;
 }
 

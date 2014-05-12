@@ -3,8 +3,8 @@
 VectorXd Brusselator::operator()( const VectorXd& x ) const {
 	VectorXd r(dimension);
 	uint32_t k=0;
-	for(uint32_t j=0;j<nY;j++)
-		for(uint32_t i=0;i<nX;i++) {
+	for(uint32_t j=0;j<nY;++j)
+		for(uint32_t i=0;i<nX;++i) {
 			r(k++) = XDot(x,i,j);
 			r(k++) = YDot(x,i,j);
 		}
@@ -14,8 +14,8 @@ VectorXd Brusselator::operator()( const VectorXd& x ) const {
 MatrixXd Brusselator::Partials( const VectorXd& x ) const {
 	MatrixXd r((int)dimension,(int)dimension);
 	uint32_t m=0,n=0;
-	for(uint32_t j=0;j<nY;j++)
-		for(uint32_t i=0;i<nX;i++) {
+	for(uint32_t j=0;j<nY;++j)
+		for(uint32_t i=0;i<nX;++i) {
 			n = 0;
 			for(uint32_t nu=0;nu<nY;nu++)
 				for(uint32_t mu=0;mu<nX;mu++) {

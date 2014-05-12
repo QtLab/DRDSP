@@ -194,5 +194,8 @@
     <ClInclude Include="..\..\..\include\DRDSP\auto_diff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\angle.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

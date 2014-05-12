@@ -17,6 +17,7 @@ namespace DRDSP {
 	struct Gaussian  {
 		double scale;
 		Gaussian();
+		explicit Gaussian( double scale );
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
@@ -24,6 +25,7 @@ namespace DRDSP {
 	struct Multiquadratic {
 		double scale;
 		Multiquadratic();
+		explicit Multiquadratic( double scale );
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
@@ -31,6 +33,7 @@ namespace DRDSP {
 	struct InverseQuadratic {
 		double scale;
 		InverseQuadratic();
+		explicit InverseQuadratic( double scale );
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};
@@ -38,6 +41,7 @@ namespace DRDSP {
 	struct InverseMultiquadratic {
 		double scale;
 		InverseMultiquadratic();
+		explicit InverseMultiquadratic( double scale );
 		double operator()( double r ) const;
 		double Derivative( double r ) const;
 	};

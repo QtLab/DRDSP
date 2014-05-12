@@ -89,12 +89,12 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 	if( logScale ) {
 		double factor = pow( maxVal/minVal, 1.0/nBins );
 		H.bins[0].minValue = minVal;
-		for(uint32_t i=0;i<nBins-1;i++) {
+		for(uint32_t i=0;i<nBins-1;++i) {
 			H.bins[i].maxValue = H.bins[i].minValue * factor;
 			H.bins[i+1].minValue = H.bins[i].maxValue;
 		}
 		H.bins[nBins-1].maxValue = H.bins[nBins-1].minValue * factor;
-		for(size_t i=0;i<N;i++) {
+		for(size_t i=0;i<N;++i) {
 			for(auto& bin : H.bins) {
 				if( bin.Test( data[i] ) ) {
 					++bin;
@@ -104,11 +104,11 @@ Histogram HistogramGenerator::Generate( const double* data, size_t N ) const {
 		}
 	} else {
 		double width = ( maxVal - minVal ) / nBins;
-		for(uint32_t i=0;i<nBins;i++) {
+		for(uint32_t i=0;i<nBins;++i) {
 			H.bins[i].minValue = minVal + width * i;
 			H.bins[i].maxValue = minVal + width * (i+1);
 		}
-		for(size_t i=0;i<N;i++) {
+		for(size_t i=0;i<N;++i) {
 			double temp = ( data[i] - minVal ) / width;
 			int32_t j = (int32_t)temp;
 			if( j >= 0 && j < (int32_t)nBins ) {

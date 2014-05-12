@@ -65,7 +65,7 @@ int main( int argc, char** argv ) {
 	// For this particular example, we use a custom initial condition
 	projSecant.W.setZero(kuramoto.embedding.eDim,4);
 	
-	for(uint32_t i=0;i<(kuramoto.embedding.eDim-2)/2;i++) {
+	for(uint32_t i=0;i<(kuramoto.embedding.eDim-2)/2;++i) {
 		projSecant.W(2*i,0) = 1;
 		projSecant.W(2*i+1,1) = 1;
 	}

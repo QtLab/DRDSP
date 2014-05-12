@@ -1,6 +1,7 @@
 bin/
 lib/
 examples/*/output/*
+!examples/*/output/dummy.txt
 
 # Visual Studio 2012 stuff
 *.suo

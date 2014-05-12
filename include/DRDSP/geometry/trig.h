@@ -4,17 +4,27 @@
 #pragma warning (disable: 4985)
 #include <cmath>
 #pragma warning (pop)
+#include "angle.h"
 
 namespace DRDSP {
 
 	template<typename T>
-	inline T csc( T x ) { return T(1)/sin(x); }
+	inline T sin( Radians<T> x ) { return ::sin(x); }
+
+	template<typename T>
+	inline T cos( Radians<T> x ) { return ::cos(x); }
+
+	template<typename T>
+	inline T tan( Radians<T> x ) { return ::tan(x); }
+
+	template<typename T>
+	inline T csc( Radians<T> x ) { return T(1)/sin(x); }
 	
 	template<typename T>
-	inline T sec( T x ) { return T(1)/cos(x); }
+	inline T sec( Radians<T> x ) { return T(1)/cos(x); }
 	
 	template<typename T>
-	inline T cot( T x ) { return T(1)/tan(x); }
+	inline T cot( Radians<T> x ) { return T(1)/tan(x); }
 
 	template<typename T>
 	inline T csch( T x ) { return T(1)/sinh(x); }
@@ -29,22 +39,22 @@ namespace DRDSP {
 	// derivatives
 
 	template<typename T>
-	inline T dsin( T x ) { return cos(x); }
+	inline T dsin( Radians<T> x ) { return cos(x); }
 	
 	template<typename T>
-	inline T dcos( T x ) { return -sin(x); }
+	inline T dcos( Radians<T> x ) { return -sin(x); }
 	
 	template<typename T>
-	inline T dtan( T x ) { T y = sec(x); return y*y; }
+	inline T dtan( Radians<T> x ) { T y = sec(x); return y*y; }
 
 	template<typename T>
-	inline T dcsc( T x ) { return -csc(x)*cot(x); }
+	inline T dcsc( Radians<T> x ) { return -csc(x)*cot(x); }
 	
 	template<typename T>
-	inline T dsec( T x ) { return sec(x)*tan(x); }
+	inline T dsec( Radians<T> x ) { return sec(x)*tan(x); }
 	
 	template<typename T>
-	inline T dcot( T x ) { T y=csc(x); return -y*y; }
+	inline T dcot( Radians<T> x ) { T y=csc(x); return -y*y; }
 
 	template<typename T>
 	inline T dasin( T x ) { return T(1)/sqrt(T(1)-x*x); }

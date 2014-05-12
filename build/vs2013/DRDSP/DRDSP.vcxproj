@@ -60,6 +60,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rk4.h" />
     <ClInclude Include="..\..\..\include\DRDSP\eigen_dual.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\angle.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\grassmannian.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\metric.h" />

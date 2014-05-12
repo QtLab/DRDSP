@@ -8,6 +8,8 @@ Introduction
 
 DRDSP is a C++ library for producing a low-dimensional dynamical system that models the long-term behaviour (attractors) of a given high-dimensional system. Systems with parameter spaces -- resulting in families of attractors -- can also be reduced.
 
+This library implements the approach described in [this paper](http://dx.doi.org/10.1137/130913675).
+
 The steps involved in the method are:
 
 1. Generate some data from the attractors.
@@ -148,7 +150,7 @@ Once data has been obtained, the secants are computed using the `Secants` class.
 vector<SecantsPreComputed> secants = ComputeSecants( data, 4 );
 ```
 
-Secants can be culled using one of the `CullSecants` function. Culling reduces the total number of secants in order to lower the computational cost of finding a projection. This is an optional, but recommended, step.
+Secants can be culled using the `CullSecants` function. Culling reduces the total number of secants in order to lower the computational cost of finding a projection. This is an optional, but recommended, step.
 
 ```cpp
 // Cull secants with 10 degree tolerance using 4 threads.
@@ -168,12 +170,36 @@ projSecant.Find( newSecants );   // Find a projection using the secants
 
 ### Computing Reduced Data
 
-`ReducedData` and `ReducedDataSystem` classes take the original model, the data sets, and an orthonormal matrix and compute the data required to find the reduced model.
+The `ReducedDataSystem` class takes the original family, the data sets, and an orthonormal matrix and compute the data required to find the reduced model.
+
+```cpp
+ReducedDataSystem reducedData;
+reducedData.ComputeData( exampleFamily, data, projSecant.W, 4 );
+```
 
 ### Find Reduced Model
 
-The `RBFModelProducer` class takes a `ReducedData` and produces a `RBFModel`.
-The `RBFFamilyProducer` class takes a `ReducedDataSystem` and produces a `RBFFamily`.
+The `RBFFamilyProducer` class takes a `ReducedDataSystem` and produces an `RBFFamily`.
+
+```cpp
+RBFFamilyProducer<RadialType> producer( 30 );       // the number of rbfs to use
+auto reducedModel = producer.BruteForce( reducedData,
+                                         data.parameterDimension,
+										 data.parameters,
+										 1000 );    // the number of iterations to perform
+```
+
+The `RadialType` is a radial basis function type, which can be one of the following:
+
+`ThinPlateSpline` -- r^2 log(r)
+`PolyharmonicSpline3` -- r^3
+`Multiquadratic` -- sqrt( 1 + (ar)^2 )
+`InverseQuadratic` -- 1 / ( 1 + (ar)^2 )
+`InverseMultiquadratic` -- 1 / sqrt( 1 + (ar)^2 )
+`Gaussian` -- exp(-(ar)^2)
+
+The resulting `RBFFamily` is a family of `RBFModel`s parameterized by the original parameter space. This can be used in any of the methods that expect a `Family`, such as `DataGenerator` and `BifurcationDiagramGenerator`.
+
 
 Examples
 --------
@@ -205,9 +231,13 @@ At the moment there are no build files for other compilers/platforms. You will f
 
 ### Dependencies and Requirements
 
-DRDSP uses Eigen, a C++ template library for linear algebra. This is included in the repository.
+DRDSP uses [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page), a C++ template library for linear algebra. This is included in the repository.
 
 A number of C++11 features are used by the library, and maybe one or two C++14 features.
 
 
+Acknowledgements
+----------------
+
+The development of this library was supported by EPSRC grant EP/G026238/1 as part of the myGrid project.
 

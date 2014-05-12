@@ -44,7 +44,7 @@ bool DataSystem::Load( const char* filename, uint32_t maxPoints ) {
 	parameters.resize( numParameters );
 
 	string setPath;
-	for(uint16_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;++i) {
 		in >> setPath;
 		if(binary) LoadSetBinary(setPath.c_str(),i,maxPoints);
 		else LoadSetText(setPath.c_str(),i,maxPoints);
@@ -82,7 +82,7 @@ bool DataSystem::LoadSetBinary( const char* filename, uint32_t i, uint32_t maxPo
 	while( !in.eof() ) {
 		if( k >= dataSets[i].points.size() ) break;
 		in.read((char*)&dataSets[i].points[k](0),sizeof(double)*dimension);
-		k++;
+		++k;
 	}
 	return true;
 }
@@ -121,7 +121,7 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoin
 			if( j >= dimension ) break;
 			in >> dataSets[i].points[k](j++);
 		}
-		k++;
+		++k;
 	}
 	return true;
 }
@@ -129,7 +129,7 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoin
 //! Write the data sets to numbered files with given prefix and suffix
 void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
-	for(uint16_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;++i) {
 		name.str("");
 		name << filePrefix << parameters[i](0) << fileSuffix;
 		dataSets[i].WriteCSV(name.str().c_str());
@@ -142,7 +142,7 @@ DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
 
 	projectedData.parameters = parameters;
 
-	for(uint16_t i=0;i<numParameters;i++) {
+	for(uint16_t i=0;i<numParameters;++i) {
 		projectedData.dataSets[i] = dataSets[i].ProjectData( W );
 	}
 

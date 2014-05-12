@@ -32,8 +32,8 @@ void ReducedFloquet( const Options& );
 int main( int argc, char** argv ) {
 	Options options(argc,argv);
 
-	ComputeReduced( options );
-	//SimulateReduced( options );
+	//ComputeReduced( options );
+	SimulateReduced( options );
 	//OriginalFloquet( options );
 	//ReducedFloquet( options );
 
@@ -180,8 +180,8 @@ void ComputeReduced( const Options& options ) {
 		bifurcationGenerator.initial = dataGenerator.initial;
 		bifurcationGenerator.Generate( rossler,
 			[]( const VectorXd& x, const VectorXd& y ) { return x[1] > 0.0 && y[1] < 0.0; },
-			[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; }
-		).WriteBitmap("output/bifurcation-orig.bmp",720);
+			[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; },
+			options.numThreads ).WriteBitmap( "output/bifurcation-orig.bmp", 720 );
 	}
 	{
 		BifurcationDiagramGenerator<RBFFamily<RadialType>> bifurcationGenerator;
@@ -195,8 +195,8 @@ void ComputeReduced( const Options& options ) {
 		bifurcationGenerator.initial = dataGenerator.initial;
 		bifurcationGenerator.Generate( reducedModel,
 			[]( const VectorXd& x, const VectorXd& y ) { return x[1] > 0.0 && y[1] < 0.0; },
-			[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; }
-		).WriteBitmap("output/bifurcation-red.bmp",720);
+			[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; },
+			options.numThreads ).WriteBitmap( "output/bifurcation-red.bmp", 720 );
 	}
 }
 
@@ -259,7 +259,7 @@ void SimulateReduced( const Options& options ) {
 	bifurcationGenerator.initial = dataGenerator.initial;
 	bifurcationGenerator.Generate( reducedModel,
 		[]( const VectorXd& x, const VectorXd& y ) { return x[1] > 0.0 && y[1] < 0.0; },
-		[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; }
-	).WriteBitmap("output/bifurcation-red.bmp",720);
+		[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; },
+		options.numThreads ).WriteBitmap( "output/bifurcation-red.bmp", 720 );
 
 }

@@ -42,7 +42,7 @@ void Bitmap::WriteFile( const char *filename ) const {
 	if( numZeroBytes > 0 )
 		numZeroBytes = 4 - numZeroBytes;
 
-	for(uint32_t j=0;j<sizeY;j++) {
+	for(uint32_t j=0;j<sizeY;++j) {
 		out.write( (const char*)&pixels[j*sizeX], sizeX*sizeof(bmpPixel) );
 		out.write( (const char*)&zeroBytes, numZeroBytes );
 	}

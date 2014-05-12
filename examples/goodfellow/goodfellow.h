@@ -23,7 +23,7 @@ struct Goodfellow : Model<> {
 	Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& state ) const {
 		typedef typename Derived::Scalar Scalar;
 		Matrix<Scalar,-1,1> res(2*N);
-		for(uint32_t i=0;i<N;i++) {
+		for(uint32_t i=0;i<N;++i) {
 			Scalar temp1 = omega - d * r2(state,i);
 			Scalar temp2 = poly(state,i);
 			res(i) = y(state,i) * temp1 + x(state,i) * temp2;

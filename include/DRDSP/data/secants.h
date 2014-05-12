@@ -2,9 +2,9 @@
 #define INCLUDED_DATA_SECANTS
 #include "../types.h"
 #include "data_system.h"
-#include <cmath>
 #include <future>
 #include <algorithm>
+#include "../geometry/angle.h"
 
 using namespace std;
 
@@ -26,8 +26,8 @@ namespace DRDSP {
 		virtual VectorXd GetSecant( size_t k ) const = 0;                 //!< Get the kth secant (normalized)
 		virtual VectorXd GetSecantNoNormalize( size_t k ) const = 0;      //!< Get the kth secant (not necessarily normalized)
 		virtual SecantsPreComputed CullSecants( double tolerance ) const;
-		SecantsPreComputed CullSecantsDegrees( double degrees ) const;
-		SecantsPreComputed CullSecantsRadians( double radians ) const;
+		SecantsPreComputed CullSecantsAngle( Degreesd degrees ) const;
+		SecantsPreComputed CullSecantsAngle( Radiansd radians ) const;
 	};
 
 	/*!
@@ -63,9 +63,9 @@ namespace DRDSP {
 
 	vector<SecantsPreComputed> ComputeSecants( const DataSystem& data, uint32_t numThreads );
 
-	vector<SecantsPreComputed> CullSecants( const vector<SecantsPreComputed>& secants, double degrees );
+	vector<SecantsPreComputed> CullSecants( const vector<SecantsPreComputed>& secants, Degreesd degrees );
 
-	vector<SecantsPreComputed> CullSecants( const vector<SecantsPreComputed>& secants, double degrees, uint32_t numThreads );
+	vector<SecantsPreComputed> CullSecants( const vector<SecantsPreComputed>& secants, Degreesd degrees, uint32_t numThreads );
 
 }
 

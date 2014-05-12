@@ -30,7 +30,7 @@ namespace DRDSP {
 
 			r.linear = z.block(0,0,dimension,dimension);
 
-			for(uint32_t i=0;i<r.numRBFs;i++) {
+			for(uint32_t i=0;i<r.numRBFs;++i) {
 				r.weights[i] = z.col(dimension+i);
 			}
 			return r;
@@ -41,7 +41,7 @@ namespace DRDSP {
 
 			model.linear = z.block(0,0,dimension,dimension);
 
-			for(uint32_t i=0;i<model.numRBFs;i++) {
+			for(uint32_t i=0;i<model.numRBFs;++i) {
 				model.weights[i] = z.col(dimension+i);
 			}
 			return model(x);
@@ -52,7 +52,7 @@ namespace DRDSP {
 
 			model.linear = z.block(0,0,dimension,dimension);
 
-			for(uint32_t i=0;i<model.numRBFs;i++) {
+			for(uint32_t i=0;i<model.numRBFs;++i) {
 				model.weights[i] = z.col(dimension+i);
 			}
 			return model.Partials(x);
@@ -62,13 +62,13 @@ namespace DRDSP {
 			ofstream out(filename);
 			out.precision(16);
 			out << dimension << "," << model.numRBFs << "," << parameterDimension << endl;
-			for(int i=0;i<affine.coeffs.rows();i++) {	
-				for(int j=0;j<affine.coeffs.cols();j++)
+			for(int i=0;i<affine.coeffs.rows();++i) {	
+				for(int j=0;j<affine.coeffs.cols();++j)
 					out << affine.coeffs(i,j) << ",";
 				out << endl;
 			}
-			for(uint32_t k=0;k<model.numRBFs;k++) {
-				for(uint32_t j=0;j<dimension;j++)
+			for(uint32_t k=0;k<model.numRBFs;++k) {
+				for(uint32_t j=0;j<dimension;++j)
 					out << model.rbfs[k].centre(j) << ",";
 				out << endl;
 			}
@@ -87,11 +87,11 @@ namespace DRDSP {
 			affine = AffineParameterMap( dimension, numRBFs, parameterDimension );
 			model = RBFModel<F>( dimension, numRBFs );
 
-			for(uint32_t i=0;i<affine.coeffs.rows();i++)
-				for(uint32_t j=0;j<affine.coeffs.cols();j++)
+			for(uint32_t i=0;i<affine.coeffs.rows();++i)
+				for(uint32_t j=0;j<affine.coeffs.cols();++j)
 					in >> affine.coeffs(i,j);
-			for(uint32_t i=0;i<numRBFs;i++)
-				for(uint32_t j=0;j<dimension;j++)
+			for(uint32_t i=0;i<numRBFs;++i)
+				for(uint32_t j=0;j<dimension;++j)
 					in >> model.rbfs[i].centre(j);
 		}
 

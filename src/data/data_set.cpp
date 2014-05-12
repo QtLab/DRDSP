@@ -48,7 +48,7 @@ bool DataSet::LoadBinary( const char* filename ) {
 			if( j >= dimension ) break;
 			in.read((char*)&points[k](j++),sizeof(double));
 		}
-		k++;
+		++k;
 	}
 	return true;
 }
@@ -78,7 +78,7 @@ bool DataSet::LoadText( const char* filename ) {
 			if( j >= dimension ) break;
 			in >> points[k](j++);
 		}
-		k++;
+		++k;
 	}
 	return true;
 }

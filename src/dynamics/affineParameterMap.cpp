@@ -19,7 +19,7 @@ MatrixXd AffineParameterMap::GetLambda( const VectorXd& parameter ) const {
 	MatrixXd Lambda;
 	Lambda.setZero(R,N);
 	Lambda.block(0,0,N,N).setIdentity();
-	for(uint32_t i=0;i<parameterDimension;i++) {
+	for(uint32_t i=0;i<parameterDimension;++i) {
 		Lambda.block(N*(i+1),0,N,N).setIdentity();
 		Lambda.block(N*(i+1),0,N,N) *= parameter(i);
 	}

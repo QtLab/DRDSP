@@ -34,7 +34,7 @@ double SecantCostFunctionMulti::operator()( const MatrixXd& X ) const {
 	
 	double sum = 0.0;
 
-	for(size_t i=0;i<N;i++) {
+	for(size_t i=0;i<N;++i) {
 		sum += SecantCostFunction(secants[i])(X);
 	}
 
@@ -78,7 +78,7 @@ MatrixXd SecantCostGradientMulti::operator()( const MatrixXd& X ) const {
 	
 	MatrixXd sum = SecantCostGradient(secants[0])(X);
 
-	for(size_t i=1;i<N;i++)
+	for(size_t i=1;i<N;++i)
 		sum += SecantCostGradient(secants[i])(X);
 
 	return sum / (double)N;
@@ -129,7 +129,7 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 		maxVal[k] = minVal[k] = data.points[0](0);
 
 	for(uint32_t j=0;j<data.points.size();++j)
-		for(uint32_t k=0;k<n;k++) {
+		for(uint32_t k=0;k<n;++k) {
 			val = data.points[j](k);
 			if( val > maxVal[k] )
 				maxVal[k] = val;
@@ -148,7 +148,7 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 	for(uint32_t i=0;i<targetDimension;++i) {
 		bigVal = 0.0;
 		bigAxis = 0;
-		for(uint32_t k=0;k<n;k++) {
+		for(uint32_t k=0;k<n;++k) {
 			if( spread[k] > bigVal ) {
 				bigVal = spread[k];
 				bigAxis = k;
@@ -177,7 +177,7 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 
 	for(uint16_t i=0;i<data.numParameters;++i)
 		for(uint32_t j=0;j<data.dataSets[i].points.size();++j)
-			for(uint32_t k=0;k<n;k++) {
+			for(uint32_t k=0;k<n;++k) {
 				val = data.dataSets[i].points[j](k);
 				if( val > maxVal[k] )
 					maxVal[k] = val;
@@ -217,8 +217,8 @@ void ProjSecant::AnalyseSecants( const SecantsPreComputed& secants ) const {
 void ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, size_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
 	size_t numSecants = 0;
-	for(uint32_t i=0;i<N;i++) {
-		for(size_t j=0;j<secants[i].count;j++) {
+	for(uint32_t i=0;i<N;++i) {
+		for(size_t j=0;j<secants[i].count;++j) {
 			len = ( W.adjoint() * secants[i].GetSecant(j) ).norm();
 			if( len < xMin ) xMin = len;
 			if( len > xMax ) xMax = len;

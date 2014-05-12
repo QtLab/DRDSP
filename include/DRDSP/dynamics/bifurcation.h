@@ -94,7 +94,7 @@ namespace DRDSP {
 		
 		template<typename Condition,typename GetValue>
 		BifurcationDiagram<Parameter,Value> Generate( Family& family, Condition&& condition, GetValue&& getValue ) const {
-			State prevState, newState;
+			State prevState;
 			Time tEnd = tStart + tInterval;
 			Parameter dp = ( pMax - pMin ) / ( pCount - 1 );
 
@@ -109,17 +109,57 @@ namespace DRDSP {
 				prevState = system.state;
 				for(Time t=tStart;t<=tEnd;t+=dt) {
 					system.Advance(dt);
-					newState = system.state;
-					if( condition(prevState,newState) ) {
-						bifurcationDiagram.data.emplace_back( parameter, getValue(prevState,newState) );
+					if( condition(prevState,system.state) ) {
+						bifurcationDiagram.data.emplace_back( parameter, getValue(prevState,system.state) );
 					}
-					prevState = newState;
+					prevState = system.state;
 				}
 				parameter += dp;
 			}
 			return bifurcationDiagram;
 		}
 
+		template<typename Condition,typename GetValue>
+		BifurcationDiagram<Parameter,Value> Generate( Family& family, Condition&& condition, GetValue&& getValue, uint32_t numThreads ) const {
+			Time tEnd = tStart + tInterval;
+			Parameter dp = ( pMax - pMin ) / ( pCount - 1 );
+
+			BifurcationDiagram<Parameter,Value> bifurcationDiagram( pCount );
+			vector<future<vector<pair<Parameter,Value>>>> futures(numThreads);
+
+			auto func = [this,&family,&condition,&getValue,tEnd]( const Parameter& parameter ) {
+				vector<pair<Parameter,Value>> results;
+				Solver system( family(parameter) );
+				system.state = initial;
+				system.dtMax = dtMax;
+				system.Advance(tStart);
+				State prevState = system.state;
+				Time dt = this->dt;
+				for(Time t=tStart;t<=tEnd;t+=dt) {
+					system.Advance(dt);
+					if( condition(prevState,system.state) ) {
+						results.emplace_back( parameter, getValue(prevState,system.state) );
+					}
+					prevState = system.state;
+				}
+				return results;
+			};
+
+			Parameter parameter = pMin;
+			for(uint32_t i=0;i<pCount;i+=numThreads) {
+				uint32_t N = min( pCount - i, numThreads );
+				for(uint32_t j=0;j<N;++j) {
+					futures[j] = async( launch::async, func, parameter );
+					parameter += dp;
+				}
+				for(uint32_t j=0;j<N;++j) {
+					auto results = futures[j].get();
+					bifurcationDiagram.data.insert( end(bifurcationDiagram.data), cbegin(results), cend(results) );
+				}
+				//cout << i << endl;
+			}
+			return bifurcationDiagram;
+		}
 
 	};
 

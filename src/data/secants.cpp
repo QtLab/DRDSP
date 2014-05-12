@@ -1,4 +1,5 @@
 #include <DRDSP/data/secants.h>
+#include <DRDSP/geometry/trig.h>
 #include <iostream>
 #include <limits>
 
@@ -7,11 +8,11 @@ using namespace DRDSP;
 
 Secants::Secants() : dimension(0), count(0) {}
 
-SecantsPreComputed Secants::CullSecantsDegrees( double degrees ) const {
-	return CullSecants( cos( degrees * (M_PI/180.0) ) );
+SecantsPreComputed Secants::CullSecantsAngle( Degreesd degrees ) const {
+	return CullSecants( cos( Radiansd(degrees) ) );
 }
 
-SecantsPreComputed Secants::CullSecantsRadians( double radians ) const {
+SecantsPreComputed Secants::CullSecantsAngle( Radiansd radians ) const {
 	return CullSecants( cos( radians ) );
 }
 
@@ -58,7 +59,7 @@ SecantsPreComputed Secants::CullSecants( double tolerance ) const {
 		if( cullWeights[i] ) {
 			culledSecants.secants[j] = GetSecant(i);
 			culledSecants.weights[j] = cullWeights[i];
-			j++;
+			++j;
 		}
 	}
 
@@ -130,7 +131,7 @@ SecantsPreComputed SecantsPreComputed::CullSecants( double tolerance ) const {
 		if( cullWeights[i] ) {
 			culledSecants.secants[j] = GetSecant(i);
 			culledSecants.weights[j] = cullWeights[i];
-			j++;
+			++j;
 		}
 	}
 
@@ -199,23 +200,25 @@ vector<SecantsPreComputed> DRDSP::ComputeSecants( const DataSystem& data, uint32
 	return secants;
 }
 
-vector<SecantsPreComputed> DRDSP::CullSecants( const vector<SecantsPreComputed>& secants, double degrees ) {
+vector<SecantsPreComputed> DRDSP::CullSecants( const vector<SecantsPreComputed>& secants, Degreesd degrees ) {
 	vector<SecantsPreComputed> culledSecants( secants.size() );
+	double tolerance = cos( Radiansd(degrees) );
 	for(size_t i=0;i<secants.size();++i)
-		culledSecants[i] = secants[i].CullSecantsDegrees( degrees );
+		culledSecants[i] = secants[i].CullSecants( tolerance );
 	return culledSecants;
 }
 
-vector<SecantsPreComputed> DRDSP::CullSecants( const vector<SecantsPreComputed>& secants, double degrees, uint32_t numThreads ) {
+vector<SecantsPreComputed> DRDSP::CullSecants( const vector<SecantsPreComputed>& secants, Degreesd degrees, uint32_t numThreads ) {
 	vector<SecantsPreComputed> culledSecants( secants.size() );
 	vector<future<void>> futures(numThreads);
 	uint32_t numParams = (uint32_t)secants.size();
+	double tolerance = cos( Radiansd(degrees) );
 	for(uint32_t i=0;i<numParams;i+=numThreads) {
 		uint32_t N = min( numParams - i, numThreads );
 		for(uint32_t j=0;j<N;++j) {
 			futures[j] = async( launch::async,
-				[degrees]( SecantsPreComputed& culled, const SecantsPreComputed& sec ) {
-					culled = sec.CullSecantsDegrees( degrees );
+				[tolerance]( SecantsPreComputed& culled, const SecantsPreComputed& sec ) {
+					culled = sec.CullSecants( tolerance );
 				},
 				ref(culledSecants[i+j]), cref(secants[i+j])
 			);
