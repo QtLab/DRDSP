@@ -193,10 +193,10 @@ The `RadialType` is a radial basis function type, which can be one of the follow
 
 * `ThinPlateSpline` -- r^2 log(r)
 * `PolyharmonicSpline3` -- r^3
-* `Multiquadratic` -- sqrt( 1 + (ar)^2 )
-* `InverseQuadratic` -- 1 / ( 1 + (ar)^2 )
-* `InverseMultiquadratic` -- 1 / sqrt( 1 + (ar)^2 )
-* `Gaussian` -- exp(-(ar)^2)
+* `Multiquadratic` -- sqrt( 1 + r^2 )
+* `InverseQuadratic` -- 1 / ( 1 + r^2 )
+* `InverseMultiquadratic` -- 1 / sqrt( 1 + r^2 )
+* `Gaussian` -- exp(-r^2)
 
 The resulting `RBFFamily` is a family of `RBFModel`s parameterized by the original parameter space. This can be used in any of the methods that expect a `Family`, such as `DataGenerator` and `BifurcationDiagramGenerator`.
 
