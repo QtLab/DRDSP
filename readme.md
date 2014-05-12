@@ -111,7 +111,7 @@ struct ExampleWrap {
 };
 ```
 
-In order to use a custom wrap function with the provided RK4 integrator, you need to make a custom version of solver:
+In order to use a custom wrap function with the provided RK4 integrator, you need to make a custom version of the solver:
 
 ```cpp
 typedef RKDynamicalSystem<ExampleModel,ExampleWrap> ExampleSolver;
