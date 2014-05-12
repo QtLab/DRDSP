@@ -174,6 +174,8 @@ The `ReducedDataSystem` class takes the original family, the data sets, and an o
 
 ```cpp
 ReducedDataSystem reducedData;
+
+// Compute data for the given family, data and projection using 4 threads.
 reducedData.ComputeData( exampleFamily, data, projSecant.W, 4 );
 ```
 
