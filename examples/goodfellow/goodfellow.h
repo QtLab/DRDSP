@@ -16,7 +16,7 @@ struct Goodfellow : Model<> {
 	void Create( uint32_t numCompartments );
 
 	MatrixXd Partials( const VectorXd& x ) const {
-		return Derivative( *this, x );
+		return AutoDerivative( *this, x );
 	}
 
 	template<typename Derived>

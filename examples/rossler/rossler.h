@@ -22,7 +22,7 @@ struct RosslerModel : Model<Vector3d> {
 	}
 
 	Matrix3d Partials( const Vector3d& x ) const {
-		return Derivative( *this, x );
+		return AutoDerivative( *this, x );
 	}
 };
 

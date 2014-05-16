@@ -32,6 +32,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rossler", "examples\rossler
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{25B61706-4B1B-4071-94DE-D65E78658FC1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dynamo", "examples\dynamo\dynamo.vcxproj", "{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2E42D8FD-0BD3-4057-9C73-EFD24E366260} = {2E42D8FD-0BD3-4057-9C73-EFD24E366260}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -88,6 +93,14 @@ Global
 		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Release|Win32.Build.0 = Release|Win32
 		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Release|x64.ActiveCfg = Release|x64
 		{72B59E16-B7A3-402D-B6C9-AA1B4AB1381D}.Release|x64.Build.0 = Release|x64
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Debug|Win32.Build.0 = Debug|Win32
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Debug|x64.ActiveCfg = Debug|x64
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Debug|x64.Build.0 = Debug|x64
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Release|Win32.ActiveCfg = Release|Win32
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Release|Win32.Build.0 = Release|Win32
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Release|x64.ActiveCfg = Release|x64
+		{3B1781C3-6E59-4D2A-9205-C0AC8EEC9F5A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

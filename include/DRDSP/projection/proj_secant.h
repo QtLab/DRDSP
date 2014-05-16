@@ -9,14 +9,14 @@ namespace DRDSP {
 	struct SecantCostFunction {
 		const SecantsPreComputed& secants;
 
-		SecantCostFunction( const SecantsPreComputed& secants ) : secants(secants) {}
+		explicit SecantCostFunction( const SecantsPreComputed& secants ) : secants(secants) {}
 		double operator()( const MatrixXd& X ) const;
 	};
 
 	struct SecantCostGradient {
 		const SecantsPreComputed& secants;
 
-		SecantCostGradient( const SecantsPreComputed& secants ) : secants(secants) {}
+		explicit SecantCostGradient( const SecantsPreComputed& secants ) : secants(secants) {}
 		MatrixXd operator()( const MatrixXd& X ) const;
 	};
 
