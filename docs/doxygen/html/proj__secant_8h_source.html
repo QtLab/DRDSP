@@ -98,14 +98,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_secant_cost_function.html">    9</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_secant_cost_function.html">SecantCostFunction</a> {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&amp; secants;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_secant_cost_function.html">SecantCostFunction</a>( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&amp; secants ) : secants(secants) {}</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_secant_cost_function.html">SecantCostFunction</a>( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&amp; secants ) : secants(secants) {}</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">double</span> operator()( <span class="keyword">const</span> MatrixXd&amp; X ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    };</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
 <div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_secant_cost_gradient.html">   16</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_secant_cost_gradient.html">SecantCostGradient</a> {</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&amp; secants;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_secant_cost_gradient.html">SecantCostGradient</a>( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&amp; secants ) : secants(secants) {}</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_secant_cost_gradient.html">SecantCostGradient</a>( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&amp; secants ) : secants(secants) {}</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        MatrixXd operator()( <span class="keyword">const</span> MatrixXd&amp; X ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    };</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
@@ -152,13 +152,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="struct_d_r_d_s_p_1_1_secant_cost_function_multi_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_secant_cost_function_multi.html">DRDSP::SecantCostFunctionMulti</a></div><div class="ttdef"><b>Definition:</b> proj_secant.h:23</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdoc">A set of data points. </div><div class="ttdef"><b>Definition:</b> data_set.h:13</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_secant_cost_gradient_multi_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_secant_cost_gradient_multi.html">DRDSP::SecantCostGradientMulti</a></div><div class="ttdef"><b>Definition:</b> proj_secant.h:31</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_secants_pre_computed_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">DRDSP::SecantsPreComputed</a></div><div class="ttdoc">Set of secants that have been pre-computed. </div><div class="ttdef"><b>Definition:</b> secants.h:32</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_secants_pre_computed_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">DRDSP::SecantsPreComputed</a></div><div class="ttdoc">Set of secants that have been pre-computed. </div><div class="ttdef"><b>Definition:</b> secants.h:36</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_secant_cost_function_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_secant_cost_function.html">DRDSP::SecantCostFunction</a></div><div class="ttdef"><b>Definition:</b> proj_secant.h:9</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_proj_secant_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_proj_secant.html">DRDSP::ProjSecant</a></div><div class="ttdef"><b>Definition:</b> proj_secant.h:39</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 8 2014 11:34:12 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 16 2014 15:01:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

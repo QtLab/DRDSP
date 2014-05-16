@@ -108,7 +108,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Family&gt;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>&amp; ComputeData( <a class="code" href="struct_d_r_d_s_p_1_1_family.html">Family</a>&amp;&amp; family, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W ) {</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            Create( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">numParameters</a> );</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numParameters;i++) {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numParameters;++i) {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                reducedData[i].ComputeData( family(data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">parameters</a>[i]), data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a>[i], W );</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            }</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
@@ -140,7 +140,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Family&gt;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>&amp; ComputeDataEmbedded( <a class="code" href="struct_d_r_d_s_p_1_1_family.html">Family</a>&amp;&amp; family, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; data, <span class="keyword">const</span> MatrixXd&amp; W ) {</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            Create( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">numParameters</a> );</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numParameters;i++) {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numParameters;++i) {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                reducedData[i].ComputeDataEmbedded( family(data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">parameters</a>[i]), data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a>[i], W );</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
@@ -172,11 +172,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> ComputeBoundingBox() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordtype">void</span> WritePointsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filePrefix, <span class="keyword">const</span> <span class="keywordtype">char</span>* fileSuffix ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">void</span> WriteVectorsCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filePrefix, <span class="keyword">const</span> <span class="keywordtype">char</span>* fileSuffix ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    };</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordtype">void</span> WriteDerivativesCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filePrefix, <span class="keyword">const</span> <span class="keywordtype">char</span>* fileSuffix ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    };</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">void</span> Compare( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>&amp; reducedData, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; rdata );</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></div><div class="ttdoc">A family of data sets with corresponding parameter values. </div><div class="ttdef"><b>Definition:</b> data_system.h:10</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdoc">An axis-aligned bounding box in n-dimensions. </div><div class="ttdef"><b>Definition:</b> aabb.h:10</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdoc">A set of data points. </div><div class="ttdef"><b>Definition:</b> data_set.h:13</div></div>
@@ -189,7 +192,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 8 2014 11:34:12 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 16 2014 15:01:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

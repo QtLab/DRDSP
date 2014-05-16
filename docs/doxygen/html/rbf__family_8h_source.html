@@ -119,7 +119,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            r.linear = z.block(0,0,dimension,dimension);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;r.numRBFs;i++) {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;r.numRBFs;++i) {</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                r.weights[i] = z.col(dimension+i);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            }</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keywordflow">return</span> r;</div>
@@ -130,7 +130,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            model.linear = z.block(0,0,dimension,dimension);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;model.numRBFs;i++) {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;model.numRBFs;++i) {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                model.weights[i] = z.col(dimension+i);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            }</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordflow">return</span> model(x);</div>
@@ -141,7 +141,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            model.linear = z.block(0,0,dimension,dimension);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;model.numRBFs;i++) {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;model.numRBFs;++i) {</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                model.weights[i] = z.col(dimension+i);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">return</span> model.Partials(x);</div>
@@ -151,13 +151,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            ofstream out(filename);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            out.precision(16);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            out &lt;&lt; dimension &lt;&lt; <span class="stringliteral">&quot;,&quot;</span> &lt;&lt; model.numRBFs &lt;&lt; <span class="stringliteral">&quot;,&quot;</span> &lt;&lt; parameterDimension &lt;&lt; endl;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0;i&lt;affine.coeffs.rows();i++) {   </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=0;j&lt;affine.coeffs.cols();j++)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0;i&lt;affine.coeffs.rows();++i) {   </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=0;j&lt;affine.coeffs.cols();++j)</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    out &lt;&lt; affine.coeffs(i,j) &lt;&lt; <span class="stringliteral">&quot;,&quot;</span>;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                out &lt;&lt; endl;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">for</span>(uint32_t k=0;k&lt;model.numRBFs;k++) {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <span class="keywordflow">for</span>(uint32_t j=0;j&lt;dimension;j++)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">for</span>(uint32_t k=0;k&lt;model.numRBFs;++k) {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <span class="keywordflow">for</span>(uint32_t j=0;j&lt;dimension;++j)</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                    out &lt;&lt; model.rbfs[k].centre(j) &lt;&lt; <span class="stringliteral">&quot;,&quot;</span>;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                out &lt;&lt; endl;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            }</div>
@@ -176,11 +176,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            affine = <a class="code" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html">AffineParameterMap</a>( dimension, numRBFs, parameterDimension );</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            model = <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel&lt;F&gt;</a>( dimension, numRBFs );</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;affine.coeffs.rows();i++)</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <span class="keywordflow">for</span>(uint32_t j=0;j&lt;affine.coeffs.cols();j++)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;affine.coeffs.rows();++i)</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <span class="keywordflow">for</span>(uint32_t j=0;j&lt;affine.coeffs.cols();++j)</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                    in &gt;&gt; affine.coeffs(i,j);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numRBFs;i++)</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                <span class="keywordflow">for</span>(uint32_t j=0;j&lt;dimension;j++)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numRBFs;++i)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                <span class="keywordflow">for</span>(uint32_t j=0;j&lt;dimension;++j)</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    in &gt;&gt; model.rbfs[i].centre(j);</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        }</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
@@ -199,7 +199,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu May 8 2014 11:34:12 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 16 2014 15:01:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
