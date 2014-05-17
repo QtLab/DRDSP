@@ -19,6 +19,7 @@ namespace DRDSP {
 		bool LoadBinary( const char* filename );        //!< Load a data set from file in binary format
 		bool LoadText( const char* filename );          //!< Load a data set from file in text format (space separated)
 		void WriteCSV( const char* filename ) const;    //!< Write the data set to file in CSV format
+		void WriteBinary( const char* filename ) const;    //!< Write the data set to file in binary format
 		DataSet ProjectData( const MatrixXd& W ) const; //!< Apply the given projection to this data set
 		
 		VectorXd& operator[]( size_t i ) {

@@ -5,7 +5,6 @@
 #include <DRDSP/auto_diff.h>
 #include <cmath>
 
-
 namespace DRDSP {
 
 	struct Dynamo : Model<> {
@@ -29,15 +28,58 @@ namespace DRDSP {
 
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
+
+			Matrix<typename Derived::Scalar,-1,-1> alphaPC, aDotPC, bDotPC;
+			
+			alphaPC.setZero(nI,nJ);
+			for(uint32_t j=0;j<nJ;j++)
+				for(uint32_t i=1;i<nI-1;i++)
+					alphaPC(i,j) = sintheta(j) / ( 1.0 + alphaB * NormB2(x,i,j) );
+		
+			Derived::Scalar t(0);
+			for(uint32_t k=0;k<nJ;k++)
+				t += alphaPC(1,k);
+			t /= nJ;
+			for(uint32_t j=0;j<nJ;j++)
+				alphaPC(0,j) = t;
+
+			aDotPC.setZero(nI,nJ);
+			for(uint32_t j=0;j<nJ;j++)
+				for(uint32_t i=1;i<nI-1;i++)
+					aDotPC(i,j) = cAlpha * alphaPC(i,j) * b(x,i,j) + D2a(x,i,j);
+
+			for(uint32_t j=0;j<nJ;j++)
+				for(uint32_t k=0;k<nJ;k++)
+					aDotPC(nI-1,j) += Bound1(j,k) * aDotPC(nI-2,k) + Bound2(j,k) * aDotPC(nI-3,k);
+		
+			t = 0.0;
+			for(uint32_t k=0;k<nJ;k++)
+				t += aDotPC(1,k);
+			t /= nJ;
+			for(uint32_t j=0;j<nJ;j++)
+				aDotPC(0,j) = t;
+
+			bDotPC.setZero(nI,nJ);
+			for(uint32_t j=0;j<nJ;j++)
+				for(uint32_t i=1;i<nI-1;i++)
+					bDotPC(i,j) = cOmega * F(x,i,j) + cAlpha * G(x,alphaPC,i,j) + D2b(x,i,j);
+		
+			t = 0.0;
+			for(uint32_t k=0;k<nJ;k++)
+				t += bDotPC(1,k);
+			t /= nJ;
+			for(uint32_t j=0;j<nJ;j++)
+				bDotPC(0,j) = t;
+
 			Matrix<typename Derived::Scalar,-1,1> r(dimension);
 			uint32_t k=0;
 			for(uint32_t i=0;i<nI;i++) {
 				for(uint32_t j=0;j<nJ;j++)
-					r(k++) = aDot(x,i,j);
+					r(k++) = aDotPC(i,j);
 			}
 			for(uint32_t i=0;i<nI;i++) {
 				for(uint32_t j=0;j<nJ;j++)
-					r(k++) = bDot(x,i,j);
+					r(k++) = bDotPC(i,j);
 			}
 			return r;
 		}
@@ -46,9 +88,10 @@ namespace DRDSP {
 			return AutoDerivativeSparse( *this, x );
 		}
 
-	protected:
-		double ds, dth, eta0;
+		VectorXd InitialCondition() const;
 
+	protected:
+		const double ds, dth, eta0;
 		VectorXd sinheta, cosheta, cotheta, sintheta, costheta;
 		MatrixXd c, pi32, Bound1, Bound2, trig1;
 		VectorXi jp1, jm1;
@@ -136,58 +179,13 @@ namespace DRDSP {
 		}*/
 
 		template<typename Derived>
-		typename Derived::Scalar aDot( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			if( i==0 ) {
-				Derived::Scalar r(0);
-				for(uint32_t k=0;k<nJ;k++)
-					r += aDot(x,1,k);
-				return r / nJ;
-			} else if( i==nI-1 ) {
-				Derived::Scalar r(0);
-				for(uint32_t k=0;k<nJ;k++)
-					r += Bound1(j,k) * aDot(x,nI-2,k) + Bound2(j,k) * aDot(x,nI-3,k);
-				return r;
-			} else {
-				return cAlpha * alpha(x,i,j) * b(x,i,j) + D2a(x,i,j);
-			}
-		}
-		
-		template<typename Derived>
-		typename Derived::Scalar bDot( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			if( i==0 ) {
-				Derived::Scalar r(0);
-				for(uint32_t k=0;k<nJ;k++)
-					r += bDot(x,1,k);
-				return r / nJ;
-			} else if( i==nI-1 ) {
-				return Derived::Scalar(0);
-			} else {
-				return cOmega * F(x,i,j) + cAlpha * G(x,i,j) + D2b(x,i,j);
-			}
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar alpha( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			if( i==0 ) {
-				Derived::Scalar r(0);
-				for(uint32_t k=0;k<nJ;k++)
-					r += alpha(x,1,k);
-				return r / nJ;
-			} else if( i==nI-1 ) {
-				return Derived::Scalar(0);
-			} else {
-				return ( sintheta(j) ) / ( 1.0 + alphaB * NormB2(x,i,j) );
-			}
-		}
-		
-		template<typename Derived>
 		typename Derived::Scalar F( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
 			return -1.5 * pi32(i,j) * ( (1.0-cosheta(i)*costheta(j)) * dta(x,i,j) - s(i) * sinheta(i) * sintheta(j) * dsa(x,i,j) );
 		}
 		
-		template<typename Derived>
-		typename Derived::Scalar G( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return -alpha(x,i,j)*D2a(x,i,j) - c(i,j)*s(i) * dsalphaApprox(x,i,j) * ( trig1(i,j)*a(x,i,j) + c(i,j)*s(i)*dsa(x,i,j) ) - c(i,j)*dtalphaApprox(x,i,j)*( c(i,j)*dta(x,i,j) - a(x,i,j)*sintheta(j) );
+		template<typename Derived,typename Derived2>
+		typename Derived::Scalar G( const MatrixBase<Derived>& x, const MatrixBase<Derived2>& alpha, uint32_t i, uint32_t j ) const {
+			return -alpha(i,j)*D2a(x,i,j) - c(i,j)*s(i) * dsalphaApprox(alpha,i,j) * ( trig1(i,j)*a(x,i,j) + c(i,j)*s(i)*dsa(x,i,j) ) - c(i,j)*dtalphaApprox(alpha,i,j)*( c(i,j)*dta(x,i,j) - a(x,i,j)*sintheta(j) );
 		}
 		
 		template<typename Derived>
@@ -224,13 +222,13 @@ namespace DRDSP {
 		}
 
 		template<typename Derived>
-		typename Derived::Scalar dsalphaApprox( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( alpha(x,i+1,j) - alpha(x,i-1,j) ) / (2.0*ds);
+		typename Derived::Scalar dsalphaApprox( const MatrixBase<Derived>& alpha, uint32_t i, uint32_t j ) const {
+			return ( alpha(i+1,j) - alpha(i-1,j) ) / (2.0*ds);
 		}
 
 		template<typename Derived>
-		typename Derived::Scalar dtalphaApprox( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( alpha(x,i,jp1(j)) - alpha(x,i,jm1(j)) ) / (2.0*dth);
+		typename Derived::Scalar dtalphaApprox( const MatrixBase<Derived>& alpha, uint32_t i, uint32_t j ) const {
+			return ( alpha(i,jp1(j)) - alpha(i,jm1(j)) ) / (2.0*dth);
 		}
 
 	};

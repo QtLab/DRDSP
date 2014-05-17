@@ -29,6 +29,9 @@ namespace DRDSP {
 
 		//! Write the data sets to numbered files with given prefix and suffix
 		void WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const;
+		
+		//! Write the data sets to numbered files with given prefix and suffix
+		void WriteDataSetsBinary( const char* filePrefix, const char* fileSuffix ) const;
 
 		//! Apply the given projection to this data system
 		DataSystem ProjectData( const MatrixXd& W ) const;

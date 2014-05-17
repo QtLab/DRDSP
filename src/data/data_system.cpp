@@ -20,7 +20,6 @@ DataSystem::DataSystem( uint32_t dim, uint32_t numParams, uint32_t paramDim ) :
 	parameters( numParams )
 {}
 
-//! Load a data system from a text file
 bool DataSystem::Load( const char* filename, uint32_t maxPoints ) {
 	ifstream in(filename);
 	if( !in ) {
@@ -53,7 +52,6 @@ bool DataSystem::Load( const char* filename, uint32_t maxPoints ) {
 	return true;
 }
 
-//! Load the ith data set from the given file in binary format
 bool DataSystem::LoadSetBinary( const char* filename, uint32_t i, uint32_t maxPoints ) {
 	ifstream in(filename,ios::binary);
 	if( !in ) {
@@ -87,7 +85,6 @@ bool DataSystem::LoadSetBinary( const char* filename, uint32_t i, uint32_t maxPo
 	return true;
 }
 
-//! Load the ith data set from the given file in text format (space separated)
 bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoints ) {
 	ifstream in(filename);
 	if( !in ) {
@@ -126,7 +123,6 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoin
 	return true;
 }
 
-//! Write the data sets to numbered files with given prefix and suffix
 void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
 	for(uint16_t i=0;i<numParameters;++i) {
@@ -136,7 +132,15 @@ void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffi
 	}
 }
 
-//! Apply the given projection to this data system
+void DataSystem::WriteDataSetsBinary( const char* filePrefix, const char* fileSuffix ) const {
+	stringstream name;
+	for(uint16_t i=0;i<numParameters;++i) {
+		name.str("");
+		name << filePrefix << parameters[i](0) << fileSuffix;
+		dataSets[i].WriteBinary(name.str().c_str());
+	}
+}
+
 DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
 	DataSystem projectedData( (uint32_t)W.cols(), numParameters, parameterDimension );
 

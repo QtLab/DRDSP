@@ -34,7 +34,7 @@ bool DataSet::LoadBinary( const char* filename ) {
 	in.read((char*)&numPoints,sizeof(numPoints));
 	cout << " - " << numPoints << " points" << endl << endl;
 
-	in.seekg(sizeof(double),ios::cur);
+	//in.seekg(sizeof(double),ios::cur);
 
 	points.resize( numPoints );
 	for( auto& x : points )
@@ -93,6 +93,19 @@ void DataSet::WriteCSV( const char* filename ) const {
 		for(uint32_t j=0;j<dimension;++j)
 			out << x(j) << ",";
 		out << endl;
+	}
+}
+
+void DataSet::WriteBinary( const char* filename ) const {
+	ofstream out(filename,ios::binary);
+	if( !out ) {
+		cout << "DataSet::WriteBinary : file error" << endl;
+		return;
+	}
+	uint32_t numPoints = (uint32_t)points.size();
+	out.write( (const char*)&numPoints, sizeof(uint32_t) );
+	for( const auto& x : points ) {
+		out.write( (const char*)&x[0], sizeof(double)*dimension );
 	}
 }
 
