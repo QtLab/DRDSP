@@ -29,15 +29,15 @@ int main( int argc, char** argv ) {
 	// The example
 	DynamoFamily dynamo;
 
-	auto parameters = ParameterList( 1.2, 2.0, 3 );
+	auto parameters = ParameterList( 1.2, 2.0, 6 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<DynamoFamily> dataGenerator(dynamo);
 	dataGenerator.initial.setRandom(dynamo.dimension);
-	dataGenerator.tStart = 0;
-	dataGenerator.tInterval = 0.00012;
-	dataGenerator.print = 200;
+	dataGenerator.tStart = 3;
+	dataGenerator.tInterval = 0.12;
+	dataGenerator.print = 100;
 	dataGenerator.dtMax = 1.0e-7;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
