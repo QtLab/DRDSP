@@ -1,6 +1,7 @@
 #ifndef INCLUDED_DUAL
 #define INCLUDED_DUAL
 #include <cmath>
+//#include <complex>
 
 namespace DRDSP {
 
@@ -8,11 +9,7 @@ namespace DRDSP {
 	struct dual {
 		T x, y;
 
-		dual() = default;
-
-		explicit dual( T real ) : x(real), y(0) {}
-
-		dual( T real, T dual ) : x(real), y(dual) {}
+		dual( T real = T(), T dual = T() ) : x(real), y(dual) {}
 
 		dual<T> operator-() const {
 			return dual<T>(-x,-y);

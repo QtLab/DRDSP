@@ -1,3 +1,4 @@
+#pragma warning ( disable : 4503 )
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
@@ -28,16 +29,16 @@ int main( int argc, char** argv ) {
 	// The example
 	DynamoFamily dynamo;
 
-	auto parameters = ParameterList( 1.2, 2.0, 6 );
+	auto parameters = ParameterList( 1.2, 2.0, 3 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<DynamoFamily> dataGenerator(dynamo);
-	dataGenerator.initial = dynamo(parameters[0]).InitialCondition();
-	dataGenerator.tStart = 3;
-	dataGenerator.tInterval = 0.12;
+	dataGenerator.initial.setRandom(dynamo.dimension);
+	dataGenerator.tStart = 0;
+	dataGenerator.tInterval = 0.00012;
 	dataGenerator.print = 200;
-	dataGenerator.dtMax = 2.011282392e-5;
+	dataGenerator.dtMax = 1.0e-7;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsBinary("output/orig",".bin");

@@ -37,7 +37,7 @@ namespace DRDSP {
 			rj = r;
 			rj[j].y = 1.0;
 			VectorXd temp = DualPart( f( rj ) );
-			for(int i=0;j<x.size();++i) {
+			for(int i=0;i<temp.size();++i) {
 				if( temp[i] == 0.0 ) continue;
 				triplets.emplace_back( i, j, temp[i] );
 			}

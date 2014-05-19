@@ -7,7 +7,7 @@
 
 namespace DRDSP {
 
-	struct Dynamo : Model<> {
+		struct Dynamo : Model<> {
 
 		static const uint32_t nI = 41;
 		static const uint32_t nJ = 160;
@@ -28,62 +28,25 @@ namespace DRDSP {
 
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
-
-			Matrix<typename Derived::Scalar,-1,-1> alphaPC, aDotPC, bDotPC;
-			
-			alphaPC.setZero(nI,nJ);
-			for(uint32_t j=0;j<nJ;j++)
-				for(uint32_t i=1;i<nI-1;i++)
-					alphaPC(i,j) = sintheta(j) / ( 1.0 + alphaB * NormB2(x,i,j) );
-		
-			Derived::Scalar t(0);
-			for(uint32_t k=0;k<nJ;k++)
-				t += alphaPC(1,k);
-			t /= nJ;
-			for(uint32_t j=0;j<nJ;j++)
-				alphaPC(0,j) = t;
-
-			aDotPC.setZero(nI,nJ);
-			for(uint32_t j=0;j<nJ;j++)
-				for(uint32_t i=1;i<nI-1;i++)
-					aDotPC(i,j) = cAlpha * alphaPC(i,j) * b(x,i,j) + D2a(x,i,j);
-
-			for(uint32_t j=0;j<nJ;j++)
-				for(uint32_t k=0;k<nJ;k++)
-					aDotPC(nI-1,j) += Bound1(j,k) * aDotPC(nI-2,k) + Bound2(j,k) * aDotPC(nI-3,k);
-		
-			t = 0.0;
-			for(uint32_t k=0;k<nJ;k++)
-				t += aDotPC(1,k);
-			t /= nJ;
-			for(uint32_t j=0;j<nJ;j++)
-				aDotPC(0,j) = t;
-
-			bDotPC.setZero(nI,nJ);
-			for(uint32_t j=0;j<nJ;j++)
-				for(uint32_t i=1;i<nI-1;i++)
-					bDotPC(i,j) = cOmega * F(x,i,j) + cAlpha * G(x,alphaPC,i,j) + D2b(x,i,j);
-		
-			t = 0.0;
-			for(uint32_t k=0;k<nJ;k++)
-				t += bDotPC(1,k);
-			t /= nJ;
-			for(uint32_t j=0;j<nJ;j++)
-				bDotPC(0,j) = t;
-
-			Matrix<typename Derived::Scalar,-1,1> r(dimension);
-			uint32_t k=0;
-			for(uint32_t i=0;i<nI;i++) {
-				for(uint32_t j=0;j<nJ;j++)
-					r(k++) = aDotPC(i,j);
-			}
-			for(uint32_t i=0;i<nI;i++) {
-				for(uint32_t j=0;j<nJ;j++)
-					r(k++) = bDotPC(i,j);
-			}
+			typedef Matrix<Derived::Scalar,-1,1> Col;
+			auto a = compute_a( x );
+			auto dsa = compute_ds( a );
+			auto dta = compute_dt( a );
+			auto ds2a = compute_ds2( a );
+			auto dt2a = compute_dt2( a );
+			auto b = compute_b( x );
+			auto alpha = compute_alpha( a, b, dsa, dta );
+			auto D2a = compute_D2( a, dsa, ds2a, dta, dt2a );
+			auto aDot = compute_aDot( b, D2a, alpha );
+			auto bDot = compute_bDot( a, b, dsa, dta, D2a, alpha );
+			Col r(dimension);
+			for(uint32_t i=0;i<nI;++i)
+				r.segment(i*nJ,nJ) = aDot.row(i).transpose();
+			for(uint32_t i=0;i<nI;++i)
+				r.segment(N+i*nJ,nJ) = bDot.row(i).transpose();
 			return r;
 		}
-
+		
 		SparseMatrix<double> Partials( const VectorXd& x ) const {
 			return AutoDerivativeSparse( *this, x );
 		}
@@ -92,143 +55,166 @@ namespace DRDSP {
 
 	protected:
 		const double ds, dth, eta0;
-		VectorXd sinheta, cosheta, cotheta, sintheta, costheta;
+		VectorXd sinheta, cosheta, cotheta, sintheta, costheta, s;
 		MatrixXd c, pi32, Bound1, Bound2, trig1;
 		VectorXi jp1, jm1;
 
 		void Init();
-
-		template<typename Derived>
-		typename Derived::Scalar a( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return x(nJ*i+j);
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar b( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return x(N+nJ*i+j);
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar dsa( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( a(x,i+1,j) - a(x,i-1,j) ) / ( 2.0*ds );
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar dsb( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( b(x,i+1,j) - b(x,i-1,j) ) / ( 2.0*ds );
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar dta( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( a(x,i,jp1(j)) - a(x,i,jm1(j)) ) / ( 2.0*dth );
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar dtb( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( b(x,i,jp1(j)) - b(x,i,jm1(j)) ) / ( 2.0*dth );
-		}
-
-		//template<typename Derived>
-		//typename Derived::Scalar dsta( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-		//	return ( a(x,i+1,jp1(j)) - a(x,i+1,jm1(j)) - a(x,i-1,jp1(j)) + a(x,i-1,jm1(j)) ) / ( 4.0*ds*dth );
-		//}
-
-		//template<typename Derived>
-		//typename Derived::Scalar dstb( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-		//	return ( b(x,i+1,jp1(j)) - b(x,i+1,jm1(j)) - b(x,i-1,jp1(j)) + b(x,i-1,jm1(j)) ) / ( 4.0*ds*dth );
-		//}
-
-		template<typename Derived>
-		typename Derived::Scalar ds2a( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( a(x,i+1,j) - 2.0*a(x,i,j) + a(x,i-1,j) ) / ( ds*ds );
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar ds2b( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( b(x,i+1,j) - 2.0*b(x,i,j) + b(x,i-1,j) ) / ( ds*ds );
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar dt2a( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( a(x,i,jp1(j)) - 2.0*a(x,i,j) + a(x,i,jm1(j)) ) / ( dth*dth );
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar dt2b( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return ( b(x,i,jp1(j)) - 2.0*b(x,i,j) + b(x,i,jm1(j)) ) / ( dth*dth );
-		}
 		
-		double theta( uint32_t j ) const {
-			return dth * j;
-		}
-
-		double s( uint32_t i ) const {
-			return ds * i;
-		}
-
-		double eta( uint32_t i ) const {
-			return eta0 - ::log(s(i));
-		}
-		/*
-		double c( uint32_t i, uint32_t j ) const {
-			return cosheta(i) - costheta(j);
-		}
-
-		double pi( uint32_t i, uint32_t j ) const {
-			return sinheta(i) / c(i,j);
-		}*/
-
 		template<typename Derived>
-		typename Derived::Scalar F( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return -1.5 * pi32(i,j) * ( (1.0-cosheta(i)*costheta(j)) * dta(x,i,j) - s(i) * sinheta(i) * sintheta(j) * dsa(x,i,j) );
-		}
-		
-		template<typename Derived,typename Derived2>
-		typename Derived::Scalar G( const MatrixBase<Derived>& x, const MatrixBase<Derived2>& alpha, uint32_t i, uint32_t j ) const {
-			return -alpha(i,j)*D2a(x,i,j) - c(i,j)*s(i) * dsalphaApprox(alpha,i,j) * ( trig1(i,j)*a(x,i,j) + c(i,j)*s(i)*dsa(x,i,j) ) - c(i,j)*dtalphaApprox(alpha,i,j)*( c(i,j)*dta(x,i,j) - a(x,i,j)*sintheta(j) );
+		Matrix<typename Derived::Scalar,-1,-1> compute_aDot( const MatrixBase<Derived>& b, const MatrixBase<Derived>& D2a, const MatrixBase<Derived>& alpha ) const {
+			Matrix<Derived::Scalar,-1,-1> aDot = cAlpha * alpha.cwiseProduct( b ) + D2a;
+			aDot.row(0).fill(aDot.row(1).mean());
+			aDot.row(nI-1) = aDot.row(nI-2) * Bound1.transpose() + aDot.row(nI-3) * Bound2.transpose();
+			return aDot;
 		}
 		
 		template<typename Derived>
-		typename Derived::Scalar Beta( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return c(i,j)*dta(x,i,j) - a(x,i,j)*sintheta(j);
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar Btheta( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return -a(x,i,j)*trig1(i,j) + c(i,j)*s(i)*dsa(x,i,j);
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar Bphi( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return b(x,i,j);
-		}
-
-		template<typename Derived>
-		typename Derived::Scalar NormB2( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			Derived::Scalar b1 = Beta(x,i,j);
-			Derived::Scalar b2 = Btheta(x,i,j);
-			Derived::Scalar b3 = Bphi(x,i,j);
-			return b1*b1 + b2*b2 + b3*b3;
+		Matrix<typename Derived::Scalar,-1,-1> compute_bDot( const MatrixBase<Derived>& a, const MatrixBase<Derived>& b, const MatrixBase<Derived>& dsa, const MatrixBase<Derived>& dta, const MatrixBase<Derived>& D2a, const MatrixBase<Derived>& alpha ) const {
+			typedef Derived::Scalar Scalar;
+			auto F = compute_F( dsa, dta );
+			auto G = compute_G( a, dsa, dta, D2a, alpha );
+			auto dsb = compute_ds( b );
+			auto ds2b = compute_ds2( b );
+			auto dtb = compute_dt( b );
+			auto dt2b = compute_dt2( b );
+			auto D2b = compute_D2( b, dsb, ds2b, dtb, dt2b );
+			Matrix<typename Derived::Scalar,-1,-1> bDot = cOmega * F + cAlpha * G + D2b;
+			bDot.row(0).fill(bDot.row(1).mean());
+			bDot.row(nI-1).setZero();
+			return bDot;
 		}
 		
 		template<typename Derived>
-		typename Derived::Scalar D2a( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return c(i,j)*c(i,j) * ( s(i)*s(i) * ds2a(x,i,j) + s(i) * (1.0 - cotheta(i) + sinheta(i)/c(i,j)) * dsa(x,i,j) + dt2a(x,i,j) - (sintheta(j)/c(i,j)) * dta(x,i,j) - a(x,i,j)/(sinheta(i)*sinheta(i)) );
+		Matrix<typename Derived::Scalar,-1,-1> compute_a( const MatrixBase<Derived>& x ) const {
+			Matrix<Derived::Scalar,-1,-1> a(nI,nJ);
+			for(uint32_t i=0;i<nI;++i)
+				a.row(i) = x.segment(i*nJ,nJ).transpose();
+			return a;
+		}
+
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> compute_b( const MatrixBase<Derived>& x ) const {
+			Matrix<Derived::Scalar,-1,-1> b(nI,nJ);
+			for(uint32_t i=0;i<nI;++i)
+				b.row(i) = x.segment(N+i*nJ,nJ).transpose();
+			return b;
 		}
 		
 		template<typename Derived>
-		typename Derived::Scalar D2b( const MatrixBase<Derived>& x, uint32_t i, uint32_t j ) const {
-			return c(i,j)*c(i,j) * ( s(i)*s(i) * ds2b(x,i,j) + s(i) * (1.0 - cotheta(i) + sinheta(i)/c(i,j)) * dsb(x,i,j) + dt2b(x,i,j) - (sintheta(j)/c(i,j)) * dtb(x,i,j) - b(x,i,j)/(sinheta(i)*sinheta(i)) );
+		Matrix<typename Derived::Scalar,-1,-1> compute_alpha( const MatrixBase<Derived>& a, const MatrixBase<Derived>& b, const MatrixBase<Derived>& dsa, const MatrixBase<Derived>& dta ) const {
+			auto mat1 = Matrix<Derived::Scalar,-1,-1>::Ones(nI,nJ);
+			auto col1 = Matrix<Derived::Scalar,-1,1>::Ones(nI);
+			auto normB2 = NormB2( a, b, dsa, dta );
+			Matrix<typename Derived::Scalar,-1,-1> alpha = ( col1 * sintheta.transpose() ).cwiseQuotient( mat1 + alphaB * normB2 );
+			alpha.row(0).fill(alpha.row(1).mean());
+			return alpha;
 		}
 
 		template<typename Derived>
-		typename Derived::Scalar dsalphaApprox( const MatrixBase<Derived>& alpha, uint32_t i, uint32_t j ) const {
-			return ( alpha(i+1,j) - alpha(i-1,j) ) / (2.0*ds);
+		Matrix<typename Derived::Scalar,-1,-1> compute_ds( const MatrixBase<Derived>& x ) const {
+			Matrix<Derived::Scalar,-1,-1> dsx;
+			dsx.setZero(nI,nJ);
+			for(uint32_t i=1;i<nI-1;++i)
+				dsx.row(i) = x.row(i+1) - x.row(i-1);
+			return dsx / Derived::Scalar( 2.0*ds );
+		}
+		
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> compute_dt( const MatrixBase<Derived>& x ) const {
+			Matrix<Derived::Scalar,-1,-1> dtx;
+			dtx.setZero(nI,nJ);
+			for(uint32_t j=0;j<nJ;++j)
+				dtx.col(j) = x.col(jp1(j)) - x.col(jm1(j));
+			return dtx / Derived::Scalar( 2.0*dth );
 		}
 
 		template<typename Derived>
-		typename Derived::Scalar dtalphaApprox( const MatrixBase<Derived>& alpha, uint32_t i, uint32_t j ) const {
-			return ( alpha(i,jp1(j)) - alpha(i,jm1(j)) ) / (2.0*dth);
+		Matrix<typename Derived::Scalar,-1,-1> compute_ds2( const MatrixBase<Derived>& x ) const {
+			Matrix<Derived::Scalar,-1,-1> ds2x;
+			ds2x.setZero(nI,nJ);
+			for(uint32_t i=1;i<nI-1;++i)
+				ds2x.row(i) = x.row(i+1) - x.row(i) - x.row(i) + x.row(i-1);
+			return ds2x / Derived::Scalar( ds*ds );
+		}
+		
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> compute_dt2( const MatrixBase<Derived>& x ) const {
+			Matrix<Derived::Scalar,-1,-1> dt2x;
+			dt2x.setZero(nI,nJ);
+			for(uint32_t j=0;j<nJ;++j)
+				dt2x.col(j) = x.col(jp1(j)) - x.col(j) - x.col(j) + x.col(jm1(j));
+			return dt2x / Derived::Scalar( dth*dth );
+		}
+
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> compute_F( const MatrixBase<Derived>& dsa, const MatrixBase<Derived>& dta ) const {
+			auto mat1 = MatrixXd::Ones(nI,nJ);
+			return -1.5 * pi32.cwiseProduct(
+				  dta.cwiseProduct( mat1 - cosheta * costheta.transpose() )
+				- dsa.cwiseProduct( s.cwiseProduct(sinheta) * sintheta.transpose() )
+			);
+		}
+		
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> compute_G( const MatrixBase<Derived>& a, const MatrixBase<Derived>& dsa, const MatrixBase<Derived>& dta, const MatrixBase<Derived>& D2a, const MatrixBase<Derived>& alpha ) const {
+			auto col1 = Matrix<double,-1,1>::Ones(nI);
+			auto row1 = Matrix<double,1,-1>::Ones(nJ);
+			auto dsalpha = compute_ds( alpha );
+			auto dtalpha = compute_dt( alpha );
+			auto cs = c.cwiseProduct( s * row1 );
+			auto term1 = alpha.cwiseProduct( D2a );
+			auto term2 = dsalpha.cwiseProduct( cs ).cwiseProduct(
+						  a.cwiseProduct( trig1 )
+						+ dsa.cwiseProduct( cs )
+					);
+			auto term3 = dtalpha.cwiseProduct( c ).cwiseProduct(
+						  dta.cwiseProduct( c )
+						- a.cwiseProduct( col1 * sintheta.transpose() )
+					);
+			
+			return - term1 - term2 - term3;
+		}
+		
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> Beta( const MatrixBase<Derived>& a, const MatrixBase<Derived>& dta ) const {
+			auto col1 = Matrix<Derived::Scalar,-1,1>::Ones(nI);
+			return c.cwiseProduct(dta) - a.cwiseProduct( col1 * sintheta.transpose() );
+		}
+
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> Btheta( const MatrixBase<Derived>& a, const MatrixBase<Derived>& dsa ) const {
+			auto row1 = Matrix<double,1,-1>::Ones(nJ);
+			return -a.cwiseProduct(trig1) + c.cwiseProduct(dsa).cwiseProduct( s * row1 );
+		}
+
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> NormB2( const MatrixBase<Derived>& a, const MatrixBase<Derived>& b, const MatrixBase<Derived>& dsa, const MatrixBase<Derived>& dta ) const {
+			auto b1 = Beta(a,dta);
+			auto b2 = Btheta(a,dsa);
+			return b1.cwiseProduct(b1) + b2.cwiseProduct(b2) + b.cwiseProduct(b);
+		}
+		
+		template<typename Derived>
+		Matrix<typename Derived::Scalar,-1,-1> compute_D2( const MatrixBase<Derived>& x, const MatrixBase<Derived>& dsx, const MatrixBase<Derived>& ds2x, const MatrixBase<Derived>& dtx, const MatrixBase<Derived>& dt2x ) const {
+			auto c2 = c.array().square().matrix().eval();
+			auto s2 = s.array().square().matrix().eval();
+			auto col1 = Matrix<double,-1,1>::Ones(nI);
+			auto row1 = Matrix<double,1,-1>::Ones(nJ);
+			auto term1 = ds2x.cwiseProduct( s2 * row1 );
+			auto term2 = dsx.cwiseProduct( ( s * row1 ).cwiseProduct( ( col1 - cotheta ) * row1 + ( sinheta * row1 ).cwiseQuotient( c ) ) );
+			auto term4 = dtx.cwiseProduct( ( col1 * sintheta.transpose() ).cwiseQuotient( c ) );
+			auto term5 = x.cwiseQuotient( sinheta.array().square().matrix() * row1 );
+			//cout << dual<double>(x(0,0)).x << ", ";
+			//cout << dual<double>(term5(0,0)).x << ", ";
+			//cout << endl;
+			return c2.cwiseProduct(
+				  term1
+				+ term2
+				+ dt2x
+				- term4
+				- term5
+			);
 		}
 
 	};
