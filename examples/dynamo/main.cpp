@@ -2,7 +2,7 @@
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
-#include "dynamo.h"
+#include "dynamo_solver.h"
 
 using namespace std;
 using namespace DRDSP;
@@ -33,12 +33,12 @@ int main( int argc, char** argv ) {
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator<DynamoFamily> dataGenerator(dynamo);
-	dataGenerator.initial.setRandom(dynamo.dimension);
+	DataGenerator<DynamoFamily,DynamoSolver> dataGenerator(dynamo);
+	dataGenerator.initial = dynamo(parameters[0]).InitialCondition();
 	dataGenerator.tStart = 3;
 	dataGenerator.tInterval = 0.12;
 	dataGenerator.print = 100;
-	dataGenerator.dtMax = 1.0e-7;
+	dataGenerator.dtMax = 0.0;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsBinary("output/orig",".bin");

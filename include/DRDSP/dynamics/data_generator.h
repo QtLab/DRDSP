@@ -26,10 +26,8 @@ namespace DRDSP {
 		DataGenerator() :
 			tStart(0),
 			tInterval(10),
-			dtMax(0.001),
-			print(200),
-			binaryOutput(true),
-			textOutput(false)
+			dtMax(0),
+			print(200)
 		{}
 
 		explicit DataGenerator( const Family& f ) :
@@ -37,10 +35,8 @@ namespace DRDSP {
 			initial(f.dimension),
 			tStart(0),
 			tInterval(10),
-			dtMax(0.001),
-			print(200),
-			binaryOutput(true),
-			textOutput(false)
+			dtMax(0),
+			print(200)
 		{}
 
 		DataGenerator( const Family& f, const State& init ) :
@@ -48,19 +44,17 @@ namespace DRDSP {
 			initial(init),
 			tStart(0),
 			tInterval(10),
-			dtMax(0.001),
-			print(200),
-			binaryOutput(true),
-			textOutput(false)
+			dtMax(0),
+			print(200)
 		{}
 
-		void GenerateFiles( const vector<Parameter>& parameters ) const {
+		void GenerateFiles( const vector<Parameter>& parameters, bool binaryOutput, bool textOutput ) const {
 			for( const auto& p : parameters ) {
-				GenerateSingleFile(p);
+				GenerateSingleFile(p,binaryOutput,textOutput);
 			}
 		}
 
-		void GenerateSingleFile( Parameter param ) const {
+		void GenerateSingleFile( Parameter param, bool binaryOutput, bool textOutput ) const {
 			ofstream outBin, outTxt;
 			stringstream fn;
 			outTxt.precision(16);
@@ -126,7 +120,7 @@ namespace DRDSP {
 
 			Solver solver( family(param) );
 			solver.state = init;
-			solver.dtMax = dtMax;
+			if( dtMax > Time() ) solver.dtMax = dtMax;
 			solver.Advance(tStart);
 
 			Time dtPrint = period / (print-1);
@@ -262,8 +256,6 @@ namespace DRDSP {
 			tStart = gen.tStart;
 			tInterval = gen.tInterval;
 			print = gen.print;
-			binaryOutput = gen.binaryOutput;
-			textOutput = gen.textOutput;
 			initial = gen.initial;
 		}
 

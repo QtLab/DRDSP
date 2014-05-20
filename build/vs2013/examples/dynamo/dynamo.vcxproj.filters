@@ -18,12 +18,18 @@
     <ClInclude Include="..\..\..\..\examples\dynamo\dynamo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\examples\dynamo\dynamo_solver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\examples\dynamo\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\examples\dynamo\dynamo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\examples\dynamo\dynamo_solver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

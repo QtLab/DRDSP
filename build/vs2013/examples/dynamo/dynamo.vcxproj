@@ -20,9 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\examples\dynamo\dynamo.h" />
+    <ClInclude Include="..\..\..\..\examples\dynamo\dynamo_solver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\examples\dynamo\dynamo.cpp" />
+    <ClCompile Include="..\..\..\..\examples\dynamo\dynamo_solver.cpp" />
     <ClCompile Include="..\..\..\..\examples\dynamo\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

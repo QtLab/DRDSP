@@ -7,7 +7,7 @@
 
 namespace DRDSP {
 
-		struct Dynamo : Model<> {
+	struct Dynamo : Model<> {
 
 		static const uint32_t nI = 41;
 		static const uint32_t nJ = 160;
@@ -205,9 +205,6 @@ namespace DRDSP {
 			auto term2 = dsx.cwiseProduct( ( s * row1 ).cwiseProduct( ( col1 - cotheta ) * row1 + ( sinheta * row1 ).cwiseQuotient( c ) ) );
 			auto term4 = dtx.cwiseProduct( ( col1 * sintheta.transpose() ).cwiseQuotient( c ) );
 			auto term5 = x.cwiseQuotient( sinheta.array().square().matrix() * row1 );
-			//cout << dual<double>(x(0,0)).x << ", ";
-			//cout << dual<double>(term5(0,0)).x << ", ";
-			//cout << endl;
 			return c2.cwiseProduct(
 				  term1
 				+ term2
