@@ -15,21 +15,34 @@ DynamoSolver::DynamoSolver( const Dynamo& dynamo ) : Dynamo(dynamo) {
 }
 
 void DynamoSolver::Advance( double dt ) {
-	
+	double dta = dt;
+	uint32_t steps = 1;
+	if( dt > dtMax && dtMax > 0.0 ) {
+		steps = uint32_t(dt / dtMax + 1.0);
+		dta = dt / steps;
+	}
+
 	for(uint32_t i=0;i<nI;++i)
 		pZero.row(i) = state.segment(i*nJ,nJ).transpose();
 	for(uint32_t i=0;i<nI;++i)
 		tZero.row(i) = state.segment(N+i*nJ,nJ).transpose();
 	
-	npCoff( dt );
-	ntCoff( dt );
-	npStep( dt );
-	ntStep( dt );
+	npCoff( dta );
+	ntCoff( dta );
+
+	for(uint32_t i=0;i<steps;++i) {
+		Step( dta );
+	}
 
 	for(uint32_t i=0;i<nI;++i)
-		state.segment(i*nJ,nJ) = pPlus.row(i).transpose();
+		state.segment(i*nJ,nJ) = pZero.row(i).transpose();
 	for(uint32_t i=0;i<nI;++i)
-		state.segment(N+i*nJ,nJ) = tPlus.row(i).transpose();
+		state.segment(N+i*nJ,nJ) = tZero.row(i).transpose();
+}
+
+void DynamoSolver::Step( double dt ) {
+	npStep( dt );
+	ntStep( dt );
 
 	pMinus = pZero;
 	pZero = pPlus;
@@ -82,7 +95,7 @@ void DynamoSolver::npCoff( double dTime ) {
 	for(uint32_t j=0;j<nJ;++j) {
 		th = theta(j);
 		for(uint32_t i=1;i<nI-1;++i) {
-			x = s( i );
+			x = s(i);
 			C = c(i,j);
 			C2 = C * C;
 			ax = C2 * x * x;
@@ -113,7 +126,7 @@ void DynamoSolver::ntCoff( double dTime ) {
 	for(uint32_t j=0;j<nJ;j++) {
 		th = theta(j);
 		for(uint32_t i=1;i<nI-1;i++) {
-			x = s( i );
+			x = s(i);
 			C = c(i,j);
 			c2 = C * C;
 			mult = -1.5 * cOmega * pi32(i,j);
@@ -165,14 +178,14 @@ void DynamoSolver::npStep( double dTime ) {
 		}
 	}
 
-	// to calculate the diffusion operator on a
-	diffA = ( pPlus - pMinus - alpha.cwiseProduct(tZero) * (2.0*dTime) ).cwiseProduct(under);
-
 	// surface boundary condition 
 	pPlus.row(nI-1) = pPlus.row(nI-2) * Bound1.transpose() + pPlus.row(nI-3) * Bound2.transpose();
 
 	// boundary condition at centre
 	pPlus.row(0).fill(pPlus.row(1).mean());
+
+	// to calculate the diffusion operator on a
+	diffA = ( pPlus - pMinus - alpha.cwiseProduct(tZero) * (2.0*dTime) ).cwiseProduct(under);
 }
 
 void DynamoSolver::ntStep( double dTime ) {

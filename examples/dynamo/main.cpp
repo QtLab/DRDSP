@@ -14,9 +14,9 @@ struct Options {
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
-		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
-		if( argc >= 4 ) numIterations = (uint32_t)atoi(argv[3]);
-		if( argc >= 5 ) numThreads = (uint32_t)atoi(argv[4]);
+		if( argc >= 3 )         numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 )   numIterations = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 )      numThreads = (uint32_t)atoi(argv[4]);
 	}
 };
 
@@ -29,7 +29,7 @@ int main( int argc, char** argv ) {
 	// The example
 	DynamoFamily dynamo;
 
-	auto parameters = ParameterList( 1.2, 2.0, 6 );
+	auto parameters = ParameterList( 1.5, 3.0, 3 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
@@ -38,7 +38,6 @@ int main( int argc, char** argv ) {
 	dataGenerator.tStart = 3;
 	dataGenerator.tInterval = 0.12;
 	dataGenerator.print = 100;
-	dataGenerator.dtMax = 0.0;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsBinary("output/orig",".bin");
@@ -72,6 +71,9 @@ int main( int argc, char** argv ) {
 	projSecant.WriteCSV("output/projection.csv");
 
 	newSecants = vector<SecantsPreComputed>();
+
+	data.ProjectData( projSecant.W ).WriteDataSetsCSV("output/p","-points.csv");;
+	return 0;
 
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;

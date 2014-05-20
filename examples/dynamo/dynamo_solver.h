@@ -12,7 +12,7 @@ namespace DRDSP {
 		double dtMax;
 
 		explicit DynamoSolver( const Dynamo& dynamo );
-		void Init();
+
 		void Advance( double dt );
 
 	protected:
@@ -23,7 +23,8 @@ namespace DRDSP {
 		         tMinus, tPlus, tCoef1, tCoef2, tCoef3, tCoef4, tCoef5,
 		         tpCof1, tpCof2, tpCof3, tpCof4, tpCof5, ptCof5,
 				 diffA, under, alpha;
-
+		void Init();
+		void Step( double dt );
 		void npCoff( double dTime );
 		void ntCoff( double dTime );
 		void npStep( double dTime );

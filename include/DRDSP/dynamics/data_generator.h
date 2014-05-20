@@ -75,7 +75,7 @@ namespace DRDSP {
 
 			Solver solver( SolverFunctionFromModel<Model>( family(param) ) );
 			solver.state = initial;
-			solver.dtMax = dtMax;
+			if( dtMax > Time() ) solver.dtMax = dtMax;
 			solver.Advance(tStart);
 
 			Time t = 0.0;
