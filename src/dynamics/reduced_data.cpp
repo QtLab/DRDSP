@@ -85,50 +85,53 @@ bool ReducedData::ReadData( const char* filename ) {
 	return true;
 }
 
-void ReducedData::WriteData( const char* filename ) const {
+const ReducedData& ReducedData::WriteData( const char* filename ) const {
 	ofstream out(filename,ios::binary);
 	if( !out ) {
-		cout << "ReducedData::WriteData : file error" << endl;
-		return;
+		cerr << "ReducedData::WriteData : file error" << endl;
+		return *this;
 	}
 	for(uint32_t k=0;k<count;++k) {
 		out.write( (const char*)&points[k](0), sizeof(double) * dimension );
 		out.write( (const char*)&vectors[k](0), sizeof(double) * dimension );
 		out.write( (const char*)&derivatives[k](0,0), sizeof(double) * dimension * dimension );
 	}
+	return *this;
 }
 
-void ReducedData::WritePointsCSV( const char* filename ) const {
+const ReducedData& ReducedData::WritePointsCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
-		cout << "ReducedData::WritePointsCSV : file error" << endl;
-		return;
+		cerr << "ReducedData::WritePointsCSV : file error" << endl;
+		return *this;
 	}
 	for(uint32_t i=0;i<count;++i) {
 		for(uint32_t j=0;j<dimension;++j)
 			out << points[i](j) << ",";
 		out << endl;
 	}
+	return *this;
 }
 
-void ReducedData::WriteVectorsCSV( const char* filename ) const {
+const ReducedData& ReducedData::WriteVectorsCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
-		cout << "ReducedData::WriteVectorsCSV : file error" << endl;
-		return;
+		cerr << "ReducedData::WriteVectorsCSV : file error" << endl;
+		return *this;
 	}
 	for(uint32_t i=0;i<count;++i) {
 		for(uint32_t j=0;j<dimension;++j)
 			out << vectors[i](j) << ",";
 		out << endl;
 	}
+	return *this;
 }
 
-void ReducedData::WriteDerivativesCSV( const char* filename ) const {
+const ReducedData& ReducedData::WriteDerivativesCSV( const char* filename ) const {
 	ofstream out(filename);
 	if( !out ) {
-		cout << "ReducedData::WriteDerivativesCSV : file error" << endl;
-		return;
+		cerr << "ReducedData::WriteDerivativesCSV : file error" << endl;
+		return *this;
 	}
 	for(uint32_t i=0;i<count;++i) {
 		for(uint32_t j=0;j<dimension;++j)
@@ -136,4 +139,5 @@ void ReducedData::WriteDerivativesCSV( const char* filename ) const {
 				out << derivatives[i](j,k) << ",";
 		out << endl;
 	}
+	return *this;
 }

@@ -139,10 +139,10 @@ void ComputeReduced( const Options& options ) {
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads );
-	reducedData.WritePointsCSV( "output/p", "-points.csv" );
-	reducedData.WriteVectorsCSV( "output/p", "-vectors.csv" );
-	reducedData.WriteDerivativesCSV( "output/p", "-derivatives.csv" );
+	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads )
+	           .WritePointsCSV( "output/p", "-points.csv" )
+	           .WriteVectorsCSV( "output/p", "-vectors.csv" )
+	           .WriteDerivativesCSV( "output/p", "-derivatives.csv" );
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;

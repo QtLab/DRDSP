@@ -12,9 +12,9 @@ namespace DRDSP {
 
 		ProjPOD();
 		explicit ProjPOD( uint32_t targetDimension );
-		void Find( const DataSet& data );
-		void Find( const DataSystem& data );
-		void Write( const char* filename ) const;
+		ProjPOD& Find( const DataSet& data );
+		ProjPOD& Find( const DataSystem& data );
+		const ProjPOD& Write( const char* filename ) const;
 
 	protected:
 		MatrixXd dataMatrix;

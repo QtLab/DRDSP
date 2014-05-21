@@ -81,9 +81,9 @@ namespace DRDSP {
 		}
 
 		AABB ComputeBoundingBox() const;
-		void WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const;
-		void WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;
-		void WriteDerivativesCSV( const char* filePrefix, const char* fileSuffix ) const;
+		const ReducedDataSystem& WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const;
+		const ReducedDataSystem& WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;
+		const ReducedDataSystem& WriteDerivativesCSV( const char* filePrefix, const char* fileSuffix ) const;
 	};
 
 	void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata );

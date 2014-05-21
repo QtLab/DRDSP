@@ -10,7 +10,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(2), numRBFs(30), numIterations(500), numThreads(3) {}
+	Options() : targetDimension(2), numRBFs(40), numIterations(1000), numThreads(3) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -26,17 +26,16 @@ int main( int argc, char** argv ) {
 
 	Options options(argc,argv);
 
-	// The example
 	DynamoFamily dynamo;
 
-	auto parameters = ParameterList( 1.5, 3.0, 3 );
+	auto parameters = ParameterList( 1.5, 3.0, 6 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<DynamoFamily,DynamoSolver> dataGenerator(dynamo);
 	dataGenerator.initial = dynamo(parameters[0]).InitialCondition();
-	dataGenerator.tStart = 3;
-	dataGenerator.tInterval = 0.12;
+	dataGenerator.tStart = 4;
+	dataGenerator.tInterval = 0.11;
 	dataGenerator.print = 100;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
@@ -54,33 +53,25 @@ int main( int argc, char** argv ) {
 
 	// Find a projection
 	cout << "Finding projection..." << endl;
-	ProjSecant projSecant;
-	projSecant.targetDimension = options.targetDimension;
-	projSecant.targetMinProjectedLength = 0.7;
+	ProjSecant projSecant( options.targetDimension );
 
-	// Compute initial condition
-	projSecant.GetInitial(data);
-
-	// Optimize over Grassmannian
-	projSecant.Find( newSecants );
-
-	// Print some statistics
-	projSecant.AnalyseSecants( newSecants );
-
-	projSecant.WriteBinary("output/projection.bin");
-	projSecant.WriteCSV("output/projection.csv");
+	projSecant.ComputeInitial(data)            // Compute initial condition
+	          .Find( newSecants )              // Optimize over Grassmannian
+			  .AnalyseSecants( newSecants )    // Print some statistics
+			  .WriteBinary("output/projection.bin")
+			  .WriteCSV("output/projection.csv");
 
 	newSecants = vector<SecantsPreComputed>();
 
-	data.ProjectData( projSecant.W ).WriteDataSetsCSV("output/p","-points.csv");;
-	return 0;
+	//data.ProjectData( projSecant.W ).WriteDataSetsCSV("output/p","-points.csv");
+	//return 0;
 
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( dynamo, data, projSecant.W, options.numThreads );
-	reducedData.WritePointsCSV("output/p","-points.csv");
-	reducedData.WriteVectorsCSV("output/p","-vectors.csv");
+	reducedData.ComputeData( dynamo, data, projSecant.W, options.numThreads )
+	           .WritePointsCSV("output/p","-points.csv")
+	           .WriteVectorsCSV("output/p","-vectors.csv");
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;

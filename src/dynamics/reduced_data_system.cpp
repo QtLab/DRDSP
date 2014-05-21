@@ -28,31 +28,34 @@ AABB ReducedDataSystem::ComputeBoundingBox() const {
 	return box;
 }
 
-void ReducedDataSystem::WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const {
+const ReducedDataSystem& ReducedDataSystem::WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
 	for(uint32_t i=0;i<numParameters;++i) {
 		name.str("");
 		name << filePrefix << i << fileSuffix;
 		reducedData[i].WritePointsCSV(name.str().c_str());
 	}
+	return *this;
 }
 
-void ReducedDataSystem::WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const {
+const ReducedDataSystem& ReducedDataSystem::WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
 	for(uint32_t i=0;i<numParameters;++i) {
 		name.str("");
 		name << filePrefix << i << fileSuffix;
 		reducedData[i].WriteVectorsCSV(name.str().c_str());
 	}
+	return *this;
 }
 
-void ReducedDataSystem::WriteDerivativesCSV( const char* filePrefix, const char* fileSuffix ) const {
+const ReducedDataSystem& ReducedDataSystem::WriteDerivativesCSV( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
 	for(uint32_t i=0;i<numParameters;++i) {
 		name.str("");
 		name << filePrefix << i << fileSuffix;
 		reducedData[i].WriteDerivativesCSV(name.str().c_str());
 	}
+	return *this;
 }
 
 void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
@@ -74,5 +77,4 @@ void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rda
 			out << x << ",";
 		out << endl;
 	}
-
 }

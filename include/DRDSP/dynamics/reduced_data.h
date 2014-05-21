@@ -22,11 +22,11 @@ namespace DRDSP {
 		AABB ComputeBoundingBox() const;
 		double ComputeVectorScale();
 		double ComputeDerivativeScale();
-		void WriteData( const char* filename ) const;
+		const ReducedData& WriteData( const char* filename ) const;
 		bool ReadData( const char* filename );
-		void WritePointsCSV( const char* filename ) const;
-		void WriteVectorsCSV( const char* filename ) const;
-		void WriteDerivativesCSV( const char* filename ) const;
+		const ReducedData& WritePointsCSV( const char* filename ) const;
+		const ReducedData& WriteVectorsCSV( const char* filename ) const;
+		const ReducedData& WriteDerivativesCSV( const char* filename ) const;
 
 		template<typename Model>
 		ReducedData& ComputeData( Model&& original, const DataSet& data, const MatrixXd& W ) {

@@ -39,19 +39,20 @@ namespace DRDSP {
 	struct ProjSecant {
 		MatrixXd W;
 		double targetMinProjectedLength;
-		uint32_t maxIterations, targetDimension;
+		uint32_t targetDimension, maxIterations;
 
 		ProjSecant();
-		void GetInitial( const DataSet& data );
-		void GetInitial( const DataSystem& data );
-		void Find( const SecantsPreComputed& secants );
-		void Find( const SecantsPreComputed* secants, size_t N );
-		void Find( const vector<SecantsPreComputed>& secants );
-		void AnalyseSecants( const SecantsPreComputed& secants ) const;
-		void AnalyseSecants( const SecantsPreComputed* secants, size_t N ) const;
-		void AnalyseSecants( const vector<SecantsPreComputed>& secants ) const;
-		void WriteCSV( const char* filename ) const;
-		void WriteBinary( const char* filename ) const;
+		explicit ProjSecant( uint32_t targetDimension );
+		ProjSecant& ComputeInitial( const DataSet& data );
+		ProjSecant& ComputeInitial( const DataSystem& data );
+		ProjSecant& Find( const SecantsPreComputed& secants );
+		ProjSecant& Find( const SecantsPreComputed* secants, size_t N );
+		ProjSecant& Find( const vector<SecantsPreComputed>& secants );
+		const ProjSecant& AnalyseSecants( const SecantsPreComputed& secants ) const;
+		const ProjSecant& AnalyseSecants( const SecantsPreComputed* secants, size_t N ) const;
+		const ProjSecant& AnalyseSecants( const vector<SecantsPreComputed>& secants ) const;
+		const ProjSecant& WriteCSV( const char* filename ) const;
+		const ProjSecant& WriteBinary( const char* filename ) const;
 		bool ReadBinary( const char* filename );
 	};
 

@@ -84,13 +84,15 @@ MatrixXd SecantCostGradientMulti::operator()( const MatrixXd& X ) const {
 	return sum / (double)N;
 }
 
-ProjSecant::ProjSecant() :
+ProjSecant::ProjSecant() : ProjSecant(2) {}
+
+ProjSecant::ProjSecant( uint32_t targetDimension ) :
 	targetMinProjectedLength(0.5),
-	targetDimension(2),
+	targetDimension(targetDimension),
 	maxIterations(100)
 {}
 
-void ProjSecant::Find( const SecantsPreComputed& secants ) {
+ProjSecant& ProjSecant::Find( const SecantsPreComputed& secants ) {
 	SecantCostFunction S(secants);
 	SecantCostGradient gradS(secants);
 
@@ -99,9 +101,10 @@ void ProjSecant::Find( const SecantsPreComputed& secants ) {
 	optimiziation.maxSteps = maxIterations;
 	optimiziation.lineSearch.alpha = 2.0;
 	optimiziation.Optimize( W );
+	return *this;
 }
 
-void ProjSecant::Find( const SecantsPreComputed* secants, size_t N ) {
+ProjSecant& ProjSecant::Find( const SecantsPreComputed* secants, size_t N ) {
 	SecantCostFunctionMulti S(secants,N);
 	SecantCostGradientMulti gradS(secants,N);
 
@@ -110,13 +113,14 @@ void ProjSecant::Find( const SecantsPreComputed* secants, size_t N ) {
 	optimiziation.maxSteps = maxIterations;
 	optimiziation.lineSearch.alpha = 2.0;
 	optimiziation.Optimize( W );
+	return *this;
 }
 
-void ProjSecant::Find( const vector<SecantsPreComputed>& secants ) {
-	Find( secants.data(), secants.size() );
+ProjSecant& ProjSecant::Find( const vector<SecantsPreComputed>& secants ) {
+	return Find( secants.data(), secants.size() );
 }
 
-void ProjSecant::GetInitial( const DataSet& data ) {
+ProjSecant& ProjSecant::ComputeInitial( const DataSet& data ) {
 	uint32_t n = data.dimension;
 
 	vector<double> maxVal(n);
@@ -128,7 +132,7 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 	for(uint32_t k=0;k<n;++k)
 		maxVal[k] = minVal[k] = data.points[0](0);
 
-	for(uint32_t j=0;j<data.points.size();++j)
+	for(size_t j=0;j<data.points.size();++j)
 		for(uint32_t k=0;k<n;++k) {
 			val = data.points[j](k);
 			if( val > maxVal[k] )
@@ -160,10 +164,10 @@ void ProjSecant::GetInitial( const DataSet& data ) {
 		W(bigAxis,i) = 1.0;
 	}
 	cout << " )" << endl;
-
+	return *this;
 }
 
-void ProjSecant::GetInitial( const DataSystem& data ) {
+ProjSecant& ProjSecant::ComputeInitial( const DataSystem& data ) {
 	uint32_t n = data.dimension;
 
 	vector<double> maxVal(n);
@@ -175,8 +179,8 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 	for(uint32_t k=0;k<n;++k)
 		maxVal[k] = minVal[k] = data.dataSets[0].points[0](k);
 
-	for(uint16_t i=0;i<data.numParameters;++i)
-		for(uint32_t j=0;j<data.dataSets[i].points.size();++j)
+	for(uint32_t i=0;i<data.numParameters;++i)
+		for(size_t j=0;j<data.dataSets[i].points.size();++j)
 			for(uint32_t k=0;k<n;++k) {
 				val = data.dataSets[i].points[j](k);
 				if( val > maxVal[k] )
@@ -207,17 +211,17 @@ void ProjSecant::GetInitial( const DataSystem& data ) {
 		W(bigAxis,i) = 1.0;
 	}
 	cout << " )" << endl;
-
+	return *this;
 }
 
-void ProjSecant::AnalyseSecants( const SecantsPreComputed& secants ) const {
-	AnalyseSecants(&secants,1);
+const ProjSecant& ProjSecant::AnalyseSecants( const SecantsPreComputed& secants ) const {
+	return AnalyseSecants(&secants,1);
 }
 
-void ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, size_t N ) const {
+const ProjSecant& ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, size_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
 	size_t numSecants = 0;
-	for(uint32_t i=0;i<N;++i) {
+	for(size_t i=0;i<N;++i) {
 		for(size_t j=0;j<secants[i].count;++j) {
 			len = ( W.adjoint() * secants[i].GetSecant(j) ).norm();
 			if( len < xMin ) xMin = len;
@@ -228,27 +232,30 @@ void ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, size_t N ) c
 	}
 	xMean = total / numSecants;
 	cout << endl << "Projected Lengths: Range = [ " << xMin << ", " << xMax << " ], Mean = " << xMean << endl;
+	return *this;
 }
 
-void ProjSecant::AnalyseSecants( const vector<SecantsPreComputed>& secants ) const {
-	AnalyseSecants(secants.data(),secants.size());
+const ProjSecant& ProjSecant::AnalyseSecants( const vector<SecantsPreComputed>& secants ) const {
+	return AnalyseSecants(secants.data(),secants.size());
 }
 
-void ProjSecant::WriteCSV( const char* filename ) const {
+const ProjSecant& ProjSecant::WriteCSV( const char* filename ) const {
 	ofstream out(filename);
 	out.precision(16);
-	for(int i=0;i<W.rows();++i) {
-		for(int j=0;j<W.cols();++j)
+	for(int64_t i=0;i<W.rows();++i) {
+		for(int64_t j=0;j<W.cols();++j)
 			out << W(i,j) << ",";
 		out << endl;
 	}
+	return *this;
 }
 
-void ProjSecant::WriteBinary( const char* filename ) const {
+const ProjSecant& ProjSecant::WriteBinary( const char* filename ) const {
 	ofstream out(filename,ios::binary);
-	for(int i=0;i<W.rows();++i)
-		for(int j=0;j<W.cols();++j)
+	for(int64_t i=0;i<W.rows();++i)
+		for(int64_t j=0;j<W.cols();++j)
 			out.write((char*)&W(i,j),sizeof(double));
+	return *this;
 }
 
 bool ProjSecant::ReadBinary( const char* filename ) {
@@ -265,8 +272,8 @@ bool ProjSecant::ReadBinary( const char* filename ) {
 	}
 	in.seekg(0, ios::beg);
 
-	for(int i=0;i<W.rows();++i)
-		for(int j=0;j<W.cols();++j)
+	for(int64_t i=0;i<W.rows();++i)
+		for(int64_t j=0;j<W.cols();++j)
 			in.read((char*)&W(i,j),sizeof(double));
 
 	return true;

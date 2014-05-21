@@ -56,31 +56,23 @@ int main( int argc, char** argv ) {
 
 	// Find a projection
 	cout << "Finding projection..." << endl;
-	ProjSecant projSecant;
-	projSecant.targetDimension = options.targetDimension;
-	projSecant.targetMinProjectedLength = 0.7;
+	ProjSecant projSecant( options.targetDimension );
 
-	// Compute initial condition
-	projSecant.GetInitial(data);
-
-	// Optimize over Grassmannian
-	projSecant.Find( newSecants );
-
-	// Print some statistics
-	projSecant.AnalyseSecants( newSecants );
-
-	projSecant.WriteBinary("output/projection.bin");
-	projSecant.WriteCSV("output/projection.csv");
+	projSecant.ComputeInitial(data)           // Compute initial condition
+	          .Find( newSecants )             // Optimize over Grassmannian
+	          .AnalyseSecants( newSecants )   // Print some statistics
+	          .WriteBinary("output/projection.bin")
+	          .WriteCSV("output/projection.csv");
 
 	newSecants = vector<SecantsPreComputed>();
 
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( goodfellow, data, projSecant.W, options.numThreads );
-	reducedData.WritePointsCSV("output/p","-points.csv");
-	reducedData.WriteVectorsCSV("output/p","-vectors.csv");
-	reducedData.WriteDerivativesCSV("output/p","-derivatives.csv");
+	reducedData.ComputeData( goodfellow, data, projSecant.W, options.numThreads )
+	           .WritePointsCSV("output/p","-points.csv")
+	           .WriteVectorsCSV("output/p","-vectors.csv")
+	           .WriteDerivativesCSV("output/p","-derivatives.csv");
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
