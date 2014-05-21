@@ -21,15 +21,14 @@ struct Options {
 	}
 };
 
-typedef Multiquadratic RadialType;
+typedef PolyharmonicSpline3 RadialType;
 
 int main( int argc, char** argv ) {
-
 	Options options(argc,argv);
-
+	
 	DynamoFamily dynamo;
 
-	auto parameters = ParameterList( 1.5, 3.0, 6 );
+	auto parameters = ParameterList( 1.5, 2.1, 3 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
@@ -64,36 +63,78 @@ int main( int argc, char** argv ) {
 
 	newSecants = vector<SecantsPreComputed>();
 
-	//data.ProjectData( projSecant.W ).WriteDataSetsCSV("output/p","-points.csv");
-	//return 0;
-
 	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( dynamo, data, projSecant.W, options.numThreads )
 	           .WritePointsCSV("output/p","-points.csv")
-	           .WriteVectorsCSV("output/p","-vectors.csv");
+	           .WriteVectorsCSV("output/p","-vectors.csv")
+			   .WriteDerivativesCSV("output/p","-derivs.csv");
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
-	
-	RBFFamilyProducer<RadialType> producer(options.numRBFs);
-	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
-	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
-	
-	reducedModel.WriteCSV("output/reduced.csv");
 
-	// Generate the data
-	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
-	rdataGenerator.MatchSettings(dataGenerator);
-	rdataGenerator.tStart = 0.0;
+	{
+	
+		RBFFamilyProducer<ThinPlateSpline> producer(options.numRBFs);
+		auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	
+		cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	
+		reducedModel.WriteCSV("output/reduced1.csv");
 
-	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata",".csv");
+		// Generate the data
+		cout << "Generating Reduced data..." << endl;
+		DataGenerator<RBFFamily<ThinPlateSpline>> rdataGenerator(reducedModel);
+		rdataGenerator.MatchSettings(dataGenerator);
+		rdataGenerator.tStart = 0.0;
 
-	Compare( reducedData, rdata );
+		DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
+		rdata.WriteDataSetsCSV("output/rdata1",".csv");
+
+	}
+
+	{
+	
+		RBFFamilyProducer<PolyharmonicSpline3> producer(options.numRBFs);
+		auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	
+		cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	
+		reducedModel.WriteCSV("output/reduced2.csv");
+
+		// Generate the data
+		cout << "Generating Reduced data..." << endl;
+		DataGenerator<RBFFamily<PolyharmonicSpline3>> rdataGenerator(reducedModel);
+		rdataGenerator.MatchSettings(dataGenerator);
+		rdataGenerator.tStart = 0.0;
+
+		DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
+		rdata.WriteDataSetsCSV("output/rdata2",".csv");
+
+	}
+
+	{
+	
+		RBFFamilyProducer<Multiquadratic> producer(options.numRBFs);
+		auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	
+		cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	
+		reducedModel.WriteCSV("output/reduced3.csv");
+
+		// Generate the data
+		cout << "Generating Reduced data..." << endl;
+		DataGenerator<RBFFamily<Multiquadratic>> rdataGenerator(reducedModel);
+		rdataGenerator.MatchSettings(dataGenerator);
+		rdataGenerator.tStart = 0.0;
+
+		DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
+		rdata.WriteDataSetsCSV("output/rdata3",".csv");
+
+	}
+
+	//Compare( reducedData, rdata );
 
 	cout << "Press any key to continue . . . "; cin.get();
 }
