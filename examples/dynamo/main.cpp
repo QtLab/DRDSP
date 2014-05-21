@@ -21,7 +21,7 @@ struct Options {
 	}
 };
 
-typedef PolyharmonicSpline3 RadialType;
+typedef Multiquadratic RadialType;
 
 int main( int argc, char** argv ) {
 	Options options(argc,argv);
@@ -73,68 +73,24 @@ int main( int argc, char** argv ) {
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
-
-	{
 	
-		RBFFamilyProducer<ThinPlateSpline> producer(options.numRBFs);
-		auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	RBFFamilyProducer<RadialType> producer(options.numRBFs);
+	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
 	
-		cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
 	
-		reducedModel.WriteCSV("output/reduced1.csv");
+	reducedModel.WriteCSV("output/reduced3.csv");
 
-		// Generate the data
-		cout << "Generating Reduced data..." << endl;
-		DataGenerator<RBFFamily<ThinPlateSpline>> rdataGenerator(reducedModel);
-		rdataGenerator.MatchSettings(dataGenerator);
-		rdataGenerator.tStart = 0.0;
+	// Generate the data
+	cout << "Generating Reduced data..." << endl;
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
+	rdataGenerator.MatchSettings(dataGenerator);
+	rdataGenerator.tStart = 0.0;
 
-		DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-		rdata.WriteDataSetsCSV("output/rdata1",".csv");
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
+	rdata.WriteDataSetsCSV("output/rdata3",".csv");
 
-	}
-
-	{
-	
-		RBFFamilyProducer<PolyharmonicSpline3> producer(options.numRBFs);
-		auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
-	
-		cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
-	
-		reducedModel.WriteCSV("output/reduced2.csv");
-
-		// Generate the data
-		cout << "Generating Reduced data..." << endl;
-		DataGenerator<RBFFamily<PolyharmonicSpline3>> rdataGenerator(reducedModel);
-		rdataGenerator.MatchSettings(dataGenerator);
-		rdataGenerator.tStart = 0.0;
-
-		DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-		rdata.WriteDataSetsCSV("output/rdata2",".csv");
-
-	}
-
-	{
-	
-		RBFFamilyProducer<Multiquadratic> producer(options.numRBFs);
-		auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
-	
-		cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
-	
-		reducedModel.WriteCSV("output/reduced3.csv");
-
-		// Generate the data
-		cout << "Generating Reduced data..." << endl;
-		DataGenerator<RBFFamily<Multiquadratic>> rdataGenerator(reducedModel);
-		rdataGenerator.MatchSettings(dataGenerator);
-		rdataGenerator.tStart = 0.0;
-
-		DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-		rdata.WriteDataSetsCSV("output/rdata3",".csv");
-
-	}
-
-	//Compare( reducedData, rdata );
+	Compare( reducedData, rdata );
 
 	cout << "Press any key to continue . . . "; cin.get();
 }

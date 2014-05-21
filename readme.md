@@ -161,10 +161,9 @@ The `ProjSecant` class determines a projection from a set of secants. The projec
 
 ```cpp
 // Find a projection
-ProjSecant projSecant;
-projSecant.targetDimension = 2;  // Set the dimension of the projection
-projSecant.GetInitial( data );   // Compute initial condition
-projSecant.Find( newSecants );   // Find a projection using the secants
+ProjSecant projSecant(2);           // Set the dimension of the projection
+projSecant.ComputeInitial( data )   // Compute initial condition
+          .Find( newSecants );      // Find a projection using the secants
 ```
 
 
