@@ -4,6 +4,7 @@
 #include <DRDSP/dynamics/data_generator.h>
 #include <DRDSP/dynamics/bifurcation.h>
 #include <DRDSP/dynamics/monodromy.h>
+#include <DRDSP/misc.h>
 #include "rossler.h"
 
 using namespace std;

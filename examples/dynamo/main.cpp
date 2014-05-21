@@ -2,6 +2,7 @@
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
+#include <DRDSP/misc.h>
 #include "dynamo_solver.h"
 
 using namespace std;

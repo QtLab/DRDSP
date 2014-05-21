@@ -3,8 +3,13 @@
 #include "types.h"
 #include <numeric>
 #include <algorithm>
+#include <vector>
 
 namespace DRDSP {
+
+	std::vector<VectorXd> ParameterList( const VectorXd& pMin, const VectorXd& pMax, uint32_t N );
+
+	std::vector<VectorXd> ParameterList( double pMin, double pMax, uint32_t N );
 
 	template<typename T>
 	T Clamp( T x, T lower, T upper ) {

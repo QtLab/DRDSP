@@ -1,6 +1,7 @@
 #include <DRDSP/projection/proj_secant.h>
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
+#include <DRDSP/misc.h>
 #include "goodfellow.h"
 
 using namespace std;

@@ -36,7 +36,7 @@ namespace DRDSP {
 			return r;
 		}
 
-		VectorXd VectorField( const VectorXd& x, const VectorXd &parameter ) {
+		VectorXd VectorField( const VectorXd& x, const VectorXd& parameter ) {
 			MatrixXd z = affine(parameter);
 
 			model.linear = z.block(0,0,dimension,dimension);
