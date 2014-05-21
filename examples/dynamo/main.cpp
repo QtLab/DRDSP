@@ -32,7 +32,7 @@ int main( int argc, char** argv ) {
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator<DynamoFamily,DynamoSolver> dataGenerator(dynamo);
+	DataGenerator<DynamoFamily,DynamoSolver> dataGenerator;
 	dataGenerator.initial = dynamo(parameters[0]).InitialCondition();
 	dataGenerator.tStart = 4;
 	dataGenerator.tInterval = 0.11;
