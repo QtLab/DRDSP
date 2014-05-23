@@ -22,14 +22,13 @@ struct Options {
 
 typedef ThinPlateSpline RadialType;
 
-
 int main( int argc, char** argv ) {
 
 	Options options(argc,argv);
 
 	BrusselatorFamily brusselator;
 
-	auto parameters = ParameterList( 1.0, 2.0, 11 );
+	auto parameters = ParameterList( 2.1, 2.8, 8 );
 
 	// Generate the data
 	cout << "Generating data..." << endl;
