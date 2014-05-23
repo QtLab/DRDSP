@@ -19,9 +19,9 @@ struct Options {
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
-		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
-		if( argc >= 4 ) numIterations = (uint32_t)atoi(argv[3]);
-		if( argc >= 5 ) numThreads = (uint32_t)atoi(argv[4]);
+		if( argc >= 3 )         numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 )   numIterations = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 )      numThreads = (uint32_t)atoi(argv[4]);
 	}
 };
 
@@ -55,9 +55,8 @@ void ReducedFloquet( const Options& options ) {
 	RBFFamily<RadialType> reducedModel;
 	reducedModel.ReadText("reduced.txt");
 
-	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> dataGenerator(reducedModel);
+	DataGenerator<RBFFamily<RadialType>> dataGenerator( reducedModel );
 	dataGenerator.initial = Vector3d(7.0,0.0,0.5);
 	dataGenerator.tStart = 1000;
 	dataGenerator.tInterval = 100;
@@ -69,11 +68,11 @@ void ReducedFloquet( const Options& options ) {
 	
 	cout << "Computing Floquet multipliers..." << endl;
 	ofstream out("output/floquet.csv");
-	for(int i=0;i<parameters.size();++i) {
+	for(size_t i=0;i<parameters.size();++i) {
 		double dt = periods[i] / (dataGenerator.print-1);
 		auto floquet = ComputeFloquetMultipliers( reducedModel(parameters[i]), data.dataSets[i].points, dt );
 		out << parameters[i] << ",";
-		for(int j=0;j<floquet.size();++j)
+		for(int64_t j=0;j<floquet.size();++j)
 			out << floquet[j].real() << "," << floquet[j].imag() << ",";
 		out << endl;
 	}
@@ -82,7 +81,6 @@ void ReducedFloquet( const Options& options ) {
 
 void OriginalFloquet( const Options& options ) {
 
-	// The example
 	RosslerFamily rossler;
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
@@ -108,11 +106,11 @@ void OriginalFloquet( const Options& options ) {
 	
 	cout << "Computing Floquet multipliers..." << endl;
 	ofstream out("output/floquet.csv");
-	for(int i=0;i<parameters.size();++i) {
+	for(size_t i=0;i<parameters.size();++i) {
 		double dt = periods[i] / (dataGenerator.print-1);
 		auto floquet = ComputeFloquetMultipliers( rossler(parameters[i]), data.dataSets[i].points, dt );
 		out << parameters[i] << ",";
-		for(int j=0;j<floquet.size();++j)
+		for(int64_t j=0;j<floquet.size();++j)
 			out << floquet[j].real() << "," << floquet[j].imag() << ",";
 		out << endl;
 	}
@@ -137,7 +135,6 @@ void ComputeReduced( const Options& options ) {
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 
-	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads )
@@ -145,21 +142,22 @@ void ComputeReduced( const Options& options ) {
 	           .WriteVectorsCSV( "output/p", "-vectors.csv" )
 	           .WriteDerivativesCSV( "output/p", "-derivatives.csv" );
 
-	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	
-	RBFFamilyProducer<RadialType> producer(options.numRBFs);
+	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	producer.boxScale = 1.6;
-	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	auto reducedFamily = producer.BruteForce( reducedData,
+											  data.parameterDimension,
+											  data.parameters,
+											  options.numIterations );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	
-	reducedModel.WriteCSV("output/reduced.csv");
+	reducedFamily.WriteCSV("output/reduced.csv");
 
-	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
-	rdataGenerator.MatchSettings(dataGenerator);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
@@ -167,7 +165,6 @@ void ComputeReduced( const Options& options ) {
 
 	Compare( reducedData, rdata );
 
-	// Bifurcation diagrams
 	cout << "Generating Bifurcation Diagram..." << endl;
 	{
 		BifurcationDiagramGenerator<RosslerFamily> bifurcationGenerator;
@@ -194,7 +191,7 @@ void ComputeReduced( const Options& options ) {
 		bifurcationGenerator.pMax = parameters.back();
 		bifurcationGenerator.pCount = 1280;
 		bifurcationGenerator.initial = dataGenerator.initial;
-		bifurcationGenerator.Generate( reducedModel,
+		bifurcationGenerator.Generate( reducedFamily,
 			[]( const VectorXd& x, const VectorXd& y ) { return x[1] > 0.0 && y[1] < 0.0; },
 			[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; },
 			options.numThreads ).WriteBitmap( "output/bifurcation-red.bmp", 720 );
@@ -203,12 +200,10 @@ void ComputeReduced( const Options& options ) {
 
 void SimulateReduced( const Options& options ) {
 
-	// The example
 	RosslerFamily rossler;
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
 
-	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<RosslerFamily> dataGenerator;
 	dataGenerator.initial = Vector3d(7.0,0.0,0.5);
@@ -220,28 +215,26 @@ void SimulateReduced( const Options& options ) {
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 
-	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads );
 
-	RBFFamily<RadialType> reducedModel;
-	reducedModel.ReadText("reduced.txt");
+	RBFFamily<RadialType> reducedFamily;
+	reducedFamily.ReadText("reduced.txt");
 
-	RBFFamilyProducer<RadialType> producer( reducedModel.model.numRBFs );
+	RBFFamilyProducer<RadialType> producer( reducedFamily.model.numRBFs );
 
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 
-	producer.Fit( reducedModel, reducedData, rossler.parameterDimension, data.parameters );
+	producer.Fit( reducedFamily, reducedData, rossler.parameterDimension, data.parameters );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	
-	reducedModel.WriteCSV("output/reduced.csv");
+	reducedFamily.WriteCSV("output/reduced.csv");
 
-	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
-	rdataGenerator.MatchSettings(dataGenerator);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
@@ -258,7 +251,7 @@ void SimulateReduced( const Options& options ) {
 	bifurcationGenerator.pMax = parameters.back();
 	bifurcationGenerator.pCount = 1280;
 	bifurcationGenerator.initial = dataGenerator.initial;
-	bifurcationGenerator.Generate( reducedModel,
+	bifurcationGenerator.Generate( reducedFamily,
 		[]( const VectorXd& x, const VectorXd& y ) { return x[1] > 0.0 && y[1] < 0.0; },
 		[]( const VectorXd& x, const VectorXd& y ) { return (x[0]+y[0])*0.5; },
 		options.numThreads ).WriteBitmap( "output/bifurcation-red.bmp", 720 );

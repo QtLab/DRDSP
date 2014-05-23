@@ -14,9 +14,9 @@ struct Options {
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
-		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
-		if( argc >= 4 ) numIterations = (uint32_t)atoi(argv[3]);
-		if( argc >= 5 ) numThreads = (uint32_t)atoi(argv[4]);
+		if( argc >= 3 )         numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 )   numIterations = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 )      numThreads = (uint32_t)atoi(argv[4]);
 	}
 };
 
@@ -33,7 +33,7 @@ int main( int argc, char** argv ) {
 
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator<KuramotoAFamily,KuramotoASolver> dataGenerator(kuramoto.family);
+	DataGenerator<KuramotoAFamily,KuramotoASolver> dataGenerator( kuramoto.family );
 	dataGenerator.initial.setRandom();
 	dataGenerator.tStart = 50;
 	dataGenerator.tInterval = 7;
@@ -91,22 +91,25 @@ int main( int argc, char** argv ) {
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	
-	RBFFamilyProducer<RadialType> producer(options.numRBFs);
-	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	RBFFamilyProducer<RadialType> producer( options.numRBFs );
+	auto reducedFamily = producer.BruteForce( reducedData,
+											  data.parameterDimension,
+											  data.parameters,
+											  options.numIterations );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	
-	reducedModel.WriteCSV("output/reduced.csv");
+	reducedFamily.WriteCSV("output/reduced.csv");
 	
-	//ModelRBFProducer rbfProducer(options.numRBFs);
-	//ModelRBF rbfModel = rbfProducer.BruteForce(reducedData.reducedData[0],options.numIterations);
+	//ModelRBFProducer rbfProducer( options.numRBFs );
+	//ModelRBF rbfModel = rbfProducer.BruteForce( reducedData.reducedData[0], options.numIterations );
 
-	//cout << "Total Cost = " << rbfProducer.ComputeTotalCost(rbfModel,reducedData.reducedData[0]) << endl;	
+	//cout << "Total Cost = " << rbfProducer.ComputeTotalCost( rbfModel, reducedData.reducedData[0] ) << endl;	
 	
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
-	rdataGenerator.MatchSettings(dataGenerator);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );

@@ -11,7 +11,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(2), numRBFs(40), numIterations(1000), numThreads(3) {}
+	Options() : targetDimension(2), numRBFs(60), numIterations(1000), numThreads(3) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -28,7 +28,7 @@ int main( int argc, char** argv ) {
 	
 	DynamoFamily dynamo;
 
-	auto parameters = ParameterList( 1.5, 2.1, 3 );
+	auto parameters = ParameterList( 1.5, 2.1, 6 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
@@ -55,7 +55,7 @@ int main( int argc, char** argv ) {
 	cout << "Finding projection..." << endl;
 	ProjSecant projSecant( options.targetDimension );
 
-	projSecant.ComputeInitial(data)            // Compute initial condition
+	projSecant.ComputeInitial( data )          // Compute initial condition
 	          .Find( newSecants )              // Optimize over Grassmannian
 			  .AnalyseSecants( newSecants )    // Print some statistics
 			  .WriteBinary("output/projection.bin")
@@ -74,21 +74,24 @@ int main( int argc, char** argv ) {
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	
-	RBFFamilyProducer<RadialType> producer(options.numRBFs);
-	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	RBFFamilyProducer<RadialType> producer( options.numRBFs );
+	auto reducedFamily = producer.BruteForce( reducedData,
+											  data.parameterDimension,
+											  data.parameters,
+											  options.numIterations );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	
-	reducedModel.WriteCSV("output/reduced3.csv");
+	reducedFamily.WriteCSV("output/reduced.csv");
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
-	rdataGenerator.MatchSettings(dataGenerator);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata3",".csv");
+	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 

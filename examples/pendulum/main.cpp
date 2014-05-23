@@ -14,9 +14,9 @@ struct Options {
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
-		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
-		if( argc >= 4 ) numIterations = (uint32_t)atoi(argv[3]);
-		if( argc >= 5 ) numThreads = (uint32_t)atoi(argv[4]);
+		if( argc >= 3 )         numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 )   numIterations = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 )      numThreads = (uint32_t)atoi(argv[4]);
 	}
 };
 
@@ -34,7 +34,7 @@ int main( int argc, char** argv ) {
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<PendulumFamily,PendulumSolver> dataGenerator;
-	dataGenerator.initial.setZero(pendulum.family.dimension);
+	dataGenerator.initial.setZero( pendulum.family.dimension );
 	dataGenerator.initial(1) = -0.422;
 	dataGenerator.tStart = 1500;
 	dataGenerator.tInterval = 12;
@@ -79,21 +79,21 @@ int main( int argc, char** argv ) {
 
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
-	RBFFamilyProducer<RadialType> producer(options.numRBFs);
-	auto reducedModel = producer.BruteForce( reducedData,
-	                                         data.parameterDimension,
-	                                         data.parameters,
-	                                         options.numIterations );
+	RBFFamilyProducer<RadialType> producer( options.numRBFs );
+	auto reducedFamily = producer.BruteForce( reducedData,
+	                                          data.parameterDimension,
+	                                          data.parameters,
+	                                          options.numIterations );
 
 	cout << "Total Cost = "
-		 << producer.ComputeTotalCost( reducedModel, reducedData, data.parameters )
+		 << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 		 << endl;
 
-	reducedModel.WriteCSV("output/reduced.csv");
+	reducedFamily.WriteCSV("output/reduced.csv");
 
 	// Generate the data
 	cout << "Simulating the reduced model..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );

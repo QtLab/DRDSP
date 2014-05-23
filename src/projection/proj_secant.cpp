@@ -13,6 +13,8 @@ using namespace DRDSP;
 
 double SecantCostFunction::operator()( const MatrixXd& X ) const {
 	
+	if( secants.count == 0 ) return 1.0;
+
 	double sum = 0.0;
 
 	if( secants.weights.size() > 0 ) {
@@ -45,6 +47,9 @@ MatrixXd SecantCostGradient::operator()( const MatrixXd& X ) const {
 
 	MatrixXd sum;
 	sum.setZero(X.rows(),X.cols());
+
+	if( secants.count == 0 ) return sum;
+
 	double projectedLength;
 	VectorXd secant, projectedSecant;
 

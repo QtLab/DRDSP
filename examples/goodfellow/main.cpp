@@ -14,9 +14,9 @@ struct Options {
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
-		if( argc >= 3 ) numRBFs = (uint32_t)atoi(argv[2]);
-		if( argc >= 4 ) numIterations = (uint32_t)atoi(argv[3]);
-		if( argc >= 5 ) numThreads = (uint32_t)atoi(argv[4]);
+		if( argc >= 3 )         numRBFs = (uint32_t)atoi(argv[2]);
+		if( argc >= 4 )   numIterations = (uint32_t)atoi(argv[3]);
+		if( argc >= 5 )      numThreads = (uint32_t)atoi(argv[4]);
 	}
 };
 
@@ -26,16 +26,15 @@ int main( int argc, char** argv ) {
 
 	Options options(argc,argv);
 
-	// The example
 	GoodfellowFamily goodfellow(100);
 
 	auto parameters = ParameterList( 4.9, 5.5, 21 );
 	
 	// Generate the data
 	cout << "Generating data..." << endl;
-	DataGenerator<GoodfellowFamily> dataGenerator(goodfellow);
+	DataGenerator<GoodfellowFamily> dataGenerator( goodfellow );
 	dataGenerator.initial.setRandom();
-	dataGenerator.initial -= 0.5 * VectorXd::Ones(goodfellow.dimension);
+	dataGenerator.initial -= 0.5 * VectorXd::Ones( goodfellow.dimension );
 	dataGenerator.initial *= 2.0;
 	dataGenerator.tStart = 200;
 	dataGenerator.tInterval = 1;
@@ -59,7 +58,7 @@ int main( int argc, char** argv ) {
 	cout << "Finding projection..." << endl;
 	ProjSecant projSecant( options.targetDimension );
 
-	projSecant.ComputeInitial(data)           // Compute initial condition
+	projSecant.ComputeInitial( data )           // Compute initial condition
 	          .Find( newSecants )             // Optimize over Grassmannian
 	          .AnalyseSecants( newSecants )   // Print some statistics
 	          .WriteBinary("output/projection.bin")
@@ -78,17 +77,20 @@ int main( int argc, char** argv ) {
 	// Obtain the reduced model
 	cout << "Computing Reduced Model..." << endl;
 	
-	RBFFamilyProducer<RadialType> producer(options.numRBFs);
-	auto reducedModel = producer.BruteForce(reducedData,data.parameterDimension,data.parameters,options.numIterations);
+	RBFFamilyProducer<RadialType> producer( options.numRBFs );
+	auto reducedFamily = producer.BruteForce( reducedData,
+											  data.parameterDimension,
+											  data.parameters,
+											  options.numIterations );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost(reducedModel,reducedData,data.parameters) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	
-	reducedModel.WriteCSV("output/reduced.csv");
+	reducedFamily.WriteCSV("output/reduced.csv");
 
 	// Generate the data
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator(reducedModel);
-	rdataGenerator.MatchSettings(dataGenerator);
+	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );

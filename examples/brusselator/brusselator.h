@@ -2,44 +2,82 @@
 #define INCLUDED_BRUSSELATOR
 #include <DRDSP/types.h>
 #include <DRDSP/dynamics/model.h>
+#include <DRDSP/auto_diff.h>
 
 using namespace DRDSP;
 
 struct Brusselator : Model<> {
-	double A, B, D1, D2;
-	static const uint32_t nX = 32;
-	static const uint32_t nY = 32;
-	static const uint32_t N = nX * nY;
-	double dx, dy;
+	static const int nX = 32;
+	static const int nY = 32;
+	static const int N = nX * nY;
+
+	double A, B, D1, D2, dx, dy;
 
 	Brusselator() : Brusselator(1.0) {}
 
 	explicit Brusselator( double B ) : Model<>(2*N), A(1), B(B), D1(1), D2(1), dx(1), dy(1) {}
 
-	VectorXd operator()( const VectorXd &X ) const;
-	MatrixXd Partials( const VectorXd &X ) const;
+	template<typename Derived>
+	Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
+		typedef Derived::Scalar Scalar;
+		auto X = compute_X(x);
+		auto Y = compute_Y(x);
+		Array<Scalar,-1,-1> XXY = X*X*Y;
+		Array<Scalar,-1,-1> XDot = A + XXY - (B+1.0)*X + D1 * laplacian(X);
+		Array<Scalar,-1,-1> YDot = B*X - XXY + D2 * laplacian(Y);
 
-	double operator()( const VectorXd &x, uint32_t k ) const;
-	double Partials( const VectorXd &x, uint32_t k1, uint32_t k2 ) const;
+		Matrix<Scalar,-1,1> r(dimension);
+
+		for(int j=0;j<nY;++j)
+			r.segment(j*nX,nX) = XDot.col(j);
+
+		for(int j=0;j<nY;++j)
+			r.segment(N+j*nX,nX) = YDot.col(j);
+
+		return r;
+	}
+
+	MatrixXd Partials( const VectorXd& x ) const {
+		return AutoDerivative( *this, x );
+	}
 
 protected:
-	inline double delta( uint32_t i, uint32_t j ) const;
-	inline double X( const VectorXd& x, uint32_t i, uint32_t j ) const;
-	inline double Y( const VectorXd& x, uint32_t i, uint32_t j ) const;
-	double XDot( const VectorXd& x, uint32_t i, uint32_t j ) const;
-	double YDot( const VectorXd& x, uint32_t i, uint32_t j ) const;
-	double dXXDot( const VectorXd& x, uint32_t i, uint32_t j, uint32_t mu, uint32_t nu ) const;
-	double dYXDot( const VectorXd& x, uint32_t i, uint32_t j, uint32_t mu, uint32_t nu ) const;
-	double dXYDot( const VectorXd& x, uint32_t i, uint32_t j, uint32_t mu, uint32_t nu ) const;
-	double dYYDot( const VectorXd& x, uint32_t i, uint32_t j, uint32_t mu, uint32_t nu ) const;
-	double laplacianX( const VectorXd& x, uint32_t i, uint32_t j ) const;
-	double laplacianY( const VectorXd& x, uint32_t i, uint32_t j ) const;
-	double dAlaplacianA( uint32_t i, uint32_t j, uint32_t mu, uint32_t nu ) const;
 
-	uint32_t ip1( uint32_t i ) const;
-	uint32_t im1( uint32_t i ) const;
-	uint32_t jp1( uint32_t j ) const;
-	uint32_t jm1( uint32_t j ) const;
+	template<typename Derived>
+	Array<typename Derived::Scalar,-1,-1> compute_X( const MatrixBase<Derived>& x ) const {
+		Array<Derived::Scalar,-1,-1> X(nX,nY);
+		for(int j=0;j<nY;++j)
+			X.col(j) = x.segment(j*nX,nX);
+		return X;
+	}
+
+	template<typename Derived>
+	Array<typename Derived::Scalar,-1,-1> compute_Y( const MatrixBase<Derived>& x ) const {
+		Array<Derived::Scalar,-1,-1> Y(nX,nY);
+		for(int j=0;j<nY;++j)
+			Y.col(j) = x.segment(N+j*nX,nX);
+		return Y;
+	}
+
+	template<typename Derived>
+	Array<typename Derived::Scalar,-1,-1> laplacian( const ArrayBase<Derived>& x ) const {
+		Array<Derived::Scalar,-1,-1> LX(nX,nY), LY(nX,nY);
+		
+		LX.row(0) = x.row(1) - 2.0 * x.row(0) + x.row(nX-1);
+		for(int i=1;i<nX-1;++i)
+			LX.row(i) = x.row(i+1) - 2.0 * x.row(i) + x.row(i-1);
+		LX.row(nX-1) = x.row(0) - 2.0 * x.row(nX-1) + x.row(nX-2);
+		LX /= dx*dx;
+
+		LY.col(0) = x.col(1) - 2.0 * x.col(0) + x.col(nY-1);
+		for(int j=1;j<nY-1;++j)
+			LY.col(j) = x.col(j+1) - 2.0 * x.col(j) + x.col(j-1);
+		LY.col(nY-1) = x.col(0) - 2.0 * x.col(nY-1) + x.col(nY-2);
+		LY /= dy*dy;
+
+		return LX + LY;
+	}
+
 };
 
 struct BrusselatorFamily : Family<Brusselator> {

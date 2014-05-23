@@ -52,18 +52,20 @@ namespace DRDSP {
 		ReducedData& ComputeDataEmbedded( const ModelEmbedded<Model,Embedded>& original, const DataSet& data, const MatrixXd& W ) {
 			Create( (uint32_t)W.cols(), data.points.size() );
 
-			static double stabilityFactor = 1.0;
-
-			MatrixXd A;
+			static const double stabilityFactor = 1.0;
 
 			for(uint32_t i=0;i<count;++i) {
 				points[i] = W.adjoint() * original.embedding(data.points[i]);
 			}
+
 			for(uint32_t i=0;i<count;++i) {
 				vectors[i] = W.adjoint() * original( data.points[i] );
 			}
+
+			MatrixXd A;
+			JacobiSVD<MatrixXd> svd;
 			for(uint32_t i=0;i<count;++i) {
-				JacobiSVD<MatrixXd> svd(W.adjoint() * original.embedding.Derivative(data.points[i]),ComputeThinU);
+				svd.compute( W.adjoint() * original.embedding.Derivative(data.points[i]), ComputeThinU );
 				uint32_t rank = 0;
 				double tolerance = original.model.dimension * eps(svd.singularValues()(0));
 				for(int j=0;j<svd.nonzeroSingularValues();++j) {
