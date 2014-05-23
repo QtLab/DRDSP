@@ -97,7 +97,7 @@ ProjSecant::ProjSecant( uint32_t targetDimension ) :
 	maxIterations(100)
 {}
 
-ProjSecant& ProjSecant::Find( const SecantsPreComputed& secants ) {
+ProjSecant& ProjSecant::Find( const Secants& secants ) {
 	SecantCostFunction S(secants);
 	SecantCostGradient gradS(secants);
 
@@ -109,7 +109,7 @@ ProjSecant& ProjSecant::Find( const SecantsPreComputed& secants ) {
 	return *this;
 }
 
-ProjSecant& ProjSecant::Find( const SecantsPreComputed* secants, size_t N ) {
+ProjSecant& ProjSecant::Find( const Secants* secants, size_t N ) {
 	SecantCostFunctionMulti S(secants,N);
 	SecantCostGradientMulti gradS(secants,N);
 
@@ -121,7 +121,7 @@ ProjSecant& ProjSecant::Find( const SecantsPreComputed* secants, size_t N ) {
 	return *this;
 }
 
-ProjSecant& ProjSecant::Find( const vector<SecantsPreComputed>& secants ) {
+ProjSecant& ProjSecant::Find( const vector<Secants>& secants ) {
 	return Find( secants.data(), secants.size() );
 }
 
@@ -219,11 +219,11 @@ ProjSecant& ProjSecant::ComputeInitial( const DataSystem& data ) {
 	return *this;
 }
 
-const ProjSecant& ProjSecant::AnalyseSecants( const SecantsPreComputed& secants ) const {
+const ProjSecant& ProjSecant::AnalyseSecants( const Secants& secants ) const {
 	return AnalyseSecants(&secants,1);
 }
 
-const ProjSecant& ProjSecant::AnalyseSecants( const SecantsPreComputed* secants, size_t N ) const {
+const ProjSecant& ProjSecant::AnalyseSecants( const Secants* secants, size_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
 	size_t numSecants = 0;
 	for(size_t i=0;i<N;++i) {
@@ -240,7 +240,7 @@ const ProjSecant& ProjSecant::AnalyseSecants( const SecantsPreComputed* secants,
 	return *this;
 }
 
-const ProjSecant& ProjSecant::AnalyseSecants( const vector<SecantsPreComputed>& secants ) const {
+const ProjSecant& ProjSecant::AnalyseSecants( const vector<Secants>& secants ) const {
 	return AnalyseSecants(secants.data(),secants.size());
 }
 

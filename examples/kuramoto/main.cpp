@@ -26,12 +26,10 @@ int main( int argc, char** argv ) {
 
 	Options options(argc,argv);
 	
-	// The kuramoto example
 	FamilyEmbedded<KuramotoAFamily,FlatEmbedding> kuramoto(KuramotoAFamily(100),FlatEmbedding(101));
 	
 	auto parameters = ParameterList( 1.0, 1.1, 6 );
 
-	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<KuramotoAFamily,KuramotoASolver> dataGenerator( kuramoto.family );
 	dataGenerator.initial.setRandom();
@@ -42,25 +40,15 @@ int main( int argc, char** argv ) {
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	
-	// Embed the data
 	cout << "Embedding data..." << endl;
 	DataSystem dataEmbedded = EmbedData( kuramoto.embedding, data, options.numThreads );
 
-	// Pre-compute secants
 	cout << "Computing secants..." << endl;
-	vector<SecantsPreComputed> secants = ComputeSecants( dataEmbedded, options.numThreads );
+	vector<Secants> secants = ComputeSecants( dataEmbedded, 10.0, options.numThreads );
 
-	// Secant culling
-	cout << "Culling secants..." << endl;
-	vector<SecantsPreComputed> newSecants = CullSecants( secants, 10.0, options.numThreads );
-
-	secants = vector<SecantsPreComputed>();
-
-	// Find a projection
 	cout << "Finding projection..." << endl;
 	ProjSecant projSecant( options.targetDimension );
 
-	// Compute initial condition
 	// For this particular example, we use a custom initial condition
 	projSecant.W.setZero(kuramoto.embedding.eDim,4);
 	
@@ -74,22 +62,20 @@ int main( int argc, char** argv ) {
 	projSecant.W.col(0).normalize();
 	projSecant.W.col(1).normalize();
 
-	projSecant.Find( newSecants )             // Optimize over Grassmannian
-	          .AnalyseSecants( newSecants )   // Print some statistics
+	projSecant.Find( secants )             // Optimize over Grassmannian
+	          .AnalyseSecants( secants )   // Print some statistics
 	          .WriteBinary("output/projection.bin")
 	          .WriteCSV("output/projection.csv");
 
-	newSecants = vector<SecantsPreComputed>();
+	secants = vector<Secants>();
 
-	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeDataEmbedded( kuramoto, data, projSecant.W, options.numThreads )
 	           .WritePointsCSV("output/p","-points.csv")
 	           .WriteVectorsCSV("output/p","-points.csv");
 
-	// Obtain the reduced model
-	cout << "Computing Reduced Model..." << endl;
+	cout << "Computing Reduced Family..." << endl;
 	
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
@@ -105,8 +91,7 @@ int main( int argc, char** argv ) {
 	//ModelRBF rbfModel = rbfProducer.BruteForce( reducedData.reducedData[0], options.numIterations );
 
 	//cout << "Total Cost = " << rbfProducer.ComputeTotalCost( rbfModel, reducedData.reducedData[0] ) << endl;	
-	
-	// Generate the data
+
 	cout << "Generating Reduced data..." << endl;
 	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );

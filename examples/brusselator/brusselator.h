@@ -7,8 +7,8 @@
 using namespace DRDSP;
 
 struct Brusselator : Model<> {
-	static const int nX = 64;
-	static const int nY = 64;
+	static const int nX = 32;
+	static const int nY = 32;
 	static const int N = nX * nY;
 
 	double A, B, D1, D2, dx, dy;
@@ -37,8 +37,8 @@ struct Brusselator : Model<> {
 		return r;
 	}
 
-	MatrixXd Partials( const VectorXd& x ) const {
-		return AutoDerivative( *this, x );
+	SparseMatrix<double> Partials( const VectorXd& x ) const {
+		return AutoDerivativeSparse( *this, x );
 	}
 
 protected:
@@ -67,15 +67,13 @@ protected:
 		for(int i=1;i<nX-1;++i)
 			LX.row(i) = x.row(i+1) - 2.0 * x.row(i) + x.row(i-1);
 		LX.row(nX-1) = x.row(0) - 2.0 * x.row(nX-1) + x.row(nX-2);
-		LX /= dx*dx;
 
 		LY.col(0) = x.col(1) - 2.0 * x.col(0) + x.col(nY-1);
 		for(int j=1;j<nY-1;++j)
 			LY.col(j) = x.col(j+1) - 2.0 * x.col(j) + x.col(j-1);
 		LY.col(nY-1) = x.col(0) - 2.0 * x.col(nY-1) + x.col(nY-2);
-		LY /= dy*dy;
 
-		return LX + LY;
+		return LX * (1.0/(dx*dx)) + LY * (1.0/(dy*dy));
 	}
 
 };

@@ -92,7 +92,6 @@ void OriginalFloquet( const Options& options ) {
 		100.0
 	};
 
-	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<RosslerFamily> dataGenerator;
 	dataGenerator.initial = Vector3d(7.0,0.0,0.5);
@@ -118,12 +117,10 @@ void OriginalFloquet( const Options& options ) {
 
 void ComputeReduced( const Options& options ) {
 
-	// The example
 	RosslerFamily rossler;
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
 
-	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<RosslerFamily> dataGenerator;
 	dataGenerator.initial = Vector3d(7.0,0.0,0.5);
@@ -142,7 +139,7 @@ void ComputeReduced( const Options& options ) {
 	           .WriteVectorsCSV( "output/p", "-vectors.csv" )
 	           .WriteDerivativesCSV( "output/p", "-derivatives.csv" );
 
-	cout << "Computing Reduced Model..." << endl;
+	cout << "Computing Reduced Family..." << endl;
 	
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	producer.boxScale = 1.6;

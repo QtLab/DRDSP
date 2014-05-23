@@ -126,6 +126,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>DRDSP.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,6 +145,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>DRDSP.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

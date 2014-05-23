@@ -26,7 +26,6 @@ int main( int argc, char** argv ) {
 
 	Options options(argc,argv);
 
-	// The pendulum example
 	FamilyEmbedded<PendulumFamily,FlatEmbedding> pendulum;
 
 	auto parameters = ParameterList( 1.42, 1.43, 11 );
@@ -44,41 +43,30 @@ int main( int argc, char** argv ) {
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
-	// Embed the data
 	cout << "Embedding data..." << endl;
 	DataSystem dataEmbedded = EmbedData( pendulum.embedding, data, options.numThreads );
 
-	// Pre-compute secants
 	cout << "Computing secants..." << endl;
-	vector<SecantsPreComputed> secants = ComputeSecants( dataEmbedded, options.numThreads );
+	vector<Secants> secants = ComputeSecants( dataEmbedded, 10.0, options.numThreads );
 
-	// Secant culling
-	cout << "Culling secants..." << endl;
-	vector<SecantsPreComputed> newSecants = CullSecants( secants, 10.0, options.numThreads );
-
-	secants = vector<SecantsPreComputed>();
-
-	// Find a projection
 	cout << "Finding projection..." << endl;
 	ProjSecant projSecant( options.targetDimension );
 	
 	projSecant.ComputeInitial( dataEmbedded )   // Compute initial condition
-	          .Find( newSecants )               // Optimize over Grassmannian
-	          .AnalyseSecants( newSecants )     // Print some statistics
+	          .Find( secants )                  // Optimize over Grassmannian
+	          .AnalyseSecants( secants )        // Print some statistics
 	          .WriteBinary("output/projection.bin")
 	          .WriteCSV("output/projection.csv");
 
-	newSecants = vector<SecantsPreComputed>();
+	secants = vector<Secants>();
 
-	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeDataEmbedded( pendulum, data, projSecant.W, options.numThreads )
 	           .WritePointsCSV("output/p","-points.csv")
 	           .WriteVectorsCSV("output/p","-vectors.csv");
 
-	// Obtain the reduced model
-	cout << "Computing Reduced Model..." << endl;
+	cout << "Computing Reduced Family..." << endl;
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
 	                                          data.parameterDimension,
@@ -91,7 +79,6 @@ int main( int argc, char** argv ) {
 
 	reducedFamily.WriteCSV("output/reduced.csv");
 
-	// Generate the data
 	cout << "Simulating the reduced model..." << endl;
 	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings(dataGenerator);

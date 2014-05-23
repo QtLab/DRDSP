@@ -56,7 +56,6 @@ void Dynamo::Init() {
 			c(i,j) = cosheta(i) - costheta(j);
 	}
 
-	
 	for(uint32_t j=0;j<nJ;++j) {
 		trig1(0,j) = -costheta(j);
 		pi32(0,j) = 1.0;

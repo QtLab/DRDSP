@@ -29,8 +29,7 @@ int main( int argc, char** argv ) {
 	DynamoFamily dynamo;
 
 	auto parameters = ParameterList( 1.5, 2.1, 6 );
-	
-	// Generate the data
+
 	cout << "Generating data..." << endl;
 	DataGenerator<DynamoFamily,DynamoSolver> dataGenerator;
 	dataGenerator.initial = dynamo(parameters[0]).InitialCondition();
@@ -41,29 +40,20 @@ int main( int argc, char** argv ) {
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsBinary("output/orig",".bin");
 
-	// Pre-compute secants
 	cout << "Computing secants..." << endl;
-	vector<SecantsPreComputed> secants = ComputeSecants( data, options.numThreads );
+	vector<Secants> secants = ComputeSecants( data, options.numThreads );
 
-	// Secant culling
-	cout << "Culling secants..." << endl;
-	vector<SecantsPreComputed> newSecants = CullSecants( secants, 10.0, options.numThreads );
-
-	secants = vector<SecantsPreComputed>();
-
-	// Find a projection
 	cout << "Finding projection..." << endl;
 	ProjSecant projSecant( options.targetDimension );
 
-	projSecant.ComputeInitial( data )          // Compute initial condition
-	          .Find( newSecants )              // Optimize over Grassmannian
-			  .AnalyseSecants( newSecants )    // Print some statistics
+	projSecant.ComputeInitial( data )       // Compute initial condition
+	          .Find( secants )              // Optimize over Grassmannian
+			  .AnalyseSecants( secants )    // Print some statistics
 			  .WriteBinary("output/projection.bin")
 			  .WriteCSV("output/projection.csv");
 
-	newSecants = vector<SecantsPreComputed>();
+	secants = vector<Secants>();
 
-	// Compute projected data
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( dynamo, data, projSecant.W, options.numThreads )
@@ -71,8 +61,7 @@ int main( int argc, char** argv ) {
 	           .WriteVectorsCSV("output/p","-vectors.csv")
 			   .WriteDerivativesCSV("output/p","-derivs.csv");
 
-	// Obtain the reduced model
-	cout << "Computing Reduced Model..." << endl;
+	cout << "Computing Reduced Family..." << endl;
 	
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
@@ -84,7 +73,6 @@ int main( int argc, char** argv ) {
 	
 	reducedFamily.WriteCSV("output/reduced.csv");
 
-	// Generate the data
 	cout << "Generating Reduced data..." << endl;
 	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );
