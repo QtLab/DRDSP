@@ -85,17 +85,17 @@ void Dynamo::Init() {
 VectorXd Dynamo::InitialCondition() const {
 	VectorXd state(dimension);
 
-	for(uint32_t i=0;i<nI;++i) {
-		double x = s(i);
-		for(uint32_t j=0;j<nJ;++j) {
-			state[i*nJ+j] = x*(1.0-x)*(sintheta(j) + costheta(j)) * 1.0e-3;
+	for(uint32_t j=0;j<nJ;++j) {
+		for(uint32_t i=0;i<nI;++i) {
+			double x = s(i);
+			state[j*nI+i] = x*(1.0-x)*(sintheta(j) + costheta(j)) * 1.0e-3;
 		}
 	}
 	double eps = 0.0;
-	for(uint32_t i=0;i<nI;++i) {
-		double x = s(i);
-		for(uint32_t j=0;j<nJ;++j) {
-			state[N+i*nJ+j] = x*(1.0-x)*(sintheta(j) + costheta(j)) * 1.0e-3 + eps * x * x * (1.0 - x) * sintheta(j) * costheta(j);
+	for(uint32_t j=0;j<nJ;++j) {
+		for(uint32_t i=0;i<nI;++i) {
+			double x = s(i);
+			state[N+j*nI+i] = x*(1.0-x)*(sintheta(j) + costheta(j)) * 1.0e-3 + eps * x * x * (1.0 - x) * sintheta(j) * costheta(j);
 		}
 	}
 	return state;

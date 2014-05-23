@@ -7,7 +7,7 @@ namespace DRDSP {
 
 	template<typename F>
 	double AutoDerivative( F&& f, double x ) {
-		return dual_part( f( dual<T>(x,1.0) ) );
+		return dual_part( f( duald(x,1.0) ) );
 	}
 
 	template<typename F>
@@ -33,11 +33,11 @@ namespace DRDSP {
 		vector<Triplet<double>> triplets;
 		triplets.reserve(x.size());
 
-		for(int j=0;j<x.size();++j) {
+		for(int64_t j=0;j<x.size();++j) {
 			rj = r;
 			rj[j].y = 1.0;
 			VectorXd temp = DualPart( f( rj ) );
-			for(int i=0;i<temp.size();++i) {
+			for(int64_t i=0;i<temp.size();++i) {
 				if( temp[i] == 0.0 ) continue;
 				triplets.emplace_back( i, j, temp[i] );
 			}

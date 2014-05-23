@@ -29,22 +29,17 @@ namespace DRDSP {
 		void ntCoff( double dTime );
 		void npStep( double dTime );
 		void ntStep( double dTime );
-		double F( const MatrixXd& a, uint32_t i, uint32_t j ) const;
 		double Beta( const MatrixXd& a, uint32_t i, uint32_t j ) const;
 		double Btheta( const MatrixXd& a, uint32_t i, uint32_t j ) const;
 		double NormB2( const MatrixXd& a, const MatrixXd& b, uint32_t i, uint32_t j ) const;
 		double Alpha( const MatrixXd& a, const MatrixXd& b, uint32_t i, uint32_t j ) const;
 		double dsp( const MatrixXd& p, uint32_t i, uint32_t j ) const;
 		double dtp( const MatrixXd& p, uint32_t i, uint32_t j ) const;
-		double eta( uint32_t i ) const;
 
-		inline double theta( uint32_t j ) const {
+		double theta( uint32_t j ) const {
 			return dth * j;
 		}
 
-		inline double s( uint32_t i ) const {
-			return ds * i;
-		}
 	};
 
 }

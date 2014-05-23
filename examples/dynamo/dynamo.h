@@ -40,10 +40,10 @@ namespace DRDSP {
 			auto aDot = compute_aDot( b, D2a, alpha );
 			auto bDot = compute_bDot( a, b, dsa, dta, D2a, alpha );
 			Col r(dimension);
-			for(uint32_t i=0;i<nI;++i)
-				r.segment(i*nJ,nJ) = aDot.row(i).transpose();
-			for(uint32_t i=0;i<nI;++i)
-				r.segment(N+i*nJ,nJ) = bDot.row(i).transpose();
+			for(uint32_t j=0;j<nJ;++j)
+				r.segment(j*nI,nI) = aDot.col(j);
+			for(uint32_t j=0;j<nJ;++j)
+				r.segment(N+j*nI,nI) = bDot.col(j);
 			return r;
 		}
 		
@@ -79,7 +79,7 @@ namespace DRDSP {
 			auto dtb = compute_dt( b );
 			auto dt2b = compute_dt2( b );
 			auto D2b = compute_D2( b, dsb, ds2b, dtb, dt2b );
-			Matrix<typename Derived::Scalar,-1,-1> bDot = cOmega * F + cAlpha * G + D2b;
+			Matrix<Scalar,-1,-1> bDot = cOmega * F + cAlpha * G + D2b;
 			bDot.row(0).fill(bDot.row(1).mean());
 			bDot.row(nI-1).setZero();
 			return bDot;
@@ -88,16 +88,16 @@ namespace DRDSP {
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,-1> compute_a( const MatrixBase<Derived>& x ) const {
 			Matrix<Derived::Scalar,-1,-1> a(nI,nJ);
-			for(uint32_t i=0;i<nI;++i)
-				a.row(i) = x.segment(i*nJ,nJ).transpose();
+			for(uint32_t j=0;j<nJ;++j)
+				a.col(j) = x.segment(j*nI,nI);
 			return a;
 		}
 
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,-1> compute_b( const MatrixBase<Derived>& x ) const {
 			Matrix<Derived::Scalar,-1,-1> b(nI,nJ);
-			for(uint32_t i=0;i<nI;++i)
-				b.row(i) = x.segment(N+i*nJ,nJ).transpose();
+			for(uint32_t j=0;j<nJ;++j)
+				b.col(j) = x.segment(N+j*nI,nI);
 			return b;
 		}
 		
@@ -106,7 +106,7 @@ namespace DRDSP {
 			auto mat1 = Matrix<Derived::Scalar,-1,-1>::Ones(nI,nJ);
 			auto col1 = Matrix<Derived::Scalar,-1,1>::Ones(nI);
 			auto normB2 = NormB2( a, b, dsa, dta );
-			Matrix<typename Derived::Scalar,-1,-1> alpha = ( col1 * sintheta.transpose() ).cwiseQuotient( mat1 + alphaB * normB2 );
+			Matrix<Derived::Scalar,-1,-1> alpha = ( col1 * sintheta.transpose() ).cwiseQuotient( mat1 + alphaB * normB2 );
 			alpha.row(0).fill(alpha.row(1).mean());
 			return alpha;
 		}
@@ -117,16 +117,17 @@ namespace DRDSP {
 			dsx.setZero(nI,nJ);
 			for(uint32_t i=1;i<nI-1;++i)
 				dsx.row(i) = x.row(i+1) - x.row(i-1);
-			return dsx / Derived::Scalar( 2.0*ds );
+			return dsx * ( 1.0 / (2.0*ds) );
 		}
 		
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,-1> compute_dt( const MatrixBase<Derived>& x ) const {
-			Matrix<Derived::Scalar,-1,-1> dtx;
-			dtx.setZero(nI,nJ);
-			for(uint32_t j=0;j<nJ;++j)
-				dtx.col(j) = x.col(jp1(j)) - x.col(jm1(j));
-			return dtx / Derived::Scalar( 2.0*dth );
+			Matrix<Derived::Scalar,-1,-1> dtx(nI,nJ);
+			dtx.col(0) = x.col(1) - x.col(nJ-1);
+			for(uint32_t j=1;j<nJ-1;++j)
+				dtx.col(j) = x.col(j+1) - x.col(j-1);
+			dtx.col(nJ-1) = x.col(0) - x.col(nJ-2);
+			return dtx * ( 1.0 / (2.0*dth) );
 		}
 
 		template<typename Derived>
@@ -134,17 +135,18 @@ namespace DRDSP {
 			Matrix<Derived::Scalar,-1,-1> ds2x;
 			ds2x.setZero(nI,nJ);
 			for(uint32_t i=1;i<nI-1;++i)
-				ds2x.row(i) = x.row(i+1) - x.row(i) - x.row(i) + x.row(i-1);
-			return ds2x / Derived::Scalar( ds*ds );
+				ds2x.row(i) = x.row(i+1) - 2.0 * x.row(i) + x.row(i-1);
+			return ds2x * ( 1.0 / (ds*ds) );
 		}
 		
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,-1> compute_dt2( const MatrixBase<Derived>& x ) const {
-			Matrix<Derived::Scalar,-1,-1> dt2x;
-			dt2x.setZero(nI,nJ);
-			for(uint32_t j=0;j<nJ;++j)
-				dt2x.col(j) = x.col(jp1(j)) - x.col(j) - x.col(j) + x.col(jm1(j));
-			return dt2x / Derived::Scalar( dth*dth );
+			Matrix<Derived::Scalar,-1,-1> dt2x(nI,nJ);
+			dt2x.col(0) = x.col(1) - 2.0 * x.col(0) + x.col(nJ-1);
+			for(uint32_t j=1;j<nJ-1;++j)
+				dt2x.col(j) = x.col(j+1) - 2.0 * x.col(j) + x.col(j-1);
+			dt2x.col(nJ-1) = x.col(0) - 2.0 * x.col(nJ-1) + x.col(nJ-2);
+			return dt2x * ( 1.0 / (dth*dth) );
 		}
 
 		template<typename Derived>

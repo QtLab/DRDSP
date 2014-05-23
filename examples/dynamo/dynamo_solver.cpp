@@ -22,10 +22,10 @@ void DynamoSolver::Advance( double dt ) {
 		dta = dt / steps;
 	}
 
-	for(uint32_t i=0;i<nI;++i)
-		pZero.row(i) = state.segment(i*nJ,nJ).transpose();
-	for(uint32_t i=0;i<nI;++i)
-		tZero.row(i) = state.segment(N+i*nJ,nJ).transpose();
+	for(uint32_t j=0;j<nJ;++j)
+		pZero.col(j) = state.segment(j*nI,nI);
+	for(uint32_t j=0;j<nJ;++j)
+		tZero.col(j) = state.segment(N+j*nI,nI);
 	
 	npCoff( dta );
 	ntCoff( dta );
@@ -34,10 +34,10 @@ void DynamoSolver::Advance( double dt ) {
 		Step( dta );
 	}
 
-	for(uint32_t i=0;i<nI;++i)
-		state.segment(i*nJ,nJ) = pZero.row(i).transpose();
-	for(uint32_t i=0;i<nI;++i)
-		state.segment(N+i*nJ,nJ) = tZero.row(i).transpose();
+	for(uint32_t j=0;j<nJ;++j)
+		state.segment(j*nI,nI) = pZero.col(j);
+	for(uint32_t j=0;j<nJ;++j)
+		state.segment(N+j*nI,nI) = tZero.col(j);
 }
 
 void DynamoSolver::Step( double dt ) {
@@ -173,8 +173,6 @@ void DynamoSolver::npStep( double dTime ) {
 						+ pCoef4(i,j)*pZero(i+1,j)
 						+ pCoef5(i,j)*pMinus(i,j)
 						+ ptCof5(i,j)*tZero(i,j)*alpha(i,j);
-
-			//diffA(i,j) = (pPlus(i,j) - pMinus(i,j) - alpha(i,j)*tZero(i,j)*2.0*dTime)*under(i,j);
 		}
 	}
 
@@ -184,7 +182,7 @@ void DynamoSolver::npStep( double dTime ) {
 	// boundary condition at centre
 	pPlus.row(0).fill(pPlus.row(1).mean());
 
-	// to calculate the diffusion operator on a
+	// calculate the diffusion operator on a
 	diffA = ( pPlus - pMinus - alpha.cwiseProduct(tZero) * (2.0*dTime) ).cwiseProduct(under);
 }
 
@@ -207,12 +205,13 @@ void DynamoSolver::ntStep( double dTime ) {
 			tPlus(i,j) -= c(i,j)*( Btheta(pZero,i,j)*s(i)*dsp(alpha,i,j) + Beta(pZero,i,j)*dtp(alpha,i,j) ) * under(i,j)*2.0*dTime;
 		}
 	}
+
+	// surface boundary condition 
 	tPlus.row(nI-1).setZero();
 
 	// boundary condition at centre
 	tPlus.row(0).fill(tPlus.row(1).mean());
 }
-
 
 double DynamoSolver::dsp( const MatrixXd& p, uint32_t i, uint32_t j ) const {
 	return ( p(i+1,j) - p(i-1,j) ) / ( 2.0*ds );

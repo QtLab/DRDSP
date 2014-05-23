@@ -7,8 +7,8 @@
 using namespace DRDSP;
 
 struct Brusselator : Model<> {
-	static const int nX = 32;
-	static const int nY = 32;
+	static const int nX = 64;
+	static const int nY = 64;
 	static const int N = nX * nY;
 
 	double A, B, D1, D2, dx, dy;
