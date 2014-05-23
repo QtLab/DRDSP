@@ -146,30 +146,25 @@ To use a custom solver, use `DataGenerator<ExampleFamily,ExampleSolver>`.
 Once data has been obtained, the secants are computed using the `Secants` class.
 
 ```cpp
-// Compute secants from the data set using 4 threads.
-vector<SecantsPreComputed> secants = ComputeSecants( data, 4 );
+// Compute secants from the data set with a 10 degree tolerance using 4 threads.
+vector<Secants> secants = ComputeSecants( data, 10.0, 4 );
 ```
 
-Secants can be culled using the `CullSecants` function. Culling reduces the total number of secants in order to lower the computational cost of finding a projection. This is an optional, but recommended, step.
-
-```cpp
-// Cull secants with 10 degree tolerance using 4 threads.
-vector<SecantsPreComputed> newSecants = CullSecants( secants, 10.0, 4 );
-```
+The tolerance is for secant culling. Culling reduces the total number of secants in order to lower the computational cost of finding a projection.
 
 The `ProjSecant` class determines a projection from a set of secants. The projection is encoded in an orthonormal matrix, `ProjSecant::W`.
 
 ```cpp
 // Find a projection
 ProjSecant projSecant(2);           // Set the dimension of the projection
-projSecant.ComputeInitial( data )   // Compute initial condition
-          .Find( newSecants );      // Find a projection using the secants
+projSecant.ComputeInitial( data )   // Compute initial condition from the data
+          .Find( secants );      // Find a projection using the secants
 ```
 
 
 ### Computing Reduced Data
 
-The `ReducedDataSystem` class takes the original family, the data sets, and an orthonormal matrix and compute the data required to find the reduced model.
+The `ReducedDataSystem` class takes the original family, the data sets, and an orthonormal matrix and computes the data required to find the reduced family.
 
 ```cpp
 ReducedDataSystem reducedData;
@@ -178,7 +173,7 @@ ReducedDataSystem reducedData;
 reducedData.ComputeData( exampleFamily, data, projSecant.W, 4 );
 ```
 
-### Find Reduced Model
+### Find Reduced Family
 
 The `RBFFamilyProducer` class takes a `ReducedDataSystem` and produces an `RBFFamily`.
 
@@ -207,11 +202,12 @@ Examples
 
 Examples are provided in `examples/`.
 
-* `examples/rossler/` -- The Rossler system.
-* `examples/pendulum/` -- A double pendulum with friction and external forcing.
-* `examples/brusselator/` -- The Brusselator PDE on a 2D physical space with a 64x64 discretization.
+* `examples/rossler/` -- The Rossler system. 3-dimensional state space.
+* `examples/pendulum/` -- A double pendulum with friction and external forcing. 5-dimensional non-Euclidean state space.
+* `examples/brusselator/` -- The Brusselator PDE on a 2D physical space.
 * `examples/kuramoto/` -- The Kuramoto model. Coupled oscillators with external forcing.
-
+* `examples/goodfellow/` -- A network of nonlinear oscillators.
+* `examples/dynamo/` -- A very complicated discretized PDE, with a 13120-dimensional state space.
 
 Extra Features
 --------------

@@ -7,15 +7,12 @@
 using namespace DRDSP;
 
 struct Brusselator : Model<> {
-	static const int nX = 32;
-	static const int nY = 32;
-	static const int N = nX * nY;
-
+	int nX, nY, N;
 	double A, B, D1, D2, dx, dy;
 
-	Brusselator() : Brusselator(1.0) {}
+	Brusselator() : Brusselator(32,32) {}
 
-	explicit Brusselator( double B ) : Model<>(2*N), A(1), B(B), D1(1), D2(1), dx(1), dy(1) {}
+	Brusselator( int nX, int nY ) : Model<>(2*nX*nY), N(nX*nY), nX(nX), nY(nY), A(1), B(1), D1(1), D2(1), dx(1), dy(1) {}
 
 	template<typename Derived>
 	Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
@@ -79,9 +76,13 @@ protected:
 };
 
 struct BrusselatorFamily : Family<Brusselator> {
-	BrusselatorFamily() : Family<Brusselator>(2*Brusselator::N,1) {}
+	int nX, nY;
+	BrusselatorFamily() : BrusselatorFamily(32,32) {}
+	BrusselatorFamily( int nX, int nY ) : Family<Brusselator>(2*nX*nY,1), nX(nX), nY(nY) {}
 	Brusselator operator()( const VectorXd& parameter ) const {
-		return Brusselator( parameter[0] );
+		Brusselator brusselator(nX,nY);
+		brusselator.B = parameter[0];
+		return brusselator;
 	}
 };
 

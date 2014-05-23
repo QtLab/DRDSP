@@ -41,7 +41,7 @@ int main( int argc, char** argv ) {
 	data.WriteDataSetsBinary("output/orig",".bin");
 
 	cout << "Computing secants..." << endl;
-	vector<Secants> secants = ComputeSecants( data, options.numThreads );
+	vector<Secants> secants = ComputeSecants( data, 10.0, options.numThreads );
 
 	cout << "Finding projection..." << endl;
 	ProjSecant projSecant( options.targetDimension );
