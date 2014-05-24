@@ -119,29 +119,57 @@ namespace DRDSP {
 
 	protected:
 
+		template<typename Family>
+		MatrixXd ComputeRho( Family&& family, const ReducedDataSystem& data, const vector<VectorXd>& parameters ) {
+			size_t cols = 0;
+			for(uint32_t i=0;i<data.numParameters;++i) {
+				cols += data.reducedData[i].count;
+			}
+			uint32_t dim = data.reducedData[0].dimension;
+
+			MatrixXd A(dim,dim*cols);
+			MatrixXd B(dim,dim*cols);
+			
+			typename Family::Model model;
+			size_t k = 0;
+			for(uint32_t i=0;i<data.numParameters;++i) {
+				model = family(parameters[i]);
+				const ReducedData& r = data.reducedData[i];
+				for(size_t j=0;j<r.count;++j) {
+					A.block(0,k*dim,dim,dim) = r.vectors[j] * r.vectors[j].transpose();
+					B.block(0,k*dim,dim,dim) = r.vectors[j] * model(r.points[j]).transpose();
+					++k;
+				}
+			}
+
+			FullPivLU<MatrixXd> lu(A);
+			return lu.solve(B).transpose();
+		}
+
 		void ComputeMatrices( const RBFModel<F>& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
 
 			MatrixXd y1, y2, A1, A2, Lambda, X, Y;
 			uint32_t m = data.dimension + model.numRBFs;
-			VectorXd temp;
+			uint32_t dim = data.dimension;
 
 			A1.setZero(m,data.count);
-			y1.setZero(data.dimension,data.count);
-			y2.setZero(data.dimension,data.count*data.dimension);
-			A2.setIdentity(m,data.count*data.dimension);
+			y1.setZero(dim,data.count);
+			y2.setZero(dim,data.count*dim);
+			A2.setIdentity(m,data.count*dim);
 
 			for(uint32_t j=0;j<data.count;++j) {
-				for(uint32_t i=0;i<data.dimension;++i) {
-					A1(i,j) = data.points[j](i);
-					y1(i,j) = data.vectors[j](i);
-					for(uint32_t k=0;k<data.dimension;++k)
-						y2(i,data.dimension*j+k) = data.derivatives[j](i,k);
-				}
+				A1.block(0,j,dim,1) = data.points[j];
+			}
+			for(uint32_t j=0;j<data.count;++j) {
+				y1.col(j) = data.vectors[j];
+			}
+			for(uint32_t j=0;j<data.count;++j) {
+				y2.block(0,j*dim,dim,dim) = data.derivatives[j];
+			}
+			for(uint32_t j=0;j<data.count;++j) {
 				for(uint32_t i=0;i<model.numRBFs;++i) {
-					A1(i+data.dimension,j) = model.rbfs[i](data.points[j]);
-					temp = model.rbfs[i].Derivative(data.points[j]);
-					for(uint32_t k=0;k<data.dimension;++k)
-						A2(i+data.dimension,data.dimension*j+k) = temp(k);
+					A1(dim+i,j) = model.rbfs[i](data.points[j]);
+					A2.block(dim+i,j*dim,1,dim) = model.rbfs[i].Derivative(data.points[j]).transpose();
 				}
 			}
 

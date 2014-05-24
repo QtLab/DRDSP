@@ -14,11 +14,15 @@ The steps involved in the method are:
 
 1. Generate some data from the attractors.
 2. Compute the secants from the data sets.
-3. Cull the secants (optional optimization).
-4. Use the secants to find a projection.
-5. Use the projection, the data, and the original model to compute some reduced data.
-6. Use the reduced data to obtain the reduced model.
+3. Use the secants to find a projection.
+4. Use the projection, the data, and the original model to compute some reduced data.
+5. Use the reduced data to obtain the reduced model.
 
+The method is compatible with any autonomous smooth deterministic dynamical system corresponding to the flow of a vector field.
+
+Non-Euclidean state spaces are supported (e.g. systems with angular state variables).
+
+Non-autonomous systems with periodic time-dependence are supported by encapsulating the explicit time-dependence as additional state (resulting in an autonomous system).
 
 Usage
 -----
@@ -158,7 +162,7 @@ The `ProjSecant` class determines a projection from a set of secants. The projec
 // Find a projection
 ProjSecant projSecant(2);           // Set the dimension of the projection
 projSecant.ComputeInitial( data )   // Compute initial condition from the data
-          .Find( secants );      // Find a projection using the secants
+          .Find( secants );         // Find a projection using the secants
 ```
 
 
