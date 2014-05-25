@@ -69,9 +69,10 @@ int main( int argc, char** argv ) {
 	cout << "Computing Reduced Family..." << endl;
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
-	                                          data.parameterDimension,
 	                                          data.parameters,
-	                                          options.numIterations );
+											  data.parameterDimension,
+	                                          options.numIterations,
+											  options.numThreads );
 
 	cout << "Total Cost = "
 		 << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )

@@ -182,11 +182,12 @@ reducedData.ComputeData( exampleFamily, data, projSecant.W, 4 );
 The `RBFFamilyProducer` class takes a `ReducedDataSystem` and produces an `RBFFamily`.
 
 ```cpp
-RBFFamilyProducer<RadialType> producer( 30 );       // the number of rbfs to use
-auto reducedModel = producer.BruteForce( reducedData,
-                                         data.parameterDimension,
-										 data.parameters,
-										 1000 );    // the number of iterations to perform
+RBFFamilyProducer<RadialType> producer( 30 );   // the number of rbfs to use
+RBFFamily reducedFamily = producer.BruteForce( reducedData,
+                                               data.parameters,
+											   data.parameterDimension,
+										       1000,   // the number of iterations to perform
+											   4 );    // the number of threads
 ```
 
 The `RadialType` is a radial basis function type, which can be one of the following:

@@ -88,7 +88,7 @@ namespace DRDSP {
 			}
 		}
 
-		RBFFamily<F> BruteForce( const ReducedDataSystem& data, uint32_t parameterDimension, const vector<VectorXd>& parameters, uint32_t numIterations ) const {
+		RBFFamily<F> BruteForce( const ReducedDataSystem& data, const vector<VectorXd>& parameters, uint32_t parameterDimension, uint32_t numIterations ) const {
 			double Sft = 0.0, Sf = -1.0;
 
 			RBFFamily<F> reduced( data.reducedData[0].dimension, parameterDimension, numRBFs );
@@ -115,6 +115,45 @@ namespace DRDSP {
 			histogramGenerator.Generate(costs).WriteCSV("output/costs.csv");
 
 			return best;
+		}
+
+		RBFFamily<F> BruteForce( const ReducedDataSystem& data, const vector<VectorXd>& parameters, uint32_t parameterDimension, uint32_t numIterations, uint32_t numThreads ) const {
+			vector<RBFFamily<F>> best(numThreads);
+			AABB box = data.ComputeBoundingBox();
+			box.Scale(boxScale);
+			
+			vector<future<void>> futures(numThreads);
+			uint32_t iterationsPerThread = numIterations / numThreads;
+			for(uint32_t i=0;i<numThreads;++i) {
+				futures[i] = async( launch::async,
+					[=]( RBFFamily<F>& out, const ReducedDataSystem& dataSys, const AABB& aabb, const vector<VectorXd>& params ){
+						out = BruteForce( dataSys,
+										  aabb,
+										  params,
+										  parameterDimension,
+										  mt19937::default_seed + i,
+										  iterationsPerThread );
+					}, ref(best[i]), cref(data), cref(box), cref(parameters)
+				);
+			}
+
+			vector<double> costs(numThreads);
+
+			for(uint32_t i=0;i<numThreads;++i) {
+				futures[i].wait();
+				costs[i] = ComputeTotalCost( best[i], data, parameters );
+			}
+
+			double bestCost = costs[0];
+			uint32_t bestIndex = 0;
+			for(uint32_t i=1;i<numThreads;++i) {
+				if( costs[i] < bestCost ) {
+					bestCost = costs[i];
+					bestIndex = i;
+				}
+			}
+
+			return best[bestIndex];
 		}
 
 	protected:
@@ -148,7 +187,7 @@ namespace DRDSP {
 
 		void ComputeMatrices( const RBFModel<F>& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
 
-			MatrixXd y1, y2, A1, A2, Lambda, X, Y;
+			MatrixXd y1, y2, A1, A2;
 			uint32_t m = data.dimension + model.numRBFs;
 			uint32_t dim = data.dimension;
 
@@ -173,15 +212,35 @@ namespace DRDSP {
 				}
 			}
 
-			AffineParameterMap Q(data.dimension,numRBFs,(uint32_t)parameter.size());
-			Lambda = Q.GetLambda(parameter);
+			AffineParameterMap Q(dim,numRBFs,(uint32_t)parameter.size());
+			auto Lambda = Q.GetLambda(parameter);
 
-			Y = A1 * y1.transpose() * (fitWeight[0]/data.scales[0]) + A2 * y2.transpose() * (fitWeight[1]/data.scales[1]);
-			X = A1 * A1.transpose() * (fitWeight[0]/data.scales[0]) + A2 * A2.transpose() * (fitWeight[1]/data.scales[1]);
+			auto Y = A1 * y1.transpose() * (fitWeight[0]/data.scales[0]) + A2 * y2.transpose() * (fitWeight[1]/data.scales[1]);
+			auto X = A1 * A1.transpose() * (fitWeight[0]/data.scales[0]) + A2 * A2.transpose() * (fitWeight[1]/data.scales[1]);
 
 			B = Lambda * Y;
 			A = Lambda * X * Lambda.transpose();
 	
+		}
+
+		RBFFamily<F> BruteForce( const ReducedDataSystem& data, const AABB& box, const vector<VectorXd>& parameters, uint32_t parameterDimension, uint32_t seed, uint32_t numIterations ) const {
+			double Sft = 0.0, Sf = -1.0;
+
+			RBFFamily<F> reduced( data.reducedData[0].dimension, parameterDimension, numRBFs );
+			RBFFamily<F> best;
+			reduced.model.mt.seed(seed);
+
+			for(uint32_t i=0;i<numIterations;++i) {
+				reduced.model.SetCentresRandom( box );
+				Fit(reduced,data,parameterDimension,parameters);
+				Sft = ComputeTotalCost(reduced,data,parameters);
+				if( Sft < Sf || i==0 ) {
+					Sf = Sft;
+					best = reduced;
+					cout << i << " \t" << Sf << endl;
+				}
+			}
+			return best;
 		}
 
 	};

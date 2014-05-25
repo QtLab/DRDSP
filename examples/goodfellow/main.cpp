@@ -10,7 +10,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(5), numRBFs(50), numIterations(500), numThreads(3) {}
+	Options() : targetDimension(3), numRBFs(50), numIterations(1500), numThreads(3) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -28,7 +28,7 @@ int main( int argc, char** argv ) {
 
 	GoodfellowFamily goodfellow(100);
 
-	auto parameters = ParameterList( 4.9, 5.5, 21 );
+	auto parameters = ParameterList( 5.5, 6.0, 6 );
 	
 	cout << "Generating data..." << endl;
 	DataGenerator<GoodfellowFamily> dataGenerator( goodfellow );
@@ -61,16 +61,16 @@ int main( int argc, char** argv ) {
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( goodfellow, data, projSecant.W, options.numThreads )
 	           .WritePointsCSV("output/p","-points.csv")
-	           .WriteVectorsCSV("output/p","-vectors.csv")
-	           .WriteDerivativesCSV("output/p","-derivatives.csv");
+	           .WriteVectorsCSV("output/p","-vectors.csv");
 
 	cout << "Computing Reduced Family..." << endl;
 	
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
-											  data.parameterDimension,
 											  data.parameters,
-											  options.numIterations );
+											  data.parameterDimension,
+											  options.numIterations,
+											  options.numThreads );
 	
 	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	

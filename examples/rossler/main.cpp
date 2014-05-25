@@ -144,9 +144,10 @@ void ComputeReduced( const Options& options ) {
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	producer.boxScale = 1.6;
 	auto reducedFamily = producer.BruteForce( reducedData,
-											  data.parameterDimension,
 											  data.parameters,
-											  options.numIterations );
+											  data.parameterDimension,
+											  options.numIterations,
+											  options.numThreads );
 	
 	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	
