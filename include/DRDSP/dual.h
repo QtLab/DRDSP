@@ -1,7 +1,10 @@
 #ifndef INCLUDED_DUAL
 #define INCLUDED_DUAL
-#include <cmath>
-//#include <complex>
+/**
+ * An implementation of dual numbers that has the same structure as std::complex.
+ *
+ */
+#include "geometry/trig.h"
 
 namespace DRDSP {
 
@@ -9,7 +12,7 @@ namespace DRDSP {
 	struct dual {
 		T x, y;
 
-		dual( T real = T(), T dual = T() ) : x(real), y(dual) {}
+		dual( T re = T(), T du = T() ) : x(re), y(du) {}
 
 		dual<T> operator-() const {
 			return dual<T>(-x,-y);
@@ -110,6 +113,15 @@ namespace DRDSP {
 		T dual_part() const {
 			return y;
 		}
+
+		void real( T re ) {
+			x = re;
+		}
+
+		void dual_part( T du ) {
+			y = du;
+		}
+
 	};
 
 	template<typename T>
@@ -140,11 +152,6 @@ namespace DRDSP {
 	template<typename T>
 	T dual_part( const dual<T>& d ) {
 		return d.dual_part();
-	}
-
-	template<typename T>
-	dual<T> conj( const dual<T>& d ) {
-		return dual<T>(d.x,-d.y);
 	}
 
 	template<typename T>

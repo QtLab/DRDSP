@@ -20,21 +20,9 @@ namespace DRDSP {
 
 		RBFFamilyProducer() : RBFFamilyProducer(30) {}
 
-		RBFFamilyProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {
+		explicit RBFFamilyProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {
 			fitWeight[0] = 0.5;
 			fitWeight[1] = 0.5;
-		}
-
-		RBFFamily<F> ComputeRBFFamily( const ReducedDataSystem& data, uint32_t parameterDimension, const vector<VectorXd>& parameters ) const {
-
-			uint32_t dimension = data.reducedData[0].dimension;
-
-			RBFFamily<F> reduced( dimension, parameterDimension, numRBFs );
-			reduced.model.SetCentresRandom( data.ComputeBoundingBox() );
-
-			Fit(reduced,data,parameterDimension,parameters);
-	
-			return reduced;
 		}
 
 		double ComputeTotalCost( const RBFFamily<F>& family, const ReducedDataSystem& data, const vector<VectorXd>& parameters ) const {
@@ -96,9 +84,10 @@ namespace DRDSP {
 			AABB box = data.ComputeBoundingBox();
 			box.Scale(boxScale);
 			vector<double> costs(numIterations);
+			mt19937 mt;
 
 			for(uint32_t i=0;i<numIterations;++i) {
-				reduced.model.SetCentresRandom( box );
+				SetCentresRandom( reduced.model, box, mt );
 				Fit(reduced,data,parameterDimension,parameters);
 				Sft = ComputeTotalCost(reduced,data,parameters);
 				costs[i] = Sft;
@@ -121,7 +110,7 @@ namespace DRDSP {
 			vector<RBFFamily<F>> best(numThreads);
 			AABB box = data.ComputeBoundingBox();
 			box.Scale(boxScale);
-			
+			uint32_t k = data.reducedData[0].dimension * numRBFs;
 			vector<future<void>> futures(numThreads);
 			uint32_t iterationsPerThread = numIterations / numThreads;
 			for(uint32_t i=0;i<numThreads;++i) {
@@ -131,7 +120,7 @@ namespace DRDSP {
 										  aabb,
 										  params,
 										  parameterDimension,
-										  mt19937::default_seed + i,
+										  mt19937::default_seed + i * k,
 										  iterationsPerThread );
 					}, ref(best[i]), cref(data), cref(box), cref(parameters)
 				);
@@ -220,7 +209,6 @@ namespace DRDSP {
 
 			B = Lambda * Y;
 			A = Lambda * X * Lambda.transpose();
-	
 		}
 
 		RBFFamily<F> BruteForce( const ReducedDataSystem& data, const AABB& box, const vector<VectorXd>& parameters, uint32_t parameterDimension, uint32_t seed, uint32_t numIterations ) const {
@@ -228,10 +216,10 @@ namespace DRDSP {
 
 			RBFFamily<F> reduced( data.reducedData[0].dimension, parameterDimension, numRBFs );
 			RBFFamily<F> best;
-			reduced.model.mt.seed(seed);
+			mt19937 mt(seed);
 
 			for(uint32_t i=0;i<numIterations;++i) {
-				reduced.model.SetCentresRandom( box );
+				SetCentresRandom( reduced.model, box, mt );
 				Fit(reduced,data,parameterDimension,parameters);
 				Sft = ComputeTotalCost(reduced,data,parameters);
 				if( Sft < Sf || i==0 ) {
@@ -241,6 +229,19 @@ namespace DRDSP {
 				}
 			}
 			return best;
+		}
+
+	protected:
+
+		template<typename F>
+		void SetCentresRandom( RBFModel<F>& model, const AABB& box, mt19937& mt ) const {
+			uniform_real_distribution<double> dist;
+			VectorXd diff = box.bMax - box.bMin;
+			for(uint32_t i=0;i<model.numRBFs;++i) {
+				for(uint32_t j=0;j<model.dimension;++j) {
+					model.rbfs[i].centre(j) = box.bMin(j) + diff(j) * dist(mt);
+				}
+			}
 		}
 
 	};

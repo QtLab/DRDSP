@@ -159,7 +159,6 @@ The tolerance is for secant culling. Culling reduces the total number of secants
 The `ProjSecant` class determines a projection from a set of secants. The projection is encoded in an orthonormal matrix, `ProjSecant::W`.
 
 ```cpp
-// Find a projection
 ProjSecant projSecant(2);           // Set the dimension of the projection
 projSecant.ComputeInitial( data )   // Compute initial condition from the data
           .Find( secants );         // Find a projection using the secants

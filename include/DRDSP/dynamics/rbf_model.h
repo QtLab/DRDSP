@@ -16,8 +16,6 @@ namespace DRDSP {
 		vector<VectorXd> weights;
 		vector<RadialFunction<F>> rbfs;
 		uint32_t numRBFs;
-		mt19937 mt;
-		uniform_real_distribution<double> dist;
 
 		RBFModel() : numRBFs(0) {}
 		
@@ -46,14 +44,6 @@ namespace DRDSP {
 			for(uint32_t i=0;i<numRBFs;++i)
 				sum += weights[i] * rbfs[i].Derivative(x).transpose();
 			return sum;
-		}
-
-		void SetCentresRandom( const AABB& box ) {
-			VectorXd diff = box.bMax - box.bMin;
-			for(uint32_t i=0;i<numRBFs;++i)
-				for(uint32_t j=0;j<dimension;++j) {
-					rbfs[i].centre(j) = box.bMin(j) + diff(j) * dist(mt);
-				}
 		}
 
 		void LoadCentresText( const char* filename ) {

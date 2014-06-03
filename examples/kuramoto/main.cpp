@@ -84,7 +84,9 @@ int main( int argc, char** argv ) {
 											  options.numIterations,
 											  options.numThreads );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
+	cout << "Total Cost = "
+	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
+	     << endl;
 	
 	reducedFamily.WriteCSV("output/reduced.csv");
 	
