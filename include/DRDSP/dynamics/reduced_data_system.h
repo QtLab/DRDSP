@@ -13,7 +13,7 @@ namespace DRDSP {
 		uint32_t numParameters;
 
 		ReducedDataSystem();
-		ReducedDataSystem( uint32_t N );
+		explicit ReducedDataSystem( uint32_t N );
 		void Create( uint32_t N );
 
 		template<typename Family>
@@ -84,6 +84,7 @@ namespace DRDSP {
 		const ReducedDataSystem& WritePointsCSV( const char* filePrefix, const char* fileSuffix ) const;
 		const ReducedDataSystem& WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;
 		const ReducedDataSystem& WriteDerivativesCSV( const char* filePrefix, const char* fileSuffix ) const;
+		size_t TotalPoints() const;
 	};
 
 	void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata );

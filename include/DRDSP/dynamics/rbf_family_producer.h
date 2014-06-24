@@ -1,12 +1,10 @@
 #ifndef INCLUDED_DYNAMICS_RBF_FAMILY_PRODUCER
 #define INCLUDED_DYNAMICS_RBF_FAMILY_PRODUCER
-#include "model.h"
+#include "family_producer.h"
 #include "rbf_family.h"
-#include "reduced_data_system.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>
-#include <Eigen/LU>
 #include "affineParameterMap.h"
 #include "../data/histogram.h"
 
@@ -14,36 +12,13 @@ using namespace std;
 
 namespace DRDSP {
 	template<typename F = ThinPlateSpline>
-	struct RBFFamilyProducer {
+	struct RBFFamilyProducer : FamilyProducer {
 		double fitWeight[2], boxScale;
 		uint32_t numRBFs;
 
 		RBFFamilyProducer() : RBFFamilyProducer(30) {}
 
-		explicit RBFFamilyProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {
-			fitWeight[0] = 0.5;
-			fitWeight[1] = 0.5;
-		}
-
-		double ComputeTotalCost( const RBFFamily<F>& family, const ReducedDataSystem& data, const vector<VectorXd>& parameters ) const {
-			double T = 0.0;
-			for(uint32_t j=0;j<data.numParameters;++j) {
-				RBFModel<F> modelRBF = family( parameters[j] );
-				double S1 = 0.0;
-				for(uint32_t i=0;i<data.reducedData[j].count;++i) {
-					S1 += ( modelRBF(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
-				}
-				S1 /= data.reducedData[j].count;
-				double S2 = 0.0;
-				for(uint32_t i=0;i<data.reducedData[j].count;++i) {
-					S2 += ( modelRBF.Partials(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
-				}
-				
-				S2 /= data.reducedData[j].count;
-				T += (fitWeight[0]/data.reducedData[j].scales[0]) * S1 + (fitWeight[1]/data.reducedData[j].scales[1]) * S2;
-			}
-			return T / data.numParameters;
-		}
+		explicit RBFFamilyProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {}
 
 		void Fit( RBFFamily<F>& reduced, const ReducedDataSystem& data, uint32_t parameterDimension, const vector<VectorXd>& parameters ) const {
 			MatrixXd A, B, Atemp, Btemp, z;
@@ -147,33 +122,6 @@ namespace DRDSP {
 
 	protected:
 
-		template<typename Family>
-		MatrixXd ComputeRho( Family&& family, const ReducedDataSystem& data, const vector<VectorXd>& parameters ) {
-			size_t cols = 0;
-			for(uint32_t i=0;i<data.numParameters;++i) {
-				cols += data.reducedData[i].count;
-			}
-			uint32_t dim = data.reducedData[0].dimension;
-
-			MatrixXd A(dim,dim*cols);
-			MatrixXd B(dim,dim*cols);
-			
-			typename Family::Model model;
-			size_t k = 0;
-			for(uint32_t i=0;i<data.numParameters;++i) {
-				model = family(parameters[i]);
-				const ReducedData& r = data.reducedData[i];
-				for(size_t j=0;j<r.count;++j) {
-					A.block(0,k*dim,dim,dim) = r.vectors[j] * r.vectors[j].transpose();
-					B.block(0,k*dim,dim,dim) = r.vectors[j] * model(r.points[j]).transpose();
-					++k;
-				}
-			}
-
-			FullPivLU<MatrixXd> lu(A);
-			return lu.solve(B).transpose();
-		}
-
 		void ComputeMatrices( const RBFModel<F>& model, const ReducedData& data, const VectorXd& parameter, MatrixXd& A, MatrixXd& B ) const {
 
 			MatrixXd y1, y2, A1, A2;
@@ -230,8 +178,6 @@ namespace DRDSP {
 			}
 			return best;
 		}
-
-	protected:
 
 		template<typename F>
 		void SetCentresRandom( RBFModel<F>& model, const AABB& box, mt19937& mt ) const {

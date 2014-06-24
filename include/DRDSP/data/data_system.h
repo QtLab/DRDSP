@@ -35,7 +35,9 @@ namespace DRDSP {
 
 		//! Apply the given projection to this data system
 		DataSystem ProjectData( const MatrixXd& W ) const;
-	
+
+		//! Total number of data points in the system
+		size_t TotalPoints() const;
 	};
 
 	template<typename E>

@@ -200,5 +200,11 @@
     <ClInclude Include="..\..\..\include\DRDSP\geometry\angle.h">
       <Filter>Header Files\geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\family_producer.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\eigen_pinv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

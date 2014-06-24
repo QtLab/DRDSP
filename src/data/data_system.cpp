@@ -43,7 +43,7 @@ bool DataSystem::Load( const char* filename, uint32_t maxPoints ) {
 	parameters.resize( numParameters );
 
 	string setPath;
-	for(uint16_t i=0;i<numParameters;++i) {
+	for(uint32_t i=0;i<numParameters;++i) {
 		in >> setPath;
 		if(binary) LoadSetBinary(setPath.c_str(),i,maxPoints);
 		else LoadSetText(setPath.c_str(),i,maxPoints);
@@ -100,7 +100,7 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoin
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 
 	parameters[i].setZero( parameterDimension );
-	for(uint16_t j=0;j<parameterDimension;++j) {
+	for(uint32_t j=0;j<parameterDimension;++j) {
 		in >> parameters[i](j);
 	}
 
@@ -125,7 +125,7 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoin
 
 void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
-	for(uint16_t i=0;i<numParameters;++i) {
+	for(uint32_t i=0;i<numParameters;++i) {
 		name.str("");
 		name << filePrefix << parameters[i](0) << fileSuffix;
 		dataSets[i].WriteCSV(name.str().c_str());
@@ -134,7 +134,7 @@ void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffi
 
 void DataSystem::WriteDataSetsBinary( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
-	for(uint16_t i=0;i<numParameters;++i) {
+	for(uint32_t i=0;i<numParameters;++i) {
 		name.str("");
 		name << filePrefix << parameters[i](0) << fileSuffix;
 		dataSets[i].WriteBinary(name.str().c_str());
@@ -146,9 +146,17 @@ DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
 
 	projectedData.parameters = parameters;
 
-	for(uint16_t i=0;i<numParameters;++i) {
+	for(uint32_t i=0;i<numParameters;++i) {
 		projectedData.dataSets[i] = dataSets[i].ProjectData( W );
 	}
 
 	return projectedData;
+}
+
+size_t DataSystem::TotalPoints() const {
+	size_t N = 0;
+	for(uint32_t i=0;i<numParameters;++i) {
+		N += dataSets[i].points.size();
+	}
+	return N;
 }

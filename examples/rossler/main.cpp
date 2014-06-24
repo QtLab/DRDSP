@@ -34,8 +34,8 @@ int main( int argc, char** argv ) {
 	Options options(argc,argv);
 
 	//ComputeReduced( options );
-	SimulateReduced( options );
-	//OriginalFloquet( options );
+	//SimulateReduced( options );
+	OriginalFloquet( options );
 	//ReducedFloquet( options );
 
 	cout << "Press any key to continue . . . "; cin.get();
@@ -45,32 +45,38 @@ void ReducedFloquet( const Options& options ) {
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
 
-	vector<double> periods = {
-		6.0, 6.0, 6.0, 6.01, 6.02, 6.03,
-		12.05, 12.05, 12.06, 12.07, 12.08, 12.08, 12.09, 12.10, 12.10, 12.11,
-		24.23, 24.24, 24.25, 48.51,
-		100.0
-	};
-
-	RBFFamily<RadialType> reducedModel;
-	reducedModel.ReadText("reduced.txt");
+	RBFFamily<RadialType> reducedFamily;
+	reducedFamily.ReadText("reduced.txt");
 
 	cout << "Generating data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> dataGenerator( reducedModel );
+	DataGenerator<RBFFamily<RadialType>> dataGenerator( reducedFamily );
 	dataGenerator.initial = Vector3d(7.0,0.0,0.5);
 	dataGenerator.tStart = 1000;
 	dataGenerator.tInterval = 100;
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 10000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
+
+	vector<double> periods(parameters.size());
+	for(size_t i=0;i<parameters.size();++i) {
+		periods[i] = DetectPeriod(
+			data.dataSets[i].points,
+			VectorXd(reducedFamily(parameters[i])(data.dataSets[i][0])),
+			dataGenerator.tInterval / (dataGenerator.print-1),
+			0.001
+		);
+		cout << periods[i] << endl;
+	}
+
+	data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;
 	ofstream out("output/floquet.csv");
 	for(size_t i=0;i<parameters.size();++i) {
 		double dt = periods[i] / (dataGenerator.print-1);
-		auto floquet = ComputeFloquetMultipliers( reducedModel(parameters[i]), data.dataSets[i].points, dt );
+		auto floquet = ComputeFloquetMultipliers( reducedFamily(parameters[i]), data.dataSets[i].points, dt );
 		out << parameters[i] << ",";
 		for(int64_t j=0;j<floquet.size();++j)
 			out << floquet[j].real() << "," << floquet[j].imag() << ",";
@@ -78,19 +84,11 @@ void ReducedFloquet( const Options& options ) {
 	}
 }
 
-
 void OriginalFloquet( const Options& options ) {
 
 	RosslerFamily rossler;
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
-
-	vector<double> periods = {
-		6.0, 6.0, 6.0, 6.01, 6.02, 6.03,
-		12.05, 12.05, 12.06, 12.07, 12.08, 12.08, 12.09, 12.10, 12.10, 12.11,
-		24.23, 24.24, 24.25, 48.51,
-		100.0
-	};
 
 	cout << "Generating data..." << endl;
 	DataGenerator<RosslerFamily> dataGenerator;
@@ -100,7 +98,20 @@ void OriginalFloquet( const Options& options ) {
 	dataGenerator.dtMax = 0.001;
 	dataGenerator.print = 10000;
 	
-	DataSystem data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
+
+	vector<double> periods(parameters.size());
+	for(size_t i=0;i<parameters.size();++i) {
+		periods[i] = DetectPeriod(
+			data.dataSets[i].points,
+			VectorXd(rossler(parameters[i])(data.dataSets[i][0])),
+			dataGenerator.tInterval / (dataGenerator.print-1),
+			0.001
+		);
+		cout << periods[i] << endl;
+	}
+
+	data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;

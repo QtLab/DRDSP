@@ -58,6 +58,14 @@ const ReducedDataSystem& ReducedDataSystem::WriteDerivativesCSV( const char* fil
 	return *this;
 }
 
+size_t ReducedDataSystem::TotalPoints() const {
+	size_t N = 0;
+	for(uint32_t i=0;i<numParameters;++i) {
+		N += reducedData[i].count;
+	}
+	return N;
+}
+
 void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
 	ofstream out("output/comparison.csv");
