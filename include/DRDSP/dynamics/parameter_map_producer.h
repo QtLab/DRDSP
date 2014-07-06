@@ -2,7 +2,6 @@
 #define INCLUDED_DYNAMICS_PARAMETER_MAP_PRODUCER
 #include "reduced_data_system.h"
 #include "../eigen_affine.h"
-#include "rbf_family.h"
 #include "../misc.h"
 #include <cmath>
 

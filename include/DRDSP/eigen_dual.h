@@ -63,7 +63,7 @@ namespace Eigen {
 				return padd(c, pmul(x,y));
 			}
 			EIGEN_STRONG_INLINE Scalar pmul(const Scalar& x, const T& y) const {
-				return pmul(x,y);
+				return x*y;
 			}
 		};
 

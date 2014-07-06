@@ -1,21 +1,23 @@
 #ifndef INCLUDED_DYNAMICS_RADIAL_BASIS
 #define INCLUDED_DYNAMICS_RADIAL_BASIS
 #include "../types.h"
-#include <DRDSP/auto_diff.h>
+#include "../auto_diff.h"
 #include <cmath>
 
-using std::acos;
-
 namespace DRDSP {
+	
+	using std::sqrt;
+	using std::exp;
+	using std::log;
 
 	struct ThinPlateSpline {
 		template<typename T>
 		T operator()( T r ) const {
-			return r*r*std::log(r);
+			return r*r*log(r);
 		}
 		template<typename T>
 		T Derivative( T r ) const {
-			return r * ( 1.0 + 2.0 * std::log(r) );
+			return r * ( T(1) + 2.0 * log(r) );
 		}
 	};
 
@@ -26,7 +28,7 @@ namespace DRDSP {
 		}
 		template<typename T>
 		T Derivative( T r ) const {
-			return 3.0*r*r;
+			return T(3)*r*r;
 		}
 	};
 
@@ -40,13 +42,13 @@ namespace DRDSP {
 		template<typename T>
 		T operator()( T r ) const {
 			T x = scale * r;
-			return std::exp(-x*x);
+			return exp(-x*x);
 		}
 
 		template<typename T>
 		T Derivative( T r ) const {
 			T x = scale * r;
-			return -2.0 * scale * x * std::exp(-x*x);
+			return -T(2) * scale * x * exp(-x*x);
 		}
 	};
 
@@ -60,13 +62,13 @@ namespace DRDSP {
 		template<typename T>
 		T operator()( T r ) const {
 			T x = scale * r;
-			return std::sqrt( 1.0 + x*x );
+			return sqrt( T(1) + x*x );
 		}
 
 		template<typename T>
 		T Derivative( T r ) const {
 			T x = scale * r;
-			return ( scale * x ) / std::sqrt( 1.0 + x*x );
+			return ( scale * x ) / sqrt( T(1) + x*x );
 		}
 	};
 
@@ -80,13 +82,13 @@ namespace DRDSP {
 		template<typename T>
 		T operator()( T r ) const {
 			T x = scale * r;
-			return 1.0 / ( 1.0 + x*x );
+			return T(1) / ( T(1) + x*x );
 		}
 
 		template<typename T>
 		T Derivative( T r ) const {
 			T x = scale * r;
-			T y = 1.0 + x*x;
+			T y = T(1) + x*x;
 			return ( -2.0 * scale * x ) / ( y*y );
 		}
 	};
@@ -101,14 +103,14 @@ namespace DRDSP {
 		template<typename T>
 		T operator()( T r ) const {
 			T x = scale * r;
-			return 1.0 / std::sqrt( 1.0 + x*x );
+			return T(1) / sqrt( T(1) + x*x );
 		}
 
 		template<typename T>
 		T Derivative( T r ) const {
 			T x = scale * r;
-			T y = 1.0 + x*x;
-			return ( -scale * x ) / std::sqrt( y*y*y );
+			T y = T(1) + x*x;
+			return ( -scale * x ) / sqrt( y*y*y );
 		}
 	};
 
