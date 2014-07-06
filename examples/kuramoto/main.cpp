@@ -50,14 +50,14 @@ int main( int argc, char** argv ) {
 	ProjSecant projSecant( options.targetDimension );
 
 	// For this particular example, we use a custom initial condition
-	projSecant.W.setZero(kuramoto.embedding.eDim,4);
+	projSecant.W.setZero(kuramoto.embedding.embedDim,4);
 	
-	for(uint32_t i=0;i<(kuramoto.embedding.eDim-2)/2;++i) {
+	for(uint32_t i=0;i<(kuramoto.embedding.embedDim-2)/2;++i) {
 		projSecant.W(2*i,0) = 1;
 		projSecant.W(2*i+1,1) = 1;
 	}
-	projSecant.W(kuramoto.embedding.eDim-2,2) = 1;
-	projSecant.W(kuramoto.embedding.eDim-1,3) = 1;
+	projSecant.W(kuramoto.embedding.embedDim-2,2) = 1;
+	projSecant.W(kuramoto.embedding.embedDim-1,3) = 1;
 	
 	projSecant.W.col(0).normalize();
 	projSecant.W.col(1).normalize();
@@ -80,7 +80,6 @@ int main( int argc, char** argv ) {
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
 											  data.parameters,
-											  data.parameterDimension,
 											  options.numIterations,
 											  options.numThreads );
 	
@@ -88,7 +87,7 @@ int main( int argc, char** argv ) {
 	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 	     << endl;
 	
-	reducedFamily.WriteCSV("output/reduced.csv");
+	//reducedFamily.WriteCSV("output/reduced.csv");
 	
 	//ModelRBFProducer rbfProducer( options.numRBFs );
 	//ModelRBF rbfModel = rbfProducer.BruteForce( reducedData.reducedData[0], options.numIterations );
@@ -96,7 +95,7 @@ int main( int argc, char** argv ) {
 	//cout << "Total Cost = " << rbfProducer.ComputeTotalCost( rbfModel, reducedData.reducedData[0] ) << endl;	
 
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	auto rdataGenerator = MakeDataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 

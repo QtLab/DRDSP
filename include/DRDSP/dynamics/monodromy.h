@@ -3,7 +3,6 @@
 #include "../types.h"
 #include <vector>
 #include <Eigen/Eigenvalues>
-#include <limits>
 
 using namespace std;
 
@@ -14,30 +13,30 @@ namespace DRDSP {
 		return x1 - y1 * ( x2 - x1 ) / ( y2 - y1 );
 	}
 
-	template<typename V,typename T>
-	T DetectPeriod( const vector<V>& orbit, const V& initialVel, T dt, T tolerance = 0.001 ) {
+	template<typename V>
+	double DetectPeriod( const vector<V>& orbit, const V& initialVel, double dt, double tolerance = 0.001 ) {
 		const auto& initial = orbit[0];
 		V initialDir = initialVel.normalized();
-		T currentValue = T(0);
-		T lastValue = T(0);
+		double currentValue = 0.0;
+		double lastValue = 0.0;
 		for(size_t i=1;i<orbit.size();++i) {
 			lastValue = currentValue;
 			currentValue = ( orbit[i] - initial ).dot( initialDir );
-			if( lastValue < T(0) && currentValue > T(0) ) {
-				T tFactor = SecantRoot( T(0), T(1), lastValue, currentValue );
-				auto x = orbit[i-1] * ( T(1) - tFactor ) + orbit[i] * tFactor;
+			if( lastValue < 0.0 && currentValue > 0.0 ) {
+				double tFactor = SecantRoot( 0.0, 1.0, lastValue, currentValue );
+				auto x = orbit[i-1] * ( 1.0 - tFactor ) + orbit[i] * tFactor;
 				if( ( x - initial ).squaredNorm() < tolerance*tolerance ) {
-					return ( T(i-1) + tFactor ) * dt;
+					return ( double(i-1) + tFactor ) * dt;
 				}
 			}
 		}
-		return T(0);
+		return 0.0;
 	}
 
 	template<typename Model>
 	MatrixXd ComputeMonodromy( const Model& model, const vector<VectorXd>& samples, double dt ) {
 		MatrixXd M;
-		M.setIdentity( model.dimension, model.dimension );
+		M.setIdentity( model.stateDim, model.stateDim );
 
 		for( const auto& x : samples ) {
 			MatrixXd temp = model.Partials( x ) * M * dt;

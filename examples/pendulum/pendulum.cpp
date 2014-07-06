@@ -12,7 +12,7 @@ void PendulumWrap::operator()( VectorXd& state ) const {
 // Embeddings
 
 VectorXd FlatEmbedding::operator()( const VectorXd& state ) const {
-	VectorXd X(eDim);
+	VectorXd X(embedDim);
 	
 	X(0) = cos(state(0));
 	X(1) = sin(state(0));
@@ -27,7 +27,7 @@ VectorXd FlatEmbedding::operator()( const VectorXd& state ) const {
 }
 
 VectorXd DoughnutEmbedding::operator()( const VectorXd& state ) const {
-	VectorXd y(eDim);
+	VectorXd y(embedDim);
 
 	double phi = state(0);
 	double theta = state(1);
@@ -52,7 +52,7 @@ VectorXd DoughnutEmbedding::operator()( const VectorXd& state ) const {
 
 MatrixXd FlatEmbedding::Derivative( const VectorXd& state ) const {
 	MatrixXd res;
-	res.setZero(eDim,oDim);
+	res.setZero(embedDim,sourceDim);
 
 	VectorXd X = (*this)(state);
 
@@ -71,7 +71,7 @@ MatrixXd FlatEmbedding::Derivative( const VectorXd& state ) const {
 
 MatrixXd DoughnutEmbedding::Derivative( const VectorXd& x ) const {
 	MatrixXd res;
-	res.setZero(eDim,oDim);
+	res.setZero(embedDim,sourceDim);
 
 	double sinphi = sin(x(0));
 	double cosphi = cos(x(0));
@@ -114,7 +114,7 @@ MatrixXd DoughnutEmbedding::DerivativeAdjoint( const VectorXd& state ) const {
 
 MatrixXd FlatEmbedding::Derivative2( const VectorXd& x, uint32_t mu ) const {
 	MatrixXd res;
-	res.setZero(oDim,oDim);
+	res.setZero(sourceDim,sourceDim);
 
 	switch( mu ) {
 		case 0:
@@ -142,7 +142,7 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd& x, uint32_t mu ) const {
 
 MatrixXd DoughnutEmbedding::Derivative2( const VectorXd& x, uint32_t mu ) const {
 	MatrixXd res;
-	res.setZero(oDim,oDim);
+	res.setZero(sourceDim,sourceDim);
 
 	double cosphi = cos(x(0));
 	double costheta = cos(x(1));
@@ -190,7 +190,7 @@ VectorXd Pendulum::operator()( const VectorXd& state ) const {
 	double costheta = cos(state(1));
 	double cospsi = cos(state(2));
 	
-	VectorXd res(dimension);
+	VectorXd res(stateDim);
 	res(0) = state[3];
 	res(1) = state[4];
 	res(2) = Omega;
@@ -201,7 +201,7 @@ VectorXd Pendulum::operator()( const VectorXd& state ) const {
 
 MatrixXd Pendulum::Partials( const VectorXd& state ) const {
 	MatrixXd res;
-	res.setZero(dimension,dimension);
+	res.setZero(stateDim,stateDim);
 
 	res(0,3) = 1;
 	res(1,4) = 1;

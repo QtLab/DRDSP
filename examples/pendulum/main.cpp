@@ -33,7 +33,7 @@ int main( int argc, char** argv ) {
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<PendulumFamily,PendulumSolver> dataGenerator;
-	dataGenerator.initial.setZero( pendulum.family.dimension );
+	dataGenerator.initial.setZero( pendulum.family.stateDim );
 	dataGenerator.initial(1) = -0.422;
 	dataGenerator.tStart = 1500;
 	dataGenerator.tInterval = 12;
@@ -70,7 +70,6 @@ int main( int argc, char** argv ) {
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
 	                                          data.parameters,
-											  data.parameterDimension,
 	                                          options.numIterations,
 											  options.numThreads );
 
@@ -78,10 +77,10 @@ int main( int argc, char** argv ) {
 		 << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 		 << endl;
 
-	reducedFamily.WriteCSV("output/reduced.csv");
+	//reducedFamily.WriteCSV("output/reduced.csv");
 
 	cout << "Simulating the reduced model..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	auto rdataGenerator = MakeDataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );

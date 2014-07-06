@@ -82,7 +82,7 @@ void Dynamo::Init() {
 }
 
 VectorXd Dynamo::InitialCondition() const {
-	VectorXd state(dimension);
+	VectorXd state(stateDim);
 
 	for(uint32_t j=0;j<nJ;++j) {
 		for(uint32_t i=0;i<nI;++i) {

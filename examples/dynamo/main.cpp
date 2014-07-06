@@ -66,7 +66,6 @@ int main( int argc, char** argv ) {
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
 											  data.parameters,
-											  data.parameterDimension,
 											  options.numIterations,
 											  options.numThreads );
 	
@@ -74,10 +73,10 @@ int main( int argc, char** argv ) {
 	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 	     << endl;
 	
-	reducedFamily.WriteCSV("output/reduced.csv");
+	//reducedFamily.WriteCSV("output/reduced.csv");
 
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	auto rdataGenerator = MakeDataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 

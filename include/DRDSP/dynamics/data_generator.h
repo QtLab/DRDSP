@@ -32,7 +32,7 @@ namespace DRDSP {
 
 		explicit DataGenerator( const Family& f ) :
 			family(f),
-			initial(f.dimension),
+			initial(f.stateDim),
 			tStart(0),
 			tInterval(10),
 			dtMax(0),
@@ -125,7 +125,7 @@ namespace DRDSP {
 
 			Time dtPrint = period / (print-1);
 
-			DataSet data( print, family.dimension );
+			DataSet data( print, family.stateDim );
 
 			for(uint32_t i=0;i<print;++i) {
 				data[i] = solver.state;
@@ -136,7 +136,7 @@ namespace DRDSP {
 
 		DataSystem GenerateDataSystem( const vector<Parameter>& parameters ) const {
 					
-			DataSystem data( family.dimension, (uint32_t)parameters.size(), family.parameterDimension );
+			DataSystem data( family.stateDim, (uint32_t)parameters.size(), family.parameterDimension );
 			
 			data.parameters = parameters;
 
@@ -150,7 +150,7 @@ namespace DRDSP {
 			
 			uint32_t numParams = (uint32_t)parameters.size();
 			
-			DataSystem data( family.dimension, numParams, family.parameterDimension );
+			DataSystem data( family.stateDim, numParams, family.paramDim );
 			
 			data.parameters = parameters;
 			vector<future<void>> futures(numThreads);
@@ -175,7 +175,7 @@ namespace DRDSP {
 
 		DataSystem GenerateDataSystem( const vector<Parameter>& parameters, const vector<double>& periods ) {
 					
-			DataSystem data( family.dimension, (uint32_t)parameters.size(), family.parameterDimension );
+			DataSystem data( family.stateDim, (uint32_t)parameters.size(), family.paramDim );
 			
 			data.parameters = parameters;
 			
@@ -189,7 +189,7 @@ namespace DRDSP {
 
 			uint32_t numParams = (uint32_t)parameters.size();
 			
-			DataSystem data( family.dimension, numParams, family.parameterDimension );
+			DataSystem data( family.stateDim, numParams, family.paramDim );
 			
 			data.parameters = parameters;
 			vector<future<void>> futures(numThreads);
@@ -214,7 +214,7 @@ namespace DRDSP {
 
 		DataSystem GenerateUsingInitials( const vector<Parameter>& parameters, const ReducedDataSystem& rdata ) const {
 			
-			DataSystem data( family.dimension, (uint32_t)parameters.size(), family.parameterDimension );
+			DataSystem data( family.stateDim, (uint32_t)parameters.size(), family.paramDim );
 			
 			data.parameters = parameters;
 			
@@ -228,7 +228,7 @@ namespace DRDSP {
 			
 			uint32_t numParams = (uint32_t)parameters.size();
 			
-			DataSystem data( family.dimension, numParams, family.parameterDimension );
+			DataSystem data( family.stateDim, numParams, family.paramDim );
 			
 			data.parameters = parameters;
 			vector<future<void>> futures(numThreads);
@@ -255,13 +255,17 @@ namespace DRDSP {
 		void MatchSettings( const DataGenerator<F2,S2>& gen ) {
 			tStart = gen.tStart;
 			tInterval = gen.tInterval;
+			dtMax = gen.dtMax;
 			print = gen.print;
 			initial = gen.initial;
 		}
 
 	};
 
-	
+	template<typename F>
+	DataGenerator<F,RKDynamicalSystem<typename F::Model>> MakeDataGenerator( const F& family ) {
+		return DataGenerator<F,RKDynamicalSystem<typename F::Model>>( family );
+	}
 
 }
 

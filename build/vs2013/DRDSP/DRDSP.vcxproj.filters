@@ -60,16 +60,10 @@
     <ClCompile Include="..\..\..\src\data\data_typed.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\radial_basis.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\dynamics\reduced_data.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\dynamics\reduced_data_system.cpp">
-      <Filter>Source Files\dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\dynamics\affineParameterMap.cpp">
       <Filter>Source Files\dynamics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\data\aabb.cpp">
@@ -126,9 +120,6 @@
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\reduced_data_system.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\affineParameterMap.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h">
@@ -200,11 +191,14 @@
     <ClInclude Include="..\..\..\include\DRDSP\geometry\angle.h">
       <Filter>Header Files\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\DRDSP\dynamics\family_producer.h">
-      <Filter>Header Files\dynamics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\eigen_pinv.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\eigen_affine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\parameter_map_producer.h">
+      <Filter>Header Files\dynamics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

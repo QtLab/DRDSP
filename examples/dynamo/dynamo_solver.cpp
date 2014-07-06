@@ -54,7 +54,7 @@ void DynamoSolver::Step( double dt ) {
 }
 
 void DynamoSolver::Init() {
-	state.setZero(dimension);
+	state.setZero(stateDim);
 	pMinus.setZero(nI,nJ);
 	pPlus.setZero(nI,nJ);
 	pZero.setZero(nI,nJ);

@@ -36,16 +36,6 @@ namespace DRDSP {
 			return (fitWeight[0]/data.scales[0]) * S1 + (fitWeight[1]/data.scales[1]) * S2;
 		}
 
-		RBFModel<F> ComputeModelRBF( const ReducedData& data ) {
-
-			RBFModel<F> model(data.dimension,numRBFs);
-			model.SetCentresRandom( data.ComputeBoundingBox() );
-
-			Fit(model,data);
-
-			return model;
-		}
-
 		void Fit( RBFModel<F>& model, const ReducedData& data ) const {
 			MatrixXd y1, y2, A1, A2, z1, z2, z, P, PI;
 			uint32_t m = data.dimension + model.numRBFs;

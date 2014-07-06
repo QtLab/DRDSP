@@ -11,24 +11,24 @@ using namespace std;
 namespace DRDSP {
 
 	template<typename F = ThinPlateSpline>
-	struct RBFModel : Model<VectorXd> {
+	struct RBFModel : Model<> {
 		MatrixXd linear;
 		vector<VectorXd> weights;
-		vector<RadialFunction<F>> rbfs;
+		vector<RBF<F>> rbfs;
 		uint32_t numRBFs;
 
 		RBFModel() : numRBFs(0) {}
 		
 		RBFModel( uint32_t dim, uint32_t nRBFs ) :
-			Model<VectorXd>(dim),
+			Model<>(dim),
 			numRBFs(nRBFs),
 			weights(nRBFs),
 			rbfs(nRBFs)
 		{
-			linear.setZero(dimension,dimension);
+			linear.setZero(stateDim,stateDim);
 			for(uint32_t i=0;i<numRBFs;++i) {
-				weights[i].setZero(dimension);
-				rbfs[i].centre.setZero(dimension);
+				weights[i].setZero(stateDim);
+				rbfs[i].centre.setZero(stateDim);
 			}
 		}
 
@@ -51,7 +51,7 @@ namespace DRDSP {
 			if( !in ) return;
 
 			for(uint32_t k=0;k<numRBFs;++k)
-				for(uint32_t j=0;j<dimension;++j)
+				for(uint32_t j=0;j<stateDim;++j)
 					in >> rbfs[k].centre(j);
 		}
 
@@ -60,26 +60,26 @@ namespace DRDSP {
 			if( !in ) return;
 
 			for(uint32_t k=0;k<numRBFs;++k)
-				in.read( (char*)&rbfs[k].centre(0), sizeof(double)*dimension );
+				in.read( (char*)&rbfs[k].centre(0), sizeof(double)*stateDim );
 		}
 
 		void WriteCSV( const char *filename ) const {
 			ofstream out(filename);
 			out.precision(16);
 			out << dimension << "," << numRBFs << endl;
-			for(uint32_t i=0;i<dimension;++i) {	
-				for(uint32_t j=0;j<dimension;++j)
+			for(uint32_t i=0;i<stateDim;++i) {	
+				for(uint32_t j=0;j<stateDim;++j)
 					out << linear(i,j) << ",";
 				out << endl;
 			}
 			out << endl;
-			for(uint32_t i=0;i<dimension;++i) {	
+			for(uint32_t i=0;i<stateDim;++i) {	
 				for(uint32_t j=0;j<numRBFs;++j)
 					out << weights[j](i) << ",";
 				out << endl;
 			}
 			out << endl;
-			for(uint32_t i=0;i<dimension;++i) {	
+			for(uint32_t i=0;i<stateDim;++i) {	
 				for(uint32_t j=0;j<numRBFs;++j)
 					out << rbfs[j].centre(i) << ",";
 				out << endl;

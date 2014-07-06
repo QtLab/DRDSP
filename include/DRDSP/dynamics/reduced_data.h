@@ -67,7 +67,7 @@ namespace DRDSP {
 			for(uint32_t i=0;i<count;++i) {
 				svd.compute( W.adjoint() * original.embedding.Derivative(data.points[i]), ComputeThinU );
 				uint32_t rank = 0;
-				double tolerance = original.model.dimension * eps(svd.singularValues()(0));
+				double tolerance = original.model.stateDim * eps(svd.singularValues()(0));
 				for(int j=0;j<svd.nonzeroSingularValues();++j) {
 					if( svd.singularValues()(j) > tolerance )
 						++rank;

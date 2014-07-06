@@ -10,7 +10,7 @@ namespace DRDSP {
 	struct DataSystem {
 		uint32_t dimension,           //!< Dimension of the space in which the data points live
 		         numParameters,       //!< Number of parameters/data sets in the family
-		         parameterDimension;  //!< Dimension of the parameter space
+		         paramDim;            //!< Dimension of the parameter space
 		vector<DataSet> dataSets;     //!< Array of data sets
 		vector<VectorXd> parameters;  //!< Array of parameter values
 
@@ -42,7 +42,7 @@ namespace DRDSP {
 
 	template<typename E>
 	DataSystem EmbedData( const E& embedding, const DataSystem& data ) {
-		DataSystem r( embedding.eDim, data.numParameters, data.parameterDimension );
+		DataSystem r( embedding.embedDim, data.numParameters, data.paramDim );
 		r.parameters = data.parameters;
 		
 		for(uint32_t i=0;i<r.numParameters;++i) {
@@ -57,7 +57,7 @@ namespace DRDSP {
 
 	template<typename E>
 	DataSystem EmbedData( const E& embedding, const DataSystem& data, uint32_t numThreads ) {
-		DataSystem r( embedding.eDim, data.numParameters, data.parameterDimension );
+		DataSystem r( embedding.embedDim, data.numParameters, data.paramDim );
 		r.parameters = data.parameters;
 		vector<future<void>> futures(numThreads);
 		for(uint32_t i=0;i<data.numParameters;i+=numThreads) {

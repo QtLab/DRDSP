@@ -39,7 +39,7 @@ namespace DRDSP {
 			auto D2a = compute_D2( a, dsa, ds2a, dta, dt2a );
 			auto aDot = compute_aDot( b, D2a, alpha );
 			auto bDot = compute_bDot( a, b, dsa, dta, D2a, alpha );
-			Col r(dimension);
+			Col r(stateDim);
 			for(uint32_t j=0;j<nJ;++j)
 				r.segment(j*nI,nI) = aDot.col(j);
 			for(uint32_t j=0;j<nJ;++j)
@@ -103,10 +103,11 @@ namespace DRDSP {
 		
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,-1> compute_alpha( const MatrixBase<Derived>& a, const MatrixBase<Derived>& b, const MatrixBase<Derived>& dsa, const MatrixBase<Derived>& dta ) const {
-			auto mat1 = Matrix<Derived::Scalar,-1,-1>::Ones(nI,nJ);
-			auto col1 = Matrix<Derived::Scalar,-1,1>::Ones(nI);
+			typedef Derived::Scalar Scalar;
+			auto mat1 = Matrix<Scalar,-1,-1>::Ones(nI,nJ);
+			auto col1 = VectorXd::Ones(nI);
 			auto normB2 = NormB2( a, b, dsa, dta );
-			Matrix<Derived::Scalar,-1,-1> alpha = ( col1 * sintheta.transpose() ).cwiseQuotient( mat1 + alphaB * normB2 );
+			Matrix<Scalar,-1,-1> alpha = ( col1 * sintheta.transpose() ).cast<Scalar>().cwiseQuotient( mat1 + alphaB * normB2 );
 			alpha.row(0).fill(alpha.row(1).mean());
 			return alpha;
 		}
@@ -180,7 +181,8 @@ namespace DRDSP {
 		
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,-1> Beta( const MatrixBase<Derived>& a, const MatrixBase<Derived>& dta ) const {
-			auto col1 = Matrix<Derived::Scalar,-1,1>::Ones(nI);
+			typedef Derived::Scalar Scalar;
+			auto col1 = VectorXd::Ones(nI);
 			return c.cwiseProduct(dta) - a.cwiseProduct( col1 * sintheta.transpose() );
 		}
 

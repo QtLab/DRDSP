@@ -9,13 +9,13 @@ using namespace DRDSP;
 DataSystem::DataSystem() :
 	dimension( 0 ),
 	numParameters( 0 ),
-	parameterDimension( 0 )
+	paramDim( 0 )
 {}
 
 DataSystem::DataSystem( uint32_t dim, uint32_t numParams, uint32_t paramDim ) :
 	dimension( dim ),
 	numParameters( numParams ),
-	parameterDimension( paramDim ),
+	paramDim( paramDim ),
 	dataSets( numParams ),
 	parameters( numParams )
 {}
@@ -34,7 +34,7 @@ bool DataSystem::Load( const char* filename, uint32_t maxPoints ) {
 	if( !numParameters )
 		return false;
 	
-	parameterDimension = (uint32_t)pDim;
+	paramDim = (uint32_t)pDim;
 	cout << "State Dimension: " << dimension << endl;
 	cout << "Parameter Samples: " << numParameters << endl;
 	cout << "Parameter Dimension: " << pDim << endl << endl;
@@ -66,8 +66,8 @@ bool DataSystem::LoadSetBinary( const char* filename, uint32_t i, uint32_t maxPo
 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 
-	parameters[i].setZero(parameterDimension);
-	in.read((char*)&parameters[i](0),sizeof(double)*parameterDimension);
+	parameters[i].setZero(paramDim);
+	in.read((char*)&parameters[i](0),sizeof(double)*paramDim);
 
 	cout << " - points = " << numPoints << ", parameter(0) = " << parameters[i](0) << endl << endl;
 	
@@ -99,8 +99,8 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoin
 
 	if( maxPoints && numPoints > maxPoints ) numPoints = maxPoints;
 
-	parameters[i].setZero( parameterDimension );
-	for(uint32_t j=0;j<parameterDimension;++j) {
+	parameters[i].setZero( paramDim );
+	for(uint32_t j=0;j<paramDim;++j) {
 		in >> parameters[i](j);
 	}
 
@@ -142,7 +142,7 @@ void DataSystem::WriteDataSetsBinary( const char* filePrefix, const char* fileSu
 }
 
 DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
-	DataSystem projectedData( (uint32_t)W.cols(), numParameters, parameterDimension );
+	DataSystem projectedData( (uint32_t)W.cols(), numParameters, paramDim );
 
 	projectedData.parameters = parameters;
 

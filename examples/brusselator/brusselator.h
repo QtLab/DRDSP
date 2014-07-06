@@ -23,7 +23,7 @@ struct Brusselator : Model<> {
 		Array<Scalar,-1,-1> XDot = A + XXY - (B+1.0)*X + D1 * laplacian(X);
 		Array<Scalar,-1,-1> YDot = B*X - XXY + D2 * laplacian(Y);
 
-		Matrix<Scalar,-1,1> r(dimension);
+		Matrix<Scalar,-1,1> r(stateDim);
 
 		for(int j=0;j<nY;++j)
 			r.segment(j*nX,nX) = XDot.col(j);

@@ -20,17 +20,6 @@ namespace DRDSP {
 
 		return svd.matrixV() * svInv.asDiagonal() * svd.matrixU().adjoint();
 	}
-
-	template<typename Derived>
-	Matrix<typename Derived::Scalar,-1,1> Vectorize( const MatrixBase<Derived>& A ) {
-		Matrix<typename Derived::Scalar,-1,1> V( A.rows() * A.cols() );
-		for(int64_t i=0;i<A.cols();++i) {
-			V.segment(i*A.rows(),A.rows()) = A.col(i);
-		}
-		return V;
-	}
-
-
 }
 
 #endif

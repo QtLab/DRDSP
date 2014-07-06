@@ -57,19 +57,19 @@ namespace DRDSP {
 	inline T dcot( Radians<T> x ) { T y=csc(x); return -y*y; }
 
 	template<typename T>
-	inline T dasin( T x ) { return T(1)/sqrt(T(1)-x*x); }
+	inline T dasin( T x ) { return T(1)/::sqrt(T(1)-x*x); }
 	
 	template<typename T>
-	inline T dacos( T x ) { return -T(1)/sqrt(T(1)-x*x); }
+	inline T dacos( T x ) { return -T(1)/::sqrt(T(1)-x*x); }
 	
 	template<typename T>
 	inline T datan( T x ) { return T(1)/(T(1)+x*x); }
 	
 	template<typename T>
-	inline T dacsc( T x ) { return -T(1)/(abs(x)*sqrt(x*x-T(1))); }
+	inline T dacsc( T x ) { return -T(1)/(::abs(x)*::sqrt(x*x-T(1))); }
 	
 	template<typename T>
-	inline T dasec( T x ) { return T(1)/(abs(x)*sqrt(x*x-T(1))); }
+	inline T dasec( T x ) { return T(1)/(::abs(x)*::sqrt(x*x-T(1))); }
 	
 	template<typename T>
 	inline T dacot( T x ) { return -T(1)/(T(1)+x*x); }
@@ -96,16 +96,16 @@ namespace DRDSP {
 	inline T dcoth( T x ) { T y=csch(x); return -y*y; }
 
 	template<typename T>
-	inline T dasinh( T x ) { return T(1)/sqrt(x*x+T(1)); }
+	inline T dasinh( T x ) { return T(1)/::sqrt(x*x+T(1)); }
 	
 	template<typename T>
-	inline T dacosh( T x ) { return T(1)/sqrt(x*x-T(1)); }
+	inline T dacosh( T x ) { return T(1)/::sqrt(x*x-T(1)); }
 	
 	template<typename T>
 	inline T datanh( T x ) { return T(1)/(T(1)-x*x); }
 	
 	template<typename T>
-	inline T dacsch( T x ) { return -T(1)/(abs(x)*sqrt(T(1)+x*x)); }
+	inline T dacsch( T x ) { return -T(1)/(::abs(x)*::sqrt(T(1)+x*x)); }
 	
 	template<typename T>
 	inline T dasech( T x ) { return -T(1)/(x*sqrt(T(1)-x*x)); }

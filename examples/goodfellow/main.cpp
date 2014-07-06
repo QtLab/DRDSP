@@ -33,7 +33,7 @@ int main( int argc, char** argv ) {
 	cout << "Generating data..." << endl;
 	DataGenerator<GoodfellowFamily> dataGenerator( goodfellow );
 	dataGenerator.initial.setRandom();
-	dataGenerator.initial -= 0.5 * VectorXd::Ones( goodfellow.dimension );
+	dataGenerator.initial -= 0.5 * VectorXd::Ones( goodfellow.stateDim );
 	dataGenerator.initial *= 2.0;
 	dataGenerator.tStart = 200;
 	dataGenerator.tInterval = 1;
@@ -68,7 +68,6 @@ int main( int argc, char** argv ) {
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
 											  data.parameters,
-											  data.parameterDimension,
 											  options.numIterations,
 											  options.numThreads );
 	
@@ -76,10 +75,10 @@ int main( int argc, char** argv ) {
 	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 		 << endl;
 	
-	reducedFamily.WriteCSV("output/reduced.csv");
+	//reducedFamily.WriteCSV("output/reduced.csv");
 
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	auto rdataGenerator = MakeDataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 

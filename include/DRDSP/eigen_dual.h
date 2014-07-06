@@ -21,20 +21,20 @@ namespace Eigen {
 			AddCost = 2 * NumTraits<T>::AddCost,
 			MulCost = 3 * NumTraits<T>::MulCost + NumTraits<T>::AddCost
 		};
-		typedef T Real;
+		typedef dual<T> Real;
 		typedef dual<T> NonInteger;
 		typedef dual<T> Nested;
 
-		static inline Real epsilon() {
-			return NumTraits<Real>::epsilon();
+		static inline dual<T> epsilon() {
+			return dual<T>( NumTraits<T>::epsilon(), NumTraits<T>::epsilon() );
 		}
-		static inline Real dummy_precision() {
-			return NumTraits<Real>::dummy_precision();
+		static inline dual<T> dummy_precision() {
+			return dual<T>( NumTraits<T>::dummy_precision(), NumTraits<T>::dummy_precision() );
 		}
-		static inline T highest() {
+		static inline dual<T> highest() {
 			return dual<T>( NumTraits<T>::highest(), NumTraits<T>::highest() );
 		}
-		static inline T lowest() {
+		static inline dual<T> lowest() {
 			return dual<T>( NumTraits<T>::lowest(), NumTraits<T>::lowest() );
 		}
 	};
@@ -56,45 +56,28 @@ namespace Eigen {
 			typedef dual<T> ReturnType;
 		};
 
-		template<typename RealScalar> struct conj_helper<dual<RealScalar>, dual<RealScalar>, false,true> {
-			typedef dual<RealScalar> Scalar;
-			EIGEN_STRONG_INLINE Scalar pmadd(const Scalar& x, const Scalar& y, const Scalar& c) const
-			{ return c + pmul(x,y); }
-			EIGEN_STRONG_INLINE Scalar pmul(const Scalar& x, const Scalar& y) const
-			{ return Scalar(numext::real(x)*numext::real(y) + numext::imag(x)*numext::imag(y), numext::imag(x)*numext::real(y) - numext::real(x)*numext::imag(y)); }
+		template<typename T>
+		struct conj_helper<dual<T>,T,false,false> {
+			typedef dual<T> Scalar;
+			EIGEN_STRONG_INLINE Scalar pmadd(const Scalar& x, const T& y, const Scalar& c) const {
+				return padd(c, pmul(x,y));
+			}
+			EIGEN_STRONG_INLINE Scalar pmul(const Scalar& x, const T& y) const {
+				return pmul(x,y);
+			}
 		};
 
-		template<typename RealScalar> struct conj_helper<dual<RealScalar>, dual<RealScalar>, true,false> {
-			typedef dual<RealScalar> Scalar;
-			EIGEN_STRONG_INLINE Scalar pmadd(const Scalar& x, const Scalar& y, const Scalar& c) const
-			{ return c + pmul(x,y); }
-			EIGEN_STRONG_INLINE Scalar pmul(const Scalar& x, const Scalar& y) const
-			{ return Scalar(numext::real(x)*numext::real(y) + numext::imag(x)*numext::imag(y), numext::real(x)*numext::imag(y) - numext::imag(x)*numext::real(y)); }
+		template<typename T>
+		struct conj_helper<T,dual<T>,false,false> {
+			typedef dual<T> Scalar;
+			EIGEN_STRONG_INLINE Scalar pmadd(const T& x, const Scalar& y, const Scalar& c) const {
+				return padd(c, pmul(x,y));
+			}
+			EIGEN_STRONG_INLINE Scalar pmul(const T& x, const Scalar& y) const {
+				return x*y;
+			}
 		};
 
-		template<typename RealScalar> struct conj_helper<dual<RealScalar>, dual<RealScalar>, true,true> {
-			typedef dual<RealScalar> Scalar;
-			EIGEN_STRONG_INLINE Scalar pmadd(const Scalar& x, const Scalar& y, const Scalar& c) const
-			{ return c + pmul(x,y); }
-			EIGEN_STRONG_INLINE Scalar pmul(const Scalar& x, const Scalar& y) const
-			{ return Scalar(numext::real(x)*numext::real(y) - numext::imag(x)*numext::imag(y), - numext::real(x)*numext::imag(y) - numext::imag(x)*numext::real(y)); }
-		};
-
-		template<typename RealScalar,bool Conj> struct conj_helper<dual<RealScalar>, RealScalar, Conj,false> {
-			typedef dual<RealScalar> Scalar;
-			EIGEN_STRONG_INLINE Scalar pmadd(const Scalar& x, const RealScalar& y, const Scalar& c) const
-			{ return padd(c, pmul(x,y)); }
-			EIGEN_STRONG_INLINE Scalar pmul(const Scalar& x, const RealScalar& y) const
-			{ return conj_if<Conj>()(x)*y; }
-		};
-
-		template<typename RealScalar, bool Conj> struct conj_helper<RealScalar, dual<RealScalar>, false, Conj > {
-			typedef dual<RealScalar> Scalar;
-			EIGEN_STRONG_INLINE Scalar pmadd(const RealScalar& x, const Scalar& y, const Scalar& c) const
-			{ return padd(c, pmul(x,y)); }
-			EIGEN_STRONG_INLINE Scalar pmul(const RealScalar& x, const Scalar& y) const
-			{ return x*conj_if<Conj>()(y); }
-		};
 	}
 }
 

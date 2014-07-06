@@ -16,7 +16,7 @@ Goodfellow::Goodfellow( uint32_t numCompartments ) :
 
 void Goodfellow::Create( uint32_t numCompartments ) {
 	N = numCompartments;
-	dimension = 2*N;
+	stateDim = 2*N;
 
 	mu.setZero(N);
 	double muMin = 0.2;

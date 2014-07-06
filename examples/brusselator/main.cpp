@@ -32,7 +32,7 @@ int main( int argc, char** argv ) {
 
 	cout << "Generating data..." << endl;
 	DataGenerator<BrusselatorFamily> dataGenerator;
-	dataGenerator.initial.setRandom( brusselator.dimension );
+	dataGenerator.initial.setRandom( brusselator.stateDim );
 	dataGenerator.tStart = 100;
 	dataGenerator.tInterval = 7.2;
 	dataGenerator.print = 200;
@@ -63,7 +63,6 @@ int main( int argc, char** argv ) {
 	RBFFamilyProducer<RadialType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
 											  data.parameters,
-											  data.parameterDimension,
 											  options.numIterations,
 											  options.numThreads );
 
@@ -71,10 +70,10 @@ int main( int argc, char** argv ) {
 	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 	     << endl;
 
-	reducedFamily.WriteCSV("output/reduced.csv");
+	//reducedFamily.WriteCSV("output/reduced.csv");
 
 	cout << "Simulating the reduced family..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	auto rdataGenerator = MakeDataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
