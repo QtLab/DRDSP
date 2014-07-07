@@ -11,16 +11,6 @@ DataSet::DataSet( size_t numPoints, uint32_t dim ) : dimension(dim), points(numP
 		x.setZero(dimension);
 }
 
-DataSet DataSet::ProjectData( const MatrixXd& W ) const {
-	DataSet projectedData( points.size(), (uint32_t)W.cols() );
-
-	for(uint32_t i=0;i<points.size();++i) {
-		projectedData.points[i] = W.adjoint() * points[i];
-	}
-
-	return projectedData;
-}
-
 bool DataSet::LoadBinary( const char* filename ) {
 	ifstream in(filename,ios::binary);
 	if( !in ) {
@@ -135,5 +125,22 @@ DataComparisonResult DRDSP::CompareData( const vector<VectorXd>& s1, const vecto
 	r.maxMinDifference = maxVal;
 	
 	return r;
+}
+
+BallXd DRDSP::ComputeBall( const vector<VectorXd>& points ) {
+	VectorXd sum(points[0].size());
+	sum.setZero();
+	for( const auto& x : points ) {
+		sum += x;
+	}
+	BallXd ball;
+	ball.centre = sum / double(points.size());
+	double r2Max = 0.0;
+	for( const auto& x : points ) {
+		double r2 = ( x - ball.centre ).squaredNorm();
+		if( r2 > r2Max ) r2Max = r2;
+	}
+	ball.radius = sqrt(r2Max);
+	return ball;
 }
 

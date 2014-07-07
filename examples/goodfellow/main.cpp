@@ -20,7 +20,7 @@ struct Options {
 	}
 };
 
-typedef ThinPlateSpline RadialType;
+typedef RBF<ThinPlateSpline> RadialType;
 
 int main( int argc, char** argv ) {
 

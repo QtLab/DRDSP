@@ -10,6 +10,8 @@ namespace DRDSP {
 		State state;
 		Map map;
 		
+		DiscreteDynamicalSystem() = default;
+		
 		explicit DiscreteDynamicalSystem( const Map& map ) : map(map) {}
 
 		DiscreteDynamicalSystem( const Map& map, const State& state ) : map(map), state(state) {}
@@ -18,7 +20,6 @@ namespace DRDSP {
 			for(uint32_t i=0;i<dt;++i)
 				state = map(state);
 		}
-
 	};
 
 	struct IdentityWrapFunction {
@@ -51,7 +52,6 @@ namespace DRDSP {
 				wrap(state);
 			}
 		}
-
 	};
 
 	template<typename F,typename WrapFunction = IdentityWrapFunction>

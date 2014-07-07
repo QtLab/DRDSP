@@ -69,20 +69,29 @@ size_t ReducedDataSystem::TotalPoints() const {
 void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata ) {
 
 	ofstream out("output/comparison.csv");
-	out << "Parameter,RMS,Max,MaxMin,Differences" << endl;
+	out << "Parameter,RMS,Max,MaxMin,Scale,RMS,Max,MaxMin,Differences" << endl;
 	for(uint32_t i=0;i<reducedData.numParameters;++i) {
+		BallXd ball = ComputeBall( reducedData.reducedData[i].points );
 		DataComparisonResult r = CompareData( reducedData.reducedData[i].points, rdata.dataSets[i].points );
 		cout << "Parameter " << rdata.parameters[i] << endl;
 		cout << "RMS: " << r.rmsDifference << endl;
 		cout << "Max: " << r.maxDifference << endl;
 		cout << "MaxMin: " << r.maxMinDifference << endl;
+		cout << "Scale: " << ball.radius << endl;
 
 		out << rdata.parameters[i] << ",";
 		out << r.rmsDifference << ",";
 		out << r.maxDifference << ",";
 		out << r.maxMinDifference << ",";
+		out << ball.radius << ",";
+		out << r.rmsDifference / ball.radius << ",";
+		out << r.maxDifference / ball.radius << ",";
+		out << r.maxMinDifference / ball.radius << ",";
 		for( const auto& x : r.differences )
 			out << x << ",";
+		out << ",";
+		for( const auto& x : r.differences )
+			out << x / ball.radius << ",";
 		out << endl;
 	}
 }

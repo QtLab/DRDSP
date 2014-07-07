@@ -48,6 +48,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\embedding.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\data_generator.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\parameter_map_producer.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\polyharmonic_spline.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model_producer.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model.h" />
@@ -62,6 +63,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\eigen_dual.h" />
     <ClInclude Include="..\..\..\include\DRDSP\eigen_pinv.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\angle.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\ball.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\geodesic.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\grassmannian.h" />
     <ClInclude Include="..\..\..\include\DRDSP\geometry\metric.h" />

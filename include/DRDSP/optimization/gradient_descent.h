@@ -4,24 +4,19 @@
 
 namespace DRDSP {
 	
-	template<typename Geodesic,typename S,typename DS>
+	template<typename Geodesic>
 	struct GradientDescent {
 		typedef typename Geodesic::Metric Metric;
 		typedef typename Metric::Point Point;
 
-		const S& cost;
-		const DS& gradient;
 		Metric metric;
 		LineSearch lineSearch;
 		uint32_t maxSteps;
 		
-		GradientDescent( const S& cost, const DS& gradient ) :
-			cost(cost),
-			gradient(gradient),
-			maxSteps(1000)
-		{}
+		GradientDescent() : maxSteps(1000) {}
 		
-		bool Step( Point& x ) {
+		template<typename S,typename DS>
+		bool Step( Point& x, const S& cost, const DS& gradient ) {
 
 			Geodesic geodesic( x, -gradient(x) );
 
@@ -43,12 +38,13 @@ namespace DRDSP {
 			return true;
 		}
 
-		bool Optimize( Point& x ) {
+		template<typename S,typename DS>
+		bool Optimize( Point& x, const S& cost, const DS& gradient ) {
 			uint32_t n = 0;
 			if( lineSearch.alpha <= 0.0 )
 				lineSearch.alpha = 1.0e-2;
 			for(uint32_t i=0;i<maxSteps;++i) {
-				if( !Step(x) )
+				if( !Step( x, cost, gradient ) )
 					return true;
 				++n;
 				cout << n << "\t" << lineSearch.S0 << "\t" << lineSearch.alpha << endl;
@@ -57,7 +53,6 @@ namespace DRDSP {
 		}
 
 	};
-
 }
 
 #endif

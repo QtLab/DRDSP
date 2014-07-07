@@ -2,35 +2,12 @@
 #define INCLUDED_DYNAMICS_RADIAL_BASIS
 #include "../types.h"
 #include "../auto_diff.h"
-#include <cmath>
+#include "polyharmonic_spline.h"
 
 namespace DRDSP {
 	
 	using std::sqrt;
 	using std::exp;
-	using std::log;
-
-	struct ThinPlateSpline {
-		template<typename T>
-		T operator()( T r ) const {
-			return r*r*log(r);
-		}
-		template<typename T>
-		T Derivative( T r ) const {
-			return r * ( T(1) + 2.0 * log(r) );
-		}
-	};
-
-	struct PolyharmonicSpline3 {
-		template<typename T>
-		T operator()( T r ) const {
-			return r*r*r;
-		}
-		template<typename T>
-		T Derivative( T r ) const {
-			return T(3)*r*r;
-		}
-	};
 
 	struct Gaussian  {
 		double scale;
@@ -48,7 +25,7 @@ namespace DRDSP {
 		template<typename T>
 		T Derivative( T r ) const {
 			T x = scale * r;
-			return -T(2) * scale * x * exp(-x*x);
+			return (-2.0 * scale) * x * exp(-x*x);
 		}
 	};
 
@@ -89,7 +66,7 @@ namespace DRDSP {
 		T Derivative( T r ) const {
 			T x = scale * r;
 			T y = T(1) + x*x;
-			return ( -2.0 * scale * x ) / ( y*y );
+			return ( (-2.0 * scale) * x ) / ( y*y );
 		}
 	};
 
@@ -116,48 +93,107 @@ namespace DRDSP {
 
 	template<typename F>
 	struct RBF {
-		VectorXd centre;
+		typedef F RadialType;
+		VectorXd weight, centre;
 		F func;
 	
 		RBF() = default;
 		
 		explicit RBF( const F& f ) : func(f) {}
-		
-		explicit RBF( const VectorXd& centre ) : centre(centre) {}
-		
-		RBF( const F& f, const VectorXd& centre ) : func(f), centre(centre) {}
 
-		double operator()( const VectorXd& x ) const {
-			return func( (x-centre).norm() );
+		VectorXd operator()( const VectorXd& x ) const {
+			return weight * func( (x-centre).norm() );
 		}
 
-		VectorXd Derivative( const VectorXd& x ) const {
+		MatrixXd Derivative( const VectorXd& x ) const {
 			VectorXd r = x - centre;
 			double rnorm = r.norm();
 			if( rnorm == 0.0 ) return VectorXd::Zero(x.size());
-			return ( func.Derivative( rnorm ) / rnorm ) * r;
+			return weight * ( ( func.Derivative( rnorm ) / rnorm ) * r ).transpose();
 		}
 	};
 
-	template<typename F,typename G>
-	struct EquiRBFVecField {
+	template<typename F>
+	struct EquiRBFZ2 {
+		typedef F RadialType;
 		VectorXd weight, centre;
 		F func;
-		G group;
 	
-		EquiRBFVecField() = default;
+		EquiRBFZ2() = default;
 		
-		explicit EquiRBFVecField( const F& f ) : func(f) {}
+		explicit EquiRBFZ2( const F& f ) : func(f) {}
 		
-		explicit EquiRBFVecField( const VectorXd& centre ) : centre(centre) {}
+		VectorXd operator()( const VectorXd& x ) const {
+			return weight * ( func( (x-centre).norm() ) - func( (x+centre).norm() ) );
+		}
 
-		EquiRBFVecField( const F& f, const G& g ) : func(f), group(g) {}
+		MatrixXd Partials( const VectorXd& x ) const {
+			VectorXd sum;
+			sum.setZero( x.size() );
+			VectorXd r = x - centre;
+			double rnorm = r.norm();
+			if( rnorm != 0.0 ) {
+				sum += ( func.Derivative( rnorm ) / rnorm ) * r;
+			}
+			r = x + centre;
+			rnorm = r.norm();
+			if( rnorm != 0.0 ) {
+				sum -= ( func.Derivative( rnorm ) / rnorm ) * r;
+			}
+			return weight * sum.transpose();
+		}
+	};
 
-		EquiRBFVecField( const F& f, const VectorXd& centre ) : func(f), centre(centre) {}
+	template<typename F,int N>
+	struct EquiRBFCyclic {
+		typedef F RadialType;
+		VectorXd weight, centre;
+		MatrixXd generator;
+		F func;
+
+		EquiRBFCyclic() = default;
 		
-		EquiRBFVecField( const F& f, const VectorXd& weight, const VectorXd& centre ) : func(f), weight(weight), centre(centre) {}
+		explicit EquiRBFCyclic( const F& f ) : func(f) {}
+		
+		VectorXd operator()( const VectorXd& x ) const {
+			VectorXd sum;
+			sum.setZero( x.size() );
+			VectorXd c = centre, w = weight;
+			for(int i=0;i<N;++i) {
+				w = generator * w;
+				c = generator * c;
+				sum.noalias() += w * func( (x-c).norm() );
+			}
+			return sum;
+		}
 
-		EquiRBFVecField( const F& f, const VectorXd& weight, const VectorXd& centre, const G& g ) : func(f), weight(weight), centre(centre), group(g) {}
+		MatrixXd Partials( const VectorXd& x ) const {
+			VectorXd r;
+			MatrixXd sum;
+			sum.setZero( x.size() );
+			VectorXd c = centre, w = weight;
+			for(int i=0;i<N;++i) {
+				w = generator * w;
+				c = generator * c;
+				r = x - c;
+				double rnorm = r.norm();
+				if( rnorm == 0.0 ) continue;
+				sum += w * ( ( func.Derivative( rnorm ) / rnorm ) * r ).transpose();
+			}
+			return sum;
+		}
+	};
+
+	template<typename F>
+	struct EquiRBFFinite {
+		typedef F RadialType;
+		VectorXd weight, centre;
+		vector<MatrixXd> group;
+		F func;
+
+		EquiRBFFinite() = default;
+		
+		explicit EquiRBFFinite( const F& f ) : func(f) {}
 
 		VectorXd operator()( const VectorXd& x ) const {
 			VectorXd sum;
@@ -176,7 +212,7 @@ namespace DRDSP {
 				r = x - g * centre;
 				double rnorm = r.norm();
 				if( rnorm == 0.0 ) continue;
-				sum += g * weight * ( ( func.Derivative( rnorm ) / rnorm ) * r ).transpose();
+				sum.noalias() += g * weight * ( ( func.Derivative( rnorm ) / rnorm ) * r ).transpose();
 			}
 			return sum;
 		}
@@ -187,15 +223,14 @@ namespace DRDSP {
 
 	template<>
 	struct EquiRBFSO2<InverseQuadratic> {
+		typedef InverseQuadratic RadialType;
 		VectorXd weight, centre;
 		Matrix<double,-1,2> W;
 		InverseQuadratic func;
 	
 		EquiRBFSO2() = default;
 		
-		explicit EquiRBFSO2( const VectorXd& centre ) : centre(centre) {}
-		
-		EquiRBFSO2( const VectorXd& weight, const VectorXd& centre ) : weight(weight), centre(centre) {}
+		explicit EquiRBFSO2( const InverseQuadratic& f ) : func(f) {}
 
 		template<typename Derived>
 		Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
@@ -233,9 +268,6 @@ namespace DRDSP {
 			return ComputeRotation( acos( x.dot(y) / (x.norm()*y.norm()) ) );
 		}
 	};
-
-
-
 }
 
 #endif

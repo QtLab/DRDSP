@@ -101,11 +101,11 @@ ProjSecant& ProjSecant::Find( const Secants& secants ) {
 	SecantCostFunction S(secants);
 	SecantCostGradient gradS(secants);
 
-	ConjugateGradient<Grassmannian::Geodesic,SecantCostFunction,SecantCostGradient> optimiziation( S, gradS );
+	ConjugateGradient<Grassmannian::Geodesic> optimiziation;
 
 	optimiziation.maxSteps = maxIterations;
 	optimiziation.lineSearch.alpha = 2.0;
-	optimiziation.Optimize( W );
+	optimiziation.Optimize( W, S, gradS );
 	return *this;
 }
 
@@ -113,11 +113,11 @@ ProjSecant& ProjSecant::Find( const Secants* secants, size_t N ) {
 	SecantCostFunctionMulti S(secants,N);
 	SecantCostGradientMulti gradS(secants,N);
 
-	ConjugateGradient<Grassmannian::Geodesic,SecantCostFunctionMulti,SecantCostGradientMulti> optimiziation( S, gradS );
+	ConjugateGradient<Grassmannian::Geodesic> optimiziation;
 
 	optimiziation.maxSteps = maxIterations;
 	optimiziation.lineSearch.alpha = 2.0;
-	optimiziation.Optimize( W );
+	optimiziation.Optimize( W, S, gradS );
 	return *this;
 }
 

@@ -10,12 +10,12 @@
 using namespace std;
 using namespace DRDSP;
 
-typedef PolyharmonicSpline3 RadialType;
+typedef RBF<PolyharmonicSpline<4>> RadialType;
 
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(3), numRBFs(40), numIterations(300), numThreads(3) {}
+	Options() : targetDimension(3), numRBFs(40), numIterations(500), numThreads(4) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);

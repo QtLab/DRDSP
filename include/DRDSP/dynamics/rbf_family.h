@@ -23,32 +23,33 @@ namespace DRDSP {
 			for(uint32_t i=0;i<stateDim;++i)
 				model.linear.col(i) = parameter.segment(i*stateDim,stateDim);
 			for(uint32_t i=0;i<nRBFs;++i)
-				model.weight[i] = parameter.segment((i+stateDim)*stateDim,stateDim);
+				model.rbfs[i].weight = parameter.segment((i+stateDim)*stateDim,stateDim);
 			for(uint32_t i=0;i<nRBFs;++i)
 				model.rbfs[i].centre = parameter.segment((i+nRBFs+stateDim)*stateDim,stateDim);
 			return model;
 		}
 	};
 
-	template<typename F = ThinPlateSpline>
+	template<typename F = RBF<ThinPlateSpline>>
 	struct RBFFamily : Family<RBFModel<F>> {
-		vector<RBF<F>> rbfs;
+		vector<VectorXd> centres;
 
 		RBFFamily() : RBFFamily(0,0) {}
 
-		RBFFamily( uint32_t dim, uint32_t nRBFs ) : Family<RBFModel<F>>(dim,dim*(dim+nRBFs)), rbfs(nRBFs) {
-			for( auto& r : rbfs ) {
-				r.centre.setZero(dim);
+		RBFFamily( uint32_t dim, uint32_t nRBFs ) : Family<RBFModel<F>>(dim,dim*(dim+nRBFs)), centres(nRBFs) {
+			for( auto& c : centres ) {
+				c.setZero(dim);
 			}
 		}
 
 		RBFModel<F> operator()( const VectorXd& parameter ) const {
-			RBFModel<F> model(stateDim,(uint32_t)rbfs.size());
+			RBFModel<F> model(stateDim,(uint32_t)centres.size());
 			for(uint32_t i=0;i<stateDim;++i)
 				model.linear.col(i) = parameter.segment(i*stateDim,stateDim);
-			for(size_t i=0;i<rbfs.size();++i)
-				model.weights[i] = parameter.segment((i+stateDim)*stateDim,stateDim);
-			model.rbfs = rbfs;
+			for(size_t i=0;i<centres.size();++i) {
+				model.rbfs[i].weight = parameter.segment((i+stateDim)*stateDim,stateDim);
+				model.rbfs[i].centre = centres[i];
+			}
 			return model;
 		}
 
@@ -61,10 +62,10 @@ namespace DRDSP {
 			uint32_t nRBFs;
 			in >> stateDim >> nRBFs;
 			paramDim = stateDim * ( stateDim + nRBFs );
-			rbfs.resize(nRBFs);
-			for(uint32_t i=0;i<nRBFs;++i)
+			centres.resize(nRBFs);
+			for( auto& c : centres )
 				for(uint32_t j=0;j<stateDim;++j)
-					in >> rbfs[i].centre(j);
+					in >> c[j];
 		}
 
 		void WriteCSV( const char* filename ) const {
@@ -73,11 +74,11 @@ namespace DRDSP {
 				cout << "RBFFamily::WriteCSV : file error " << filename << endl;
 				return;
 			}
-			out << stateDim << "," << rbfs.size() << endl;
+			out << stateDim << "," << centres.size() << endl;
 
-			for(size_t i=0;i<rbfs.size();++i) {
+			for( const auto& c : centres ) {
 				for(uint32_t j=0;j<stateDim;++j) {
-					out << rbfs[i].centre(j) << ",";
+					out << c[j] << ",";
 				}
 				out << endl;
 			}
@@ -88,8 +89,12 @@ namespace DRDSP {
 			L.setZero();
 			for(uint32_t i=0;i<stateDim;++i)
 				L.block(0,stateDim*i,stateDim,stateDim).setIdentity() *= x[i];
-			for(size_t i=0;i<rbfs.size();++i)
-				L.block(0,stateDim*(stateDim+i),stateDim,stateDim).setIdentity() *= rbfs[i]( x );
+
+			typename Model::RadialType rbf;
+			for(size_t i=0;i<centres.size();++i) {
+				double phi = rbf( (x-centres[i]).norm() );
+				L.block(0,stateDim*(stateDim+i),stateDim,stateDim).setIdentity() *= phi;
+			}
 			return L;
 		}
 
@@ -105,11 +110,14 @@ namespace DRDSP {
 			for(uint32_t i=0;i<stateDim;++i) {
 				L.block(stateDim*i,stateDim*i,stateDim,stateDim).setIdentity();
 			}
-			VectorXd dphi;
-			for(size_t i=0;i<rbfs.size();++i) {
-				dphi = rbfs[i].Derivative(x);
+			typename Model::RadialType rbf;
+			VectorXd r;
+			for(size_t i=0;i<centres.size();++i) {
+				r = x - centres[i];
+				double rnorm = r.norm();
+				double dphi = rbf.Derivative( rnorm ) / rnorm;
 				for(uint32_t j=0;j<stateDim;++j) {
-					L.block(j*stateDim,stateDim*(stateDim+i),stateDim,stateDim).setIdentity() *= dphi[j];
+					L.block(j*stateDim,stateDim*(stateDim+i),stateDim,stateDim).setIdentity() *= r[j] * dphi;
 				}
 			}
 			return L;

@@ -11,7 +11,7 @@ using namespace std;
 
 namespace DRDSP {
 
-	template<typename F = ThinPlateSpline>
+	template<typename F = RBF<ThinPlateSpline>>
 	struct RBFFamilyProducer : ProducerBase {
 		typedef PMapFamily<RBFFamily<F>,AffineXd> ReducedFamily;
 		double boxScale;
@@ -104,7 +104,7 @@ namespace DRDSP {
 			ParameterMapProducer<RBFFamily<F>> pmp;
 
 			for(uint32_t i=0;i<numIterations;++i) {
-				SetCentresRandom( reduced.rbfs, box, mt );
+				SetCentresRandom( reduced.centres, box, mt );
 				A = pmp.SolveOrig( reduced, data, parameters );
 				cost = ComputeTotalCost( ReducedFamily( reduced, A ), data, parameters );
 				if( cost < bestCost || i==0 ) {
@@ -116,13 +116,12 @@ namespace DRDSP {
 			return best;
 		}
 
-		template<typename F>
-		void SetCentresRandom( vector<RBF<F>>& rbfs, const AABB& box, mt19937& mt ) const {
+		void SetCentresRandom( vector<VectorXd>& centres, const AABB& box, mt19937& mt ) const {
 			static uniform_real_distribution<double> dist;
 			VectorXd diff = box.bMax - box.bMin;
-			for(size_t i=0;i<rbfs.size();++i) {
-				for(uint32_t j=0;j<rbfs[i].centre.size();++j) {
-					rbfs[i].centre(j) = box.bMin(j) + diff(j) * dist(mt);
+			for( auto& c : centres ) {
+				for(int64_t j=0;j<c.size();++j) {
+					c[j] = box.bMin(j) + diff(j) * dist(mt);
 				}
 			}
 		}

@@ -1,26 +1,27 @@
 #ifndef INCLUDED_DATA_DATA_SET
 #define INCLUDED_DATA_DATA_SET
 #include "../types.h"
+#include "../geometry/ball.h"
 #include <vector>
 
 using namespace std;
 
 namespace DRDSP {
 
-	/*!
+	/**
 	 * \brief A set of data points
 	 */
 	struct DataSet {
-		uint32_t dimension;        //!< Dimension of the space
-		vector<VectorXd> points;   //!< Array of data vectors
+		uint32_t dimension;        ///< Dimension of the space
+		vector<VectorXd> points;   ///< Array of data vectors
 		
 		DataSet() : dimension(0) {}
+		explicit DataSet( size_t numPoints ) : points(numPoints) {}
 		DataSet( size_t numPoints, uint32_t dim );
-		bool LoadBinary( const char* filename );        //!< Load a data set from file in binary format
-		bool LoadText( const char* filename );          //!< Load a data set from file in text format (space separated)
-		void WriteCSV( const char* filename ) const;    //!< Write the data set to file in CSV format
-		void WriteBinary( const char* filename ) const;    //!< Write the data set to file in binary format
-		DataSet ProjectData( const MatrixXd& W ) const; //!< Apply the given projection to this data set
+		bool LoadBinary( const char* filename );         ///< Load a data set from file in binary format
+		bool LoadText( const char* filename );           ///< Load a data set from file in text format (space separated)
+		void WriteCSV( const char* filename ) const;     ///< Write the data set to file in CSV format
+		void WriteBinary( const char* filename ) const;  ///< Write the data set to file in binary format
 		
 		VectorXd& operator[]( size_t i ) {
 			return points[i];
@@ -31,11 +32,20 @@ namespace DRDSP {
 		}
 	};
 
-	template<typename E>
-	DataSet EmbedData( const E& embedding, const DataSet& data ) {
-		DataSet r( data.points.size(), embedding.eDim );
-		for(uint32_t i=0;i<r.points.size();++i) {
-			r[i] = embedding(data[i]);
+	template<typename F>
+	DataSet Map( const F& f, const DataSet& data ) {
+		DataSet r( data.points.size() );
+		for(size_t i=0;i<r.points.size();++i) {
+			r[i] = f(data[i]);
+		}
+		return r;
+	}
+
+	template<typename Derived>
+	DataSet MapMatrix( const MatrixBase<Derived>& A, const DataSet& data ) {
+		DataSet r( data.points.size() );
+		for(size_t i=0;i<r.points.size();++i) {
+			r[i] = A * data[i];
 		}
 		return r;
 	}
@@ -48,6 +58,9 @@ namespace DRDSP {
 	};
 
 	DataComparisonResult CompareData( const vector<VectorXd>& s1, const vector<VectorXd>& s2 );
+
+	BallXd ComputeBall( const vector<VectorXd>& points );
+
 
 }
 

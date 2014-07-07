@@ -1,6 +1,5 @@
 #ifndef INCLUDED_EIGEN_DUAL
 #define INCLUDED_EIGEN_DUAL
-#include <limits>
 #include <Eigen/Core>
 #include "dual.h"
 
@@ -86,10 +85,10 @@ namespace DRDSP {
 	template<typename T,int Rows,int Cols>
 	using DualMatrix = Matrix<dual<T>,Rows,Cols>;
 
-	typedef DualMatrix<float,-1,-1>  DualMatrixXf;
+	typedef DualMatrix<float ,-1,-1> DualMatrixXf;
 	typedef DualMatrix<double,-1,-1> DualMatrixXd;
-	typedef DualMatrix<float,-1,1>  DualVectorXf;
-	typedef DualMatrix<double,-1,1> DualVectorXd;
+	typedef DualMatrix<float ,-1,1>  DualVectorXf;
+	typedef DualMatrix<double,-1,1>  DualVectorXd;
 
 	template<typename Derived>
 	DualMatrixXd Dualify( const MatrixBase<Derived>& x, const MatrixBase<Derived>& y ) {

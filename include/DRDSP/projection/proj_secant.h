@@ -11,6 +11,7 @@ namespace DRDSP {
 
 		explicit SecantCostFunction( const Secants& secants ) : secants(secants) {}
 		double operator()( const MatrixXd& X ) const;
+		SecantCostFunction& operator=( const SecantCostFunction& ) = delete;
 	};
 
 	struct SecantCostGradient {
@@ -18,6 +19,7 @@ namespace DRDSP {
 
 		explicit SecantCostGradient( const Secants& secants ) : secants(secants) {}
 		MatrixXd operator()( const MatrixXd& X ) const;
+		SecantCostGradient& operator=( const SecantCostGradient& ) = delete;
 	};
 
 	struct SecantCostFunctionMulti {

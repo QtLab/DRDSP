@@ -21,7 +21,7 @@ struct Options {
 	}
 };
 
-typedef Multiquadratic RadialType;
+typedef RBF<Multiquadratic> RadialType;
 
 int main( int argc, char** argv ) {
 	Options options(argc,argv);

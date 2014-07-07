@@ -147,7 +147,7 @@ DataSystem DataSystem::ProjectData( const MatrixXd& W ) const {
 	projectedData.parameters = parameters;
 
 	for(uint32_t i=0;i<numParameters;++i) {
-		projectedData.dataSets[i] = dataSets[i].ProjectData( W );
+		projectedData.dataSets[i] = MapMatrix( W, dataSets[i] );
 	}
 
 	return projectedData;

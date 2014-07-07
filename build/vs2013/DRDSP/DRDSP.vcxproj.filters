@@ -200,5 +200,11 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\parameter_map_producer.h">
       <Filter>Header Files\dynamics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\polyharmonic_spline.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\geometry\ball.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

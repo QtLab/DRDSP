@@ -4,29 +4,26 @@
 
 namespace DRDSP {
 	
-	template<typename Geodesic,typename S,typename DS>
+	template<typename Geodesic>
 	struct ConjugateGradient {
 		typedef typename Geodesic::Metric Metric;
 		typedef typename Metric::Point Point;
 		typedef typename Metric::InnerProduct::Vector Vector;
 
-		const S& cost;
-		const DS& gradient;
 		Metric metric;
 		Geodesic geodesic;
 		LineSearch lineSearch;
 		uint32_t n, maxSteps;
 		enum modType { FR, PR, HS } modifier;
 
-		ConjugateGradient( const S& cost, const DS& gradient ) :
-			cost(cost),
-			gradient(gradient),
+		ConjugateGradient() :
 			n(0),
 			maxSteps(1000),
 			modifier(HS)
 		{}
 
-		bool Step( Point& x ) {
+		template<typename S,typename DS>
+		bool Step( Point& x, const S& cost, const DS& gradient ) {
 			lastGrad = grad;
 			grad = gradient(x);
 
@@ -55,12 +52,13 @@ namespace DRDSP {
 			return true;
 		}
 
-		bool Optimize( Point& x ) {
+		template<typename S,typename DS>
+		bool Optimize( Point& x, const S& cost, const DS& gradient ) {
 			n = 0;
 			if( lineSearch.alpha <= 0.0 )
 				lineSearch.alpha = 1.0e-2;
 			for(uint32_t i=0;i<maxSteps;++i) {
-				if( !Step(x) )
+				if( !Step( x, cost, gradient ) )
 					return true;
 				++n;
 				cout << n << "\t" << lineSearch.S0 << "\t" << lineSearch.alpha << endl;
@@ -93,6 +91,7 @@ namespace DRDSP {
 			return 0.0;
 		}
 	};
+
 }
 
 #endif
