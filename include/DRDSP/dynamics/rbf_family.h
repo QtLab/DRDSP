@@ -2,9 +2,7 @@
 #define INCLUDED_DYNAMICS_RBF_FAMILY
 #include <iostream>
 #include <fstream>
-#include "../types.h"
 #include "rbf_model.h"
-#include <Eigen/LU>
 
 using namespace std;
 
@@ -46,10 +44,10 @@ namespace DRDSP {
 			RBFModel<F> model(stateDim,(uint32_t)centres.size());
 			for(uint32_t i=0;i<stateDim;++i)
 				model.linear.col(i) = parameter.segment(i*stateDim,stateDim);
-			for(size_t i=0;i<centres.size();++i) {
+			for(size_t i=0;i<centres.size();++i)
 				model.rbfs[i].weight = parameter.segment((i+stateDim)*stateDim,stateDim);
+			for(size_t i=0;i<centres.size();++i)
 				model.rbfs[i].centre = centres[i];
-			}
 			return model;
 		}
 
@@ -85,15 +83,14 @@ namespace DRDSP {
 		}
 
 		MatrixXd ComputeLinear( const VectorXd& x ) const {
+			Model model = (*this)( VectorXd::Zero(paramDim) );
 			MatrixXd L( stateDim, paramDim );
 			L.setZero();
-			for(uint32_t i=0;i<stateDim;++i)
+			for(uint32_t i=0;i<stateDim;++i) {
 				L.block(0,stateDim*i,stateDim,stateDim).setIdentity() *= x[i];
-
-			typename Model::RadialType rbf;
+			}
 			for(size_t i=0;i<centres.size();++i) {
-				double phi = rbf( (x-centres[i]).norm() );
-				L.block(0,stateDim*(stateDim+i),stateDim,stateDim).setIdentity() *= phi;
+				L.block(0,stateDim*(stateDim+i),stateDim,stateDim) = model.rbfs[i].LinearWeight(x);
 			}
 			return L;
 		}
@@ -105,20 +102,14 @@ namespace DRDSP {
 		}
 
 		MatrixXd ComputeLinearDerivative( const VectorXd& x ) const {
+			Model model = (*this)( VectorXd::Zero(paramDim) );
 			MatrixXd L( stateDim * stateDim, paramDim );
 			L.setZero();
 			for(uint32_t i=0;i<stateDim;++i) {
 				L.block(stateDim*i,stateDim*i,stateDim,stateDim).setIdentity();
 			}
-			typename Model::RadialType rbf;
-			VectorXd r;
 			for(size_t i=0;i<centres.size();++i) {
-				r = x - centres[i];
-				double rnorm = r.norm();
-				double dphi = rbf.Derivative( rnorm ) / rnorm;
-				for(uint32_t j=0;j<stateDim;++j) {
-					L.block(j*stateDim,stateDim*(stateDim+i),stateDim,stateDim).setIdentity() *= r[j] * dphi;
-				}
+				L.block(0,stateDim*(stateDim+i),stateDim*stateDim,stateDim) = model.rbfs[i].LinearDerivativeWeight(x);
 			}
 			return L;
 		}

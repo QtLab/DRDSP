@@ -10,12 +10,12 @@
 using namespace std;
 using namespace DRDSP;
 
-typedef RBF<PolyharmonicSpline<4>> RadialType;
+typedef RBF<PolyharmonicSpline<3>> RBFType;
 
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(3), numRBFs(40), numIterations(500), numThreads(4) {}
+	Options() : targetDimension(3), numRBFs(40), numIterations(250), numThreads(4) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -49,11 +49,11 @@ void ReducedFloquet( const Options& options ) {
 
 	auto parameters = ParameterList( 4.0, 8.8, 21 );
 
-	RBFFamily<RadialType> reducedFamily;
+	RBFFamily<RBFType> reducedFamily;
 	reducedFamily.ReadText("reduced.txt");
 
 	cout << "Generating data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> dataGenerator( reducedFamily );
+	DataGenerator<RBFFamily<RBFType>> dataGenerator( reducedFamily );
 	dataGenerator.initial = Vector3d(7.0,0.0,0.5);
 	dataGenerator.tStart = 1000;
 	dataGenerator.tInterval = 100;
@@ -66,7 +66,7 @@ void ReducedFloquet( const Options& options ) {
 	for(size_t i=0;i<parameters.size();++i) {
 		periods[i] = DetectPeriod(
 			data.dataSets[i].points,
-			VectorXd(reducedFamily(parameters[i])(data.dataSets[i][0])),
+			reducedFamily(parameters[i])(data.dataSets[i][0]),
 			dataGenerator.tInterval / (dataGenerator.print-1),
 			0.001
 		);
@@ -156,7 +156,7 @@ void ComputeReduced( const Options& options ) {
 
 	cout << "Computing Reduced Family..." << endl;
 	
-	RBFFamilyProducer<RadialType> producer( options.numRBFs );
+	RBFFamilyProducer<RBFType> producer( options.numRBFs );
 	producer.boxScale = 1.6;
 	auto reducedFamily = producer.BruteForce( reducedData,
 											  data.parameters,
@@ -231,10 +231,10 @@ void SimulateReduced( const Options& options ) {
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads );
 
-	RBFFamily<RadialType> reducedFamily;
+	RBFFamily<RBFType> reducedFamily;
 	reducedFamily.ReadText("reduced.txt");
 
-	RBFFamilyProducer<RadialType> producer( reducedFamily.nRBFs );
+	RBFFamilyProducer<RBFType> producer( reducedFamily.nRBFs );
 
 	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 
@@ -245,7 +245,7 @@ void SimulateReduced( const Options& options ) {
 	reducedFamily.WriteCSV("output/reduced.csv");
 
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RadialType>> rdataGenerator( reducedFamily );
+	DataGenerator<RBFFamily<RBFType>> rdataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 
@@ -254,7 +254,7 @@ void SimulateReduced( const Options& options ) {
 
 	Compare( reducedData, rdata );
 
-	BifurcationDiagramGenerator<RBFFamily<RadialType>> bifurcationGenerator;
+	BifurcationDiagramGenerator<RBFFamily<RBFType>> bifurcationGenerator;
 	bifurcationGenerator.tStart = 500.0;
 	bifurcationGenerator.tInterval = 500.0;
 	bifurcationGenerator.dt = 0.001;
@@ -362,7 +362,7 @@ void Test2( const Options& options ) {
 
 	cout << "Computing Reduced Family..." << endl;
 	
-	RBFFamilyProducer<RadialType> producer( options.numRBFs );
+	RBFFamilyProducer<RBFType> producer( options.numRBFs );
 	producer.boxScale = 1.6;
 	auto reducedFamily = producer.BruteForce( reducedData,
 											  data.parameters,

@@ -162,6 +162,9 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

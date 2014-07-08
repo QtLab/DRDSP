@@ -20,7 +20,7 @@ struct Options {
 	}
 };
 
-typedef RBF<Multiquadratic> RadialType;
+typedef RBF<Multiquadratic> RBFType;
 
 int main( int argc, char** argv ) {
 
@@ -67,7 +67,7 @@ int main( int argc, char** argv ) {
 	           .WriteVectorsCSV("output/p","-vectors.csv");
 
 	cout << "Computing Reduced Family..." << endl;
-	RBFFamilyProducer<RadialType> producer( options.numRBFs );
+	RBFFamilyProducer<RBFType> producer( options.numRBFs );
 	auto reducedFamily = producer.BruteForce( reducedData,
 	                                          data.parameters,
 	                                          options.numIterations,

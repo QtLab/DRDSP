@@ -1,7 +1,7 @@
 #ifndef INCLUDED_TYPES
 #define INCLUDED_TYPES
 
-#include <stdint.h>
+#include <cstdint>
 
 #pragma warning( disable : 4714 ) // function '...' marked as __forceinline not inlined
 

@@ -210,6 +210,9 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

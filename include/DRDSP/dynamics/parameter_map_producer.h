@@ -4,6 +4,7 @@
 #include "../eigen_affine.h"
 #include "../misc.h"
 #include <cmath>
+#include <Eigen/LU>
 
 using namespace std;
 
