@@ -3,6 +3,7 @@
 #include <DRDSP/dynamics/data_generator.h>
 #include <DRDSP/misc.h>
 #include "pendulum.h"
+#include <DRDSP/dynamics/bifurcation.h>
 
 using namespace std;
 using namespace DRDSP;
@@ -10,7 +11,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(4), numRBFs(40), numIterations(1000), numThreads(4) {}
+	Options() : targetDimension(3), numRBFs(100), numIterations(120), numThreads(4) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -20,7 +21,7 @@ struct Options {
 	}
 };
 
-typedef RBF<Multiquadratic> RBFType;
+typedef RBF<PolyharmonicSpline<4>> RBFType;
 
 int main( int argc, char** argv ) {
 
@@ -28,16 +29,18 @@ int main( int argc, char** argv ) {
 
 	FamilyEmbedded<PendulumFamily,FlatEmbedding> pendulum;
 
-	auto parameters = ParameterList( 1.42, 1.43, 11 );
+	auto parameters = ParameterList( 1.886, 1.894, 8 );
 
 	// Generate the data
 	cout << "Generating data..." << endl;
 	DataGenerator<PendulumFamily,PendulumSolver> dataGenerator;
 	dataGenerator.initial.setZero( pendulum.family.stateDim );
-	dataGenerator.initial(1) = -0.422;
-	dataGenerator.tStart = 1500;
-	dataGenerator.tInterval = 12;
-	dataGenerator.print = 200;
+	dataGenerator.initial[0] = -0.81;
+	dataGenerator.initial[1] = 0.14;
+	dataGenerator.initial[3] = 0.74;
+	dataGenerator.tStart = 1000;
+	dataGenerator.tInterval = 1000;
+	dataGenerator.print = 2000;
 	dataGenerator.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
@@ -59,6 +62,31 @@ int main( int argc, char** argv ) {
 	          .WriteCSV("output/projection.csv");
 
 	secants = vector<Secants>();
+
+/*
+	BifurcationDiagramGenerator<PendulumFamily,PendulumSolver> bifurcationGenerator;
+	bifurcationGenerator.tStart = 1000.0;
+	bifurcationGenerator.tInterval = 1000.0;
+	bifurcationGenerator.dt = 0.001;
+	bifurcationGenerator.dtMax = 0.001;
+	bifurcationGenerator.pMin = parameters.front();
+	bifurcationGenerator.pMax = parameters.back();
+	bifurcationGenerator.pCount = 1280;
+	bifurcationGenerator.initial = dataGenerator.initial;
+	bifurcationGenerator.Generate( pendulum.family,
+		[&]( const VectorXd& x, const VectorXd& y ) {
+			VectorXd px = projSecant.W.adjoint() * pendulum.embedding(x);
+			VectorXd py = projSecant.W.adjoint() * pendulum.embedding(y);
+			return px[2] < 0.0 && py[2] > 0.0;
+		},
+		[&]( const VectorXd& x, const VectorXd& y ) {
+			VectorXd px = projSecant.W.adjoint() * pendulum.embedding(x);
+			VectorXd py = projSecant.W.adjoint() * pendulum.embedding(y);
+			return (px[1]+py[1])*0.5;
+		},
+		options.numThreads ).WriteBitmap( "output/bifurcation-orig.bmp", 720 );
+*/
+
 
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
