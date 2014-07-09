@@ -1,7 +1,8 @@
 \section{Class Hierarchy}
 This inheritance list is sorted roughly, but not completely, alphabetically\-:\begin{DoxyCompactList}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:A\-A\-B\-B}{\pageref{struct_d_r_d_s_p_1_1_a_a_b_b}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Affine\-Parameter\-Map}{\pageref{struct_d_r_d_s_p_1_1_affine_parameter_map}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Affine$<$ Scalar, Rows, Cols $>$}{\pageref{struct_d_r_d_s_p_1_1_affine}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Ball$<$ Scalar, Dim $>$}{\pageref{struct_d_r_d_s_p_1_1_ball}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Bifurcation\-Diagram$<$ Parameter, Value $>$}{\pageref{struct_d_r_d_s_p_1_1_bifurcation_diagram}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Bifurcation\-Diagram\-Generator$<$ Family, Solver $>$}{\pageref{struct_d_r_d_s_p_1_1_bifurcation_diagram_generator}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Bin}{\pageref{struct_d_r_d_s_p_1_1_bin}}{}
@@ -9,12 +10,9 @@ This inheritance list is sorted roughly, but not completely, alphabetically\-:\b
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:bmp\-File\-Head}{\pageref{struct_d_r_d_s_p_1_1bmp_file_head}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:bmp\-Info\-Head}{\pageref{struct_d_r_d_s_p_1_1bmp_info_head}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:bmp\-Pixel}{\pageref{struct_d_r_d_s_p_1_1bmp_pixel}}{}
-\item \contentsline{section}{Eigen\-:\-:internal\-:\-:conj\-\_\-helper$<$ dual$<$ Real\-Scalar $>$, dual$<$ Real\-Scalar $>$, false, true $>$}{\pageref{struct_eigen_1_1internal_1_1conj__helper_3_01dual_3_01_real_scalar_01_4_00_01dual_3_01_real_scal4b61c34ae29b604821accd0f1246383c}}{}
-\item \contentsline{section}{Eigen\-:\-:internal\-:\-:conj\-\_\-helper$<$ dual$<$ Real\-Scalar $>$, dual$<$ Real\-Scalar $>$, true, false $>$}{\pageref{struct_eigen_1_1internal_1_1conj__helper_3_01dual_3_01_real_scalar_01_4_00_01dual_3_01_real_scal6e28e8a9ebcfb8ddcb71a8128b9186c8}}{}
-\item \contentsline{section}{Eigen\-:\-:internal\-:\-:conj\-\_\-helper$<$ dual$<$ Real\-Scalar $>$, dual$<$ Real\-Scalar $>$, true, true $>$}{\pageref{struct_eigen_1_1internal_1_1conj__helper_3_01dual_3_01_real_scalar_01_4_00_01dual_3_01_real_scala5ecec909c0c0ca9a1043b6a856d6abb}}{}
-\item \contentsline{section}{Eigen\-:\-:internal\-:\-:conj\-\_\-helper$<$ dual$<$ Real\-Scalar $>$, Real\-Scalar, Conj, false $>$}{\pageref{struct_eigen_1_1internal_1_1conj__helper_3_01dual_3_01_real_scalar_01_4_00_01_real_scalar_00_01_conj_00_01false_01_4}}{}
-\item \contentsline{section}{Eigen\-:\-:internal\-:\-:conj\-\_\-helper$<$ Real\-Scalar, dual$<$ Real\-Scalar $>$, false, Conj $>$}{\pageref{struct_eigen_1_1internal_1_1conj__helper_3_01_real_scalar_00_01dual_3_01_real_scalar_01_4_00_01false_00_01_conj_01_4}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Conjugate\-Gradient$<$ Geodesic, S, D\-S $>$}{\pageref{struct_d_r_d_s_p_1_1_conjugate_gradient}}{}
+\item \contentsline{section}{Eigen\-:\-:internal\-:\-:conj\-\_\-helper$<$ dual$<$ T $>$, T, false, false $>$}{\pageref{struct_eigen_1_1internal_1_1conj__helper_3_01dual_3_01_t_01_4_00_01_t_00_01false_00_01false_01_4}}{}
+\item \contentsline{section}{Eigen\-:\-:internal\-:\-:conj\-\_\-helper$<$ T, dual$<$ T $>$, false, false $>$}{\pageref{struct_eigen_1_1internal_1_1conj__helper_3_01_t_00_01dual_3_01_t_01_4_00_01false_00_01false_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Conjugate\-Gradient$<$ Geodesic $>$}{\pageref{struct_d_r_d_s_p_1_1_conjugate_gradient}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Continuous\-Dynamical\-System$<$ Solver, Wrap\-Function $>$}{\pageref{struct_d_r_d_s_p_1_1_continuous_dynamical_system}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Continuous\-Dynamical\-System$<$ R\-K4$<$ F $>$, Wrap\-Function $>$}{\pageref{struct_d_r_d_s_p_1_1_continuous_dynamical_system}}{}
 \begin{DoxyCompactList}
@@ -36,17 +34,27 @@ This inheritance list is sorted roughly, but not completely, alphabetically\-:\b
 \begin{DoxyCompactList}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Identity\-Embedding}{\pageref{struct_d_r_d_s_p_1_1_identity_embedding}}{}
 \end{DoxyCompactList}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Equi\-R\-B\-F\-Cyclic$<$ F, N $>$}{\pageref{struct_d_r_d_s_p_1_1_equi_r_b_f_cyclic}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Equi\-R\-B\-F\-Finite$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_equi_r_b_f_finite}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Equi\-R\-B\-F\-S\-O2$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_equi_r_b_f_s_o2}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Equi\-R\-B\-F\-S\-O2$<$ Inverse\-Quadratic $>$}{\pageref{struct_d_r_d_s_p_1_1_equi_r_b_f_s_o2_3_01_inverse_quadratic_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Equi\-R\-B\-F\-Z2$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_equi_r_b_f_z2}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Euclidean\-Geodesic$<$ V $>$}{\pageref{struct_d_r_d_s_p_1_1_euclidean_geodesic}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Family$<$ Model, Parameter $>$}{\pageref{struct_d_r_d_s_p_1_1_family}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Family$<$ R\-B\-F\-Model$<$ F $>$, Vector\-Xd $>$}{\pageref{struct_d_r_d_s_p_1_1_family}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Family$<$ F\-:\-:Model, F\-:\-:Parameter $>$}{\pageref{struct_d_r_d_s_p_1_1_family}}{}
+\begin{DoxyCompactList}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Family\-Embedded$<$ F, Embedding $>$}{\pageref{struct_d_r_d_s_p_1_1_family_embedded}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:P\-Map\-Family$<$ F, P\-Map $>$}{\pageref{struct_d_r_d_s_p_1_1_p_map_family}}{}
+\end{DoxyCompactList}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Family$<$ R\-B\-F\-Model$<$ F $>$ $>$}{\pageref{struct_d_r_d_s_p_1_1_family}}{}
 \begin{DoxyCompactList}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F\-Family$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f_family}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F\-N\-L\-Family$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f_n_l_family}}{}
 \end{DoxyCompactList}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Family\-Embedded$<$ Family, Embedding $>$}{\pageref{struct_d_r_d_s_p_1_1_family_embedded}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Frobenius\-Inner\-Product}{\pageref{struct_d_r_d_s_p_1_1_frobenius_inner_product}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Gaussian}{\pageref{struct_d_r_d_s_p_1_1_gaussian}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Grassmannian\-:\-:Geodesic}{\pageref{struct_d_r_d_s_p_1_1_grassmannian_1_1_geodesic}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Gradient\-Descent$<$ Geodesic, S, D\-S $>$}{\pageref{struct_d_r_d_s_p_1_1_gradient_descent}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Gradient\-Descent$<$ Geodesic $>$}{\pageref{struct_d_r_d_s_p_1_1_gradient_descent}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Histogram}{\pageref{struct_d_r_d_s_p_1_1_histogram}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Histogram\-Generator}{\pageref{struct_d_r_d_s_p_1_1_histogram_generator}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Identity\-Wrap\-Function}{\pageref{struct_d_r_d_s_p_1_1_identity_wrap_function}}{}
@@ -54,20 +62,35 @@ This inheritance list is sorted roughly, but not completely, alphabetically\-:\b
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Inverse\-Quadratic}{\pageref{struct_d_r_d_s_p_1_1_inverse_quadratic}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Line\-Search}{\pageref{struct_d_r_d_s_p_1_1_line_search}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Model$<$ State $>$}{\pageref{struct_d_r_d_s_p_1_1_model}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Model$<$ Vector\-Xd $>$}{\pageref{struct_d_r_d_s_p_1_1_model}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Model$<$ M\-:\-:State $>$}{\pageref{struct_d_r_d_s_p_1_1_model}}{}
+\begin{DoxyCompactList}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Model\-Embedded$<$ M, Embedding $>$}{\pageref{struct_d_r_d_s_p_1_1_model_embedded}}{}
+\end{DoxyCompactList}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Model$<$$>$}{\pageref{struct_d_r_d_s_p_1_1_model}}{}
 \begin{DoxyCompactList}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F\-Model$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f_model}}{}
 \end{DoxyCompactList}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Model\-Embedded$<$ Model, Embedding $>$}{\pageref{struct_d_r_d_s_p_1_1_model_embedded}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Multiquadratic}{\pageref{struct_d_r_d_s_p_1_1_multiquadratic}}{}
 \item \contentsline{section}{Eigen\-:\-:Num\-Traits$<$ dual$<$ T $>$ $>$}{\pageref{struct_eigen_1_1_num_traits_3_01dual_3_01_t_01_4_01_4}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline3}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline3}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ N $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 1 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_011_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 2 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_012_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 3 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_013_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 4 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_014_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 5 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_015_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 6 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_016_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 7 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_017_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Polyharmonic\-Spline$<$ 8 $>$}{\pageref{struct_d_r_d_s_p_1_1_polyharmonic_spline_3_018_01_4}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Producer\-Base}{\pageref{struct_d_r_d_s_p_1_1_producer_base}}{}
+\begin{DoxyCompactList}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Parameter\-Map\-Producer$<$ Family $>$}{\pageref{struct_d_r_d_s_p_1_1_parameter_map_producer}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F\-Family\-Producer$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f_family_producer}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F\-Model\-Producer$<$ Family $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f_model_producer}}{}
+\end{DoxyCompactList}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Proj\-P\-O\-D}{\pageref{struct_d_r_d_s_p_1_1_proj_p_o_d}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Proj\-Secant}{\pageref{struct_d_r_d_s_p_1_1_proj_secant}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Radial\-Function$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_radial_function}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Radians$<$ T $>$}{\pageref{struct_d_r_d_s_p_1_1_radians}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F\-Family\-Producer$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f_family_producer}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F\-Model\-Producer$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f_model_producer}}{}
+\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-B\-F$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_b_f}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Reduced\-Data}{\pageref{struct_d_r_d_s_p_1_1_reduced_data}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Reduced\-Data\-System}{\pageref{struct_d_r_d_s_p_1_1_reduced_data_system}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:R\-K4$<$ F $>$}{\pageref{struct_d_r_d_s_p_1_1_r_k4}}{}
@@ -78,11 +101,6 @@ This inheritance list is sorted roughly, but not completely, alphabetically\-:\b
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Secant\-Cost\-Gradient}{\pageref{struct_d_r_d_s_p_1_1_secant_cost_gradient}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Secant\-Cost\-Gradient\-Multi}{\pageref{struct_d_r_d_s_p_1_1_secant_cost_gradient_multi}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Secants}{\pageref{struct_d_r_d_s_p_1_1_secants}}{}
-\begin{DoxyCompactList}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Secants\-Data}{\pageref{struct_d_r_d_s_p_1_1_secants_data}}{}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Secants\-Pre\-Computed}{\pageref{struct_d_r_d_s_p_1_1_secants_pre_computed}}{}
-\end{DoxyCompactList}
-\item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Thin\-Plate\-Spline}{\pageref{struct_d_r_d_s_p_1_1_thin_plate_spline}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Traits$<$ V $>$}{\pageref{struct_d_r_d_s_p_1_1_traits}}{}
 \item \contentsline{section}{D\-R\-D\-S\-P\-:\-:Uniform\-Metric$<$ Point, Inner\-Product $>$}{\pageref{struct_d_r_d_s_p_1_1_uniform_metric}}{}
 \end{DoxyCompactList}

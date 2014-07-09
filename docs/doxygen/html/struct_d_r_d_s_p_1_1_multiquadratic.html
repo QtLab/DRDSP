@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_multiquadratic.html">Multiquadratic</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_multiquadratic.html">Multiquadratic</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -100,12 +101,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9676531016bae341f6c2e9163041b899"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9676531016bae341f6c2e9163041b899"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Multiquadratic</b> (double scale)</td></tr>
 <tr class="separator:a9676531016bae341f6c2e9163041b899"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af06319ae007aa40fbd2833759161437f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af06319ae007aa40fbd2833759161437f"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (double r) const </td></tr>
-<tr class="separator:af06319ae007aa40fbd2833759161437f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afba9d7a5aeb541953b9a54919b013f5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afba9d7a5aeb541953b9a54919b013f5f"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>Derivative</b> (double r) const </td></tr>
-<tr class="separator:afba9d7a5aeb541953b9a54919b013f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca54d746ab7b550198d005901bff0470"><td class="memTemplParams" colspan="2"><a class="anchor" id="aca54d746ab7b550198d005901bff0470"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aca54d746ab7b550198d005901bff0470"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (T r) const </td></tr>
+<tr class="separator:aca54d746ab7b550198d005901bff0470"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74604d43e27612cd26b42b7e825ca161"><td class="memTemplParams" colspan="2"><a class="anchor" id="a74604d43e27612cd26b42b7e825ca161"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a74604d43e27612cd26b42b7e825ca161"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Derivative</b> (T r) const </td></tr>
+<tr class="separator:a74604d43e27612cd26b42b7e825ca161"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -113,14 +116,13 @@ Public Attributes</h2></td></tr>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>scale</b></td></tr>
 <tr class="separator:ad075ed2b3b85cab9d74369163eab65cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/DRDSP/dynamics/<a class="el" href="radial__basis_8h_source.html">radial_basis.h</a></li>
-<li>src/dynamics/radial_basis.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:06 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:01 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

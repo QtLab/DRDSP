@@ -35,7 +35,7 @@ namespace DRDSP {
 			ParameterMapProducer<RBFFamily<F>> pmp;
 
 			for(uint32_t i=0;i<numIterations;++i) {
-				SetCentresRandom( reduced.rbfs, box, mt );
+				SetPointsRandom( reduced.centres, box, mt );
 				A = pmp.SolveOrig( reduced, data, parameters );
 				Sft = ComputeTotalCost( ReducedFamily( reduced, A ), data, parameters );
 				costs[i] = Sft;
@@ -105,7 +105,7 @@ namespace DRDSP {
 			ParameterMapProducer<RBFFamily<F>> pmp;
 
 			for(uint32_t i=0;i<numIterations;++i) {
-				SetCentresRandom( reduced.centres, box, mt );
+				SetPointsRandom( reduced.centres, box, mt );
 				A = pmp.SolveOrig( reduced, data, parameters );
 				cost = ComputeTotalCost( ReducedFamily( reduced, A ), data, parameters );
 				if( cost < bestCost || i==0 ) {
@@ -115,16 +115,6 @@ namespace DRDSP {
 				}
 			}
 			return best;
-		}
-
-		void SetCentresRandom( vector<VectorXd>& centres, const AABB& box, mt19937& mt ) const {
-			static uniform_real_distribution<double> dist;
-			VectorXd diff = box.bMax - box.bMin;
-			for( auto& c : centres ) {
-				for(int64_t j=0;j<c.size();++j) {
-					c[j] = box.bMin(j) + diff(j) * dist(mt);
-				}
-			}
 		}
 
 	};

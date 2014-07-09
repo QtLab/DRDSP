@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -94,15 +95,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    </div>
 <div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_data_system.html">   10</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_data_system.html#ac494c5833ae14e805cd1d0a8b8e52143">   11</a></span>&#160;        uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#ab6aefaa08cd0a5b6a9e83105ecd56289">dimension</a>,           </div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_data_system.html#a11e4d274af9cfc398b7f1b6b49427f9b">   11</a></span>&#160;        uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#ab6aefaa08cd0a5b6a9e83105ecd56289">dimension</a>,           </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                 <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">numParameters</a>,       </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                 <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#ac494c5833ae14e805cd1d0a8b8e52143">parameterDimension</a>;  </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                 <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a11e4d274af9cfc398b7f1b6b49427f9b">paramDim</a>;            </div>
 <div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">   14</a></span>&#160;        vector&lt;DataSet&gt; <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a>;     </div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">   15</a></span>&#160;        vector&lt;VectorXd&gt; <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">parameters</a>;  </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>();</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>( uint32_t dim, uint32_t numParams, uint32_t paramDim );</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>( uint32_t dim, uint32_t numParams, uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a11e4d274af9cfc398b7f1b6b49427f9b">paramDim</a> );</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a23b905c286750d16f9cd8996ad4c2076">Load</a>( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename, uint32_t maxPoints = 0 );</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
@@ -111,68 +112,73 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#acf1c420d18c840b32fa5891f03253ee4">LoadSetText</a>( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename, uint32_t i, uint32_t maxPoints = 0 );</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a6b4e0e6bc3ba1135a08fc2c2ed874e39">WriteDataSetsCSV</a>( <span class="keyword">const</span> <span class="keywordtype">char</span>* filePrefix, <span class="keyword">const</span> <span class="keywordtype">char</span>* fileSuffix ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">ProjectData</a>( <span class="keyword">const</span> MatrixXd&amp; W ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    };</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> E&gt;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> EmbedData( <span class="keyword">const</span> E&amp; embedding, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; data ) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> r( embedding.eDim, data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">numParameters</a>, data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#ac494c5833ae14e805cd1d0a8b8e52143">parameterDimension</a> );</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        r.parameters = data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">parameters</a>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">for</span>(uint32_t i=0;i&lt;r.numParameters;++i) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            r.dataSets[i].points.resize( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a>[i].points.size() );</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> j=0;j&lt;r.dataSets[i].points.size();++j)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                r.dataSets[i][j] = embedding(data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a>[i][j]);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        }</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">return</span> r;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> E&gt;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    DataSystem EmbedData( <span class="keyword">const</span> E&amp; embedding, <span class="keyword">const</span> DataSystem&amp; data, uint32_t numThreads ) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        DataSystem r( embedding.eDim, data.numParameters, data.parameterDimension );</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        r.parameters = data.parameters;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        vector&lt;future&lt;void&gt;&gt; futures(numThreads);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">for</span>(uint32_t i=0;i&lt;data.numParameters;i+=numThreads) {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            uint32_t N = min( data.numParameters - i, numThreads );</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keywordflow">for</span>(uint32_t j=0;j&lt;N;++j) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                futures[j] = async( launch::async,</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                    [&amp;]( DataSet&amp; embedded, <span class="keyword">const</span> DataSet&amp; original ) {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                        embedded.points.resize( original.points.size() );</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> k=0;k&lt;embedded.points.size();++k)</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                            embedded[k] = embedding( original[k] );</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                    },</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    ref(r.dataSets[i+j]), cref(data.dataSets[i+j])</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                );</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">for</span>(uint32_t j=0;j&lt;N;++j) {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                futures[j].wait();</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            }</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">return</span> r;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#ac05f637ae6b77c109ac004cad87bacb4">WriteDataSetsBinary</a>( <span class="keyword">const</span> <span class="keywordtype">char</span>* filePrefix, <span class="keyword">const</span> <span class="keywordtype">char</span>* fileSuffix ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">ProjectData</a>( <span class="keyword">const</span> MatrixXd&amp; W ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">size_t</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a952b433226cdd312620db7140fe352ce">TotalPoints</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    };</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> E&gt;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> EmbedData( <span class="keyword">const</span> E&amp; embedding, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; data ) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> r( embedding.embedDim, data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">numParameters</a>, data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a11e4d274af9cfc398b7f1b6b49427f9b">paramDim</a> );</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        r.parameters = data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">parameters</a>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">for</span>(uint32_t i=0;i&lt;r.numParameters;++i) {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            r.dataSets[i].points.resize( data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a>[i].points.size() );</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> j=0;j&lt;r.dataSets[i].points.size();++j)</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                r.dataSets[i][j] = embedding(data.<a class="code" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a>[i][j]);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">return</span> r;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> E&gt;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    DataSystem EmbedData( <span class="keyword">const</span> E&amp; embedding, <span class="keyword">const</span> DataSystem&amp; data, uint32_t numThreads ) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        DataSystem r( embedding.embedDim, data.numParameters, data.paramDim );</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        r.parameters = data.parameters;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        vector&lt;future&lt;void&gt;&gt; futures(numThreads);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">for</span>(uint32_t i=0;i&lt;data.numParameters;i+=numThreads) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            uint32_t N = min( data.numParameters - i, numThreads );</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">for</span>(uint32_t j=0;j&lt;N;++j) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                futures[j] = async( launch::async,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    [&amp;]( DataSet&amp; embedded, <span class="keyword">const</span> DataSet&amp; original ) {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                        embedded.points.resize( original.points.size() );</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> k=0;k&lt;embedded.points.size();++k)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                            embedded[k] = embedding( original[k] );</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                    },</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                    ref(r.dataSets[i+j]), cref(data.dataSets[i+j])</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                );</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">for</span>(uint32_t j=0;j&lt;N;++j) {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                futures[j].wait();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> r;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></div><div class="ttdoc">A family of data sets with corresponding parameter values. </div><div class="ttdef"><b>Definition:</b> data_system.h:10</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_ac494c5833ae14e805cd1d0a8b8e52143"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#ac494c5833ae14e805cd1d0a8b8e52143">DRDSP::DataSystem::parameterDimension</a></div><div class="ttdeci">uint32_t parameterDimension</div><div class="ttdoc">Dimension of the parameter space. </div><div class="ttdef"><b>Definition:</b> data_system.h:11</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_ac05f637ae6b77c109ac004cad87bacb4"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#ac05f637ae6b77c109ac004cad87bacb4">DRDSP::DataSystem::WriteDataSetsBinary</a></div><div class="ttdeci">void WriteDataSetsBinary(const char *filePrefix, const char *fileSuffix) const </div><div class="ttdoc">Write the data sets to numbered files with given prefix and suffix. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:135</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_aae14ac3e8c2e1a397759cd3a4d8a102f"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">DRDSP::DataSystem::parameters</a></div><div class="ttdeci">vector&lt; VectorXd &gt; parameters</div><div class="ttdoc">Array of parameter values. </div><div class="ttdef"><b>Definition:</b> data_system.h:15</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_afd5e714d21c0d7c1b1efb65b233788ab"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">DRDSP::DataSystem::ProjectData</a></div><div class="ttdeci">DataSystem ProjectData(const MatrixXd &amp;W) const </div><div class="ttdoc">Apply the given projection to this data system. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:140</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a23b905c286750d16f9cd8996ad4c2076"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a23b905c286750d16f9cd8996ad4c2076">DRDSP::DataSystem::Load</a></div><div class="ttdeci">bool Load(const char *filename, uint32_t maxPoints=0)</div><div class="ttdoc">Load a data system from a text file. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:24</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a11e4d274af9cfc398b7f1b6b49427f9b"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a11e4d274af9cfc398b7f1b6b49427f9b">DRDSP::DataSystem::paramDim</a></div><div class="ttdeci">uint32_t paramDim</div><div class="ttdoc">Dimension of the parameter space. </div><div class="ttdef"><b>Definition:</b> data_system.h:11</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a952b433226cdd312620db7140fe352ce"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a952b433226cdd312620db7140fe352ce">DRDSP::DataSystem::TotalPoints</a></div><div class="ttdeci">size_t TotalPoints() const </div><div class="ttdoc">Total number of data points in the system. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:156</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_afd5e714d21c0d7c1b1efb65b233788ab"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">DRDSP::DataSystem::ProjectData</a></div><div class="ttdeci">DataSystem ProjectData(const MatrixXd &amp;W) const </div><div class="ttdoc">Apply the given projection to this data system. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:144</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a23b905c286750d16f9cd8996ad4c2076"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a23b905c286750d16f9cd8996ad4c2076">DRDSP::DataSystem::Load</a></div><div class="ttdeci">bool Load(const char *filename, uint32_t maxPoints=0)</div><div class="ttdoc">Load a data system from a text file. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:23</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a621ef4f4452821030bb57e93dadf334e"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">DRDSP::DataSystem::numParameters</a></div><div class="ttdeci">uint32_t numParameters</div><div class="ttdoc">Number of parameters/data sets in the family. </div><div class="ttdef"><b>Definition:</b> data_system.h:11</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_ab6aefaa08cd0a5b6a9e83105ecd56289"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#ab6aefaa08cd0a5b6a9e83105ecd56289">DRDSP::DataSystem::dimension</a></div><div class="ttdeci">uint32_t dimension</div><div class="ttdoc">Dimension of the space in which the data points live. </div><div class="ttdef"><b>Definition:</b> data_system.h:11</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a1c2765c2e9a5b228dfd5c7487d67f94b"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a1c2765c2e9a5b228dfd5c7487d67f94b">DRDSP::DataSystem::LoadSetBinary</a></div><div class="ttdeci">bool LoadSetBinary(const char *filename, uint32_t i, uint32_t maxPoints=0)</div><div class="ttdoc">Load the ith data set from the given file in binary format. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:57</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a1c2765c2e9a5b228dfd5c7487d67f94b"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a1c2765c2e9a5b228dfd5c7487d67f94b">DRDSP::DataSystem::LoadSetBinary</a></div><div class="ttdeci">bool LoadSetBinary(const char *filename, uint32_t i, uint32_t maxPoints=0)</div><div class="ttdoc">Load the ith data set from the given file in binary format. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:55</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a5fe0b41909f9056f986b4284e0fcb614"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">DRDSP::DataSystem::dataSets</a></div><div class="ttdeci">vector&lt; DataSet &gt; dataSets</div><div class="ttdoc">Array of data sets. </div><div class="ttdef"><b>Definition:</b> data_system.h:14</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a6b4e0e6bc3ba1135a08fc2c2ed874e39"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a6b4e0e6bc3ba1135a08fc2c2ed874e39">DRDSP::DataSystem::WriteDataSetsCSV</a></div><div class="ttdeci">void WriteDataSetsCSV(const char *filePrefix, const char *fileSuffix) const </div><div class="ttdoc">Write the data sets to numbered files with given prefix and suffix. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:130</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_acf1c420d18c840b32fa5891f03253ee4"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#acf1c420d18c840b32fa5891f03253ee4">DRDSP::DataSystem::LoadSetText</a></div><div class="ttdeci">bool LoadSetText(const char *filename, uint32_t i, uint32_t maxPoints=0)</div><div class="ttdoc">Load the ith data set from the given file in text format (space separated) </div><div class="ttdef"><b>Definition:</b> data_system.cpp:91</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a6b4e0e6bc3ba1135a08fc2c2ed874e39"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a6b4e0e6bc3ba1135a08fc2c2ed874e39">DRDSP::DataSystem::WriteDataSetsCSV</a></div><div class="ttdeci">void WriteDataSetsCSV(const char *filePrefix, const char *fileSuffix) const </div><div class="ttdoc">Write the data sets to numbered files with given prefix and suffix. </div><div class="ttdef"><b>Definition:</b> data_system.cpp:126</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_acf1c420d18c840b32fa5891f03253ee4"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#acf1c420d18c840b32fa5891f03253ee4">DRDSP::DataSystem::LoadSetText</a></div><div class="ttdeci">bool LoadSetText(const char *filename, uint32_t i, uint32_t maxPoints=0)</div><div class="ttdoc">Load the ith data set from the given file in text format (space separated) </div><div class="ttdef"><b>Definition:</b> data_system.cpp:88</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:07:59 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

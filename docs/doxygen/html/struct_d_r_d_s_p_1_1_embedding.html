@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -111,20 +112,20 @@ Inheritance diagram for DRDSP::Embedding:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a03a9777076d129e3330a7c69e3ff48e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03a9777076d129e3330a7c69e3ff48e3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Embedding</b> (uint32_t originalDimension, uint32_t embeddedDimension)</td></tr>
-<tr class="separator:a03a9777076d129e3330a7c69e3ff48e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a761628175adca44353dfae4c5adabe1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a761628175adca44353dfae4c5adabe1f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Embedding</b> (uint32_t <a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a>, uint32_t <a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a43679793e6c6df0de8a564c97b774928">embedDim</a>)</td></tr>
+<tr class="separator:a761628175adca44353dfae4c5adabe1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac49e8aa042fbf2ee8e9fdc3d2b4f1c26"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac49e8aa042fbf2ee8e9fdc3d2b4f1c26"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">oDim</a></td></tr>
-<tr class="memdesc:ac49e8aa042fbf2ee8e9fdc3d2b4f1c26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the original state space. <br/></td></tr>
-<tr class="separator:ac49e8aa042fbf2ee8e9fdc3d2b4f1c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa49b8deb5d403025ca5db3f483c015b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa49b8deb5d403025ca5db3f483c015b2"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#aa49b8deb5d403025ca5db3f483c015b2">eDim</a></td></tr>
-<tr class="memdesc:aa49b8deb5d403025ca5db3f483c015b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the embedding space, R^n. <br/></td></tr>
-<tr class="separator:aa49b8deb5d403025ca5db3f483c015b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31e1f302b771269d2475538dc0d12e26"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a31e1f302b771269d2475538dc0d12e26"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a></td></tr>
+<tr class="memdesc:a31e1f302b771269d2475538dc0d12e26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the original state space. <br/></td></tr>
+<tr class="separator:a31e1f302b771269d2475538dc0d12e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43679793e6c6df0de8a564c97b774928"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a43679793e6c6df0de8a564c97b774928"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_embedding.html#a43679793e6c6df0de8a564c97b774928">embedDim</a></td></tr>
+<tr class="memdesc:a43679793e6c6df0de8a564c97b774928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the embedding space, R^n. <br/></td></tr>
+<tr class="separator:a43679793e6c6df0de8a564c97b774928"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base for an embedding of a state space into R^n. </p>
@@ -134,7 +135,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:06 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:00 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

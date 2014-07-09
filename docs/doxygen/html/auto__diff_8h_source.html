@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -92,11 +93,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &quot;eigen_dual.h&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;Eigen/SparseCore&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
+<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="namespace_d_r_d_s_p.html">    6</a></span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keywordtype">double</span> AutoDerivative( F&amp;&amp; f, <span class="keywordtype">double</span> x ) {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordflow">return</span> dual_part( f( <a class="code" href="struct_d_r_d_s_p_1_1dual.html">dual&lt;T&gt;</a>(x,1.0) ) );</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordflow">return</span> dual_part( forward&lt;F&gt;(f)( <a class="code" href="struct_d_r_d_s_p_1_1dual.html">duald</a>(x,1.0) ) );</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    }</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
@@ -110,7 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordflow">for</span>(int64_t j=0;j&lt;df.cols();++j) {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            rj = r;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            rj[j].y = 1.0;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            df.col( j ) = f( rj );</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            df.col( j ) = forward&lt;F&gt;(f)( rj );</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        }</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">return</span> DualPart( df );</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    }</div>
@@ -122,11 +123,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        vector&lt;Triplet&lt;double&gt;&gt; triplets;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        triplets.reserve(x.size());</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=0;j&lt;x.size();++j) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">for</span>(int64_t j=0;j&lt;x.size();++j) {</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            rj = r;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            rj[j].y = 1.0;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            VectorXd temp = DualPart( f( rj ) );</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0;j&lt;x.size();++i) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            VectorXd temp = DualPart( forward&lt;F&gt;(f)( rj ) );</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">for</span>(int64_t i=0;i&lt;temp.size();++i) {</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                <span class="keywordflow">if</span>( temp[i] == 0.0 ) <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                triplets.emplace_back( i, j, temp[i] );</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            }</div>
@@ -139,11 +140,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1dual_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1dual.html">DRDSP::dual</a></div><div class="ttdef"><b>Definition:</b> dual.h:8</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1dual_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1dual.html">DRDSP::dual</a></div><div class="ttdef"><b>Definition:</b> dual.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:07:59 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

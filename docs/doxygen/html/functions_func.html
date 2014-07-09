@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -79,7 +80,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -91,23 +92,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 &#160;<ul>
 <li>ComputeFromData()
-: <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html#a07644fb406546e3e6f5adbebd472a968">DRDSP::SecantsPreComputed</a>
+: <a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a0863c97dcf80e86c5f7d941bb91ed68e">DRDSP::Secants</a>
 </li>
 <li>Generate()
 : <a class="el" href="struct_d_r_d_s_p_1_1_histogram_generator.html#af1acac305990b01bc4cc6e612415bf72">DRDSP::HistogramGenerator</a>
-</li>
-<li>GetLambda()
-: <a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#ae983bda2073bac0d8e6aebcc34d51153">DRDSP::AffineParameterMap</a>
-</li>
-<li>GetSecant()
-: <a class="el" href="struct_d_r_d_s_p_1_1_secants.html#aa36f3ff75b75d498e585cbac447cede9">DRDSP::Secants</a>
-, <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html#a97086e7908c47815d8570c9e8cbac7c5">DRDSP::SecantsPreComputed</a>
-, <a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a82585a040aebaa63bc5b1b40a79f99eb">DRDSP::SecantsData</a>
-</li>
-<li>GetSecantNoNormalize()
-: <a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a17468fc67c5ae42306af7fecee7b7dc9">DRDSP::SecantsData</a>
-, <a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a96e9a725643c31456df79a797f427981">DRDSP::Secants</a>
-, <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html#a9af341c4da934bd319392be47d58081d">DRDSP::SecantsPreComputed</a>
 </li>
 <li>Load()
 : <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a23b905c286750d16f9cd8996ad4c2076">DRDSP::DataSystem</a>
@@ -127,21 +115,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>LoadText()
 : <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a9caf2a2c685f1433028de6d3c11bd758">DRDSP::DataSet</a>
 </li>
-<li>operator()()
-: <a class="el" href="struct_d_r_d_s_p_1_1_affine_parameter_map.html#ac59316fb45c1d70439c180e28a021c25">DRDSP::AffineParameterMap</a>
-</li>
 <li>ProjectData()
-: <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a0f42640d4f826807b69830bf3617152c">DRDSP::DataSet</a>
-, <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">DRDSP::DataSystem</a>
-</li>
-<li>SetData()
-: <a class="el" href="struct_d_r_d_s_p_1_1_secants_data.html#a1c1383e3f4eca99473eba63d7a50a024">DRDSP::SecantsData</a>
+: <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">DRDSP::DataSystem</a>
 </li>
 <li>TotalFrequency()
 : <a class="el" href="struct_d_r_d_s_p_1_1_histogram.html#adeb7a588aa66fe2e6dd0d851ea92d625">DRDSP::Histogram</a>
 </li>
+<li>TotalPoints()
+: <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a952b433226cdd312620db7140fe352ce">DRDSP::DataSystem</a>
+</li>
+<li>WriteBinary()
+: <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a3003901476d4b92d122a64d78d67e212">DRDSP::DataSet</a>
+</li>
 <li>WriteCSV()
 : <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a1d90f86c1fbe0380d91158b1c050c501">DRDSP::DataSet</a>
+</li>
+<li>WriteDataSetsBinary()
+: <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ac05f637ae6b77c109ac004cad87bacb4">DRDSP::DataSystem</a>
 </li>
 <li>WriteDataSetsCSV()
 : <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a6b4e0e6bc3ba1135a08fc2c2ed874e39">DRDSP::DataSystem</a>
@@ -150,7 +140,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:06 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

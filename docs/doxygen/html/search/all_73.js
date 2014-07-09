@@ -6,9 +6,8 @@ var searchData=
   ['secantcostfunctionmulti',['SecantCostFunctionMulti',['../struct_d_r_d_s_p_1_1_secant_cost_function_multi.html',1,'DRDSP']]],
   ['secantcostgradient',['SecantCostGradient',['../struct_d_r_d_s_p_1_1_secant_cost_gradient.html',1,'DRDSP']]],
   ['secantcostgradientmulti',['SecantCostGradientMulti',['../struct_d_r_d_s_p_1_1_secant_cost_gradient_multi.html',1,'DRDSP']]],
-  ['secants',['secants',['../struct_d_r_d_s_p_1_1_secants_pre_computed.html#ad343c78cb0caa31f6038f2335f495060',1,'DRDSP::SecantsPreComputed']]],
   ['secants',['Secants',['../struct_d_r_d_s_p_1_1_secants.html',1,'DRDSP']]],
-  ['secantsdata',['SecantsData',['../struct_d_r_d_s_p_1_1_secants_data.html',1,'DRDSP']]],
-  ['secantsprecomputed',['SecantsPreComputed',['../struct_d_r_d_s_p_1_1_secants_pre_computed.html',1,'DRDSP']]],
-  ['setdata',['SetData',['../struct_d_r_d_s_p_1_1_secants_data.html#a1c1383e3f4eca99473eba63d7a50a024',1,'DRDSP::SecantsData']]]
+  ['secants',['secants',['../struct_d_r_d_s_p_1_1_secants.html#a1ea6387e35af61db236e3c9053fb5161',1,'DRDSP::Secants']]],
+  ['sourcedim',['sourceDim',['../struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26',1,'DRDSP::Embedding']]],
+  ['statedim',['stateDim',['../struct_d_r_d_s_p_1_1_model.html#a5689ac0bda80d0ae6db69443439ce1b5',1,'DRDSP::Model::stateDim()'],['../struct_d_r_d_s_p_1_1_family.html#ae2e7aabde5a620540f4771f1fac6da78',1,'DRDSP::Family::stateDim()']]]
 ];

@@ -85,6 +85,15 @@ namespace DRDSP {
 		const ReducedDataSystem& WriteVectorsCSV( const char* filePrefix, const char* fileSuffix ) const;
 		const ReducedDataSystem& WriteDerivativesCSV( const char* filePrefix, const char* fileSuffix ) const;
 		size_t TotalPoints() const;
+
+		ReducedData& operator[]( size_t i ) {
+			return reducedData[i];
+		}
+		
+		const ReducedData& operator[]( size_t i ) const {
+			return reducedData[i];
+		}
+
 	};
 
 	void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata );

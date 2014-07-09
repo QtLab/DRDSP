@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -97,36 +98,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aaefd4fae1d6f593b4f3699f866421b2c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaefd4fae1d6f593b4f3699f866421b2c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>GetInitial</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;data)</td></tr>
-<tr class="separator:aaefd4fae1d6f593b4f3699f866421b2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c9ff355f1c573933201b714f73063a5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c9ff355f1c573933201b714f73063a5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>GetInitial</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data)</td></tr>
-<tr class="separator:a9c9ff355f1c573933201b714f73063a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a8623152ec81a33eba68b44b4c79690"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a8623152ec81a33eba68b44b4c79690"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Find</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a> &amp;secants)</td></tr>
-<tr class="separator:a6a8623152ec81a33eba68b44b4c79690"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add0fcf2bf615c58b2b1f1de17431b9aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add0fcf2bf615c58b2b1f1de17431b9aa"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Find</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a> *secants, size_t N)</td></tr>
-<tr class="separator:add0fcf2bf615c58b2b1f1de17431b9aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86e5d2697efbde14d9bc25936dca7395"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a86e5d2697efbde14d9bc25936dca7395"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Find</b> (const vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a> &gt; &amp;secants)</td></tr>
-<tr class="separator:a86e5d2697efbde14d9bc25936dca7395"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cd887b8b69d245d986dd6715937bf18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5cd887b8b69d245d986dd6715937bf18"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a> &amp;secants) const </td></tr>
-<tr class="separator:a5cd887b8b69d245d986dd6715937bf18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bc2e242eb9dd71a6aec7c047870021a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2bc2e242eb9dd71a6aec7c047870021a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a> *secants, size_t N) const </td></tr>
-<tr class="separator:a2bc2e242eb9dd71a6aec7c047870021a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60bc686a0b19aa9b281a4758ba21fd4d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60bc686a0b19aa9b281a4758ba21fd4d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a> &gt; &amp;secants) const </td></tr>
-<tr class="separator:a60bc686a0b19aa9b281a4758ba21fd4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fc22577409b0117ab14f1b635eebc6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0fc22577409b0117ab14f1b635eebc6d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteCSV</b> (const char *filename) const </td></tr>
-<tr class="separator:a0fc22577409b0117ab14f1b635eebc6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcc803bd3d240249ea9a81f3e3afc9e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abcc803bd3d240249ea9a81f3e3afc9e5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteBinary</b> (const char *filename) const </td></tr>
-<tr class="separator:abcc803bd3d240249ea9a81f3e3afc9e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2afae510f9abf0a5163529ee09128f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2afae510f9abf0a5163529ee09128f8"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ProjSecant</b> (uint32_t targetDimension)</td></tr>
+<tr class="separator:ae2afae510f9abf0a5163529ee09128f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa55fa8720a3fc21364865b8a7939ab57"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa55fa8720a3fc21364865b8a7939ab57"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeInitial</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;data)</td></tr>
+<tr class="separator:aa55fa8720a3fc21364865b8a7939ab57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6efb6dce18044a7284965904b1ac755"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6efb6dce18044a7284965904b1ac755"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeInitial</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data)</td></tr>
+<tr class="separator:aa6efb6dce18044a7284965904b1ac755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b4b5d140093eab8a0313a035ad35f7a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b4b5d140093eab8a0313a035ad35f7a"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>Find</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &amp;secants)</td></tr>
+<tr class="separator:a1b4b5d140093eab8a0313a035ad35f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6422b7edf25dec73c435bbbc83179d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad6422b7edf25dec73c435bbbc83179d2"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>Find</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> *secants, size_t N)</td></tr>
+<tr class="separator:ad6422b7edf25dec73c435bbbc83179d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6176307efdb61f11ba39aa8bd155322"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6176307efdb61f11ba39aa8bd155322"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>Find</b> (const vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &gt; &amp;secants)</td></tr>
+<tr class="separator:af6176307efdb61f11ba39aa8bd155322"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c12f28ba578c22c206b0d92ad6eb490"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c12f28ba578c22c206b0d92ad6eb490"></a>
+const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &amp;secants) const </td></tr>
+<tr class="separator:a4c12f28ba578c22c206b0d92ad6eb490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0e2cf457eb340f1b1df392ea161ae14"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0e2cf457eb340f1b1df392ea161ae14"></a>
+const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> *secants, size_t N) const </td></tr>
+<tr class="separator:af0e2cf457eb340f1b1df392ea161ae14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a314a6742c209f41d347eaf652db24761"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a314a6742c209f41d347eaf652db24761"></a>
+const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &gt; &amp;secants) const </td></tr>
+<tr class="separator:a314a6742c209f41d347eaf652db24761"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b8c61ea307a758c789ae424cd72006c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b8c61ea307a758c789ae424cd72006c"></a>
+const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>WriteCSV</b> (const char *filename) const </td></tr>
+<tr class="separator:a1b8c61ea307a758c789ae424cd72006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb9d6b0aa69ba44619363a69d7f7cef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afbb9d6b0aa69ba44619363a69d7f7cef"></a>
+const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>WriteBinary</b> (const char *filename) const </td></tr>
+<tr class="separator:afbb9d6b0aa69ba44619363a69d7f7cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae37dfe0f561f61c3ecfda5abc02e8b25"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae37dfe0f561f61c3ecfda5abc02e8b25"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>ReadBinary</b> (const char *filename)</td></tr>
 <tr class="separator:ae37dfe0f561f61c3ecfda5abc02e8b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,12 +143,12 @@ MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>W</b></td></tr>
 <tr class="memitem:a422dde54e49a8b5ab4f631fc0b8cf829"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a422dde54e49a8b5ab4f631fc0b8cf829"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>targetMinProjectedLength</b></td></tr>
 <tr class="separator:a422dde54e49a8b5ab4f631fc0b8cf829"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa9954dc50be3af121c7590879782afa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa9954dc50be3af121c7590879782afa"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>maxIterations</b></td></tr>
-<tr class="separator:afa9954dc50be3af121c7590879782afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa74d47b541db9bf256f9602e2ae0646a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa74d47b541db9bf256f9602e2ae0646a"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>targetDimension</b></td></tr>
 <tr class="separator:aa74d47b541db9bf256f9602e2ae0646a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa9954dc50be3af121c7590879782afa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa9954dc50be3af121c7590879782afa"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>maxIterations</b></td></tr>
+<tr class="separator:afa9954dc50be3af121c7590879782afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>include/DRDSP/projection/<a class="el" href="proj__secant_8h_source.html">proj_secant.h</a></li>
@@ -153,7 +157,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>targetDimension</
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:06 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

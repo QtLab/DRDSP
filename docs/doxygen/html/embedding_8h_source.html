@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -94,31 +95,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_embedding.html">   10</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">   11</a></span>&#160;        uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">oDim</a>, </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                 <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#aa49b8deb5d403025ca5db3f483c015b2">eDim</a>; </div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">   11</a></span>&#160;        uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a>,   </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                 <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a43679793e6c6df0de8a564c97b774928">embedDim</a>;    </div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a>( uint32_t originalDimension, uint32_t embeddedDimension ) : <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">oDim</a>(originalDimension), <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#aa49b8deb5d403025ca5db3f483c015b2">eDim</a>(embeddedDimension) {}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a>( uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a>, uint32_t <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a43679793e6c6df0de8a564c97b774928">embedDim</a> ) : sourceDim(sourceDim), embedDim(embedDim) {}</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    };</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
 <div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_identity_embedding.html">   18</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_identity_embedding.html">IdentityEmbedding</a> : <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a> {</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_identity_embedding.html">IdentityEmbedding</a>( uint32_t dimension ) : <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a>(dimension,dimension) {}</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_identity_embedding.html">IdentityEmbedding</a>( uint32_t dim ) : <a class="code" href="struct_d_r_d_s_p_1_1_embedding.html">Embedding</a>(dim,dim) {}</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        VectorXd operator()( <span class="keyword">const</span> VectorXd&amp; x )<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordflow">return</span> x;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        }</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        MatrixXd Derivative( <span class="keyword">const</span> VectorXd&amp; )<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keywordflow">return</span> MatrixXd::Identity(<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#aa49b8deb5d403025ca5db3f483c015b2">eDim</a>,<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">oDim</a>);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keywordflow">return</span> MatrixXd::Identity(<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a43679793e6c6df0de8a564c97b774928">embedDim</a>,<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a>);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        }</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        MatrixXd DerivativeAdjoint( <span class="keyword">const</span> VectorXd&amp; )<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">return</span> MatrixXd::Identity(<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">oDim</a>,<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#aa49b8deb5d403025ca5db3f483c015b2">eDim</a>);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">return</span> MatrixXd::Identity(<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a>,<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a43679793e6c6df0de8a564c97b774928">embedDim</a>);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        }</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        MatrixXd Derivative2( <span class="keyword">const</span> VectorXd&amp;, uint32_t )<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">return</span> MatrixXd::Identity(<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">oDim</a>,<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">oDim</a>);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">return</span> MatrixXd::Identity(<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a>,<a class="code" href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">sourceDim</a>);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        }</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    };</div>
@@ -133,13 +134,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_identity_embedding_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_identity_embedding.html">DRDSP::IdentityEmbedding</a></div><div class="ttdef"><b>Definition:</b> embedding.h:18</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_embedding_html_a31e1f302b771269d2475538dc0d12e26"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_embedding.html#a31e1f302b771269d2475538dc0d12e26">DRDSP::Embedding::sourceDim</a></div><div class="ttdeci">uint32_t sourceDim</div><div class="ttdoc">Dimension of the original state space. </div><div class="ttdef"><b>Definition:</b> embedding.h:11</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_embedding_html_a43679793e6c6df0de8a564c97b774928"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_embedding.html#a43679793e6c6df0de8a564c97b774928">DRDSP::Embedding::embedDim</a></div><div class="ttdeci">uint32_t embedDim</div><div class="ttdoc">Dimension of the embedding space, R^n. </div><div class="ttdef"><b>Definition:</b> embedding.h:11</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_embedding_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_embedding.html">DRDSP::Embedding</a></div><div class="ttdoc">Base for an embedding of a state space into R^n. </div><div class="ttdef"><b>Definition:</b> embedding.h:10</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_embedding_html_aa49b8deb5d403025ca5db3f483c015b2"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_embedding.html#aa49b8deb5d403025ca5db3f483c015b2">DRDSP::Embedding::eDim</a></div><div class="ttdeci">uint32_t eDim</div><div class="ttdoc">Dimension of the embedding space, R^n. </div><div class="ttdef"><b>Definition:</b> embedding.h:11</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_embedding_html_ac49e8aa042fbf2ee8e9fdc3d2b4f1c26"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_embedding.html#ac49e8aa042fbf2ee8e9fdc3d2b4f1c26">DRDSP::Embedding::oDim</a></div><div class="ttdeci">uint32_t oDim</div><div class="ttdoc">Dimension of the original state space. </div><div class="ttdef"><b>Definition:</b> embedding.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:07:59 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

@@ -1,5 +1,6 @@
 #ifndef INCLUDED_DYNAMICS_PARAMETER_MAP_PRODUCER
 #define INCLUDED_DYNAMICS_PARAMETER_MAP_PRODUCER
+#include "producer_base.h"
 #include "reduced_data_system.h"
 #include "../eigen_affine.h"
 #include "../misc.h"
@@ -9,40 +10,6 @@
 using namespace std;
 
 namespace DRDSP {
-
-	struct ProducerBase {
-		double fitWeight[2];
-
-		ProducerBase() {
-			fitWeight[0] = 0.5;
-			fitWeight[1] = 0.5;
-		}
-
-		template<typename Family>
-		double ComputeTotalCost( const Family& family, const ReducedDataSystem& data, const vector<VectorXd>& parameters ) const {
-			double T = 0.0;
-			typename Family::Model model;
-			for(uint32_t j=0;j<data.numParameters;++j) {
-				model = family( parameters[j] );
-				
-				double S1 = 0.0;
-				for(uint32_t i=0;i<data.reducedData[j].count;++i) {
-					S1 += ( model(data.reducedData[j].points[i]) - data.reducedData[j].vectors[i] ).squaredNorm();
-				}
-				S1 /= data.reducedData[j].count;
-				
-				double S2 = 0.0;
-				for(uint32_t i=0;i<data.reducedData[j].count;++i) {
-					S2 += ( model.Partials(data.reducedData[j].points[i]) - data.reducedData[j].derivatives[i] ).squaredNorm();
-				}
-				S2 /= data.reducedData[j].count;
-				
-				T += (fitWeight[0]/data.reducedData[j].scales[0]) * S1 + (fitWeight[1]/data.reducedData[j].scales[1]) * S2;
-			}
-			return T / data.numParameters;
-		}
-
-	};
 
 	template<typename Family>
 	struct ParameterMapProducer : ProducerBase {

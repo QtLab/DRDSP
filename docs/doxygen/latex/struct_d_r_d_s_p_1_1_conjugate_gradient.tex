@@ -1,5 +1,5 @@
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient}{\section{D\-R\-D\-S\-P\-:\-:Conjugate\-Gradient$<$ Geodesic, S, D\-S $>$ Struct Template Reference}
-\label{struct_d_r_d_s_p_1_1_conjugate_gradient}\index{D\-R\-D\-S\-P\-::\-Conjugate\-Gradient$<$ Geodesic, S, D\-S $>$@{D\-R\-D\-S\-P\-::\-Conjugate\-Gradient$<$ Geodesic, S, D\-S $>$}}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient}{\section{D\-R\-D\-S\-P\-:\-:Conjugate\-Gradient$<$ Geodesic $>$ Struct Template Reference}
+\label{struct_d_r_d_s_p_1_1_conjugate_gradient}\index{D\-R\-D\-S\-P\-::\-Conjugate\-Gradient$<$ Geodesic $>$@{D\-R\-D\-S\-P\-::\-Conjugate\-Gradient$<$ Geodesic $>$}}
 }
 \subsection*{Public Types}
 \begin{DoxyCompactItemize}
@@ -9,72 +9,63 @@ enum {\bfseries mod\-Type} \{ {\bfseries F\-R},
 {\bfseries H\-S}
  \}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_ad2dbb9202d05ee3a642542bdb57f53d4}{typedef Geodesic\-::\-Metric {\bfseries Metric}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_ad2dbb9202d05ee3a642542bdb57f53d4}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a8e0530e6eb42ec794636928afa96bcf3}{typedef Geodesic\-::\-Metric {\bfseries Metric}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a8e0530e6eb42ec794636928afa96bcf3}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_ae9a0676df2e8baf28e631cd3b0675f13}{typedef Metric\-::\-Point {\bfseries Point}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_ae9a0676df2e8baf28e631cd3b0675f13}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_aa2b56058b24948111e1e0af905ba4804}{typedef Metric\-::\-Point {\bfseries Point}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_aa2b56058b24948111e1e0af905ba4804}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_ac17fb0d576c130d96dc7a0c679904195}{typedef \\*
-Metric\-::\-Inner\-Product\-::\-Vector {\bfseries Vector}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_ac17fb0d576c130d96dc7a0c679904195}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_aa3b0207ecee13952f4bcae716852a805}{typedef \\*
+Metric\-::\-Inner\-Product\-::\-Vector {\bfseries Vector}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_aa3b0207ecee13952f4bcae716852a805}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a6c456a95e7395dc7214f03009d71d551}{{\bfseries Conjugate\-Gradient} (const S \&cost, const D\-S \&gradient)}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a6c456a95e7395dc7214f03009d71d551}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a50cc2feb8470b14e487e4900a0729531}{{\footnotesize template$<$typename S , typename D\-S $>$ }\\bool {\bfseries Step} (Point \&x, const S \&cost, const D\-S \&gradient)}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a50cc2feb8470b14e487e4900a0729531}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_addebe2c816c58ead13698bb709be3c91}{bool {\bfseries Step} (Point \&x)}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_addebe2c816c58ead13698bb709be3c91}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_af5a86a83da82cf11e590dc0a8c2b4899}{bool {\bfseries Optimize} (Point \&x)}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_af5a86a83da82cf11e590dc0a8c2b4899}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_afb69550164e1851bfef45b0819d329be}{{\footnotesize template$<$typename S , typename D\-S $>$ }\\bool {\bfseries Optimize} (Point \&x, const S \&cost, const D\-S \&gradient)}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_afb69550164e1851bfef45b0819d329be}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a99a26cfd777d03fa23e9f3b8616ab43d}{const S \& {\bfseries cost}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a99a26cfd777d03fa23e9f3b8616ab43d}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a1f7b00cedb7596ca2d5ddd9319970968}{Metric {\bfseries metric}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a1f7b00cedb7596ca2d5ddd9319970968}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a7ef242a4984a63fd30f9b91df600dc6f}{const D\-S \& {\bfseries gradient}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a7ef242a4984a63fd30f9b91df600dc6f}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a4d615b846d98b25b42595a9224984896}{Geodesic {\bfseries geodesic}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a4d615b846d98b25b42595a9224984896}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_adeba6039246c2eb8d402e7621b82a849}{Metric {\bfseries metric}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_adeba6039246c2eb8d402e7621b82a849}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a63540dd317ba49a3cb74652e1843d468}{\hyperlink{struct_d_r_d_s_p_1_1_line_search}{Line\-Search} {\bfseries line\-Search}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a63540dd317ba49a3cb74652e1843d468}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a00375a585abf769b0c891db71d899234}{Geodesic {\bfseries geodesic}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a00375a585abf769b0c891db71d899234}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a0fda11830e3613a899c21174c9bef987}{uint32\-\_\-t {\bfseries n}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a0fda11830e3613a899c21174c9bef987}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a43bb6232fc92c3aff4c848aed6ddd7fc}{\hyperlink{struct_d_r_d_s_p_1_1_line_search}{Line\-Search} {\bfseries line\-Search}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a43bb6232fc92c3aff4c848aed6ddd7fc}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a3d17de4607acfbd7bf82986350730f83}{uint32\-\_\-t {\bfseries max\-Steps}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a3d17de4607acfbd7bf82986350730f83}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_aab99791cf6d68a73446914fdf7297fcb}{uint32\-\_\-t {\bfseries n}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_aab99791cf6d68a73446914fdf7297fcb}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a8580aa724477135eef128de805b10935}{uint32\-\_\-t {\bfseries max\-Steps}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a8580aa724477135eef128de805b10935}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a2a7cb6153f1fb58b6a71f353ac1d3e9f}{enum \\*
-D\-R\-D\-S\-P\-::\-Conjugate\-Gradient\-::mod\-Type {\bfseries modifier}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a2a7cb6153f1fb58b6a71f353ac1d3e9f}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a0370bc97e78073a487af5067a0f4f16e}{enum \\*
+D\-R\-D\-S\-P\-::\-Conjugate\-Gradient\-::mod\-Type {\bfseries modifier}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a0370bc97e78073a487af5067a0f4f16e}
 
 \end{DoxyCompactItemize}
 \subsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a8a0a119d801dbd3ec2aad9b906d4e08f}{double {\bfseries Modifier} (const Point \&x)}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a8a0a119d801dbd3ec2aad9b906d4e08f}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a68790da1a177ed56ce1db8a53f79e806}{double {\bfseries Modifier} (const Point \&x)}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a68790da1a177ed56ce1db8a53f79e806}
 
 \end{DoxyCompactItemize}
 \subsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a59ac9a080d4a359f07902246468e0055}{Point {\bfseries last\-X}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a59ac9a080d4a359f07902246468e0055}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a8f7ae6f524c01551e8e49e3d7b817029}{Point {\bfseries last\-X}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a8f7ae6f524c01551e8e49e3d7b817029}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_ad568881f7bacc36d04e3ac1aea0a22f9}{Vector {\bfseries grad}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_ad568881f7bacc36d04e3ac1aea0a22f9}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a26a670a4537d7da7cf27664fbbc1f004}{Vector {\bfseries grad}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a26a670a4537d7da7cf27664fbbc1f004}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_a5cb630cdcd16d2b96eb94b78a619a5b6}{Vector {\bfseries last\-Grad}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_a5cb630cdcd16d2b96eb94b78a619a5b6}
+\hypertarget{struct_d_r_d_s_p_1_1_conjugate_gradient_adf3802e381b2d39ba60238594dd6e2e2}{Vector {\bfseries last\-Grad}}\label{struct_d_r_d_s_p_1_1_conjugate_gradient_adf3802e381b2d39ba60238594dd6e2e2}
 
 \end{DoxyCompactItemize}
 

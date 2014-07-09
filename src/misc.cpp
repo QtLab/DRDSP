@@ -24,3 +24,14 @@ vector<VectorXd> DRDSP::ParameterList( double pMin, double pMax, uint32_t N ) {
 	}
 	return v;
 }
+
+void DRDSP::SetPointsRandom( vector<VectorXd>& points, const AABB& box, mt19937& mt ) {
+	static uniform_real_distribution<double> dist;
+	VectorXd diff = box.bMax - box.bMin;
+	for( auto& x : points ) {
+		for(int64_t j=0;j<x.size();++j) {
+			x[j] = box.bMin(j) + diff(j) * dist(mt);
+		}
+	}
+}
+

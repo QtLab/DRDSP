@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_data_generator.html">DataGenerator</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_data_generator.html">DataGenerator</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -119,12 +120,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5a941cc6ff7879e3575044db26ef9fd1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a941cc6ff7879e3575044db26ef9fd1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DataGenerator</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_family.html">Family</a> &amp;f, const State &amp;init)</td></tr>
 <tr class="separator:a5a941cc6ff7879e3575044db26ef9fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af375f81e326785a741c508552eb8f247"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af375f81e326785a741c508552eb8f247"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>GenerateFiles</b> (const vector&lt; Parameter &gt; &amp;parameters) const </td></tr>
-<tr class="separator:af375f81e326785a741c508552eb8f247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2ed6178fcdd9e170695c81861dd5e60"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2ed6178fcdd9e170695c81861dd5e60"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>GenerateSingleFile</b> (Parameter param) const </td></tr>
-<tr class="separator:af2ed6178fcdd9e170695c81861dd5e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75dada039d5a70edd9c66044d525177b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75dada039d5a70edd9c66044d525177b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>GenerateFiles</b> (const vector&lt; Parameter &gt; &amp;parameters, bool binaryOutput, bool textOutput) const </td></tr>
+<tr class="separator:a75dada039d5a70edd9c66044d525177b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a869d99350afa0c0bbe7a7d3579bd4ee5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a869d99350afa0c0bbe7a7d3579bd4ee5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>GenerateSingleFile</b> (Parameter param, bool binaryOutput, bool textOutput) const </td></tr>
+<tr class="separator:a869d99350afa0c0bbe7a7d3579bd4ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2527e7273aaf2d4752ddd8a0272d7cd5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2527e7273aaf2d4752ddd8a0272d7cd5"></a>
 <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GenerateDataSet</b> (const Parameter &amp;param) const </td></tr>
 <tr class="separator:a2527e7273aaf2d4752ddd8a0272d7cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,7 +194,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>textOutput</b></td></
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:00 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

@@ -81,5 +81,5 @@ int main( int argc, char** argv ) {
 
 	Compare( reducedData, rdata );
 
-	cout << "Press any key to continue . . . "; cin.get();
+	cout << "Press enter to continue . . . "; cin.get();
 }

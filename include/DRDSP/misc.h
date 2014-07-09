@@ -4,6 +4,8 @@
 #include <numeric>
 #include <algorithm>
 #include <vector>
+#include <random>
+#include "data/aabb.h"
 
 namespace DRDSP {
 
@@ -65,6 +67,8 @@ namespace DRDSP {
 		}
 		return V;
 	}
+
+	void SetPointsRandom( std::vector<VectorXd>& points, const AABB& box, std::mt19937& mt );
 
 }
 

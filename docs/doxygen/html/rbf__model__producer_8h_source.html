@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -96,124 +97,153 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;Eigen/LU&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../data/histogram.h&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;producer_base.h&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;../misc.h&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">   14</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a> {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">double</span> fitWeight[2];</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        uint32_t numRBFs;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a>() : <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a>(30) {}</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a>( uint32_t nRBFs ) : numRBFs(nRBFs) {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            fitWeight[0] = 0.5;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            fitWeight[1] = 0.5;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        }</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordtype">double</span> ComputeTotalCost( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel&lt;F&gt;</a>&amp; model, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data )<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="keywordtype">double</span> S1 = 0.0;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;data.count;++i) {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                S1 += ( model(data.points[i]) - data.vectors[i] ).squaredNorm();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            S1 /= data.count;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordtype">double</span> S2 = 0.0;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;data.count;++i) {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                S2 += ( model.Partials(data.points[i]) - data.derivatives[i] ).squaredNorm();</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            S2 /= data.count;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keywordflow">return</span> (fitWeight[0]/data.scales[0]) * S1 + (fitWeight[1]/data.scales[1]) * S2;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel&lt;F&gt;</a> ComputeModelRBF( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data ) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel&lt;F&gt;</a> model(data.dimension,numRBFs);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            model.SetCentresRandom( data.ComputeBoundingBox() );</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            Fit(model,data);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">return</span> model;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> Fit( <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel&lt;F&gt;</a>&amp; model, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data )<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            MatrixXd y1, y2, A1, A2, z1, z2, z, P, PI;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            uint32_t m = data.dimension + model.numRBFs;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            VectorXd temp;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            A1.setZero(m,data.count);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            y1.setZero(data.dimension,data.count);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            y2.setZero(data.dimension,data.count*data.dimension);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            A2.setIdentity(m,data.count*data.dimension);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">for</span>(uint32_t j=0;j&lt;data.count;++j) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keywordflow">for</span>(uint32_t i=0;i&lt;data.dimension;++i) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                    A1(i,j) = data.points[j](i);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                    y1(i,j) = data.vectors[j](i);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    <span class="keywordflow">for</span>(uint32_t k=0;k&lt;data.dimension;++k)</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                        y2(i,data.dimension*j+k) = data.derivatives[j](i,k);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordflow">for</span>(uint32_t i=0;i&lt;model.numRBFs;++i) {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    A1(i+data.dimension,j) = model.rbfs[i](data.points[j]);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    temp = model.rbfs[i].Derivative(data.points[j]);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                    <span class="keywordflow">for</span>(uint32_t k=0;k&lt;data.dimension;++k)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                        A2(i+data.dimension,data.dimension*j+k) = temp(k);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            }</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            P = (A1 * A1.transpose()) * (fitWeight[0]/data.scales[0]) + (A2 * A2.transpose()) * (fitWeight[1]/data.scales[1]);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            FullPivLU&lt;MatrixXd&gt; lu(P);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            PI = lu.inverse();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            z1 = y1 * A1.transpose() * PI;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            z2 = y2 * A2.transpose() * PI;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            z = z1 * (fitWeight[0]/data.scales[0]) + z2 * (fitWeight[1]/data.scales[1]);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            model.linear = z.block(0,0,data.dimension,data.dimension);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">for</span>(uint32_t a=0;a&lt;model.numRBFs;++a)</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                model.weights[a] = z.col(data.dimension+a);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel&lt;F&gt;</a> BruteForce( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data, uint32_t numIterations )<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordtype">double</span> Sft = 0.0, Sf = -1.0;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel&lt;F&gt;</a> model( data.dimension, numRBFs ), best;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> box = data.ComputeBoundingBox();</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            vector&lt;double&gt; costs(numIterations);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numIterations;++i) {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                model.SetCentresRandom( box );</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                Fit(model,data);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                Sft = ComputeTotalCost(model,data);</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                costs[i] = Sft;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                <span class="keywordflow">if</span>( Sft &lt; Sf || i==0 ) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                    Sf = Sft;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                    best = model;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                    cout &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot; \t&quot;</span> &lt;&lt; Sf &lt;&lt; endl;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                }</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>DRDSP {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Family&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">   16</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a> : <a class="code" href="struct_d_r_d_s_p_1_1_producer_base.html">ProducerBase</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">typedef</span> <span class="keyword">typename</span> Family::Model Model;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">double</span> boxScale;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        uint32_t numRBFs;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a>( uint32_t numRBFs ) : numRBFs(numRBFs) {}</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        VectorXd Solve( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_family.html">Family</a>&amp; family, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data )<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            MatrixXd A1, A2;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            VectorXd y1, y2;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            uint32_t ldim = family.<a class="code" href="struct_d_r_d_s_p_1_1_family.html#a364eac2f469c96b1584ffbd66ea49e81">paramDim</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            uint32_t dim = data.dimension;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            uint32_t dim2 = dim*dim;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            A1.setZero( data.count * dim, ldim );</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            y1.setZero( data.count * dim );</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            y2.setZero( data.count * dim2 );</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            A2.setZero( data.count * dim2, ldim );</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0;i&lt;data.count;++i) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                A1.block(i*dim,0,dim,ldim) = family.ComputeLinear( data.points[i] );</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0;i&lt;data.count;++i) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                y1.segment(i*dim,dim) = data.vectors[i] - family.ComputeTranslation( data.points[i] );</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0;i&lt;data.count;++i) {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                A2.block(i*dim2,0,dim2,ldim) = family.ComputeLinearDerivative( data.points[i] );</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0;i&lt;data.count;++i) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                y2.segment(i*dim2,dim2) = Vectorize( data.derivatives[i] - family.ComputeTranslationDerivative( data.points[i] ) );</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keyword">auto</span> A = A1.transpose() * A1 * (fitWeight[0]/data.scales[0]) + A2.transpose() * A2 * (fitWeight[1]/data.scales[1]);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keyword">auto</span> b = A1.transpose() * y1 * (fitWeight[0]/data.scales[0]) + A2.transpose() * y2 * (fitWeight[1]/data.scales[1]);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            Eigen::FullPivLU&lt;MatrixXd&gt; lu(A);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keywordflow">if</span>( !lu.isInjective() ) {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                <span class="comment">//cout &lt;&lt; &quot;Matrix not injective, rank = &quot; &lt;&lt; lu.rank() &lt;&lt; &quot; != (&quot; &lt;&lt; lu.matrixLU().rows() &lt;&lt; &quot;,&quot; &lt;&lt; lu.matrixLU().cols() &lt;&lt; &quot;)&quot; &lt;&lt; endl;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            <span class="keywordflow">return</span> lu.solve(b);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        Model BruteForce( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data, uint32_t numIterations )<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordtype">double</span> cost = 0.0, bestCost = -1.0;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            Model family( data.dimension, numRBFs );</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            Model model, best;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> box = data.ComputeBoundingBox();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            box.Scale(boxScale);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            vector&lt;double&gt; costs(numIterations);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            mt19937 mt;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numIterations;++i) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                SetPointsRandom( family.centres, box, mt );</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                model = family( Solve( family, data ) );</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                costs[i] = ComputeTotalCost( model, data );</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="keywordflow">if</span>( costs[i] &lt; bestCost || i==0 ) {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                    bestCost = costs[i];</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    best = model;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                    cout &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot; \t&quot;</span> &lt;&lt; bestCost &lt;&lt; endl;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html">HistogramGenerator</a>(100).<a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html#af1acac305990b01bc4cc6e612415bf72">Generate</a>(costs).WriteCSV(<span class="stringliteral">&quot;output/costs.csv&quot;</span>);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="keywordflow">return</span> best;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        Model BruteForce( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data, uint32_t numIterations, uint32_t numThreads )<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            vector&lt;Model&gt; best(numThreads);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> box = data.ComputeBoundingBox();</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            box.Scale(boxScale);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            uint32_t k = data.dimension * numRBFs;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            vector&lt;future&lt;void&gt;&gt; futures(numThreads);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            uint32_t iterationsPerThread = numIterations / numThreads;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numThreads;++i) {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                futures[i] = async( launch::async,</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                    [=,&amp;data,&amp;box]( Model&amp; out ){</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                        out = BruteForce( data,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                                          box,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                                          mt19937::default_seed + i * k,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                                          iterationsPerThread );</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                    }, ref(best[i])</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                );</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            vector&lt;double&gt; costs(numThreads);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numThreads;++i) {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                futures[i].wait();</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                costs[i] = ComputeTotalCost( best[i], data );</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            }</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html">HistogramGenerator</a>(100).<a class="code" href="struct_d_r_d_s_p_1_1_histogram_generator.html#af1acac305990b01bc4cc6e612415bf72">Generate</a>(costs).WriteCSV(<span class="stringliteral">&quot;output/costs.csv&quot;</span>);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordflow">return</span> best;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        }</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    };</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordtype">double</span> bestCost = costs[0];</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            uint32_t bestIndex = 0;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=1;i&lt;numThreads;++i) {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                <span class="keywordflow">if</span>( costs[i] &lt; bestCost ) {</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    bestCost = costs[i];</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                    bestIndex = i;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordflow">return</span> best[bestIndex];</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        Model BruteForce( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>&amp; data, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a>&amp; box, uint32_t seed, uint32_t numIterations )<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordtype">double</span> cost = 0.0, bestCost = -1.0;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            uint32_t dim = data.dimension;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <a class="code" href="struct_d_r_d_s_p_1_1_family.html">Family</a> family( dim, numRBFs );</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            Model model, best;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            mt19937 mt(seed);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            <span class="keywordflow">for</span>(uint32_t i=0;i&lt;numIterations;++i) {</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                SetPointsRandom( family.centres, box, mt );</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                model = family( Solve( family, data ) );</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                cost = ComputeTotalCost( model, data );</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                <span class="keywordflow">if</span>( cost &lt; bestCost || i==0 ) {</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                    bestCost = cost;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                    best = model;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                    cout &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot; \t&quot;</span> &lt;&lt; bestCost &lt;&lt; endl;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                }</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            <span class="keywordflow">return</span> best;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        }</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    };</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;}</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor"></span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdoc">An axis-aligned bounding box in n-dimensions. </div><div class="ttdef"><b>Definition:</b> aabb.h:10</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html_a364eac2f469c96b1584ffbd66ea49e81"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html#a364eac2f469c96b1584ffbd66ea49e81">DRDSP::Family::paramDim</a></div><div class="ttdeci">uint32_t paramDim</div><div class="ttdoc">Dimension of the model&amp;#39;s parameter space. </div><div class="ttdef"><b>Definition:</b> model.h:27</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html_af1acac305990b01bc4cc6e612415bf72"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html#af1acac305990b01bc4cc6e612415bf72">DRDSP::HistogramGenerator::Generate</a></div><div class="ttdeci">Histogram Generate(const double *data, size_t N) const </div><div class="ttdoc">Generates a histogram from the given data. </div><div class="ttdef"><b>Definition:</b> histogram.cpp:70</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_r_b_f_model_producer_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">DRDSP::RBFModelProducer</a></div><div class="ttdef"><b>Definition:</b> rbf_model_producer.h:14</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_r_b_f_model_producer_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">DRDSP::RBFModelProducer</a></div><div class="ttdef"><b>Definition:</b> rbf_model_producer.h:16</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data.html">DRDSP::ReducedData</a></div><div class="ttdef"><b>Definition:</b> reduced_data.h:12</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_r_b_f_model_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_r_b_f_model.html">DRDSP::RBFModel</a></div><div class="ttdef"><b>Definition:</b> rbf_model.h:14</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_producer_base_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_producer_base.html">DRDSP::ProducerBase</a></div><div class="ttdef"><b>Definition:</b> producer_base.h:7</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html">DRDSP::Family</a></div><div class="ttdoc">Base for model with parameters. </div><div class="ttdef"><b>Definition:</b> model.h:24</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html">DRDSP::HistogramGenerator</a></div><div class="ttdoc">A class for generating histograms from data. </div><div class="ttdef"><b>Definition:</b> histogram.h:45</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:07:59 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

@@ -206,5 +206,8 @@
     <ClInclude Include="..\..\..\include\DRDSP\geometry\ball.h">
       <Filter>Header Files\geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\producer_base.h">
+      <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

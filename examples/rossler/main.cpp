@@ -42,7 +42,7 @@ int main( int argc, char** argv ) {
 	//Test( options );
 	//Test2( options );
 
-	cout << "Press any key to continue . . . "; cin.get();
+	cout << "Press enter to continue . . . "; cin.get();
 }
 
 void ReducedFloquet( const Options& options ) {
@@ -209,7 +209,7 @@ void ComputeReduced( const Options& options ) {
 			options.numThreads ).WriteBitmap( "output/bifurcation-red.bmp", 720 );
 	}
 }
-/*
+
 void SimulateReduced( const Options& options ) {
 
 	RosslerFamily rossler;
@@ -231,21 +231,19 @@ void SimulateReduced( const Options& options ) {
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads );
 
-	RBFFamily<RBFType> reducedFamily;
-	reducedFamily.ReadText("reduced.txt");
+	ParameterMapProducer<RBFFamily<RBFType>> producer;
 
-	RBFFamilyProducer<RBFType> producer( reducedFamily.nRBFs );
+	RBFFamily<RBFType> family;
+	family.ReadText("reduced.txt");
+	AffineXd paramMap = producer.SolveOrig( family, reducedData, data.parameters );
+	
+	typedef PMapFamily<RBFFamily<RBFType>,AffineXd> ReducedFamily;
+	ReducedFamily reducedFamily( family, paramMap );
 
 	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
-
-	producer.Fit( reducedFamily, reducedData, data.parameters );
-	
-	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
-	
-	reducedFamily.WriteCSV("output/reduced.csv");
 
 	cout << "Generating Reduced data..." << endl;
-	DataGenerator<RBFFamily<RBFType>> rdataGenerator( reducedFamily );
+	DataGenerator<ReducedFamily> rdataGenerator( reducedFamily );
 	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 
@@ -254,7 +252,7 @@ void SimulateReduced( const Options& options ) {
 
 	Compare( reducedData, rdata );
 
-	BifurcationDiagramGenerator<RBFFamily<RBFType>> bifurcationGenerator;
+	BifurcationDiagramGenerator<ReducedFamily> bifurcationGenerator;
 	bifurcationGenerator.tStart = 500.0;
 	bifurcationGenerator.tInterval = 500.0;
 	bifurcationGenerator.dt = 0.001;
@@ -269,7 +267,7 @@ void SimulateReduced( const Options& options ) {
 		options.numThreads ).WriteBitmap( "output/bifurcation-red.bmp", 720 );
 
 }
-*/
+
 
 void Test( const Options& options ) {
 
@@ -337,6 +335,8 @@ void Test( const Options& options ) {
 
 }
 
+#include <DRDSP/dynamics/rbf_model_producer.h>
+
 void Test2( const Options& options ) {
 	RosslerFamily rossler;
 
@@ -351,24 +351,23 @@ void Test2( const Options& options ) {
 	dataGenerator.print = 1000;
 	
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
-	data.WriteDataSetsCSV("output/orig",".csv");
 
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( rossler, data, MatrixXd::Identity(3,3), options.numThreads )
+	reducedData.ComputeData( rossler, data, Matrix3d::Identity(), options.numThreads )
 	           .WritePointsCSV( "output/p", "-points.csv" )
 	           .WriteVectorsCSV( "output/p", "-vectors.csv" )
 	           .WriteDerivativesCSV( "output/p", "-derivatives.csv" );
 
 	cout << "Computing Reduced Family..." << endl;
 	
-	RBFFamilyProducer<RBFType> producer( options.numRBFs );
+	RBFModelProducer<RBFFamily<RBFType>> producer( options.numRBFs );
 	producer.boxScale = 1.6;
-	auto reducedFamily = producer.BruteForce( reducedData,
-											  data.parameters,
-											  options.numIterations,
-											  options.numThreads );
+	auto reducedModel = producer.BruteForce( reducedData[20],
+											 options.numIterations,
+											 options.numThreads );
 	
-	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
+	cout << "Total Cost = " << producer.ComputeTotalCost( reducedModel, reducedData[20] ) << endl;
+
 }
 

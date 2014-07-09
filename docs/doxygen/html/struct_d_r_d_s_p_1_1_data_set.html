@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -111,6 +112,9 @@ Inheritance diagram for DRDSP::DataSet:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a6f0c11d360c6e00083f674b04fbd0986"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6f0c11d360c6e00083f674b04fbd0986"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DataSet</b> (size_t numPoints)</td></tr>
+<tr class="separator:a6f0c11d360c6e00083f674b04fbd0986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1fec22ab532a161837090408b0cfd8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab1fec22ab532a161837090408b0cfd8c"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DataSet</b> (size_t numPoints, uint32_t dim)</td></tr>
 <tr class="separator:ab1fec22ab532a161837090408b0cfd8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,10 +130,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stru
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a1d90f86c1fbe0380d91158b1c050c501">WriteCSV</a> (const char *filename) const </td></tr>
 <tr class="memdesc:a1d90f86c1fbe0380d91158b1c050c501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the data set to file in CSV format. <br/></td></tr>
 <tr class="separator:a1d90f86c1fbe0380d91158b1c050c501"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f42640d4f826807b69830bf3617152c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f42640d4f826807b69830bf3617152c"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a0f42640d4f826807b69830bf3617152c">ProjectData</a> (const MatrixXd &amp;W) const </td></tr>
-<tr class="memdesc:a0f42640d4f826807b69830bf3617152c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the given projection to this data set. <br/></td></tr>
-<tr class="separator:a0f42640d4f826807b69830bf3617152c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3003901476d4b92d122a64d78d67e212"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3003901476d4b92d122a64d78d67e212"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_set.html#a3003901476d4b92d122a64d78d67e212">WriteBinary</a> (const char *filename) const </td></tr>
+<tr class="memdesc:a3003901476d4b92d122a64d78d67e212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the data set to file in binary format. <br/></td></tr>
+<tr class="separator:a3003901476d4b92d122a64d78d67e212"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6124959ad62a522b65cf6ad715166354"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6124959ad62a522b65cf6ad715166354"></a>
 VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_t i)</td></tr>
 <tr class="separator:a6124959ad62a522b65cf6ad715166354"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,7 +161,7 @@ vector&lt; VectorXd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a c
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:00 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -91,44 +92,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="struct_d_r_d_s_p_1_1_secants-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DRDSP::Secants Struct Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">DRDSP::Secants Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Base class/interface for a set of secants.  
+<p>Set of unit secants that have been pre-computed.  
  <a href="struct_d_r_d_s_p_1_1_secants.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="secants_8h_source.html">secants.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for DRDSP::Secants:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="struct_d_r_d_s_p_1_1_secants.png" usemap="#DRDSP::Secants_map" alt=""/>
-  <map id="DRDSP::Secants_map" name="DRDSP::Secants_map">
-<area href="struct_d_r_d_s_p_1_1_secants_data.html" title="Set of secants that are computed on demand from a given DataSet. " alt="DRDSP::SecantsData" shape="rect" coords="0,56,181,80"/>
-<area href="struct_d_r_d_s_p_1_1_secants_pre_computed.html" title="Set of secants that have been pre-computed. " alt="DRDSP::SecantsPreComputed" shape="rect" coords="191,56,372,80"/>
-</map>
- </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa36f3ff75b75d498e585cbac447cede9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa36f3ff75b75d498e585cbac447cede9"></a>
-virtual VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#aa36f3ff75b75d498e585cbac447cede9">GetSecant</a> (size_t k) const =0</td></tr>
-<tr class="memdesc:aa36f3ff75b75d498e585cbac447cede9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the kth secant (normalized) <br/></td></tr>
-<tr class="separator:aa36f3ff75b75d498e585cbac447cede9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96e9a725643c31456df79a797f427981"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a96e9a725643c31456df79a797f427981"></a>
-virtual VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a96e9a725643c31456df79a797f427981">GetSecantNoNormalize</a> (size_t k) const =0</td></tr>
-<tr class="memdesc:a96e9a725643c31456df79a797f427981"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the kth secant (not necessarily normalized) <br/></td></tr>
-<tr class="separator:a96e9a725643c31456df79a797f427981"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b6763bc1541a775e842e437448200ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b6763bc1541a775e842e437448200ef"></a>
-virtual <a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CullSecants</b> (double tolerance) const </td></tr>
-<tr class="separator:a9b6763bc1541a775e842e437448200ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f71a6f8d4486035762d783f42ebae99"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f71a6f8d4486035762d783f42ebae99"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CullSecantsAngle</b> (<a class="el" href="struct_d_r_d_s_p_1_1_degrees.html">Degreesd</a> degrees) const </td></tr>
-<tr class="separator:a0f71a6f8d4486035762d783f42ebae99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae86cc8c98ff9ed5ae1f3903b898f9030"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae86cc8c98ff9ed5ae1f3903b898f9030"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_secants_pre_computed.html">SecantsPreComputed</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CullSecantsAngle</b> (<a class="el" href="struct_d_r_d_s_p_1_1_radians.html">Radiansd</a> radians) const </td></tr>
-<tr class="separator:ae86cc8c98ff9ed5ae1f3903b898f9030"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43e1c7b34ac0ed5b971cb65dc215e6fb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a43e1c7b34ac0ed5b971cb65dc215e6fb"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CullSecants</b> (double tolerance) const </td></tr>
+<tr class="separator:a43e1c7b34ac0ed5b971cb65dc215e6fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbaf3dce9ddfb23d80ff093e629d4275"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbaf3dce9ddfb23d80ff093e629d4275"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CullSecantsAngle</b> (<a class="el" href="struct_d_r_d_s_p_1_1_degrees.html">Degreesd</a> degrees) const </td></tr>
+<tr class="separator:acbaf3dce9ddfb23d80ff093e629d4275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f3d0d30aab4cc28ee2ebc81c6e9a7d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6f3d0d30aab4cc28ee2ebc81c6e9a7d"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CullSecantsAngle</b> (<a class="el" href="struct_d_r_d_s_p_1_1_radians.html">Radiansd</a> radians) const </td></tr>
+<tr class="separator:ac6f3d0d30aab4cc28ee2ebc81c6e9a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0863c97dcf80e86c5f7d941bb91ed68e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0863c97dcf80e86c5f7d941bb91ed68e"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a0863c97dcf80e86c5f7d941bb91ed68e">ComputeFromData</a> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;dataSet)</td></tr>
+<tr class="memdesc:a0863c97dcf80e86c5f7d941bb91ed68e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute this set of secants from the given data set. <br/></td></tr>
+<tr class="separator:a0863c97dcf80e86c5f7d941bb91ed68e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0d7e98f7ba8474af04b722faf05870a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0d7e98f7ba8474af04b722faf05870a"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#ab0d7e98f7ba8474af04b722faf05870a">ComputeFromData</a> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;dataSet, double tolerance)</td></tr>
+<tr class="memdesc:ab0d7e98f7ba8474af04b722faf05870a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute this set of secants from the given data set with culling. <br/></td></tr>
+<tr class="separator:ab0d7e98f7ba8474af04b722faf05870a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21ff677ea2698d6de90941403daa68c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21ff677ea2698d6de90941403daa68c9"></a>
+VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>GetSecant</b> (size_t k) const </td></tr>
+<tr class="separator:a21ff677ea2698d6de90941403daa68c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -140,9 +134,17 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="st
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a950d625f7d298f93eaad20062f79db1b">dimension</a></td></tr>
 <tr class="memdesc:a950d625f7d298f93eaad20062f79db1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the space. <br/></td></tr>
 <tr class="separator:a950d625f7d298f93eaad20062f79db1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ea6387e35af61db236e3c9053fb5161"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ea6387e35af61db236e3c9053fb5161"></a>
+vector&lt; VectorXd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a1ea6387e35af61db236e3c9053fb5161">secants</a></td></tr>
+<tr class="memdesc:a1ea6387e35af61db236e3c9053fb5161"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of pre-computed unit secants. <br/></td></tr>
+<tr class="separator:a1ea6387e35af61db236e3c9053fb5161"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a534beb61e939e136580727be9296c8a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a534beb61e939e136580727be9296c8a8"></a>
+vector&lt; <a class="el" href="namespace_d_r_d_s_p.html#a955ec80e50da3c3f17008affbdd1ca04">weightType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secants.html#a534beb61e939e136580727be9296c8a8">weights</a></td></tr>
+<tr class="memdesc:a534beb61e939e136580727be9296c8a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of secant weights produced by culling. <br/></td></tr>
+<tr class="separator:a534beb61e939e136580727be9296c8a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Base class/interface for a set of secants. </p>
+<div class="textblock"><p>Set of unit secants that have been pre-computed. </p>
 </div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>include/DRDSP/data/<a class="el" href="secants_8h_source.html">secants.h</a></li>
 <li>src/data/secants.cpp</li>
@@ -150,7 +152,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:00 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

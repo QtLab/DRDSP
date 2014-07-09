@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -97,7 +98,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a71eccc9137f7cdd5ec97aa47fe2f7fd0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="memitem:a9612a2496beb0b52144de43caff55111"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsInteger</b> = 0, 
 <b>IsSigned</b> = 1, 
 <b>IsComplex</b> = 0, 
@@ -108,10 +109,10 @@ Public Types</h2></td></tr>
 <b>MulCost</b> = 3 * NumTraits&lt;T&gt;::MulCost + NumTraits&lt;T&gt;::AddCost
 <br/>
  }</td></tr>
-<tr class="separator:a71eccc9137f7cdd5ec97aa47fe2f7fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1104f56db31039ea4f10cbb93c399225"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1104f56db31039ea4f10cbb93c399225"></a>
-typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b></td></tr>
-<tr class="separator:a1104f56db31039ea4f10cbb93c399225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a9612a2496beb0b52144de43caff55111"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26ecaebf4644a9f1f6d85be4a2942f2f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26ecaebf4644a9f1f6d85be4a2942f2f"></a>
+typedef <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b></td></tr>
+<tr class="separator:a26ecaebf4644a9f1f6d85be4a2942f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeac6a4fe1a0dfd09a45b1f91c9b238b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeac6a4fe1a0dfd09a45b1f91c9b238b1"></a>
 typedef <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>NonInteger</b></td></tr>
 <tr class="separator:aeac6a4fe1a0dfd09a45b1f91c9b238b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,18 +122,18 @@ typedef <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; T &gt;&#
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3a6553abba83520cc82e79e720c7421c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a6553abba83520cc82e79e720c7421c"></a>
-static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
-<tr class="separator:a3a6553abba83520cc82e79e720c7421c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf513a1cd4679b584422030e99679369"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf513a1cd4679b584422030e99679369"></a>
-static Real&#160;</td><td class="memItemRight" valign="bottom"><b>dummy_precision</b> ()</td></tr>
-<tr class="separator:aaf513a1cd4679b584422030e99679369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aceabe7479baf090b5d7791d9d1236c15"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aceabe7479baf090b5d7791d9d1236c15"></a>
-static T&#160;</td><td class="memItemRight" valign="bottom"><b>highest</b> ()</td></tr>
-<tr class="separator:aceabe7479baf090b5d7791d9d1236c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6eb996ed665ef6c34755ce25323412e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6eb996ed665ef6c34755ce25323412e"></a>
-static T&#160;</td><td class="memItemRight" valign="bottom"><b>lowest</b> ()</td></tr>
-<tr class="separator:aa6eb996ed665ef6c34755ce25323412e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabaf964c5626b1c2ed65d05983ee8e4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aabaf964c5626b1c2ed65d05983ee8e4b"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
+<tr class="separator:aabaf964c5626b1c2ed65d05983ee8e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6ed000841e7d59405efc2d0bcc5bd1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6ed000841e7d59405efc2d0bcc5bd1f"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>dummy_precision</b> ()</td></tr>
+<tr class="separator:af6ed000841e7d59405efc2d0bcc5bd1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a045ef0e706fed8a0302dec589495cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a045ef0e706fed8a0302dec589495cc"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>highest</b> ()</td></tr>
+<tr class="separator:a6a045ef0e706fed8a0302dec589495cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a343d65ec0cc99937e9e272ab59867cb8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a343d65ec0cc99937e9e272ab59867cb8"></a>
+static <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>lowest</b> ()</td></tr>
+<tr class="separator:a343d65ec0cc99937e9e272ab59867cb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/DRDSP/<a class="el" href="eigen__dual_8h_source.html">eigen_dual.h</a></li>
@@ -140,7 +141,7 @@ static T&#160;</td><td class="memItemRight" valign="bottom"><b>lowest</b> ()</td
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:06 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

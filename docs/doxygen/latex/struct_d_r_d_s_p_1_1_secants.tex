@@ -3,35 +3,32 @@
 }
 
 
-Base class/interface for a set of secants.  
+Set of unit secants that have been pre-\/computed.  
 
 
 
 
 {\ttfamily \#include $<$secants.\-h$>$}
 
-Inheritance diagram for D\-R\-D\-S\-P\-:\-:Secants\-:\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[height=2.000000cm]{struct_d_r_d_s_p_1_1_secants}
-\end{center}
-\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_secants_aa36f3ff75b75d498e585cbac447cede9}{virtual Vector\-Xd \hyperlink{struct_d_r_d_s_p_1_1_secants_aa36f3ff75b75d498e585cbac447cede9}{Get\-Secant} (size\-\_\-t k) const =0}\label{struct_d_r_d_s_p_1_1_secants_aa36f3ff75b75d498e585cbac447cede9}
-
-\begin{DoxyCompactList}\small\item\em Get the kth secant (normalized) \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_secants_a96e9a725643c31456df79a797f427981}{virtual Vector\-Xd \hyperlink{struct_d_r_d_s_p_1_1_secants_a96e9a725643c31456df79a797f427981}{Get\-Secant\-No\-Normalize} (size\-\_\-t k) const =0}\label{struct_d_r_d_s_p_1_1_secants_a96e9a725643c31456df79a797f427981}
-
-\begin{DoxyCompactList}\small\item\em Get the kth secant (not necessarily normalized) \end{DoxyCompactList}\item 
-\hypertarget{struct_d_r_d_s_p_1_1_secants_a9b6763bc1541a775e842e437448200ef}{virtual \hyperlink{struct_d_r_d_s_p_1_1_secants_pre_computed}{Secants\-Pre\-Computed} {\bfseries Cull\-Secants} (double tolerance) const }\label{struct_d_r_d_s_p_1_1_secants_a9b6763bc1541a775e842e437448200ef}
+\hypertarget{struct_d_r_d_s_p_1_1_secants_a43e1c7b34ac0ed5b971cb65dc215e6fb}{\hyperlink{struct_d_r_d_s_p_1_1_secants}{Secants} {\bfseries Cull\-Secants} (double tolerance) const }\label{struct_d_r_d_s_p_1_1_secants_a43e1c7b34ac0ed5b971cb65dc215e6fb}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_secants_a0f71a6f8d4486035762d783f42ebae99}{\hyperlink{struct_d_r_d_s_p_1_1_secants_pre_computed}{Secants\-Pre\-Computed} {\bfseries Cull\-Secants\-Angle} (\hyperlink{struct_d_r_d_s_p_1_1_degrees}{Degreesd} degrees) const }\label{struct_d_r_d_s_p_1_1_secants_a0f71a6f8d4486035762d783f42ebae99}
+\hypertarget{struct_d_r_d_s_p_1_1_secants_acbaf3dce9ddfb23d80ff093e629d4275}{\hyperlink{struct_d_r_d_s_p_1_1_secants}{Secants} {\bfseries Cull\-Secants\-Angle} (\hyperlink{struct_d_r_d_s_p_1_1_degrees}{Degreesd} degrees) const }\label{struct_d_r_d_s_p_1_1_secants_acbaf3dce9ddfb23d80ff093e629d4275}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_secants_ae86cc8c98ff9ed5ae1f3903b898f9030}{\hyperlink{struct_d_r_d_s_p_1_1_secants_pre_computed}{Secants\-Pre\-Computed} {\bfseries Cull\-Secants\-Angle} (\hyperlink{struct_d_r_d_s_p_1_1_radians}{Radiansd} radians) const }\label{struct_d_r_d_s_p_1_1_secants_ae86cc8c98ff9ed5ae1f3903b898f9030}
+\hypertarget{struct_d_r_d_s_p_1_1_secants_ac6f3d0d30aab4cc28ee2ebc81c6e9a7d}{\hyperlink{struct_d_r_d_s_p_1_1_secants}{Secants} {\bfseries Cull\-Secants\-Angle} (\hyperlink{struct_d_r_d_s_p_1_1_radians}{Radiansd} radians) const }\label{struct_d_r_d_s_p_1_1_secants_ac6f3d0d30aab4cc28ee2ebc81c6e9a7d}
+
+\item 
+\hypertarget{struct_d_r_d_s_p_1_1_secants_a0863c97dcf80e86c5f7d941bb91ed68e}{\hyperlink{struct_d_r_d_s_p_1_1_secants}{Secants} \& \hyperlink{struct_d_r_d_s_p_1_1_secants_a0863c97dcf80e86c5f7d941bb91ed68e}{Compute\-From\-Data} (const \hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} \&data\-Set)}\label{struct_d_r_d_s_p_1_1_secants_a0863c97dcf80e86c5f7d941bb91ed68e}
+
+\begin{DoxyCompactList}\small\item\em Compute this set of secants from the given data set. \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_secants_ab0d7e98f7ba8474af04b722faf05870a}{\hyperlink{struct_d_r_d_s_p_1_1_secants}{Secants} \& \hyperlink{struct_d_r_d_s_p_1_1_secants_ab0d7e98f7ba8474af04b722faf05870a}{Compute\-From\-Data} (const \hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} \&data\-Set, double tolerance)}\label{struct_d_r_d_s_p_1_1_secants_ab0d7e98f7ba8474af04b722faf05870a}
+
+\begin{DoxyCompactList}\small\item\em Compute this set of secants from the given data set with culling. \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_secants_a21ff677ea2698d6de90941403daa68c9}{Vector\-Xd {\bfseries Get\-Secant} (size\-\_\-t k) const }\label{struct_d_r_d_s_p_1_1_secants_a21ff677ea2698d6de90941403daa68c9}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
@@ -42,11 +39,17 @@ Inheritance diagram for D\-R\-D\-S\-P\-:\-:Secants\-:\begin{figure}[H]
 \begin{DoxyCompactList}\small\item\em Number of secants in the data set. \end{DoxyCompactList}\item 
 \hypertarget{struct_d_r_d_s_p_1_1_secants_a950d625f7d298f93eaad20062f79db1b}{uint32\-\_\-t \hyperlink{struct_d_r_d_s_p_1_1_secants_a950d625f7d298f93eaad20062f79db1b}{dimension}}\label{struct_d_r_d_s_p_1_1_secants_a950d625f7d298f93eaad20062f79db1b}
 
-\begin{DoxyCompactList}\small\item\em Dimension of the space. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Dimension of the space. \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_secants_a1ea6387e35af61db236e3c9053fb5161}{vector$<$ Vector\-Xd $>$ \hyperlink{struct_d_r_d_s_p_1_1_secants_a1ea6387e35af61db236e3c9053fb5161}{secants}}\label{struct_d_r_d_s_p_1_1_secants_a1ea6387e35af61db236e3c9053fb5161}
+
+\begin{DoxyCompactList}\small\item\em Array of pre-\/computed unit secants. \end{DoxyCompactList}\item 
+\hypertarget{struct_d_r_d_s_p_1_1_secants_a534beb61e939e136580727be9296c8a8}{vector$<$ \hyperlink{namespace_d_r_d_s_p_a955ec80e50da3c3f17008affbdd1ca04}{weight\-Type} $>$ \hyperlink{struct_d_r_d_s_p_1_1_secants_a534beb61e939e136580727be9296c8a8}{weights}}\label{struct_d_r_d_s_p_1_1_secants_a534beb61e939e136580727be9296c8a8}
+
+\begin{DoxyCompactList}\small\item\em Array of secant weights produced by culling. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-Base class/interface for a set of secants. 
+Set of unit secants that have been pre-\/computed. 
 
 The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
 \item 

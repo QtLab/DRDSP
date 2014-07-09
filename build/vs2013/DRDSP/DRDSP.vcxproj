@@ -49,6 +49,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\data_generator.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\parameter_map_producer.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\polyharmonic_spline.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\dynamics\producer_base.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model_producer.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\model.h" />
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\rbf_model.h" />

@@ -61,9 +61,11 @@ namespace DRDSP {
 			in >> stateDim >> nRBFs;
 			paramDim = stateDim * ( stateDim + nRBFs );
 			centres.resize(nRBFs);
-			for( auto& c : centres )
+			for( auto& c : centres ) {
+				c.setZero(stateDim);
 				for(uint32_t j=0;j<stateDim;++j)
 					in >> c[j];
+			}
 		}
 
 		void WriteCSV( const char* filename ) const {

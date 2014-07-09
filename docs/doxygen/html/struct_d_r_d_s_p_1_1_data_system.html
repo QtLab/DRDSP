@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -103,7 +104,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aff122ec613cf26452c910ae884b11095"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aff122ec613cf26452c910ae884b11095"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>DataSystem</b> (uint32_t dim, uint32_t numParams, uint32_t paramDim)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DataSystem</b> (uint32_t dim, uint32_t numParams, uint32_t <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a11e4d274af9cfc398b7f1b6b49427f9b">paramDim</a>)</td></tr>
 <tr class="separator:aff122ec613cf26452c910ae884b11095"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23b905c286750d16f9cd8996ad4c2076"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23b905c286750d16f9cd8996ad4c2076"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a23b905c286750d16f9cd8996ad4c2076">Load</a> (const char *filename, uint32_t maxPoints=0)</td></tr>
@@ -121,10 +122,18 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stru
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a6b4e0e6bc3ba1135a08fc2c2ed874e39">WriteDataSetsCSV</a> (const char *filePrefix, const char *fileSuffix) const </td></tr>
 <tr class="memdesc:a6b4e0e6bc3ba1135a08fc2c2ed874e39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the data sets to numbered files with given prefix and suffix. <br/></td></tr>
 <tr class="separator:a6b4e0e6bc3ba1135a08fc2c2ed874e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac05f637ae6b77c109ac004cad87bacb4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac05f637ae6b77c109ac004cad87bacb4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ac05f637ae6b77c109ac004cad87bacb4">WriteDataSetsBinary</a> (const char *filePrefix, const char *fileSuffix) const </td></tr>
+<tr class="memdesc:ac05f637ae6b77c109ac004cad87bacb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the data sets to numbered files with given prefix and suffix. <br/></td></tr>
+<tr class="separator:ac05f637ae6b77c109ac004cad87bacb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd5e714d21c0d7c1b1efb65b233788ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd5e714d21c0d7c1b1efb65b233788ab"></a>
 <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#afd5e714d21c0d7c1b1efb65b233788ab">ProjectData</a> (const MatrixXd &amp;W) const </td></tr>
 <tr class="memdesc:afd5e714d21c0d7c1b1efb65b233788ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the given projection to this data system. <br/></td></tr>
 <tr class="separator:afd5e714d21c0d7c1b1efb65b233788ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a952b433226cdd312620db7140fe352ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a952b433226cdd312620db7140fe352ce"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a952b433226cdd312620db7140fe352ce">TotalPoints</a> () const </td></tr>
+<tr class="memdesc:a952b433226cdd312620db7140fe352ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of data points in the system. <br/></td></tr>
+<tr class="separator:a952b433226cdd312620db7140fe352ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -136,10 +145,10 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">numParameters</a></td></tr>
 <tr class="memdesc:a621ef4f4452821030bb57e93dadf334e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of parameters/data sets in the family. <br/></td></tr>
 <tr class="separator:a621ef4f4452821030bb57e93dadf334e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac494c5833ae14e805cd1d0a8b8e52143"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac494c5833ae14e805cd1d0a8b8e52143"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#ac494c5833ae14e805cd1d0a8b8e52143">parameterDimension</a></td></tr>
-<tr class="memdesc:ac494c5833ae14e805cd1d0a8b8e52143"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the parameter space. <br/></td></tr>
-<tr class="separator:ac494c5833ae14e805cd1d0a8b8e52143"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11e4d274af9cfc398b7f1b6b49427f9b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11e4d274af9cfc398b7f1b6b49427f9b"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a11e4d274af9cfc398b7f1b6b49427f9b">paramDim</a></td></tr>
+<tr class="memdesc:a11e4d274af9cfc398b7f1b6b49427f9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the parameter space. <br/></td></tr>
+<tr class="separator:a11e4d274af9cfc398b7f1b6b49427f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fe0b41909f9056f986b4284e0fcb614"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5fe0b41909f9056f986b4284e0fcb614"></a>
 vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">dataSets</a></td></tr>
 <tr class="memdesc:a5fe0b41909f9056f986b4284e0fcb614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of data sets. <br/></td></tr>
@@ -158,7 +167,7 @@ vector&lt; VectorXd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a c
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:00 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

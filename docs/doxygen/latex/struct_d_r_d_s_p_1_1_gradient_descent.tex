@@ -1,43 +1,34 @@
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent}{\section{D\-R\-D\-S\-P\-:\-:Gradient\-Descent$<$ Geodesic, S, D\-S $>$ Struct Template Reference}
-\label{struct_d_r_d_s_p_1_1_gradient_descent}\index{D\-R\-D\-S\-P\-::\-Gradient\-Descent$<$ Geodesic, S, D\-S $>$@{D\-R\-D\-S\-P\-::\-Gradient\-Descent$<$ Geodesic, S, D\-S $>$}}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent}{\section{D\-R\-D\-S\-P\-:\-:Gradient\-Descent$<$ Geodesic $>$ Struct Template Reference}
+\label{struct_d_r_d_s_p_1_1_gradient_descent}\index{D\-R\-D\-S\-P\-::\-Gradient\-Descent$<$ Geodesic $>$@{D\-R\-D\-S\-P\-::\-Gradient\-Descent$<$ Geodesic $>$}}
 }
 \subsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a55e418414059f2b9f839c1ea59d2bd44}{typedef Geodesic\-::\-Metric {\bfseries Metric}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a55e418414059f2b9f839c1ea59d2bd44}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a0534fdca2e58308db1766b72510da64a}{typedef Geodesic\-::\-Metric {\bfseries Metric}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a0534fdca2e58308db1766b72510da64a}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a93a9eb83c41f78b67a02dd0fd96cb996}{typedef Metric\-::\-Point {\bfseries Point}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a93a9eb83c41f78b67a02dd0fd96cb996}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a35bcc6491682744ad9720510a1d13ecb}{typedef Metric\-::\-Point {\bfseries Point}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a35bcc6491682744ad9720510a1d13ecb}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a3634101c3538e592d42cf2a3e11624e9}{{\bfseries Gradient\-Descent} (const S \&cost, const D\-S \&gradient)}\label{struct_d_r_d_s_p_1_1_gradient_descent_a3634101c3538e592d42cf2a3e11624e9}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a826130f2adf7029ab248d9fc4d70d224}{{\footnotesize template$<$typename S , typename D\-S $>$ }\\bool {\bfseries Step} (Point \&x, const S \&cost, const D\-S \&gradient)}\label{struct_d_r_d_s_p_1_1_gradient_descent_a826130f2adf7029ab248d9fc4d70d224}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a1857bebfa12e9455853995452195461b}{bool {\bfseries Step} (Point \&x)}\label{struct_d_r_d_s_p_1_1_gradient_descent_a1857bebfa12e9455853995452195461b}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_ad4ac6a7f56e4aec9ddbdeb651e8ffdbf}{bool {\bfseries Optimize} (Point \&x)}\label{struct_d_r_d_s_p_1_1_gradient_descent_ad4ac6a7f56e4aec9ddbdeb651e8ffdbf}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_aef8ad1b92b8fefa8f67072f052dfb042}{{\footnotesize template$<$typename S , typename D\-S $>$ }\\bool {\bfseries Optimize} (Point \&x, const S \&cost, const D\-S \&gradient)}\label{struct_d_r_d_s_p_1_1_gradient_descent_aef8ad1b92b8fefa8f67072f052dfb042}
 
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_ae37db7d5f8203c9636421950402012ee}{const S \& {\bfseries cost}}\label{struct_d_r_d_s_p_1_1_gradient_descent_ae37db7d5f8203c9636421950402012ee}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a3d83fb182690e94d667cf7e079706427}{Metric {\bfseries metric}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a3d83fb182690e94d667cf7e079706427}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a27e280693a2ea49c5978a9fbec467384}{const D\-S \& {\bfseries gradient}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a27e280693a2ea49c5978a9fbec467384}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a5da80c1f920af9fca7bbee2e4698848b}{\hyperlink{struct_d_r_d_s_p_1_1_line_search}{Line\-Search} {\bfseries line\-Search}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a5da80c1f920af9fca7bbee2e4698848b}
 
 \item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a9f52cc0847b60f167b8b7dcdbc15c211}{Metric {\bfseries metric}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a9f52cc0847b60f167b8b7dcdbc15c211}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a64f328d922bca75d2cd7581c380c50f0}{\hyperlink{struct_d_r_d_s_p_1_1_line_search}{Line\-Search} {\bfseries line\-Search}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a64f328d922bca75d2cd7581c380c50f0}
-
-\item 
-\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_a7ba95b5390365497175372184f0d6b5c}{uint32\-\_\-t {\bfseries max\-Steps}}\label{struct_d_r_d_s_p_1_1_gradient_descent_a7ba95b5390365497175372184f0d6b5c}
+\hypertarget{struct_d_r_d_s_p_1_1_gradient_descent_afd2cba8ba783cebeb2abd470242c4d5c}{uint32\-\_\-t {\bfseries max\-Steps}}\label{struct_d_r_d_s_p_1_1_gradient_descent_afd2cba8ba783cebeb2abd470242c4d5c}
 
 \end{DoxyCompactItemize}
 

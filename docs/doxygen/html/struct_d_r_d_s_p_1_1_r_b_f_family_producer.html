@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,11 +83,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>DRDSP</b></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_family_producer.html">RBFFamilyProducer</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespace_d_r_d_s_p.html">DRDSP</a></li><li class="navelem"><a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_family_producer.html">RBFFamilyProducer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
@@ -95,42 +97,62 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">DRDSP::RBFFamilyProducer&lt; F &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for DRDSP::RBFFamilyProducer&lt; F &gt;:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="struct_d_r_d_s_p_1_1_r_b_f_family_producer.png" usemap="#DRDSP::RBFFamilyProducer&lt; F &gt;_map" alt=""/>
+  <map id="DRDSP::RBFFamilyProducer&lt; F &gt;_map" name="DRDSP::RBFFamilyProducer&lt; F &gt;_map">
+<area href="struct_d_r_d_s_p_1_1_producer_base.html" alt="DRDSP::ProducerBase" shape="rect" coords="0,0,206,24"/>
+</map>
+ </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:adeef9e5c4bb8e84b47d6975b5fd0b9a5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adeef9e5c4bb8e84b47d6975b5fd0b9a5"></a>
+typedef <a class="el" href="struct_d_r_d_s_p_1_1_p_map_family.html">PMapFamily</a>&lt; <a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_family.html">RBFFamily</a><br class="typebreak"/>
+&lt; F &gt;, <a class="el" href="struct_d_r_d_s_p_1_1_affine.html">AffineXd</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReducedFamily</b></td></tr>
+<tr class="separator:adeef9e5c4bb8e84b47d6975b5fd0b9a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0282e37f5ef5428167e10724710c20e7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0282e37f5ef5428167e10724710c20e7"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>RBFFamilyProducer</b> (uint32_t nRBFs)</td></tr>
 <tr class="separator:a0282e37f5ef5428167e10724710c20e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e3950bcb42af71ce2911188f048e969"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e3950bcb42af71ce2911188f048e969"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_family.html">RBFFamily</a>&lt; F &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeRBFFamily</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, uint32_t parameterDimension, const vector&lt; VectorXd &gt; &amp;parameters) const </td></tr>
-<tr class="separator:a2e3950bcb42af71ce2911188f048e969"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bf81ec016b1927ffc69522622de07f5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6bf81ec016b1927ffc69522622de07f5"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeTotalCost</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_family.html">RBFFamily</a>&lt; F &gt; &amp;family, const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, const vector&lt; VectorXd &gt; &amp;parameters) const </td></tr>
-<tr class="separator:a6bf81ec016b1927ffc69522622de07f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0aa34f75bbd4cf0345c7b3556ac11058"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0aa34f75bbd4cf0345c7b3556ac11058"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Fit</b> (<a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_family.html">RBFFamily</a>&lt; F &gt; &amp;reduced, const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, uint32_t parameterDimension, const vector&lt; VectorXd &gt; &amp;parameters) const </td></tr>
-<tr class="separator:a0aa34f75bbd4cf0345c7b3556ac11058"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a288ad4de46e43c3b1c5338b34c81ba6a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a288ad4de46e43c3b1c5338b34c81ba6a"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_family.html">RBFFamily</a>&lt; F &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>BruteForce</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, uint32_t parameterDimension, const vector&lt; VectorXd &gt; &amp;parameters, uint32_t numIterations) const </td></tr>
-<tr class="separator:a288ad4de46e43c3b1c5338b34c81ba6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e1dcce56a93b0504c2b1c4d36cc7ff3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e1dcce56a93b0504c2b1c4d36cc7ff3"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_p_map_family.html">ReducedFamily</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BruteForce</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, const vector&lt; VectorXd &gt; &amp;parameters, uint32_t numIterations) const </td></tr>
+<tr class="separator:a6e1dcce56a93b0504c2b1c4d36cc7ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af58f8bd5bdcd8730766c1bc186f4372c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af58f8bd5bdcd8730766c1bc186f4372c"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_p_map_family.html">ReducedFamily</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BruteForce</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, const vector&lt; VectorXd &gt; &amp;parameters, uint32_t numIterations, uint32_t numThreads) const </td></tr>
+<tr class="separator:af58f8bd5bdcd8730766c1bc186f4372c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_struct_d_r_d_s_p_1_1_producer_base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_struct_d_r_d_s_p_1_1_producer_base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="struct_d_r_d_s_p_1_1_producer_base.html">DRDSP::ProducerBase</a></td></tr>
+<tr class="memitem:addbb029e21d29fc090c177509d7bcd3f inherit pub_methods_struct_d_r_d_s_p_1_1_producer_base"><td class="memTemplParams" colspan="2"><a class="anchor" id="addbb029e21d29fc090c177509d7bcd3f"></a>
+template&lt;typename Model &gt; </td></tr>
+<tr class="memitem:addbb029e21d29fc090c177509d7bcd3f inherit pub_methods_struct_d_r_d_s_p_1_1_producer_base"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ComputeTotalCost</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_model.html">Model</a> &amp;model, const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a> &amp;data) const </td></tr>
+<tr class="separator:addbb029e21d29fc090c177509d7bcd3f inherit pub_methods_struct_d_r_d_s_p_1_1_producer_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e47c61d879ea97d767641adeecb1ac8 inherit pub_methods_struct_d_r_d_s_p_1_1_producer_base"><td class="memTemplParams" colspan="2"><a class="anchor" id="a3e47c61d879ea97d767641adeecb1ac8"></a>
+template&lt;typename Family &gt; </td></tr>
+<tr class="memitem:a3e47c61d879ea97d767641adeecb1ac8 inherit pub_methods_struct_d_r_d_s_p_1_1_producer_base"><td class="memTemplItemLeft" align="right" valign="top">double&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ComputeTotalCost</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_family.html">Family</a> &amp;family, const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, const vector&lt; VectorXd &gt; &amp;parameters) const </td></tr>
+<tr class="separator:a3e47c61d879ea97d767641adeecb1ac8 inherit pub_methods_struct_d_r_d_s_p_1_1_producer_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a80e649c8308fc4249acf9a91e91dbe1e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80e649c8308fc4249acf9a91e91dbe1e"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>fitWeight</b> [2]</td></tr>
-<tr class="separator:a80e649c8308fc4249acf9a91e91dbe1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83431f5c3b6616def3277dbc57fe412b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83431f5c3b6616def3277dbc57fe412b"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>boxScale</b></td></tr>
 <tr class="separator:a83431f5c3b6616def3277dbc57fe412b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad65e12c9e040fba915381b0af0031b21"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad65e12c9e040fba915381b0af0031b21"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>numRBFs</b></td></tr>
 <tr class="separator:ad65e12c9e040fba915381b0af0031b21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_struct_d_r_d_s_p_1_1_producer_base"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_struct_d_r_d_s_p_1_1_producer_base')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="struct_d_r_d_s_p_1_1_producer_base.html">DRDSP::ProducerBase</a></td></tr>
+<tr class="memitem:ac8a769138a797ad3cf75d6280a7163d1 inherit pub_attribs_struct_d_r_d_s_p_1_1_producer_base"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8a769138a797ad3cf75d6280a7163d1"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>fitWeight</b> [2]</td></tr>
+<tr class="separator:ac8a769138a797ad3cf75d6280a7163d1 inherit pub_attribs_struct_d_r_d_s_p_1_1_producer_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:af800620ffdbf454cd8cb33c83421a01b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af800620ffdbf454cd8cb33c83421a01b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeMatrices</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_r_b_f_model.html">RBFModel</a>&lt; F &gt; &amp;model, const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a> &amp;data, const VectorXd &amp;parameter, MatrixXd &amp;A, MatrixXd &amp;B) const </td></tr>
-<tr class="separator:af800620ffdbf454cd8cb33c83421a01b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1163c5bef56c9fa9e578fa13aaaad329"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1163c5bef56c9fa9e578fa13aaaad329"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_p_map_family.html">ReducedFamily</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BruteForce</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;data, const <a class="el" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> &amp;box, const vector&lt; VectorXd &gt; &amp;parameters, uint32_t seed, uint32_t numIterations) const </td></tr>
+<tr class="separator:a1163c5bef56c9fa9e578fa13aaaad329"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/DRDSP/dynamics/<a class="el" href="rbf__family__producer_8h_source.html">rbf_family_producer.h</a></li>
@@ -138,7 +160,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeMatrices</b> (
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 16 2014 15:01:06 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 9 2014 05:08:02 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
