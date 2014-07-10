@@ -1,4 +1,5 @@
 #include <DRDSP/dynamics/reduced_data_system.h>
+#include <DRDSP/dynamics/monodromy.h>
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -89,6 +90,25 @@ void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rda
 		out << ",";
 		for( const auto& x : r.differences )
 			out << x / ball.radius << ",";
+		out << endl;
+	}
+}
+
+void DRDSP::ComparePeriods( const ReducedDataSystem& reducedData, const DataSystem& rdata, double dt, double tolerance ) {
+	ofstream out("output/periods.csv");
+	out << "Parameter,Original Period,Reduced Period,Error,Rel Error,%" << endl;
+	for(uint32_t i=0;i<reducedData.numParameters;++i) {
+		double p1 = DetectPeriod( reducedData[i].points, reducedData[i].vectors[0], dt, tolerance );
+		double p2 = DetectPeriod( rdata.dataSets[i].points, reducedData[i].vectors[0], dt, tolerance );
+		double err = p2 - p1;
+		double rel = err / p1;
+		double pc = rel * 100.0;
+		out << rdata.parameters[i] << ",";
+		out << p1 << ",";
+		out << p2 << ",";
+		out << err << ",";
+		out << rel << ",";
+		out << pc << ",";
 		out << endl;
 	}
 }

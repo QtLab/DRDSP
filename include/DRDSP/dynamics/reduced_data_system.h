@@ -97,6 +97,7 @@ namespace DRDSP {
 	};
 
 	void Compare( const ReducedDataSystem& reducedData, const DataSystem& rdata );
+	void ComparePeriods( const ReducedDataSystem& reducedData, const DataSystem& rdata, double dt, double tolerance = 0.001 );
 
 }
 

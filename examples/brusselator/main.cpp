@@ -10,7 +10,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(2), numRBFs(30), numIterations(3000), numThreads(3) {}
+	Options() : targetDimension(2), numRBFs(30), numIterations(3000), numThreads(4) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -80,6 +80,7 @@ int main( int argc, char** argv ) {
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
-
+	ComparePeriods( reducedData, rdata, dataGenerator.tInterval / (dataGenerator.print-1), 0.01 );
+	
 	cout << "Press enter to continue . . . "; cin.get();
 }
