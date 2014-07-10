@@ -70,7 +70,7 @@ int main( int argc, char** argv ) {
 	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 	     << endl;
 
-	//reducedFamily.WriteCSV("output/reduced.csv");
+	reducedFamily.family.WriteCSV("output/reduced.csv");
 
 	cout << "Simulating the reduced family..." << endl;
 	auto rdataGenerator = MakeDataGenerator( reducedFamily );

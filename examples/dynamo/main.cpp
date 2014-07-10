@@ -21,7 +21,7 @@ struct Options {
 	}
 };
 
-typedef RBF<Multiquadratic> RBFType;
+typedef EquiRBFZ2<Multiquadratic> RBFType;
 
 int main( int argc, char** argv ) {
 	Options options(argc,argv);
@@ -73,7 +73,7 @@ int main( int argc, char** argv ) {
 	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 	     << endl;
 	
-	//reducedFamily.WriteCSV("output/reduced.csv");
+	reducedFamily.family.WriteCSV("output/reduced.csv");
 
 	cout << "Generating Reduced data..." << endl;
 	auto rdataGenerator = MakeDataGenerator( reducedFamily );

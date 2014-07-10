@@ -74,10 +74,7 @@ void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rda
 		BallXd ball = ComputeBall( reducedData.reducedData[i].points );
 		DataComparisonResult r = CompareData( reducedData.reducedData[i].points, rdata.dataSets[i].points );
 		cout << "Parameter " << rdata.parameters[i] << endl;
-		cout << "RMS: " << r.rmsDifference << endl;
-		cout << "Max: " << r.maxDifference << endl;
-		cout << "MaxMin: " << r.maxMinDifference << endl;
-		cout << "Scale: " << ball.radius << endl;
+		cout << "Max Rel Error: " << r.maxDifference / ball.radius << endl;
 
 		out << rdata.parameters[i] << ",";
 		out << r.rmsDifference << ",";

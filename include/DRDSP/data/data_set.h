@@ -45,7 +45,7 @@ namespace DRDSP {
 	DataSet MapMatrix( const MatrixBase<Derived>& A, const DataSet& data ) {
 		DataSet r( data.points.size() );
 		for(size_t i=0;i<r.points.size();++i) {
-			r[i] = A * data[i];
+			r[i].noalias() = A * data[i];
 		}
 		return r;
 	}

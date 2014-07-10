@@ -10,7 +10,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(3), numRBFs(50), numIterations(1500), numThreads(3) {}
+	Options() : targetDimension(2), numRBFs(100), numIterations(300), numThreads(3) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -20,25 +20,23 @@ struct Options {
 	}
 };
 
-typedef RBF<ThinPlateSpline> RBFType;
+typedef EquiRBFZ2<Multiquadratic> RBFType; //
 
 int main( int argc, char** argv ) {
 
 	Options options(argc,argv);
 
-	GoodfellowFamily goodfellow(100);
+	GoodfellowFamily goodfellow(10);
 
-	auto parameters = ParameterList( 5.5, 6.0, 6 );
+	auto parameters = ParameterList( 4.1, 4.2, 6 );
 	
 	cout << "Generating data..." << endl;
 	DataGenerator<GoodfellowFamily> dataGenerator( goodfellow );
-	dataGenerator.initial.setRandom();
-	dataGenerator.initial -= 0.5 * VectorXd::Ones( goodfellow.stateDim );
-	dataGenerator.initial *= 2.0;
-	dataGenerator.tStart = 200;
-	dataGenerator.tInterval = 1;
+	dataGenerator.initial.setRandom( goodfellow.stateDim );
+	dataGenerator.tStart = 100;
+	dataGenerator.tInterval = 2;
 	dataGenerator.print = 200;
-	dataGenerator.dtMax = 0.001;
+	dataGenerator.dtMax = 0.00001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 	data.WriteDataSetsCSV("output/orig",".csv");
@@ -75,7 +73,7 @@ int main( int argc, char** argv ) {
 	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
 		 << endl;
 	
-	//reducedFamily.WriteCSV("output/reduced.csv");
+	reducedFamily.family.WriteCSV("output/reduced.csv");
 
 	cout << "Generating Reduced data..." << endl;
 	auto rdataGenerator = MakeDataGenerator( reducedFamily );

@@ -33,15 +33,15 @@ namespace DRDSP {
 			Create( (uint32_t)W.cols(), data.points.size() );
 
 			for(uint32_t i=0;i<count;++i) {
-				points[i] = W.adjoint() * data.points[i];
+				points[i].noalias() = W.adjoint() * data.points[i];
 			}
 
 			for(uint32_t i=0;i<count;++i) {
-				vectors[i] = W.adjoint() * original( data.points[i] );
+				vectors[i].noalias() = W.adjoint() * original( data.points[i] );
 			}
 
 			for(uint32_t i=0;i<count;++i) {
-				derivatives[i] = W.adjoint() * original.Partials( data.points[i] ) * W;
+				derivatives[i].noalias() = W.adjoint() * original.Partials( data.points[i] ) * W;
 			}
 			scales[0] = ComputeVectorScale();
 			scales[1] = ComputeDerivativeScale();
@@ -55,11 +55,11 @@ namespace DRDSP {
 			static const double stabilityFactor = 1.0;
 
 			for(uint32_t i=0;i<count;++i) {
-				points[i] = W.adjoint() * original.embedding(data.points[i]);
+				points[i].noalias() = W.adjoint() * original.embedding(data.points[i]);
 			}
 
 			for(uint32_t i=0;i<count;++i) {
-				vectors[i] = W.adjoint() * original( data.points[i] );
+				vectors[i].noalias() = W.adjoint() * original( data.points[i] );
 			}
 
 			MatrixXd A;
@@ -73,8 +73,8 @@ namespace DRDSP {
 						++rank;
 					else break;
 				}
-				A = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();
-				derivatives[i] = W.adjoint() * original.Partials( data.points[i] ) * original.embedding.DerivativeAdjoint(data.points[i]) * W * A - stabilityFactor * ( MatrixXd::Identity(A.rows(),A.cols()) - A );
+				A.noalias() = svd.matrixU().leftCols(rank) * svd.matrixU().leftCols(rank).transpose();
+				derivatives[i].noalias() = W.adjoint() * original.Partials( data.points[i] ) * original.embedding.DerivativeAdjoint(data.points[i]) * W * A - stabilityFactor * ( MatrixXd::Identity(A.rows(),A.cols()) - A );
 			}
 			scales[0] = ComputeVectorScale();
 			scales[1] = ComputeDerivativeScale();

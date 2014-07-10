@@ -26,10 +26,10 @@ struct Goodfellow : Model<> {
 		for(uint32_t i=0;i<N;++i) {
 			Scalar temp1 = omega - d * r2(state,i);
 			Scalar temp2 = poly(state,i);
-			res(i) = y(state,i) * temp1 + x(state,i) * temp2;
-			res(N+i) = -x(state,i) * temp1 + y(state,i) * temp2;
+			res[i] = y(state,i) * temp1 + x(state,i) * temp2;
+			res[N+i] = -x(state,i) * temp1 + y(state,i) * temp2;
 		}
-		res.head(N) += p / N * (adjacency * state.head(N));
+		res.head(N) += (p / N) * (adjacency * state.head(N));
 		return res;
 	}
 
@@ -60,7 +60,7 @@ struct Goodfellow : Model<> {
 
 	template<typename Derived>
 	typename Derived::Scalar poly( const MatrixBase<Derived>& state, uint32_t i ) const {
-		return mu(i) - a * r2(state,i) + b * r4(state,i) - c * r6(state,i);
+		return mu[i] - a * r2(state,i) + b * r4(state,i) - c * r6(state,i);
 	}
 
 };
