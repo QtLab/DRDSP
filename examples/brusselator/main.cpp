@@ -10,7 +10,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(2), numRBFs(30), numIterations(3000), numThreads(4) {}
+	Options() : targetDimension(2), numRBFs(30), numIterations(3000), numThreads(3) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -22,19 +22,29 @@ struct Options {
 
 typedef RBF<ThinPlateSpline> RBFType;
 
-int main( int argc, char** argv ) {
+void ComputeReduced( const Options& options );
+void LoadProjection( const Options& options );
 
+int main( int argc, char** argv ) {
 	Options options(argc,argv);
+
+	ComputeReduced( options );
+	//LoadProjection( options );
+
+	cout << "Press enter to continue . . . "; cin.get();
+}
+
+void ComputeReduced( const Options& options ) {
 
 	BrusselatorFamily brusselator;
 
-	auto parameters = ParameterList( 2.1, 2.8, 8 );
+	auto parameters = ParameterList( 2.1, 3.9, 19 );
 
 	cout << "Generating data..." << endl;
 	DataGenerator<BrusselatorFamily> dataGenerator;
 	dataGenerator.initial.setRandom( brusselator.stateDim );
 	dataGenerator.tStart = 100;
-	dataGenerator.tInterval = 7.2;
+	dataGenerator.tInterval = 20;
 	dataGenerator.print = 200;
 	dataGenerator.dtMax = 0.001;
 
@@ -80,7 +90,57 @@ int main( int argc, char** argv ) {
 	rdata.WriteDataSetsCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
-	ComparePeriods( reducedData, rdata, dataGenerator.tInterval / (dataGenerator.print-1), 0.01 );
+	ComparePeriods( reducedData, rdata, dataGenerator.tInterval / (dataGenerator.print-1), 0.1 );
 	
-	cout << "Press enter to continue . . . "; cin.get();
+}
+
+void LoadProjection( const Options& options ) {
+
+	BrusselatorFamily brusselator;
+
+	auto parameters = ParameterList( 2.1, 3.9, 19 );
+
+	cout << "Generating data..." << endl;
+	DataGenerator<BrusselatorFamily> dataGenerator;
+	dataGenerator.initial.setRandom( brusselator.stateDim );
+	dataGenerator.tStart = 100;
+	dataGenerator.tInterval = 9.1;
+	dataGenerator.print = 1000;
+	dataGenerator.dtMax = 0.001;
+
+	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
+
+	ProjSecant projSecant( options.targetDimension );
+	projSecant.W.setZero(brusselator.stateDim,options.targetDimension);
+	projSecant.ReadBinary("output/projection.bin");
+
+	cout << endl << "Computing Reduced Data..." << endl;
+	ReducedDataSystem reducedData;
+	reducedData.ComputeData( brusselator, data, projSecant.W, options.numThreads )
+	           .WritePointsCSV("output/p","-points.csv")
+	           .WriteVectorsCSV("output/p","-vectors.csv");
+
+	cout << endl << "Computing Reduced Family..." << endl;
+	RBFFamilyProducer<RBFType> producer( options.numRBFs );
+	auto reducedFamily = producer.BruteForce( reducedData,
+											  data.parameters,
+											  options.numIterations,
+											  options.numThreads );
+
+	cout << "Total Cost = "
+	     << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )
+	     << endl;
+
+	reducedFamily.family.WriteCSV("output/reduced.csv");
+
+	cout << "Simulating the reduced family..." << endl;
+	auto rdataGenerator = MakeDataGenerator( reducedFamily );
+	rdataGenerator.MatchSettings( dataGenerator );
+	rdataGenerator.tStart = 0.0;
+	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
+	rdata.WriteDataSetsCSV("output/rdata",".csv");
+
+	Compare( reducedData, rdata );
+	ComparePeriods( reducedData, rdata, dataGenerator.tInterval / (dataGenerator.print-1), 0.1 );
+	
 }

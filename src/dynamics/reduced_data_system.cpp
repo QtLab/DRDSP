@@ -22,8 +22,8 @@ AABB ReducedDataSystem::ComputeBoundingBox() const {
 	for(uint32_t i=1;i<numParameters;++i) {
 		AABB box2 = reducedData[i].ComputeBoundingBox();
 		for(uint32_t j=0;j<d;++j) {
-			if( box2.bMin(j) < box.bMin(j) ) box.bMin(j) = box2.bMin(j);
-			if( box2.bMax(j) > box.bMax(j) ) box.bMax(j) = box2.bMax(j);
+			if( box2.bMin[j] < box.bMin[j] ) box.bMin[j] = box2.bMin[j];
+			if( box2.bMax[j] > box.bMax[j] ) box.bMax[j] = box2.bMax[j];
 		}
 	}
 	return box;
