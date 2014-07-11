@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\..\src\dynamics\reduced_data_system.cpp" />
     <ClCompile Include="..\..\..\src\geometry\grassmannian.cpp" />
     <ClCompile Include="..\..\..\src\misc.cpp" />
+    <ClCompile Include="..\..\..\src\projection\inverse.cpp" />
     <ClCompile Include="..\..\..\src\projection\proj_pod.cpp" />
     <ClCompile Include="..\..\..\src\projection\proj_secant.cpp" />
   </ItemGroup>
@@ -71,6 +72,7 @@
     <ClInclude Include="..\..\..\include\DRDSP\optimization\conjugate_gradient.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\gradient_descent.h" />
     <ClInclude Include="..\..\..\include\DRDSP\optimization\linesearch.h" />
+    <ClInclude Include="..\..\..\include\DRDSP\projection\inverse.h" />
     <ClInclude Include="..\..\..\include\DRDSP\projection\proj_pod.h" />
     <ClInclude Include="..\..\..\include\DRDSP\projection\proj_secant.h" />
     <ClInclude Include="..\..\..\include\DRDSP\types.h" />

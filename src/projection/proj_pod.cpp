@@ -10,15 +10,17 @@ ProjPOD::ProjPOD( uint32_t targetDimension ) : targetDimension(targetDimension) 
 
 ProjPOD& ProjPOD::Find( const DataSet& data ) {
 
+	MatrixXd dataMatrix;
 	dataMatrix.setZero(data.dimension,data.points.size());
 
 	uint32_t k = 0;
 	for(size_t j=0;j<data.points.size();++j)
 		dataMatrix.col(k++) = data.points[j];
 
-	svd.compute(dataMatrix,ComputeThinU);
-	
-	W = svd.matrixU().block(0,0,data.dimension,targetDimension);
+	JacobiSVD<MatrixXd> svd(dataMatrix,ComputeThinU);
+	singularValues = svd.singularValues();
+
+	W = svd.matrixU().leftCols(targetDimension);
 	return *this;
 }
 
@@ -28,6 +30,7 @@ ProjPOD& ProjPOD::Find( const DataSystem& data ) {
 	for(uint32_t i=0;i<data.numParameters;++i)
 		totalPoints += data.dataSets[i].points.size();
 
+	MatrixXd dataMatrix;
 	dataMatrix.setZero( data.dimension, totalPoints );
 
 	size_t k = 0;
@@ -35,9 +38,10 @@ ProjPOD& ProjPOD::Find( const DataSystem& data ) {
 		for(size_t j=0;j<data.dataSets[i].points.size();++j)
 			dataMatrix.col(k++) = data.dataSets[i].points[j];
 
-	svd.compute(dataMatrix,ComputeThinU);
-	
-	W = svd.matrixU().block(0,0,data.dimension,targetDimension);
+	JacobiSVD<MatrixXd> svd(dataMatrix,ComputeThinU);
+	singularValues = svd.singularValues();
+
+	W = svd.matrixU().leftCols(targetDimension);
 	return *this;
 }
 
@@ -48,8 +52,8 @@ const ProjPOD& ProjPOD::Write( const char* filename ) const {
 
 	ofstream out(outfn.str());
 	out.precision(16);
-	for(int64_t i=0;i<svd.nonzeroSingularValues();++i) {
-		out << svd.singularValues()[i] << endl;
+	for(int64_t i=0;i<singularValues.size();++i) {
+		out << singularValues[i] << endl;
 	}
 	out.close();
 

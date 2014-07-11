@@ -220,28 +220,35 @@ ProjSecant& ProjSecant::ComputeInitial( const DataSystem& data ) {
 }
 
 const ProjSecant& ProjSecant::AnalyseSecants( const Secants& secants ) const {
-	return AnalyseSecants(&secants,1);
-}
-
-const ProjSecant& ProjSecant::AnalyseSecants( const Secants* secants, size_t N ) const {
 	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
 	size_t numSecants = 0;
-	for(size_t i=0;i<N;++i) {
-		for(size_t j=0;j<secants[i].count;++j) {
-			len = ( W.adjoint() * secants[i].GetSecant(j) ).norm();
-			if( len < xMin ) xMin = len;
-			if( len > xMax ) xMax = len;
-			total += len;
-		}
-		numSecants += secants[i].count;
+	for(size_t j=0;j<secants.count;++j) {
+		len = ( W.adjoint() * secants.GetSecant(j) ).norm();
+		if( len < xMin ) xMin = len;
+		if( len > xMax ) xMax = len;
+		total += len;
 	}
+	numSecants += secants.count;
 	xMean = total / numSecants;
 	cout << endl << "Projected Lengths: Range = [ " << xMin << ", " << xMax << " ], Mean = " << xMean << endl;
 	return *this;
 }
 
 const ProjSecant& ProjSecant::AnalyseSecants( const vector<Secants>& secants ) const {
-	return AnalyseSecants(secants.data(),secants.size());
+	double xMin = 1.0, xMax = 0.0, xMean = 0.0, total = 0.0, len;
+	size_t numSecants = 0;
+	for( const auto& set : secants ) {
+		for(size_t j=0;j<set.count;++j) {
+			len = ( W.adjoint() * set.GetSecant(j) ).norm();
+			if( len < xMin ) xMin = len;
+			if( len > xMax ) xMax = len;
+			total += len;
+		}
+		numSecants += set.count;
+	}
+	xMean = total / numSecants;
+	cout << endl << "Projected Lengths: Range = [ " << xMin << ", " << xMax << " ], Mean = " << xMean << endl;
+	return *this;
 }
 
 const ProjSecant& ProjSecant::WriteCSV( const char* filename ) const {

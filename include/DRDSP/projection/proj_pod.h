@@ -17,8 +17,7 @@ namespace DRDSP {
 		const ProjPOD& Write( const char* filename ) const;
 
 	protected:
-		MatrixXd dataMatrix;
-		JacobiSVD<MatrixXd> svd;
+		JacobiSVD<MatrixXd>::SingularValuesType singularValues;
 	};
 
 }

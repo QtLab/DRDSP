@@ -51,7 +51,6 @@ namespace DRDSP {
 		ProjSecant& Find( const Secants* secants, size_t N );
 		ProjSecant& Find( const vector<Secants>& secants );
 		const ProjSecant& AnalyseSecants( const Secants& secants ) const;
-		const ProjSecant& AnalyseSecants( const Secants* secants, size_t N ) const;
 		const ProjSecant& AnalyseSecants( const vector<Secants>& secants ) const;
 		const ProjSecant& WriteCSV( const char* filename ) const;
 		const ProjSecant& WriteBinary( const char* filename ) const;

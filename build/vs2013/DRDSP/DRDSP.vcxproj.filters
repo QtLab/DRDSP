@@ -78,6 +78,9 @@
     <ClCompile Include="..\..\..\src\misc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\projection\inverse.cpp">
+      <Filter>Source Files\projection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\DRDSP\types.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\DRDSP\dynamics\producer_base.h">
       <Filter>Header Files\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\DRDSP\projection\inverse.h">
+      <Filter>Header Files\projection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

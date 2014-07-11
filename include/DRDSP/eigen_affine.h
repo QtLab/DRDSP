@@ -61,9 +61,11 @@ namespace DRDSP {
 	typedef Affine<float, -1,-1> AffineXf;
 	typedef Affine<double,-1,-1> AffineXd;
 
-	AffineXd VecToAffine( const VectorXd& param, int64_t rows ) {
+	template<typename Derived>
+	Affine<typename Derived::Scalar,-1,-1> VecToAffine( const MatrixBase<Derived>& param, int64_t rows ) {
+		typedef Derived::Scalar Scalar;
 		int64_t cols = param.size() / rows - 1;
-		AffineXd A( rows, cols );
+		Affine<Scalar,-1,-1> A( rows, cols );
 		for(int64_t i=0;i<cols;++i) {
 			A.linear.col(i) = param.segment(i*rows,rows);
 		}
@@ -71,10 +73,11 @@ namespace DRDSP {
 		return A;
 	}
 
-	VectorXd AffineToVec( const AffineXd& A ) {
+	template<typename Scalar>
+	Matrix<Scalar,-1,1> AffineToVec( const Affine<Scalar,-1,-1>& A ) {
 		int64_t rows = A.linear.rows();
 		int64_t cols = A.linear.cols();
-		VectorXd v( rows * ( cols + 1 ) );
+		Matrix<Scalar,-1,1> v( rows * ( cols + 1 ) );
 		for(int64_t i=0;i<cols;++i) {
 			v.segment(i*rows,rows) = A.linear.col(i);
 		}

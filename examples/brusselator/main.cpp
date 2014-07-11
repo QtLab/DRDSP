@@ -2,6 +2,7 @@
 #include <DRDSP/dynamics/rbf_family_producer.h>
 #include <DRDSP/dynamics/data_generator.h>
 #include <DRDSP/misc.h>
+#include <DRDSP/projection/inverse.h>
 #include "brusselator.h"
 
 using namespace std;
@@ -63,6 +64,9 @@ void ComputeReduced( const Options& options ) {
 
 	secants = vector<Secants>();
 
+	auto inverse = ComputeInverse( projSecant.W, data );
+	cout << ComputeInverseCost( inverse, data ) << endl;
+
 	cout << endl << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
 	reducedData.ComputeData( brusselator, data, projSecant.W, options.numThreads )
@@ -113,6 +117,8 @@ void LoadProjection( const Options& options ) {
 	ProjSecant projSecant( options.targetDimension );
 	projSecant.W.setZero(brusselator.stateDim,options.targetDimension);
 	projSecant.ReadBinary("output/projection.bin");
+
+	cout << ComputeInverseCost( ComputeInverse( projSecant.W, data ), data ) << endl;
 
 	cout << endl << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
