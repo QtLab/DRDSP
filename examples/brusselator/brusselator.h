@@ -1,6 +1,5 @@
 #ifndef INCLUDED_BRUSSELATOR
 #define INCLUDED_BRUSSELATOR
-#include <DRDSP/types.h>
 #include <DRDSP/dynamics/model.h>
 #include <DRDSP/auto_diff.h>
 
@@ -80,9 +79,9 @@ struct BrusselatorFamily : Family<Brusselator> {
 	BrusselatorFamily() : BrusselatorFamily(32,32) {}
 	BrusselatorFamily( int nX, int nY ) : Family<Brusselator>(2*nX*nY,1), nX(nX), nY(nY) {}
 	Brusselator operator()( const VectorXd& parameter ) const {
-		Brusselator brusselator(nX,nY);
-		brusselator.B = parameter[0];
-		return brusselator;
+		Brusselator model(nX,nY);
+		model.B = parameter[0];
+		return model;
 	}
 };
 

@@ -39,7 +39,8 @@ namespace Eigen {
 	};
 
 	namespace internal {
-		template<typename T> struct scalar_product_traits<T,dual<T>> {
+		template<typename T>
+		struct scalar_product_traits<T,dual<T>> {
 			enum {
 				// Cost = 2*NumTraits<T>::MulCost,
 				Defined = 1
@@ -47,7 +48,8 @@ namespace Eigen {
 			typedef dual<T> ReturnType;
 		};
 
-		template<typename T> struct scalar_product_traits<dual<T>,T> {
+		template<typename T>
+		struct scalar_product_traits<dual<T>,T> {
 			enum {
 				// Cost = 2*NumTraits<T>::MulCost,
 				Defined = 1

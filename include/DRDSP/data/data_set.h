@@ -38,6 +38,7 @@ namespace DRDSP {
 		for(size_t i=0;i<r.points.size();++i) {
 			r[i] = f(data[i]);
 		}
+		r.dimension = (uint32_t)r[0].size();
 		return r;
 	}
 
@@ -47,6 +48,7 @@ namespace DRDSP {
 		for(size_t i=0;i<r.points.size();++i) {
 			r[i].noalias() = A * data[i];
 		}
+		r.dimension = (uint32_t)r[0].size();
 		return r;
 	}
 

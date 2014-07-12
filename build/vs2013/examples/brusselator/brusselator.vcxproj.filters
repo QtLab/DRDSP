@@ -18,12 +18,15 @@
     <ClCompile Include="..\..\..\..\examples\brusselator\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\examples\brusselator\brusselator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\examples\brusselator\brusselator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\examples\brusselator\ginzburg_landau.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\examples\brusselator\fitzhugh_nagumo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

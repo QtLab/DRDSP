@@ -152,11 +152,12 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\examples\brusselator\brusselator.cpp" />
     <ClCompile Include="..\..\..\..\examples\brusselator\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\examples\brusselator\brusselator.h" />
+    <ClInclude Include="..\..\..\..\examples\brusselator\fitzhugh_nagumo.h" />
+    <ClInclude Include="..\..\..\..\examples\brusselator\ginzburg_landau.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

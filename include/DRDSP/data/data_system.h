@@ -4,39 +4,39 @@
 
 namespace DRDSP {
 	
-	/*!
+	/**
 	 * \brief A family of data sets with corresponding parameter values
 	 */
 	struct DataSystem {
-		uint32_t dimension,           //!< Dimension of the space in which the data points live
-		         numParameters,       //!< Number of parameters/data sets in the family
-		         paramDim;            //!< Dimension of the parameter space
-		vector<DataSet> dataSets;     //!< Array of data sets
-		vector<VectorXd> parameters;  //!< Array of parameter values
+		uint32_t dimension,           ///< Dimension of the space in which the data points live
+		         numParameters,       ///< Number of parameters/data sets in the family
+		         paramDim;            ///< Dimension of the parameter space
+		vector<DataSet> dataSets;     ///< Array of data sets
+		vector<VectorXd> parameters;  ///< Array of parameter values
 
 		DataSystem();
 
 		DataSystem( uint32_t dim, uint32_t numParams, uint32_t paramDim );
 
-		//! Load a data system from a text file
+		/// Load a data system from a text file
 		bool Load( const char* filename, uint32_t maxPoints = 0 );
 
-		//! Load the ith data set from the given file in binary format
+		/// Load the ith data set from the given file in binary format
 		bool LoadSetBinary( const char* filename, uint32_t i, uint32_t maxPoints = 0 );
 
-		//! Load the ith data set from the given file in text format (space separated)
+		/// Load the ith data set from the given file in text format (space separated)
 		bool LoadSetText( const char* filename, uint32_t i, uint32_t maxPoints = 0 );
 
-		//! Write the data sets to numbered files with given prefix and suffix
+		/// Write the data sets to numbered files with given prefix and suffix
 		void WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const;
 		
-		//! Write the data sets to numbered files with given prefix and suffix
+		/// Write the data sets to numbered files with given prefix and suffix
 		void WriteDataSetsBinary( const char* filePrefix, const char* fileSuffix ) const;
 
-		//! Apply the given projection to this data system
+		/// Apply the given projection to this data system
 		DataSystem ProjectData( const MatrixXd& W ) const;
 
-		//! Total number of data points in the system
+		/// Total number of data points in the system
 		size_t TotalPoints() const;
 	};
 

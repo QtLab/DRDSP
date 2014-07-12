@@ -4,12 +4,12 @@
 
 namespace DRDSP {
 
-	/*!
+	/**
 	 * \brief An axis-aligned bounding box in n-dimensions.
 	 */
 	struct AABB {
-		VectorXd bMin, //!< minimum bounds
-			     bMax; //!< maximum bounds
+		VectorXd bMin, ///< minimum bounds
+			     bMax; ///< maximum bounds
 
 		explicit AABB( uint32_t dim );
 		double Volume() const;
