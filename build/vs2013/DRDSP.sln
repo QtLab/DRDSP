@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRDSP", "DRDSP\DRDSP.vcxproj", "{2E42D8FD-0BD3-4057-9C73-EFD24E366260}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "brusselator", "examples\brusselator\brusselator.vcxproj", "{A59F79A8-1300-4D42-8EAA-D6DC2A564FD2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2E42D8FD-0BD3-4057-9C73-EFD24E366260} = {2E42D8FD-0BD3-4057-9C73-EFD24E366260}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fitzhugh", "examples\fitzhugh\fitzhugh.vcxproj", "{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2E42D8FD-0BD3-4057-9C73-EFD24E366260} = {2E42D8FD-0BD3-4057-9C73-EFD24E366260}
 	EndProjectSection
@@ -61,6 +66,14 @@ Global
 		{A59F79A8-1300-4D42-8EAA-D6DC2A564FD2}.Release|Win32.Build.0 = Release|Win32
 		{A59F79A8-1300-4D42-8EAA-D6DC2A564FD2}.Release|x64.ActiveCfg = Release|x64
 		{A59F79A8-1300-4D42-8EAA-D6DC2A564FD2}.Release|x64.Build.0 = Release|x64
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Debug|Win32.Build.0 = Debug|Win32
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Debug|x64.ActiveCfg = Debug|x64
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Debug|x64.Build.0 = Debug|x64
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Release|Win32.ActiveCfg = Release|Win32
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Release|Win32.Build.0 = Release|Win32
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Release|x64.ActiveCfg = Release|x64
+		{E0E81D99-86ED-4F39-A33E-BBA6F27F146C}.Release|x64.Build.0 = Release|x64
 		{638E94A9-BC05-4D11-AEAB-391563E05C08}.Debug|Win32.ActiveCfg = Debug|Win32
 		{638E94A9-BC05-4D11-AEAB-391563E05C08}.Debug|Win32.Build.0 = Debug|Win32
 		{638E94A9-BC05-4D11-AEAB-391563E05C08}.Debug|x64.ActiveCfg = Debug|x64
