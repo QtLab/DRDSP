@@ -3,7 +3,7 @@
 #include <DRDSP/dynamics/data_generator.h>
 #include <DRDSP/misc.h>
 #include <DRDSP/projection/inverse.h>
-#include "brusselator.h"
+#include "ginzburg_landau.h"
 
 using namespace std;
 using namespace DRDSP;
@@ -11,7 +11,7 @@ using namespace DRDSP;
 struct Options {
 	uint32_t targetDimension, numRBFs, numIterations, numThreads;
 
-	Options() : targetDimension(2), numRBFs(30), numIterations(1000), numThreads(3) {}
+	Options() : targetDimension(2), numRBFs(30), numIterations(300), numThreads(3) {}
 	
 	Options( int argc, char** argv ) : Options() {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
@@ -21,7 +21,7 @@ struct Options {
 	}
 };
 
-typedef RBF<ThinPlateSpline> RBFType;
+typedef EquiRBFZ2<ThinPlateSpline> RBFType;
 
 void ComputeReduced( const Options& options );
 void LoadProjection( const Options& options );
@@ -37,19 +37,22 @@ int main( int argc, char** argv ) {
 
 void ComputeReduced( const Options& options ) {
 
-	BrusselatorFamily brusselator;
+	GinzburgLandauFamily ginzburgLandau;
 
-	auto parameters = ParameterList( 2.1, 3.9, 19 );
+	auto parameters = ParameterList( 1.5, 2.0, 3 );
 
 	cout << "Generating data..." << endl;
-	DataGenerator<BrusselatorFamily> dataGenerator;
-	dataGenerator.initial.setRandom( brusselator.stateDim );
-	dataGenerator.tStart = 100;
-	dataGenerator.tInterval = 9.1;
+	DataGenerator<GinzburgLandauFamily> dataGenerator;
+	dataGenerator.initial.setRandom( ginzburgLandau.stateDim );
+	dataGenerator.tStart = 1000.0;
+	dataGenerator.tInterval = 100.0;
 	dataGenerator.print = 200;
 	dataGenerator.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
+
+	auto data2 = MapMatrix( MatrixXd::Identity(2,data.dimension), data );
+	data2.WriteCSV("output/test",".csv");
 
 	cout << "Computing secants..." << endl;
 	vector<Secants> secants = ComputeSecants( data, 10.0, options.numThreads );
@@ -69,7 +72,7 @@ void ComputeReduced( const Options& options ) {
 
 	cout << endl << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( brusselator, data, projSecant.W, options.numThreads )
+	reducedData.ComputeData( ginzburgLandau, data, projSecant.W, options.numThreads )
 	           .WritePointsCSV("output/p","-points.csv")
 	           .WriteVectorsCSV("output/p","-vectors.csv");
 
@@ -100,30 +103,30 @@ void ComputeReduced( const Options& options ) {
 
 void LoadProjection( const Options& options ) {
 
-	BrusselatorFamily brusselator;
+	GinzburgLandauFamily ginzburgLandau;
 
-	auto parameters = ParameterList( 2.1, 3.9, 19 );
+	auto parameters = ParameterList( 3, 4, 6 );
 
 	cout << "Generating data..." << endl;
-	DataGenerator<BrusselatorFamily> dataGenerator;
-	dataGenerator.initial.setRandom( brusselator.stateDim );
-	dataGenerator.tStart = 100;
-	dataGenerator.tInterval = 9.1;
-	dataGenerator.print = 1000;
+	DataGenerator<GinzburgLandauFamily> dataGenerator;
+	dataGenerator.initial.setRandom( ginzburgLandau.stateDim );
+	dataGenerator.tStart = 100.0;
+	dataGenerator.tInterval = 1000.0;
+	dataGenerator.print = 10000;
 	dataGenerator.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 
 	ProjSecant projSecant( options.targetDimension );
-	projSecant.W.setZero(brusselator.stateDim,options.targetDimension);
-	projSecant.ReadBinary("output/projection.bin");
+	projSecant.W.setZero( ginzburgLandau.stateDim, options.targetDimension );
+	projSecant.ReadBinary("output/proj-cgl-5.bin");
 
-	cout << ComputeInverseCost( ComputeInverse( projSecant.W, data ), data ) << endl;
+	MapMatrix( projSecant.W.adjoint(), data ).WriteCSV("output/p","-points.csv");
 
 	cout << endl << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
-	reducedData.ComputeData( brusselator, data, projSecant.W, options.numThreads )
-	           .WritePointsCSV("output/p","-points.csv")
+	reducedData.ComputeData( ginzburgLandau, data, projSecant.W, options.numThreads )
+	           //.WritePointsCSV("output/p","-points.csv")
 	           .WriteVectorsCSV("output/p","-vectors.csv");
 
 	cout << endl << "Computing Reduced Family..." << endl;

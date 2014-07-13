@@ -7,15 +7,15 @@ using namespace DRDSP;
 
 struct FitzHughNagumo : Model<> {
 	int nX, nY, N;
-	double sigma, lambda, kappa, tau, Du, Dv, dx, dy;
-	complex<double> p, q;
+	double dx, dy, sigma, lambda, kappa, tau, Du, Dv;
 
 	FitzHughNagumo() : FitzHughNagumo(32,32) {}
 
 	FitzHughNagumo( int nX, int nY ) :
 		Model<>(2*nX*nY),
 		N(nX*nY), nX(nX), nY(nY), dx(1), dy(1),
-		sigma(3), lambda(1), kappa(0), tau(3), Du(1), Dv(1) {}
+		sigma(3), lambda(1), kappa(0), tau(3), Du(1), Dv(1)
+	{}
 
 	template<typename Derived>
 	Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
@@ -86,8 +86,11 @@ protected:
 
 struct FitzHughNagumoFamily : Family<FitzHughNagumo> {
 	int nX, nY;
+	
 	FitzHughNagumoFamily() : FitzHughNagumoFamily(32,32) {}
+	
 	FitzHughNagumoFamily( int nX, int nY ) : Family<FitzHughNagumo>(2*nX*nY,1), nX(nX), nY(nY) {}
+	
 	FitzHughNagumo operator()( const VectorXd& parameter ) const {
 		FitzHughNagumo model(nX,nY);
 		model.lambda = parameter[0];

@@ -74,7 +74,7 @@ void ReducedFloquet( const Options& options ) {
 	}
 
 	data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
-	data.WriteDataSetsCSV("output/orig",".csv");
+	data.WriteCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;
 	ofstream out("output/floquet.csv");
@@ -116,7 +116,7 @@ void OriginalFloquet( const Options& options ) {
 	}
 
 	data = dataGenerator.GenerateDataSystem( parameters, periods, options.numThreads );
-	data.WriteDataSetsCSV("output/orig",".csv");
+	data.WriteCSV("output/orig",".csv");
 	
 	cout << "Computing Floquet multipliers..." << endl;
 	ofstream out("output/floquet.csv");
@@ -145,7 +145,7 @@ void ComputeReduced( const Options& options ) {
 	dataGenerator.print = 1000;
 	
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
-	data.WriteDataSetsCSV("output/orig",".csv");
+	data.WriteCSV("output/orig",".csv");
 
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
@@ -173,7 +173,7 @@ void ComputeReduced( const Options& options ) {
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata",".csv");
+	rdata.WriteCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 
@@ -225,7 +225,7 @@ void SimulateReduced( const Options& options ) {
 	dataGenerator.print = 1000;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
-	data.WriteDataSetsCSV("output/orig",".csv");
+	data.WriteCSV("output/orig",".csv");
 
 	cout << "Computing Reduced Data..." << endl;
 	ReducedDataSystem reducedData;
@@ -248,7 +248,7 @@ void SimulateReduced( const Options& options ) {
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata",".csv");
+	rdata.WriteCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 
@@ -331,7 +331,7 @@ void Test( const Options& options ) {
 	rdataGenerator.print = 1000;
 
 	DataSystem rdata = rdataGenerator.GenerateDataSystem( newParams, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata",".csv");
+	rdata.WriteCSV("output/rdata",".csv");
 
 }
 

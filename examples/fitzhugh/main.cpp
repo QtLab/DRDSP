@@ -91,9 +91,8 @@ void ComputeReduced( const Options& options ) {
 	rdataGenerator.MatchSettings( dataGenerator );
 	rdataGenerator.tStart = 0.0;
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata",".csv");
+	rdata.WriteCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 	ComparePeriods( reducedData, rdata, dataGenerator.tInterval / (dataGenerator.print-1), 1.0 );
-	
 }

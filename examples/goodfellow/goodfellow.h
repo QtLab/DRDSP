@@ -75,7 +75,6 @@ struct GoodfellowFamily : Family<Goodfellow> {
 		model.p = parameter[0];
 		return model;
 	}
-	
 };
 
 #endif

@@ -38,7 +38,7 @@ int main( int argc, char** argv ) {
 	dataGenerator.print = 100;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
-	data.WriteDataSetsBinary("output/orig",".bin");
+	data.WriteBinary("output/orig",".bin");
 
 	cout << "Computing secants..." << endl;
 	vector<Secants> secants = ComputeSecants( data, 10.0, options.numThreads );
@@ -81,7 +81,7 @@ int main( int argc, char** argv ) {
 	rdataGenerator.tStart = 0.0;
 
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata",".csv");
+	rdata.WriteCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 

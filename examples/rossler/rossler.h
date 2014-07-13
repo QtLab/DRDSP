@@ -11,7 +11,10 @@ struct RosslerModel : Model<Vector3d> {
 
 	RosslerModel() : RosslerModel(4) {}
 	
-	explicit RosslerModel( double c ) : Model<Vector3d>(3), a(0.1), b(0.1), c(c) {}
+	explicit RosslerModel( double c ) :
+		Model<Vector3d>(3),
+		a(0.1), b(0.1), c(c)
+	{}
 
 	template<typename Derived>
 	Matrix<typename Derived::Scalar,3,1> operator()( const MatrixBase<Derived>& x ) const {
@@ -113,7 +116,6 @@ struct RosslerHighModel : Model<> {
 		A = svd.matrixU() * svalues.asDiagonal() * svd.matrixV().adjoint();
 		Ainv = svd.matrixV() * svalues.asDiagonal().inverse() * svd.matrixU().adjoint();
 	}
-
 };
 
 struct RosslerHighFamily : Family<RosslerHighModel> {

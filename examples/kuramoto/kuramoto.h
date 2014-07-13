@@ -69,7 +69,6 @@ struct KuramotoAFamily : Family<KuramotoA> {
 		model.forcingFrequency = parameter[0];
 		return model;
 	}
-
 };
 
 struct KuramotoBFamily : Family<KuramotoB> {

@@ -11,7 +11,11 @@ struct Brusselator : Model<> {
 
 	Brusselator() : Brusselator(32,32) {}
 
-	Brusselator( int nX, int nY ) : Model<>(2*nX*nY), N(nX*nY), nX(nX), nY(nY), A(1), B(1), D1(1), D2(1), dx(1), dy(1) {}
+	Brusselator( int nX, int nY ) :
+		Model<>(2*nX*nY),
+		N(nX*nY), nX(nX), nY(nY), dx(1), dy(1),
+		A(1), B(1), D1(1), D2(1)
+	{}
 
 	template<typename Derived>
 	Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
@@ -76,8 +80,11 @@ protected:
 
 struct BrusselatorFamily : Family<Brusselator> {
 	int nX, nY;
+	
 	BrusselatorFamily() : BrusselatorFamily(32,32) {}
+	
 	BrusselatorFamily( int nX, int nY ) : Family<Brusselator>(2*nX*nY,1), nX(nX), nY(nY) {}
+	
 	Brusselator operator()( const VectorXd& parameter ) const {
 		Brusselator model(nX,nY);
 		model.B = parameter[0];

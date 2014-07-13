@@ -28,10 +28,10 @@ namespace DRDSP {
 		bool LoadSetText( const char* filename, uint32_t i, uint32_t maxPoints = 0 );
 
 		/// Write the data sets to numbered files with given prefix and suffix
-		void WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const;
+		void WriteCSV( const char* filePrefix, const char* fileSuffix ) const;
 		
 		/// Write the data sets to numbered files with given prefix and suffix
-		void WriteDataSetsBinary( const char* filePrefix, const char* fileSuffix ) const;
+		void WriteBinary( const char* filePrefix, const char* fileSuffix ) const;
 
 		/// Apply the given projection to this data system
 		DataSystem ProjectData( const MatrixXd& W ) const;
@@ -76,6 +76,15 @@ namespace DRDSP {
 				futures[j].wait();
 			}
 		}
+		return r;
+	}
+
+	template<typename Derived>
+	DataSystem MapMatrix( const MatrixBase<Derived>& A, const DataSystem& data ) {
+		DataSystem r( (uint32_t)A.rows(), data.numParameters, data.paramDim );
+		r.parameters = data.parameters;
+		for(uint32_t i=0;i<r.numParameters;++i)
+			r.dataSets[i] = MapMatrix( A, data.dataSets[i] );
 		return r;
 	}
 

@@ -123,7 +123,7 @@ bool DataSystem::LoadSetText( const char* filename, uint32_t i, uint32_t maxPoin
 	return true;
 }
 
-void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffix ) const {
+void DataSystem::WriteCSV( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
 	for(uint32_t i=0;i<numParameters;++i) {
 		name.str("");
@@ -132,7 +132,7 @@ void DataSystem::WriteDataSetsCSV( const char* filePrefix, const char* fileSuffi
 	}
 }
 
-void DataSystem::WriteDataSetsBinary( const char* filePrefix, const char* fileSuffix ) const {
+void DataSystem::WriteBinary( const char* filePrefix, const char* fileSuffix ) const {
 	stringstream name;
 	for(uint32_t i=0;i<numParameters;++i) {
 		name.str("");

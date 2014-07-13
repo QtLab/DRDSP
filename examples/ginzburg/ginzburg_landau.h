@@ -7,15 +7,15 @@ using namespace DRDSP;
 
 struct GinzburgLandau : Model<> {
 	int nX, nY, N;
-	double gamma, dx, dy, q;
+	double dx, dy, gamma, q;
 	complex<double> p;
 
 	GinzburgLandau() : GinzburgLandau(32,32) {}
 
 	GinzburgLandau( int nX, int nY ) :
 		Model<>(2*nX*nY),
-		N(nX*nY), nX(nX), nY(nY),
-		p(1,1), q(1), gamma(3), dx(1), dy(1)
+		N(nX*nY), nX(nX), nY(nY), dx(1), dy(1),
+		p(1,-0.6), q(1), gamma(1)
 	{}
 
 	template<typename Derived>
@@ -75,8 +75,11 @@ protected:
 
 struct GinzburgLandauFamily : Family<GinzburgLandau> {
 	int nX, nY;
+	
 	GinzburgLandauFamily() : GinzburgLandauFamily(32,32) {}
+	
 	GinzburgLandauFamily( int nX, int nY ) : Family<GinzburgLandau>(2*nX*nY,1), nX(nX), nY(nY) {}
+	
 	GinzburgLandau operator()( const VectorXd& parameter ) const {
 		GinzburgLandau model(nX,nY);
 		model.gamma = parameter[0];

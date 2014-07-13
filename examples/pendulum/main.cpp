@@ -44,7 +44,7 @@ int main( int argc, char** argv ) {
 	dataGenerator.dtMax = 0.001;
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
-	data.WriteDataSetsCSV("output/orig",".csv");
+	data.WriteCSV("output/orig",".csv");
 	
 	cout << "Embedding data..." << endl;
 	DataSystem dataEmbedded = EmbedData( pendulum.embedding, data, options.numThreads );
@@ -112,7 +112,7 @@ int main( int argc, char** argv ) {
 	rdataGenerator.MatchSettings(dataGenerator);
 	rdataGenerator.tStart = 0.0;
 	DataSystem rdata = rdataGenerator.GenerateUsingInitials( parameters, reducedData, options.numThreads );
-	rdata.WriteDataSetsCSV("output/rdata",".csv");
+	rdata.WriteCSV("output/rdata",".csv");
 
 	Compare( reducedData, rdata );
 

@@ -13,7 +13,10 @@ struct Pendulum : Model<> {
 
 	Pendulum() : Pendulum(1.8) {}
 
-	explicit Pendulum( double Omega ) : Model<>(5), Omega(Omega), length(1.1), mass(7.0), A(0.15), delta1(0.245), delta2(0.245) {}
+	explicit Pendulum( double Omega ) :
+		Model<>(5),
+		Omega(Omega), length(1.1), mass(7.0), A(0.15), delta1(0.245), delta2(0.245)
+	{}
 
 	VectorXd operator()( const VectorXd& state ) const;
 	MatrixXd Partials( const VectorXd& state ) const;
