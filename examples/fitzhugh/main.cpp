@@ -51,6 +51,32 @@ void ComputeReduced( const Options& options ) {
 
 	DataSystem data = dataGenerator.GenerateDataSystem( parameters, options.numThreads );
 
+	/*GenerateVideo( data.dataSets[0], "output/images/img", ".bmp",
+		[]( const VectorXd& x ) {
+			double maxVal = 0.0;
+			for(int64_t i=0;i<x.size();++i) {
+				double absx = abs(x[i]);
+				if( absx > maxVal ) maxVal = absx;
+			}
+			uint32_t nX = 32, nY = 32, N = nX*nY;
+			Bitmap image(2*nX,nY);
+			for(uint32_t j=0;j<nY;++j) {
+				for(uint32_t i=0;i<nX;++i) {
+					uint8_t val = uint8_t(127.0 * x[j*nY+i] / maxVal);
+					image.SetPixel(i,j,127-val,127-val,127+val);
+				}
+			}
+			for(uint32_t j=0;j<nY;++j) {
+				for(uint32_t i=0;i<nX;++i) {
+					uint8_t val = uint8_t(127.0 * x[N+j*nY+i] / maxVal);
+					image.SetPixel(nX+i,j,127-val,127-val,127+val);
+				}
+			}
+			return image;
+		}
+	);*/
+
+
 	cout << "Computing secants..." << endl;
 	vector<Secants> secants = ComputeSecants( data, 10.0, options.numThreads );
 

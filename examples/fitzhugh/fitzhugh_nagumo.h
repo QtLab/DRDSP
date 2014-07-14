@@ -7,14 +7,14 @@ using namespace DRDSP;
 
 struct FitzHughNagumo : Model<> {
 	int nX, nY, N;
-	double dx, dy, sigma, lambda, kappa, tau, Du, Dv;
+	double dx, dy, gamma, lambda, tau, Du, Dv;
 
 	FitzHughNagumo() : FitzHughNagumo(32,32) {}
 
 	FitzHughNagumo( int nX, int nY ) :
 		Model<>(2*nX*nY),
 		N(nX*nY), nX(nX), nY(nY), dx(1), dy(1),
-		sigma(3), lambda(1), kappa(0), tau(3), Du(1), Dv(1)
+		gamma(3), lambda(1), tau(3), Du(1), Dv(1)
 	{}
 
 	template<typename Derived>
@@ -22,7 +22,7 @@ struct FitzHughNagumo : Model<> {
 		typedef Derived::Scalar Scalar;
 		auto u = compute_u(x);
 		auto v = compute_v(x);
-		Array<Scalar,-1,-1> uDot = action_potential(u) - sigma * v + Du * laplacian(u);
+		Array<Scalar,-1,-1> uDot = action_potential(u) - gamma * v + Du * laplacian(u);
 		Array<Scalar,-1,-1> vDot = ( u - v + Dv * laplacian(v) ) / tau;
 		return vectorize( uDot, vDot );
 	}
@@ -35,7 +35,7 @@ protected:
 
 	template<typename Derived>
 	Array<typename Derived::Scalar,-1,-1> action_potential( const ArrayBase<Derived>& x ) const {
-		return lambda * x - x * x * x - kappa;
+		return lambda * x - x * x * x;
 	}
 
 	template<typename Derived>

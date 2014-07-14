@@ -64,7 +64,7 @@ namespace DRDSP {
 		void SetPixel( uint32_t x, uint32_t y, uint8_t R, uint8_t G, uint8_t B );
 		const bmpPixel& operator()( uint32_t x, uint32_t y ) const;
 		bmpPixel& operator()( uint32_t x, uint32_t y );
-		void WriteFile( const char *filename ) const;
+		void WriteFile( const char* filename ) const;
 	
 	protected:
 		uint32_t sizeX, sizeY;

@@ -3,9 +3,11 @@
 #include <iostream>
 #include <fstream>
 #include <future>
+#include <string>
 #include "../types.h"
 #include "../data/data_system.h"
 #include "../dynamics/reduced_data_system.h"
+#include "../bitmap.h"
 
 using namespace std;
 
@@ -266,6 +268,15 @@ namespace DRDSP {
 	DataGenerator<F,RKDynamicalSystem<typename F::Model>> MakeDataGenerator( const F& family ) {
 		return DataGenerator<F,RKDynamicalSystem<typename F::Model>>( family );
 	}
+
+	template<typename F>
+	void GenerateVideo( const DataSet& data, const char* filePrefix, const char* fileSuffix, F&& f ) {
+		uint32_t k = 0;
+		for( const auto& x : data.points ) {
+			f( x ).WriteFile( ( filePrefix + to_string(k++) + fileSuffix ).c_str() );
+		}
+	}
+
 
 }
 
