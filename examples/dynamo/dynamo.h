@@ -9,20 +9,11 @@ namespace DRDSP {
 
 	struct Dynamo : Model<> {
 
-		static const uint32_t nI = 41;
-		static const uint32_t nJ = 160;
-		static const uint32_t N = nI*nJ;
-		double cAlpha, cOmega, alphaB;
+		double cAlpha = 1,
+		       cOmega = -1000,
+		       alphaB = 1;
 
-		Dynamo() :
-			Model<>( 2 * N ),
-			ds( 1.0 / double( nI - 1 ) ),
-			dth( (2.0 * M_PI) / double( nJ ) ),
-			cAlpha( 1 ),
-			cOmega( -1000 ),
-			alphaB( 1.0 ),
-			eta0( 1.0 )
-		{
+		Dynamo() : Model<>( 2 * N ) {
 			Init();
 		}
 
@@ -53,8 +44,17 @@ namespace DRDSP {
 
 		VectorXd InitialCondition() const;
 
+		friend struct DynamoFamily;
+
 	protected:
-		const double ds, dth, eta0;
+		static const uint32_t nI = 41;
+		static const uint32_t nJ = 160;
+		static const uint32_t N = nI*nJ;
+
+		const double ds = 1.0 / double( nI - 1 ),
+		             dth = (2.0 * M_PI) / double( nJ ),
+		             eta0 = 1.0;
+
 		VectorXd sinheta, cosheta, cotheta, sintheta, costheta, s;
 		MatrixXd c, pi32, Bound1, Bound2, trig1;
 		VectorXi jp1, jm1;

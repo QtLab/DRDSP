@@ -3,13 +3,7 @@
 Goodfellow::Goodfellow() : Goodfellow(100) {}
 
 Goodfellow::Goodfellow( uint32_t numCompartments ) :
-	Model<>(2*numCompartments),
-	N(numCompartments),
-	omega(20.0),
-	a(2.0),
-	b(3.0/2.0),
-	c(1.0/3.0),
-	d(10.0)
+	Model<>(2*numCompartments),	N(numCompartments)
 {
 	Create(N);
 }

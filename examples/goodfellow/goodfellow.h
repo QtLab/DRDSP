@@ -8,11 +8,18 @@ using namespace DRDSP;
 struct Goodfellow : Model<> {
 	MatrixXd adjacency;
 	VectorXd mu;
-	double omega, a, b, c, d, p;
+	double omega = 20.0,
+	       a = 2.0,
+	       b = 3.0/2.0,
+	       c = 1.0/3.0,
+	       d = 10.0,
+	       p = 1.0;
 	uint32_t N;
 
 	Goodfellow();
+	
 	explicit Goodfellow( uint32_t numCompartments );
+	
 	void Create( uint32_t numCompartments );
 
 	MatrixXd Partials( const VectorXd& x ) const {

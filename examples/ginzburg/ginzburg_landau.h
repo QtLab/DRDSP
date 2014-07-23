@@ -6,16 +6,19 @@
 using namespace DRDSP;
 
 struct GinzburgLandau : Model<> {
-	int nX, nY, N;
-	double dx, dy, gamma, q;
+	int nX, nY,
+	    N = nX * nY;
+	double dx = 1.0,
+	       dy = 1.0,
+	       gamma = 1.0,
+	       q = 1.0;
 	complex<double> p;
 
 	GinzburgLandau() : GinzburgLandau(32,32) {}
 
 	GinzburgLandau( int nX, int nY ) :
-		Model<>(2*nX*nY),
-		N(nX*nY), nX(nX), nY(nY), dx(1), dy(1),
-		p(1,-0.6), q(1), gamma(1)
+		Model<>(2*nX*nY), nX(nX), nY(nY),
+		p(1,-0.6)
 	{}
 
 	template<typename Derived>

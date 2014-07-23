@@ -6,15 +6,12 @@
 
 using namespace DRDSP;
 
-struct RosslerModel : Model<Vector3d> {
-	double a,b,c;
-
-	RosslerModel() : RosslerModel(4) {}
+struct Rossler : Model<Vector3d> {
+	double a = 0.1,
+	       b = 0.1,
+	       c = 4.0;
 	
-	explicit RosslerModel( double c ) :
-		Model<Vector3d>(3),
-		a(0.1), b(0.1), c(c)
-	{}
+	Rossler() : Model<Vector3d>(3) {}
 
 	template<typename Derived>
 	Matrix<typename Derived::Scalar,3,1> operator()( const MatrixBase<Derived>& x ) const {
@@ -30,12 +27,14 @@ struct RosslerModel : Model<Vector3d> {
 	}
 };
 
-struct RosslerFamily : Family<RosslerModel> {
+struct RosslerFamily : Family<Rossler> {
 	
-	RosslerFamily() : Family<RosslerModel>(3,1) {}
+	RosslerFamily() : Family<Rossler>(3,1) {}
 	
-	RosslerModel operator()( const VectorXd& parameter ) const {
-		return RosslerModel( parameter[0] );
+	Rossler operator()( const VectorXd& parameter ) const {
+		Rossler rossler;
+		rossler.c = parameter[0];
+		return rossler;
 	}
 
 	Vector3d ComputeLinear( const VectorXd& x ) const {
@@ -47,7 +46,7 @@ struct RosslerFamily : Family<RosslerModel> {
 	}
 
 	Vector3d ComputeTranslation( const VectorXd& x ) const {
-		RosslerModel rossler;
+		Rossler rossler;
 		Vector3d T;
 		T[0] = -x[1] - x[2];
 		T[1] = x[0] + rossler.a * x[1];
@@ -63,7 +62,7 @@ struct RosslerFamily : Family<RosslerModel> {
 	}
 
 	Matrix<double,9,1> ComputeTranslationDerivative( const VectorXd& x ) const {
-		RosslerModel rossler;
+		Rossler rossler;
 		Matrix<double,9,1> T;
 		T[0] = 0.0;
 		T[1] = 1.0;
@@ -78,11 +77,11 @@ struct RosslerFamily : Family<RosslerModel> {
 	}
 };
 
-struct RosslerHighModel : Model<> {
+struct RosslerHigh : Model<> {
 	
-	RosslerHighModel() : RosslerHighModel(100) {}
+	RosslerHigh() : RosslerHigh(100) {}
 	
-	explicit RosslerHighModel( uint32_t n ) : Model<>(n) {}
+	explicit RosslerHigh( uint32_t n ) : Model<>(n) {}
 
 	template<typename Derived>
 	Matrix<typename Derived::Scalar,-1,1> operator()( const MatrixBase<Derived>& x ) const {
@@ -100,7 +99,7 @@ struct RosslerHighModel : Model<> {
 	
 	static MatrixXd A, Ainv;
 	
-	RosslerModel rossler;
+	Rossler rossler;
 
 	static void GenerateA( uint32_t dimension ) {
 		MatrixXd R(dimension,dimension);
@@ -118,14 +117,14 @@ struct RosslerHighModel : Model<> {
 	}
 };
 
-struct RosslerHighFamily : Family<RosslerHighModel> {
+struct RosslerHighFamily : Family<RosslerHigh> {
 	
 	RosslerHighFamily() : RosslerHighFamily(100) {};
 
-	explicit RosslerHighFamily( uint32_t n ) : Family<RosslerHighModel>(n,1) {}
+	explicit RosslerHighFamily( uint32_t n ) : Family<RosslerHigh>(n,1) {}
 	
-	RosslerHighModel operator()( const VectorXd& parameter ) const {
-		RosslerHighModel model( stateDim );
+	RosslerHigh operator()( const VectorXd& parameter ) const {
+		RosslerHigh model( stateDim );
 		model.rossler.c = parameter[0];
 		return model;
 	}

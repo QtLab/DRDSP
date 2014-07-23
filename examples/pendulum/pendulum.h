@@ -11,19 +11,20 @@ struct PendulumWrap {
 
 struct Pendulum : Model<> {
 
-	Pendulum() : Pendulum(1.8) {}
-
-	explicit Pendulum( double Omega ) :
-		Model<>(5),
-		Omega(Omega), length(1.1), mass(7.0), A(0.15), delta1(0.245), delta2(0.245)
-	{}
+	Pendulum() : Model<>(5) {}
 
 	VectorXd operator()( const VectorXd& state ) const;
 	MatrixXd Partials( const VectorXd& state ) const;
 
+	friend struct PendulumFamily;
+
 protected:
-	// parameters
-	double Omega, length, mass, A, delta1, delta2;
+	double Omega = 1.0,
+	       length = 1.1,
+		   mass = 7.0,
+		   A = 0.15,
+		   delta1 = 0.245,
+		   delta2 = 0.245;
 
 	double f1( double sinphi, double cosphi ) const;
 	double f2( double cosphi ) const;
@@ -42,7 +43,9 @@ struct PendulumFamily : Family<Pendulum> {
 	PendulumFamily() : Family<Pendulum>(5,1) {}
 
 	Pendulum operator()( const VectorXd& parameter ) const {
-		return Pendulum( parameter[0] );
+		Pendulum P;
+		P.Omega = parameter[0];
+		return P;
 	}
 };
 

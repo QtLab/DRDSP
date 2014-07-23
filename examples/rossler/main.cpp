@@ -271,7 +271,7 @@ void SimulateReduced( const Options& options ) {
 
 void Test( const Options& options ) {
 
-	RosslerHighModel::GenerateA(10);
+	RosslerHigh::GenerateA(10);
 
 	RosslerHighFamily rosslerHigh(10);
 

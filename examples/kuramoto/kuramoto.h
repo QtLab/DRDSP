@@ -14,7 +14,8 @@ struct KuramotoBase : Model<> {
 	KuramotoWrap wrap;
 	VectorXd frequencies;
 	VectorXd interactionStrengths;
-	double K, forcingFrequency;
+	double K = 1.0,
+	       forcingFrequency = 1.0;
 	uint32_t numOscillators;
 
 	KuramotoBase() : KuramotoBase(1) {}
@@ -23,9 +24,7 @@ struct KuramotoBase : Model<> {
 		Model<>(N+1),
 		numOscillators(N),
 		frequencies(N),
-		interactionStrengths(N),
-		K(1.0),
-		forcingFrequency(1.0)
+		interactionStrengths(N)
 	{}
 
 protected:
