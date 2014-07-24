@@ -17,16 +17,15 @@ namespace DRDSP {
 	 * \brief Set of unit secants that have been pre-computed
 	 */
 	struct Secants {
-		size_t count;                ///< Number of secants in the data set
-		uint32_t dimension;          ///< Dimension of the space
+		size_t count = 0;            ///< Number of secants in the data set
+		uint32_t dimension = 0;      ///< Dimension of the space
 		vector<VectorXd> secants;    ///< Array of pre-computed unit secants
 		vector<weightType> weights;  ///< Array of secant weights produced by culling
 
-		Secants();
 		Secants CullSecants( double tolerance ) const;
 		Secants CullSecantsAngle( Degreesd degrees ) const;
 		Secants CullSecantsAngle( Radiansd radians ) const;
-		Secants& ComputeFromData( const DataSet& dataSet ); ///< Compute this set of secants from the given data set
+		Secants& ComputeFromData( const DataSet& dataSet );                   ///< Compute this set of secants from the given data set
 		Secants& ComputeFromData( const DataSet& dataSet, double tolerance ); ///< Compute this set of secants from the given data set with culling
 		VectorXd GetSecant( size_t k ) const;
 	};

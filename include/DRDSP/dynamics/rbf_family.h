@@ -12,7 +12,7 @@ namespace DRDSP {
 	struct RBFNLFamily : Family<RBFModel<F>> {
 		uint32_t nRBFs;
 
-		RBFNLFamily() : nRBFs(0) {}
+		RBFNLFamily() : RBFNLFamily(0,0) {}
 
 		RBFNLFamily( uint32_t dim, uint32_t nRBFs ) : Family<RBFModel<F>>(dim,dim*(dim+2*nRBFs)), nRBFs(nRBFs) {}
 

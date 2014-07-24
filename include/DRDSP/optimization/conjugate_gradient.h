@@ -13,14 +13,11 @@ namespace DRDSP {
 		Metric metric;
 		Geodesic geodesic;
 		LineSearch lineSearch;
-		uint32_t n, maxSteps;
-		enum modType { FR, PR, HS } modifier;
 
-		ConjugateGradient() :
-			n(0),
-			maxSteps(1000),
-			modifier(HS)
-		{}
+		uint32_t n = 0,
+		         maxSteps = 1000;
+
+		enum modType { FR, PR, HS } modifier = HS;
 
 		template<typename S,typename DS>
 		bool Step( Point& x, const S& cost, const DS& gradient ) {

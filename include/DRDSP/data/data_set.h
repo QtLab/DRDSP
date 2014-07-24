@@ -12,10 +12,10 @@ namespace DRDSP {
 	 * \brief A set of data points
 	 */
 	struct DataSet {
-		uint32_t dimension;        ///< Dimension of the space
+		uint32_t dimension = 0;    ///< Dimension of the space
 		vector<VectorXd> points;   ///< Array of data vectors
 		
-		DataSet() : dimension(0) {}
+		DataSet() = default;
 		explicit DataSet( size_t numPoints ) : points(numPoints) {}
 		DataSet( size_t numPoints, uint32_t dim );
 		bool LoadBinary( const char* filename );         ///< Load a data set from file in binary format

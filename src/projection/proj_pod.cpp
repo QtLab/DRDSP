@@ -4,10 +4,6 @@
 using namespace std;
 using namespace DRDSP;
 
-ProjPOD::ProjPOD() : targetDimension(2) {}
-
-ProjPOD::ProjPOD( uint32_t targetDimension ) : targetDimension(targetDimension) {}
-
 ProjPOD& ProjPOD::Find( const DataSet& data ) {
 
 	MatrixXd dataMatrix;

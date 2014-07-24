@@ -10,11 +10,13 @@ using namespace std;
 namespace DRDSP {
 
 	struct LineSearch {
-		double alpha, alphaMax, mu, eta;
+		double alpha = 1.0e-2,
+		       alphaMax = 1.0e6,
+		       mu = 0.00001,
+		       eta = 0.9;
+
 		double S0, DS0;
 
-		LineSearch() : alpha(1.0e-2), alphaMax(1.0e6), mu(0.00001), eta(0.9) {}
-		
 		template<typename S,typename DS>
 		double Search( S&& cost, DS&& costDeriv ) {
 			static const double ratio = 2.0;

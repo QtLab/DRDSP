@@ -10,9 +10,9 @@ namespace DRDSP {
 	using std::exp;
 
 	struct Gaussian  {
-		double scale;
+		double scale = 1.0;
 
-		Gaussian() : Gaussian(1.0) {}
+		Gaussian() = default;
 
 		explicit Gaussian( double scale ) : scale(scale) {}
 
@@ -30,9 +30,9 @@ namespace DRDSP {
 	};
 
 	struct Multiquadratic {
-		double scale;
+		double scale = 1.0;
 		
-		Multiquadratic() : Multiquadratic(1.0) {}
+		Multiquadratic() = default;
 
 		explicit Multiquadratic( double scale ) : scale(scale) {}
 
@@ -50,9 +50,9 @@ namespace DRDSP {
 	};
 
 	struct InverseQuadratic {
-		double scale;
+		double scale = 1.0;
 		
-		InverseQuadratic() : InverseQuadratic(1.0) {}
+		InverseQuadratic() = default;
 		
 		explicit InverseQuadratic( double scale ) : scale(scale) {}
 		
@@ -71,9 +71,9 @@ namespace DRDSP {
 	};
 
 	struct InverseMultiquadratic {
-		double scale;
-		
-		InverseMultiquadratic() : InverseMultiquadratic(1.0) {}
+		double scale = 1.0;
+
+		InverseMultiquadratic() = default;
 
 		explicit InverseMultiquadratic( double scale ) : scale(scale) {}
 

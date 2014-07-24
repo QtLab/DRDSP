@@ -12,9 +12,9 @@ namespace DRDSP {
 	template<typename State = VectorXd>
 	struct Model {
 		typedef State State;
-		uint32_t stateDim; ///< Dimension of the model's state space
+		uint32_t stateDim = 20; ///< Dimension of the model's state space
 
-		Model() : stateDim(0) {}
+		Model() = default;
 		explicit Model( uint32_t stateDim ) : stateDim(stateDim) {}
 	};
 
@@ -25,10 +25,10 @@ namespace DRDSP {
 	struct Family {
 		typedef Model Model;
 		typedef Parameter Parameter;
-		uint32_t stateDim,  ///< Dimension of the model's state space
-		         paramDim;  ///< Dimension of the model's parameter space
+		uint32_t stateDim = 0,  ///< Dimension of the model's state space
+		         paramDim = 0;  ///< Dimension of the model's parameter space
 
-		Family() : stateDim(0), paramDim(0) {}
+		Family() = default;
 		Family( uint32_t stateDim, uint32_t paramDim ) : stateDim(stateDim), paramDim(paramDim) {}
 	};
 	
@@ -72,7 +72,7 @@ namespace DRDSP {
 	 */
 	template<typename F,typename Embedding>
 	struct FamilyEmbedded : Family<typename F::Model,typename F::Parameter> {
-		F family;        ///< The underlying family
+		F family;             ///< The underlying family
 		Embedding embedding;  ///< An embedding into R^n
 
 		FamilyEmbedded() {

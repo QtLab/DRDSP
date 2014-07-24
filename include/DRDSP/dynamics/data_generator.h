@@ -21,33 +21,21 @@ namespace DRDSP {
 		typedef typename Solver::Time Time;
 		Family family;
 		State initial;
-		Time tStart, tInterval, dtMax;
-		uint32_t print;
-		bool binaryOutput, textOutput;
+		Time tStart = 0,
+		     tInterval = 10,
+		     dtMax = 0;
+		uint32_t print = 200;
 	
-		DataGenerator() :
-			tStart(0),
-			tInterval(10),
-			dtMax(0),
-			print(200)
-		{}
+		DataGenerator() = default;
 
 		explicit DataGenerator( const Family& f ) :
 			family(f),
-			initial(f.stateDim),
-			tStart(0),
-			tInterval(10),
-			dtMax(0),
-			print(200)
+			initial(f.stateDim)
 		{}
 
 		DataGenerator( const Family& f, const State& init ) :
 			family(f),
-			initial(init),
-			tStart(0),
-			tInterval(10),
-			dtMax(0),
-			print(200)
+			initial(init)
 		{}
 
 		void GenerateFiles( const vector<Parameter>& parameters, bool binaryOutput, bool textOutput ) const {

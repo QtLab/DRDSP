@@ -7,8 +7,6 @@
 using namespace DRDSP;
 using namespace std;
 
-ReducedDataSystem::ReducedDataSystem() : numParameters(0) {}
-
 ReducedDataSystem::ReducedDataSystem( uint32_t N ) : reducedData(N), numParameters(N) {}
 
 void ReducedDataSystem::Create( uint32_t N ) {

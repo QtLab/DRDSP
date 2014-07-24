@@ -13,10 +13,10 @@ namespace DRDSP {
 		vector<VectorXd> points, vectors;
 		vector<MatrixXd> derivatives;
 		double scales[2];
-		size_t count;
-		uint32_t dimension;
+		size_t count = 0;
+		uint32_t dimension = 0;
 
-		ReducedData();
+		ReducedData() = default;
 		ReducedData( uint32_t dim, size_t numPoints );
 		void Create( uint32_t dim, size_t numPoints );
 		AABB ComputeBoundingBox() const;

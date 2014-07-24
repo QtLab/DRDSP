@@ -11,9 +11,7 @@ namespace DRDSP {
 
 		Metric metric;
 		LineSearch lineSearch;
-		uint32_t maxSteps;
-		
-		GradientDescent() : maxSteps(1000) {}
+		uint32_t maxSteps = 1000;
 		
 		template<typename S,typename DS>
 		bool Step( Point& x, const S& cost, const DS& gradient ) {

@@ -6,8 +6,6 @@
 using namespace std;
 using namespace DRDSP;
 
-Secants::Secants() : dimension(0), count(0) {}
-
 VectorXd Secants::GetSecant( size_t k ) const {
 	return secants[k];
 }

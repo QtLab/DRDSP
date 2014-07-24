@@ -10,9 +10,9 @@ namespace DRDSP {
 
 	struct ReducedDataSystem {
 		vector<ReducedData> reducedData;
-		uint32_t numParameters;
+		uint32_t numParameters = 0;
 
-		ReducedDataSystem();
+		ReducedDataSystem() = default;
 		explicit ReducedDataSystem( uint32_t N );
 		void Create( uint32_t N );
 

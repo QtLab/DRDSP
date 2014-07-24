@@ -11,9 +11,7 @@ double DRDSP::eps( double x ) {
 	return *((double*)&y) - x;
 }
 
-ReducedData::ReducedData() : dimension(0), count(0) {}
-
-ReducedData::ReducedData( uint32_t dim, size_t numPoints ) : dimension(0), count(0) {
+ReducedData::ReducedData( uint32_t dim, size_t numPoints ) {
 	Create(dim,numPoints);
 }
 

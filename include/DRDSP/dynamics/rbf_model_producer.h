@@ -15,7 +15,7 @@ namespace DRDSP {
 	template<typename Family>
 	struct RBFModelProducer : ProducerBase {
 		typedef typename Family::Model Model;
-		double boxScale;
+		double boxScale = 1.5;
 		uint32_t numRBFs;
 
 		explicit RBFModelProducer( uint32_t numRBFs ) : numRBFs(numRBFs) {}

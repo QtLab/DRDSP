@@ -8,10 +8,9 @@ namespace DRDSP {
 
 	struct ProjPOD {
 		MatrixXd W;
-		uint32_t targetDimension;
+		uint32_t targetDimension = 2;
 
-		ProjPOD();
-		explicit ProjPOD( uint32_t targetDimension );
+		explicit ProjPOD( uint32_t targetDimension ) : targetDimension(targetDimension) {}
 		ProjPOD& Find( const DataSet& data );
 		ProjPOD& Find( const DataSystem& data );
 		const ProjPOD& Write( const char* filename ) const;

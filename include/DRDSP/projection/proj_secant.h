@@ -40,11 +40,11 @@ namespace DRDSP {
 
 	struct ProjSecant {
 		MatrixXd W;
-		double targetMinProjectedLength;
-		uint32_t targetDimension, maxIterations;
+		double targetMinProjectedLength = 0.5;
+		uint32_t targetDimension = 2,
+		         maxIterations = 100;
 
-		ProjSecant();
-		explicit ProjSecant( uint32_t targetDimension );
+		explicit ProjSecant( uint32_t targetDimension ) : targetDimension(targetDimension) {}
 		ProjSecant& ComputeInitial( const DataSet& data );
 		ProjSecant& ComputeInitial( const DataSystem& data );
 		ProjSecant& Find( const Secants& secants );

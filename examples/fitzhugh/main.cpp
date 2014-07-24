@@ -76,7 +76,6 @@ void ComputeReduced( const Options& options ) {
 		}
 	);*/
 
-
 	cout << "Computing secants..." << endl;
 	vector<Secants> secants = ComputeSecants( data, 10.0, options.numThreads );
 

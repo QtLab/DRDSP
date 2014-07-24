@@ -6,12 +6,6 @@
 using namespace std;
 using namespace DRDSP;
 
-DataSystem::DataSystem() :
-	dimension( 0 ),
-	numParameters( 0 ),
-	paramDim( 0 )
-{}
-
 DataSystem::DataSystem( uint32_t dim, uint32_t numParams, uint32_t paramDim ) :
 	dimension( dim ),
 	numParameters( numParams ),

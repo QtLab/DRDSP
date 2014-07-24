@@ -89,14 +89,6 @@ MatrixXd SecantCostGradientMulti::operator()( const MatrixXd& X ) const {
 	return sum / (double)N;
 }
 
-ProjSecant::ProjSecant() : ProjSecant(2) {}
-
-ProjSecant::ProjSecant( uint32_t targetDimension ) :
-	targetMinProjectedLength(0.5),
-	targetDimension(targetDimension),
-	maxIterations(100)
-{}
-
 ProjSecant& ProjSecant::Find( const Secants& secants ) {
 	SecantCostFunction S(secants);
 	SecantCostGradient gradS(secants);

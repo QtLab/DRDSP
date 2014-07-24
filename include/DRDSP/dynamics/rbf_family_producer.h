@@ -15,12 +15,12 @@ namespace DRDSP {
 	template<typename F = RBF<ThinPlateSpline>>
 	struct RBFFamilyProducer : ProducerBase {
 		typedef PMapFamily<RBFFamily<F>,AffineXd> ReducedFamily;
-		double boxScale;
-		uint32_t numRBFs;
+		double boxScale = 1.5;
+		uint32_t numRBFs = 30;
 
-		RBFFamilyProducer() : RBFFamilyProducer(30) {}
+		RBFFamilyProducer() = default;
 
-		explicit RBFFamilyProducer( uint32_t nRBFs ) : numRBFs(nRBFs), boxScale(1.5) {}
+		explicit RBFFamilyProducer( uint32_t nRBFs ) : numRBFs(nRBFs) {}
 
 		ReducedFamily BruteForce( const ReducedDataSystem& data, const vector<VectorXd>& parameters, uint32_t numIterations ) const {
 			double Sft = 0.0, Sf = -1.0;

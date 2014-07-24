@@ -34,11 +34,11 @@ namespace DRDSP {
 		State state;
 		Solver solver;
 		WrapFunction wrap;
-		double dtMax;
+		double dtMax = 0.0;
 		
-		explicit ContinuousDynamicalSystem( const Solver& solver ) : solver(solver), dtMax(0) {}
+		explicit ContinuousDynamicalSystem( const Solver& solver ) : solver(solver) {}
 
-		ContinuousDynamicalSystem( const Solver& solver, const State& state ) : solver(solver), state(state), dtMax(0) {}
+		ContinuousDynamicalSystem( const Solver& solver, const State& state ) : solver(solver), state(state) {}
 
 		void Advance( double dt ) {
 			double dta = dt;
