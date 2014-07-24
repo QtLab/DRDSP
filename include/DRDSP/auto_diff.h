@@ -16,12 +16,11 @@ namespace DRDSP {
 		df.setZero( x.size(), x.size() );
 
 		DualVectorXd r = x.cast<duald>();
-		DualVectorXd rj;
 
 		for(int64_t j=0;j<df.cols();++j) {
-			rj = r;
-			rj[j].y = 1.0;
-			df.col( j ) = forward<F>(f)( rj );
+			r[j].y = 1.0;
+			df.col( j ) = forward<F>(f)( r );
+			r[j].y = 0.0;
 		}
 		return DualPart( df );
 	}
@@ -29,18 +28,18 @@ namespace DRDSP {
 	template<typename F>
 	SparseMatrix<double> AutoDerivativeSparse( F&& f, const VectorXd& x ) {
 		DualVectorXd r = x.cast<duald>();
-		DualVectorXd rj;
 		vector<Triplet<double>> triplets;
-		triplets.reserve(x.size());
+		triplets.reserve( x.size() );
+		VectorXd temp( x.size() );
 
 		for(int64_t j=0;j<x.size();++j) {
-			rj = r;
-			rj[j].y = 1.0;
-			VectorXd temp = DualPart( forward<F>(f)( rj ) );
+			r[j].y = 1.0;
+			temp = DualPart( forward<F>(f)( r ) );
 			for(int64_t i=0;i<temp.size();++i) {
 				if( temp[i] == 0.0 ) continue;
 				triplets.emplace_back( i, j, temp[i] );
 			}
+			r[j].y = 0.0;
 		}
 		SparseMatrix<double> df((int)x.size(),(int)x.size());
 		df.setFromTriplets( cbegin(triplets), cend(triplets) );
