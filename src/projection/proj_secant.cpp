@@ -256,9 +256,12 @@ const ProjSecant& ProjSecant::WriteCSV( const char* filename ) const {
 
 const ProjSecant& ProjSecant::WriteBinary( const char* filename ) const {
 	ofstream out(filename,ios::binary);
-	for(int64_t i=0;i<W.rows();++i)
-		for(int64_t j=0;j<W.cols();++j)
-			out.write((char*)&W(i,j),sizeof(double));
+	uint32_t n = (uint32_t)W.rows();
+	uint32_t d = (uint32_t)W.cols();
+	out.write((const char*)&n,sizeof(uint32_t));
+	out.write((const char*)&d,sizeof(uint32_t));
+	for(int64_t j=0;j<W.cols();++j)
+		out.write((const char*)&W(0,j),sizeof(double)*W.rows());
 	return *this;
 }
 
@@ -269,16 +272,16 @@ bool ProjSecant::ReadBinary( const char* filename ) {
 		return false;
 	}
 
-	in.seekg(0, ios::end);
-	if( (size_t)in.tellg() < sizeof(double)*W.size() ) {
-		cout << "ProjSecant::Read : insufficient data" << endl;
-		return false;
-	}
-	in.seekg(0, ios::beg);
+	uint32_t n, d;
 
-	for(int64_t i=0;i<W.rows();++i)
-		for(int64_t j=0;j<W.cols();++j)
-			in.read((char*)&W(i,j),sizeof(double));
+	in.read((char*)&n,sizeof(uint32_t));
+	in.read((char*)&d,sizeof(uint32_t));
+
+	W.setZero(n,d);
+	targetDimension = d;
+
+	for(int64_t j=0;j<W.cols();++j)
+		in.read((char*)&W(0,j),sizeof(double)*W.rows());
 
 	return true;
 }
