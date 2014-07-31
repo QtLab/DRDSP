@@ -17,7 +17,7 @@ namespace DRDSP {
 			return position + velocity * t;
 		}
 
-		V ParallelTranslate( const V& v, T t ) const {
+		V ParallelTranslate( const V& v, T ) const {
 			return v;
 		}
 
