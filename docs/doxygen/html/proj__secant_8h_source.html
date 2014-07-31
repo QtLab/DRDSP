@@ -130,27 +130,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
 <div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_proj_secant.html">   41</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> {</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        MatrixXd W;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">double</span> targetMinProjectedLength;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        uint32_t targetDimension, maxIterations;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>();</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>( uint32_t targetDimension );</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">double</span> targetMinProjectedLength = 0.5;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        uint32_t targetDimension = 2,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                 maxIterations = 100;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>( uint32_t targetDimension ) : targetDimension(targetDimension) {}</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; ComputeInitial( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a>&amp; data );</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; ComputeInitial( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; data );</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; Find( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a>&amp; secants );</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; Find( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a>* secants, <span class="keywordtype">size_t</span> N );</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; Find( <span class="keyword">const</span> vector&lt;Secants&gt;&amp; secants );</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; AnalyseSecants( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a>&amp; secants ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; AnalyseSecants( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a>* secants, <span class="keywordtype">size_t</span> N ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; AnalyseSecants( <span class="keyword">const</span> vector&lt;Secants&gt;&amp; secants ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; WriteCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; WriteBinary( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">bool</span> ReadBinary( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename );</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    };</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; AnalyseSecants( <span class="keyword">const</span> vector&lt;Secants&gt;&amp; secants ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; WriteCSV( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a>&amp; WriteBinary( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">bool</span> ReadBinary( <span class="keyword">const</span> <span class="keywordtype">char</span>* filename );</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    };</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></div><div class="ttdoc">A family of data sets with corresponding parameter values. </div><div class="ttdef"><b>Definition:</b> data_system.h:10</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_secant_cost_gradient_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_secant_cost_gradient.html">DRDSP::SecantCostGradient</a></div><div class="ttdef"><b>Definition:</b> proj_secant.h:17</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_secant_cost_function_multi_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_secant_cost_function_multi.html">DRDSP::SecantCostFunctionMulti</a></div><div class="ttdef"><b>Definition:</b> proj_secant.h:25</div></div>
@@ -162,7 +161,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 10 2014 02:49:03 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 31 2014 01:37:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

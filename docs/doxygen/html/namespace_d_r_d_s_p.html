@@ -243,6 +243,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_line_search.html">LineSearch</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_proj_inverse.html">ProjInverse</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_proj_p_o_d.html">ProjPOD</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_d_r_d_s_p_1_1_secant_cost_function.html">SecantCostFunction</a></td></tr>
@@ -258,10 +260,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a955ec80e50da3c3f17008affbdd1ca04"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a955ec80e50da3c3f17008affbdd1ca04"></a>
-typedef uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_d_r_d_s_p.html#a955ec80e50da3c3f17008affbdd1ca04">weightType</a></td></tr>
-<tr class="memdesc:a955ec80e50da3c3f17008affbdd1ca04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer type of weights/counts produced by secant culling. <br/></td></tr>
-<tr class="separator:a955ec80e50da3c3f17008affbdd1ca04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f6649cfc0354447bca3de04bc85e19d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6f6649cfc0354447bca3de04bc85e19d"></a>
+typedef uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_d_r_d_s_p.html#a6f6649cfc0354447bca3de04bc85e19d">weightType</a></td></tr>
+<tr class="memdesc:a6f6649cfc0354447bca3de04bc85e19d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer type of weights/counts produced by secant culling. <br/></td></tr>
+<tr class="separator:a6f6649cfc0354447bca3de04bc85e19d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf04200393245234d20ef0f7d3402237"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf04200393245234d20ef0f7d3402237"></a>
 typedef <a class="el" href="struct_d_r_d_s_p_1_1dual.html">dual</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>duald</b></td></tr>
 <tr class="separator:aaf04200393245234d20ef0f7d3402237"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -357,6 +359,10 @@ template&lt;typename E &gt; </td></tr>
 template&lt;typename E &gt; </td></tr>
 <tr class="memitem:a0cdc1c82147be28daee0ad7682c73366"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>EmbedData</b> (const E &amp;embedding, const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data, uint32_t numThreads)</td></tr>
 <tr class="separator:a0cdc1c82147be28daee0ad7682c73366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8be4fb8808ef04a4c5b29eb7f6afd0e9"><td class="memTemplParams" colspan="2"><a class="anchor" id="a8be4fb8808ef04a4c5b29eb7f6afd0e9"></a>
+template&lt;typename Derived &gt; </td></tr>
+<tr class="memitem:a8be4fb8808ef04a4c5b29eb7f6afd0e9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>MapMatrix</b> (const MatrixBase&lt; Derived &gt; &amp;A, const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data)</td></tr>
+<tr class="separator:a8be4fb8808ef04a4c5b29eb7f6afd0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fad6e7371d3c4d68e9cebe2effa11b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fad6e7371d3c4d68e9cebe2effa11b6"></a>
 vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeSecants</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data)</td></tr>
 <tr class="separator:a2fad6e7371d3c4d68e9cebe2effa11b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -526,6 +532,10 @@ template&lt;typename F &gt; </td></tr>
 <a class="el" href="struct_d_r_d_s_p_1_1_r_k_dynamical_system.html">RKDynamicalSystem</a>&lt; typename <br class="typebreak"/>
 F::Model &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>MakeDataGenerator</b> (const F &amp;family)</td></tr>
 <tr class="separator:af3ee0bfe0ba3d52879952a631b8189c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4d1d38989b2ec23162bc8f91224b9dc"><td class="memTemplParams" colspan="2"><a class="anchor" id="af4d1d38989b2ec23162bc8f91224b9dc"></a>
+template&lt;typename F &gt; </td></tr>
+<tr class="memitem:af4d1d38989b2ec23162bc8f91224b9dc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>GenerateVideo</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;data, const char *filePrefix, const char *fileSuffix, F &amp;&amp;f)</td></tr>
+<tr class="separator:af4d1d38989b2ec23162bc8f91224b9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9f2df4bb7e0ab3ef94dca7616cdbc3a"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac9f2df4bb7e0ab3ef94dca7616cdbc3a"></a>
 template&lt;typename E &gt; </td></tr>
 <tr class="memitem:ac9f2df4bb7e0ab3ef94dca7616cdbc3a"><td class="memTemplItemLeft" align="right" valign="top">MatrixXd&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ComputeInducedMetric</b> (const E &amp;embedding, const VectorXd &amp;x)</td></tr>
@@ -553,12 +563,18 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>eps</b> (double x)<
 <tr class="memitem:aa45917cc76977abca1d6febb472ef839"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa45917cc76977abca1d6febb472ef839"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>Compare</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;reducedData, const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;rdata)</td></tr>
 <tr class="separator:aa45917cc76977abca1d6febb472ef839"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c85f0ae74d0e946dc8ca335611d8092"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c85f0ae74d0e946dc8ca335611d8092"></a>
-<a class="el" href="struct_d_r_d_s_p_1_1_affine.html">AffineXd</a>&#160;</td><td class="memItemRight" valign="bottom"><b>VecToAffine</b> (const VectorXd &amp;param, int64_t rows)</td></tr>
-<tr class="separator:a8c85f0ae74d0e946dc8ca335611d8092"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ca1e4d504de3a501bdbd60a87fdddf5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2ca1e4d504de3a501bdbd60a87fdddf5"></a>
-VectorXd&#160;</td><td class="memItemRight" valign="bottom"><b>AffineToVec</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_affine.html">AffineXd</a> &amp;A)</td></tr>
-<tr class="separator:a2ca1e4d504de3a501bdbd60a87fdddf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a066149977b4932776924fb7fa4e2eb89"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a066149977b4932776924fb7fa4e2eb89"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ComparePeriods</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> &amp;reducedData, const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;rdata, double dt, double tolerance=0.001)</td></tr>
+<tr class="separator:a066149977b4932776924fb7fa4e2eb89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06706d709929ab3943baffd95a0b332c"><td class="memTemplParams" colspan="2"><a class="anchor" id="a06706d709929ab3943baffd95a0b332c"></a>
+template&lt;typename Derived &gt; </td></tr>
+<tr class="memitem:a06706d709929ab3943baffd95a0b332c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="struct_d_r_d_s_p_1_1_affine.html">Affine</a>&lt; typename <br class="typebreak"/>
+Derived::Scalar,-1,-1 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>VecToAffine</b> (const MatrixBase&lt; Derived &gt; &amp;param, int64_t rows)</td></tr>
+<tr class="separator:a06706d709929ab3943baffd95a0b332c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ade4d90b302773f4a3b938e54301f32"><td class="memTemplParams" colspan="2"><a class="anchor" id="a6ade4d90b302773f4a3b938e54301f32"></a>
+template&lt;typename Scalar &gt; </td></tr>
+<tr class="memitem:a6ade4d90b302773f4a3b938e54301f32"><td class="memTemplItemLeft" align="right" valign="top">Matrix&lt; Scalar,-1, 1 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>AffineToVec</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_affine.html">Affine</a>&lt; Scalar,-1,-1 &gt; &amp;A)</td></tr>
+<tr class="separator:a6ade4d90b302773f4a3b938e54301f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc669f9f4960f272232d92a693e07b41"><td class="memTemplParams" colspan="2"><a class="anchor" id="afc669f9f4960f272232d92a693e07b41"></a>
 template&lt;typename Derived &gt; </td></tr>
 <tr class="memitem:afc669f9f4960f272232d92a693e07b41"><td class="memTemplItemLeft" align="right" valign="top">DualMatrixXd&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Dualify</b> (const MatrixBase&lt; Derived &gt; &amp;x, const MatrixBase&lt; Derived &gt; &amp;y)</td></tr>
@@ -760,6 +776,12 @@ Derived::Scalar,-1, 1 &gt;&#160;</td><td class="memTemplItemRight" valign="botto
 <tr class="memitem:aed7e416be6e486d50e2fb2297f4e3cb7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed7e416be6e486d50e2fb2297f4e3cb7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetPointsRandom</b> (std::vector&lt; VectorXd &gt; &amp;points, const <a class="el" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> &amp;box, std::mt19937 &amp;mt)</td></tr>
 <tr class="separator:aed7e416be6e486d50e2fb2297f4e3cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a222133a527ba815aa291e2b48f245bda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a222133a527ba815aa291e2b48f245bda"></a>
+<a class="el" href="struct_d_r_d_s_p_1_1_proj_inverse.html">ProjInverse</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeInverse</b> (const MatrixXd &amp;W, const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data)</td></tr>
+<tr class="separator:a222133a527ba815aa291e2b48f245bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ccbd325c8cee6f342d361f818ee9d01"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ccbd325c8cee6f342d361f818ee9d01"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeInverseCost</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_proj_inverse.html">ProjInverse</a> &amp;inverse, const <a class="el" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a> &amp;data)</td></tr>
+<tr class="separator:a1ccbd325c8cee6f342d361f818ee9d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -781,7 +803,7 @@ const double&#160;</td><td class="memItemRight" valign="bottom"><b>DEG_PER_RAD</
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 10 2014 02:49:03 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 31 2014 01:37:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

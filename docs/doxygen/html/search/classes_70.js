@@ -12,6 +12,7 @@ var searchData=
   ['polyharmonicspline_3c_207_20_3e',['PolyharmonicSpline&lt; 7 &gt;',['../struct_d_r_d_s_p_1_1_polyharmonic_spline_3_017_01_4.html',1,'DRDSP']]],
   ['polyharmonicspline_3c_208_20_3e',['PolyharmonicSpline&lt; 8 &gt;',['../struct_d_r_d_s_p_1_1_polyharmonic_spline_3_018_01_4.html',1,'DRDSP']]],
   ['producerbase',['ProducerBase',['../struct_d_r_d_s_p_1_1_producer_base.html',1,'DRDSP']]],
+  ['projinverse',['ProjInverse',['../struct_d_r_d_s_p_1_1_proj_inverse.html',1,'DRDSP']]],
   ['projpod',['ProjPOD',['../struct_d_r_d_s_p_1_1_proj_p_o_d.html',1,'DRDSP']]],
   ['projsecant',['ProjSecant',['../struct_d_r_d_s_p_1_1_proj_secant.html',1,'DRDSP']]]
 ];

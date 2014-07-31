@@ -105,7 +105,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Family&gt;</div>
 <div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">   16</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a> : <a class="code" href="struct_d_r_d_s_p_1_1_producer_base.html">ProducerBase</a> {</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">typedef</span> <span class="keyword">typename</span> Family::Model Model;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">double</span> boxScale;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">double</span> boxScale = 1.5;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        uint32_t numRBFs;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">RBFModelProducer</a>( uint32_t numRBFs ) : numRBFs(numRBFs) {}</div>
@@ -233,17 +233,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor"></span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdoc">An axis-aligned bounding box in n-dimensions. </div><div class="ttdef"><b>Definition:</b> aabb.h:10</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html_a364eac2f469c96b1584ffbd66ea49e81"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html#a364eac2f469c96b1584ffbd66ea49e81">DRDSP::Family::paramDim</a></div><div class="ttdeci">uint32_t paramDim</div><div class="ttdoc">Dimension of the model&amp;#39;s parameter space. </div><div class="ttdef"><b>Definition:</b> model.h:27</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html_a364eac2f469c96b1584ffbd66ea49e81"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html#a364eac2f469c96b1584ffbd66ea49e81">DRDSP::Family::paramDim</a></div><div class="ttdeci">uint32_t paramDim</div><div class="ttdoc">Dimension of the model&amp;#39;s parameter space. </div><div class="ttdef"><b>Definition:</b> model.h:29</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html_af1acac305990b01bc4cc6e612415bf72"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html#af1acac305990b01bc4cc6e612415bf72">DRDSP::HistogramGenerator::Generate</a></div><div class="ttdeci">Histogram Generate(const double *data, size_t N) const </div><div class="ttdoc">Generates a histogram from the given data. </div><div class="ttdef"><b>Definition:</b> histogram.cpp:70</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_r_b_f_model_producer_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_r_b_f_model_producer.html">DRDSP::RBFModelProducer</a></div><div class="ttdef"><b>Definition:</b> rbf_model_producer.h:16</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data.html">DRDSP::ReducedData</a></div><div class="ttdef"><b>Definition:</b> reduced_data.h:12</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_producer_base_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_producer_base.html">DRDSP::ProducerBase</a></div><div class="ttdef"><b>Definition:</b> producer_base.h:7</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html">DRDSP::Family</a></div><div class="ttdoc">Base for model with parameters. </div><div class="ttdef"><b>Definition:</b> model.h:24</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html">DRDSP::Family</a></div><div class="ttdoc">Base for model with parameters. </div><div class="ttdef"><b>Definition:</b> model.h:25</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_histogram_generator_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_histogram_generator.html">DRDSP::HistogramGenerator</a></div><div class="ttdoc">A class for generating histograms from data. </div><div class="ttdef"><b>Definition:</b> histogram.h:45</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 10 2014 02:49:03 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 31 2014 01:37:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

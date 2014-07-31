@@ -140,6 +140,8 @@ struct \hyperlink{struct_d_r_d_s_p_1_1_gradient_descent}{Gradient\-Descent}
 \item 
 struct \hyperlink{struct_d_r_d_s_p_1_1_line_search}{Line\-Search}
 \item 
+struct \hyperlink{struct_d_r_d_s_p_1_1_proj_inverse}{Proj\-Inverse}
+\item 
 struct \hyperlink{struct_d_r_d_s_p_1_1_proj_p_o_d}{Proj\-P\-O\-D}
 \item 
 struct \hyperlink{struct_d_r_d_s_p_1_1_secant_cost_function}{Secant\-Cost\-Function}
@@ -155,7 +157,7 @@ struct \hyperlink{struct_d_r_d_s_p_1_1_proj_secant}{Proj\-Secant}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{namespace_d_r_d_s_p_a955ec80e50da3c3f17008affbdd1ca04}{typedef uint16\-\_\-t \hyperlink{namespace_d_r_d_s_p_a955ec80e50da3c3f17008affbdd1ca04}{weight\-Type}}\label{namespace_d_r_d_s_p_a955ec80e50da3c3f17008affbdd1ca04}
+\hypertarget{namespace_d_r_d_s_p_a6f6649cfc0354447bca3de04bc85e19d}{typedef uint32\-\_\-t \hyperlink{namespace_d_r_d_s_p_a6f6649cfc0354447bca3de04bc85e19d}{weight\-Type}}\label{namespace_d_r_d_s_p_a6f6649cfc0354447bca3de04bc85e19d}
 
 \begin{DoxyCompactList}\small\item\em Integer type of weights/counts produced by secant culling. \end{DoxyCompactList}\item 
 \hypertarget{namespace_d_r_d_s_p_aaf04200393245234d20ef0f7d3402237}{typedef \hyperlink{struct_d_r_d_s_p_1_1dual}{dual}$<$ double $>$ {\bfseries duald}}\label{namespace_d_r_d_s_p_aaf04200393245234d20ef0f7d3402237}
@@ -243,6 +245,9 @@ struct \hyperlink{struct_d_r_d_s_p_1_1_proj_secant}{Proj\-Secant}
 
 \item 
 \hypertarget{namespace_d_r_d_s_p_a0cdc1c82147be28daee0ad7682c73366}{{\footnotesize template$<$typename E $>$ }\\\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Embed\-Data} (const E \&embedding, const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&data, uint32\-\_\-t num\-Threads)}\label{namespace_d_r_d_s_p_a0cdc1c82147be28daee0ad7682c73366}
+
+\item 
+\hypertarget{namespace_d_r_d_s_p_a8be4fb8808ef04a4c5b29eb7f6afd0e9}{{\footnotesize template$<$typename Derived $>$ }\\\hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} {\bfseries Map\-Matrix} (const Matrix\-Base$<$ Derived $>$ \&A, const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&data)}\label{namespace_d_r_d_s_p_a8be4fb8808ef04a4c5b29eb7f6afd0e9}
 
 \item 
 \hypertarget{namespace_d_r_d_s_p_a2fad6e7371d3c4d68e9cebe2effa11b6}{vector$<$ \hyperlink{struct_d_r_d_s_p_1_1_secants}{Secants} $>$ {\bfseries Compute\-Secants} (const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&data)}\label{namespace_d_r_d_s_p_a2fad6e7371d3c4d68e9cebe2effa11b6}
@@ -376,6 +381,9 @@ struct \hyperlink{struct_d_r_d_s_p_1_1_proj_secant}{Proj\-Secant}
 F\-::\-Model $>$ $>$ {\bfseries Make\-Data\-Generator} (const F \&family)}\label{namespace_d_r_d_s_p_af3ee0bfe0ba3d52879952a631b8189c6}
 
 \item 
+\hypertarget{namespace_d_r_d_s_p_af4d1d38989b2ec23162bc8f91224b9dc}{{\footnotesize template$<$typename F $>$ }\\void {\bfseries Generate\-Video} (const \hyperlink{struct_d_r_d_s_p_1_1_data_set}{Data\-Set} \&data, const char $\ast$file\-Prefix, const char $\ast$file\-Suffix, F \&\&f)}\label{namespace_d_r_d_s_p_af4d1d38989b2ec23162bc8f91224b9dc}
+
+\item 
 \hypertarget{namespace_d_r_d_s_p_ac9f2df4bb7e0ab3ef94dca7616cdbc3a}{{\footnotesize template$<$typename E $>$ }\\Matrix\-Xd {\bfseries Compute\-Induced\-Metric} (const E \&embedding, const Vector\-Xd \&x)}\label{namespace_d_r_d_s_p_ac9f2df4bb7e0ab3ef94dca7616cdbc3a}
 
 \item 
@@ -398,10 +406,14 @@ F\-::\-Model $>$ $>$ {\bfseries Make\-Data\-Generator} (const F \&family)}\label
 \hypertarget{namespace_d_r_d_s_p_aa45917cc76977abca1d6febb472ef839}{void {\bfseries Compare} (const \hyperlink{struct_d_r_d_s_p_1_1_reduced_data_system}{Reduced\-Data\-System} \&reduced\-Data, const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&rdata)}\label{namespace_d_r_d_s_p_aa45917cc76977abca1d6febb472ef839}
 
 \item 
-\hypertarget{namespace_d_r_d_s_p_a8c85f0ae74d0e946dc8ca335611d8092}{\hyperlink{struct_d_r_d_s_p_1_1_affine}{Affine\-Xd} {\bfseries Vec\-To\-Affine} (const Vector\-Xd \&param, int64\-\_\-t rows)}\label{namespace_d_r_d_s_p_a8c85f0ae74d0e946dc8ca335611d8092}
+\hypertarget{namespace_d_r_d_s_p_a066149977b4932776924fb7fa4e2eb89}{void {\bfseries Compare\-Periods} (const \hyperlink{struct_d_r_d_s_p_1_1_reduced_data_system}{Reduced\-Data\-System} \&reduced\-Data, const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&rdata, double dt, double tolerance=0.\-001)}\label{namespace_d_r_d_s_p_a066149977b4932776924fb7fa4e2eb89}
 
 \item 
-\hypertarget{namespace_d_r_d_s_p_a2ca1e4d504de3a501bdbd60a87fdddf5}{Vector\-Xd {\bfseries Affine\-To\-Vec} (const \hyperlink{struct_d_r_d_s_p_1_1_affine}{Affine\-Xd} \&A)}\label{namespace_d_r_d_s_p_a2ca1e4d504de3a501bdbd60a87fdddf5}
+\hypertarget{namespace_d_r_d_s_p_a06706d709929ab3943baffd95a0b332c}{{\footnotesize template$<$typename Derived $>$ }\\\hyperlink{struct_d_r_d_s_p_1_1_affine}{Affine}$<$ typename \\*
+Derived\-::\-Scalar,-\/1,-\/1 $>$ {\bfseries Vec\-To\-Affine} (const Matrix\-Base$<$ Derived $>$ \&param, int64\-\_\-t rows)}\label{namespace_d_r_d_s_p_a06706d709929ab3943baffd95a0b332c}
+
+\item 
+\hypertarget{namespace_d_r_d_s_p_a6ade4d90b302773f4a3b938e54301f32}{{\footnotesize template$<$typename Scalar $>$ }\\Matrix$<$ Scalar,-\/1, 1 $>$ {\bfseries Affine\-To\-Vec} (const \hyperlink{struct_d_r_d_s_p_1_1_affine}{Affine}$<$ Scalar,-\/1,-\/1 $>$ \&A)}\label{namespace_d_r_d_s_p_a6ade4d90b302773f4a3b938e54301f32}
 
 \item 
 \hypertarget{namespace_d_r_d_s_p_afc669f9f4960f272232d92a693e07b41}{{\footnotesize template$<$typename Derived $>$ }\\Dual\-Matrix\-Xd {\bfseries Dualify} (const Matrix\-Base$<$ Derived $>$ \&x, const Matrix\-Base$<$ Derived $>$ \&y)}\label{namespace_d_r_d_s_p_afc669f9f4960f272232d92a693e07b41}
@@ -556,6 +568,12 @@ Derived\-::\-Scalar,-\/1, 1 $>$ {\bfseries Vectorize} (const Matrix\-Base$<$ Der
 
 \item 
 \hypertarget{namespace_d_r_d_s_p_aed7e416be6e486d50e2fb2297f4e3cb7}{void {\bfseries Set\-Points\-Random} (std\-::vector$<$ Vector\-Xd $>$ \&points, const \hyperlink{struct_d_r_d_s_p_1_1_a_a_b_b}{A\-A\-B\-B} \&box, std\-::mt19937 \&mt)}\label{namespace_d_r_d_s_p_aed7e416be6e486d50e2fb2297f4e3cb7}
+
+\item 
+\hypertarget{namespace_d_r_d_s_p_a222133a527ba815aa291e2b48f245bda}{\hyperlink{struct_d_r_d_s_p_1_1_proj_inverse}{Proj\-Inverse} {\bfseries Compute\-Inverse} (const Matrix\-Xd \&W, const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&data)}\label{namespace_d_r_d_s_p_a222133a527ba815aa291e2b48f245bda}
+
+\item 
+\hypertarget{namespace_d_r_d_s_p_a1ccbd325c8cee6f342d361f818ee9d01}{double {\bfseries Compute\-Inverse\-Cost} (const \hyperlink{struct_d_r_d_s_p_1_1_proj_inverse}{Proj\-Inverse} \&inverse, const \hyperlink{struct_d_r_d_s_p_1_1_data_system}{Data\-System} \&data)}\label{namespace_d_r_d_s_p_a1ccbd325c8cee6f342d361f818ee9d01}
 
 \end{DoxyCompactItemize}
 \subsection*{Variables}

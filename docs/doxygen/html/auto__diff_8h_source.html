@@ -106,45 +106,44 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        df.setZero( x.size(), x.size() );</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        DualVectorXd r = x.cast&lt;<a class="code" href="struct_d_r_d_s_p_1_1dual.html">duald</a>&gt;();</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        DualVectorXd rj;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordflow">for</span>(int64_t j=0;j&lt;df.cols();++j) {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            rj = r;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            rj[j].y = 1.0;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            df.col( j ) = forward&lt;F&gt;(f)( rj );</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        }</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">return</span> DualPart( df );</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    }</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    SparseMatrix&lt;double&gt; AutoDerivativeSparse( F&amp;&amp; f, <span class="keyword">const</span> VectorXd&amp; x ) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        DualVectorXd r = x.cast&lt;<a class="code" href="struct_d_r_d_s_p_1_1dual.html">duald</a>&gt;();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        DualVectorXd rj;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        vector&lt;Triplet&lt;double&gt;&gt; triplets;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        triplets.reserve(x.size());</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">for</span>(int64_t j=0;j&lt;x.size();++j) {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            rj = r;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            rj[j].y = 1.0;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            VectorXd temp = DualPart( forward&lt;F&gt;(f)( rj ) );</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">for</span>(int64_t i=0;i&lt;temp.size();++i) {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                <span class="keywordflow">if</span>( temp[i] == 0.0 ) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                triplets.emplace_back( i, j, temp[i] );</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        SparseMatrix&lt;double&gt; df((<span class="keywordtype">int</span>)x.size(),(int)x.size());</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        df.setFromTriplets( cbegin(triplets), cend(triplets) );</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">return</span> df;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordflow">for</span>(int64_t j=0;j&lt;df.cols();++j) {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            r[j].y = 1.0;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            df.col( j ) = forward&lt;F&gt;(f)( r );</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            r[j].y = 0.0;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        }</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordflow">return</span> DualPart( df );</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    SparseMatrix&lt;double&gt; AutoDerivativeSparse( F&amp;&amp; f, <span class="keyword">const</span> VectorXd&amp; x ) {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        DualVectorXd r = x.cast&lt;<a class="code" href="struct_d_r_d_s_p_1_1dual.html">duald</a>&gt;();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        vector&lt;Triplet&lt;double&gt;&gt; triplets;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        triplets.reserve( x.size() );</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        VectorXd temp( x.size() );</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keywordflow">for</span>(int64_t j=0;j&lt;x.size();++j) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            r[j].y = 1.0;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            temp = DualPart( forward&lt;F&gt;(f)( r ) );</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordflow">for</span>(int64_t i=0;i&lt;temp.size();++i) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                <span class="keywordflow">if</span>( temp[i] == 0.0 ) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                triplets.emplace_back( i, j, temp[i] );</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            r[j].y = 0.0;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        SparseMatrix&lt;double&gt; df((<span class="keywordtype">int</span>)x.size(),(int)x.size());</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        df.setFromTriplets( cbegin(triplets), cend(triplets) );</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> df;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1dual_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1dual.html">DRDSP::dual</a></div><div class="ttdef"><b>Definition:</b> dual.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 10 2014 02:49:03 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 31 2014 01:37:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

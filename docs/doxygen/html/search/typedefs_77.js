@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weighttype',['weightType',['../namespace_d_r_d_s_p.html#a955ec80e50da3c3f17008affbdd1ca04',1,'DRDSP']]]
+  ['weighttype',['weightType',['../namespace_d_r_d_s_p.html#a6f6649cfc0354447bca3de04bc85e19d',1,'DRDSP']]]
 ];

@@ -98,9 +98,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae2afae510f9abf0a5163529ee09128f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2afae510f9abf0a5163529ee09128f8"></a>
+<tr class="memitem:a6b9225aa855d0379f792542de6a9f074"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b9225aa855d0379f792542de6a9f074"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ProjSecant</b> (uint32_t targetDimension)</td></tr>
-<tr class="separator:ae2afae510f9abf0a5163529ee09128f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a6b9225aa855d0379f792542de6a9f074"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa55fa8720a3fc21364865b8a7939ab57"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa55fa8720a3fc21364865b8a7939ab57"></a>
 <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>ComputeInitial</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_data_set.html">DataSet</a> &amp;data)</td></tr>
 <tr class="separator:aa55fa8720a3fc21364865b8a7939ab57"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,9 +119,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4c12f28ba578c22c206b0d92ad6eb490"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c12f28ba578c22c206b0d92ad6eb490"></a>
 const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &amp;secants) const </td></tr>
 <tr class="separator:a4c12f28ba578c22c206b0d92ad6eb490"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0e2cf457eb340f1b1df392ea161ae14"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0e2cf457eb340f1b1df392ea161ae14"></a>
-const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> *secants, size_t N) const </td></tr>
-<tr class="separator:af0e2cf457eb340f1b1df392ea161ae14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a314a6742c209f41d347eaf652db24761"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a314a6742c209f41d347eaf652db24761"></a>
 const <a class="el" href="struct_d_r_d_s_p_1_1_proj_secant.html">ProjSecant</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>AnalyseSecants</b> (const vector&lt; <a class="el" href="struct_d_r_d_s_p_1_1_secants.html">Secants</a> &gt; &amp;secants) const </td></tr>
 <tr class="separator:a314a6742c209f41d347eaf652db24761"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,13 +138,13 @@ Public Attributes</h2></td></tr>
 MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>W</b></td></tr>
 <tr class="separator:a99ab0daf8cb539f9ecf07132d3994357"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a422dde54e49a8b5ab4f631fc0b8cf829"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a422dde54e49a8b5ab4f631fc0b8cf829"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>targetMinProjectedLength</b></td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>targetMinProjectedLength</b> = 0.5</td></tr>
 <tr class="separator:a422dde54e49a8b5ab4f631fc0b8cf829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa74d47b541db9bf256f9602e2ae0646a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa74d47b541db9bf256f9602e2ae0646a"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>targetDimension</b></td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>targetDimension</b> = 2</td></tr>
 <tr class="separator:aa74d47b541db9bf256f9602e2ae0646a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa9954dc50be3af121c7590879782afa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa9954dc50be3af121c7590879782afa"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>maxIterations</b></td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>maxIterations</b> = 100</td></tr>
 <tr class="separator:afa9954dc50be3af121c7590879782afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following files:<ul>
@@ -157,7 +154,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>maxIterations</b>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 10 2014 02:49:09 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 31 2014 01:37:26 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

@@ -103,10 +103,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        vector&lt;VectorXd&gt; points, vectors;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        vector&lt;MatrixXd&gt; derivatives;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">double</span> scales[2];</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">size_t</span> count;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        uint32_t dimension;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">size_t</span> count = 0;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        uint32_t dimension = 0;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data.html">ReducedData</a>( uint32_t dim, <span class="keywordtype">size_t</span> numPoints );</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">void</span> Create( uint32_t dim, <span class="keywordtype">size_t</span> numPoints );</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_a_a_b_b.html">AABB</a> ComputeBoundingBox() <span class="keyword">const</span>;</div>
@@ -177,17 +177,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdoc">An axis-aligned bounding box in n-dimensions. </div><div class="ttdef"><b>Definition:</b> aabb.h:10</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html_aa7f54a15defe7ff2157559a1c0d7f22c"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html#aa7f54a15defe7ff2157559a1c0d7f22c">DRDSP::ModelEmbedded::model</a></div><div class="ttdeci">M model</div><div class="ttdoc">The underlying model. </div><div class="ttdef"><b>Definition:</b> model.h:39</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html_aa7f54a15defe7ff2157559a1c0d7f22c"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html#aa7f54a15defe7ff2157559a1c0d7f22c">DRDSP::ModelEmbedded::model</a></div><div class="ttdeci">M model</div><div class="ttdoc">The underlying model. </div><div class="ttdef"><b>Definition:</b> model.h:40</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdoc">A set of data points. </div><div class="ttdef"><b>Definition:</b> data_set.h:14</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></div><div class="ttdoc">Base for model without parameters. </div><div class="ttdef"><b>Definition:</b> model.h:12</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model.html">DRDSP::Model</a></div><div class="ttdoc">Base for model without parameters. </div><div class="ttdef"><b>Definition:</b> model.h:13</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html_ac486c907dea215957d503dc4dc9d76e3"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html#ac486c907dea215957d503dc4dc9d76e3">DRDSP::DataSet::points</a></div><div class="ttdeci">vector&lt; VectorXd &gt; points</div><div class="ttdoc">Array of data vectors. </div><div class="ttdef"><b>Definition:</b> data_set.h:16</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html_a52bceea77c9ddd837c36aba500705060"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html#a52bceea77c9ddd837c36aba500705060">DRDSP::ModelEmbedded::embedding</a></div><div class="ttdeci">Embedding embedding</div><div class="ttdoc">An embedding into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:40</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html_a52bceea77c9ddd837c36aba500705060"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html#a52bceea77c9ddd837c36aba500705060">DRDSP::ModelEmbedded::embedding</a></div><div class="ttdeci">Embedding embedding</div><div class="ttdoc">An embedding into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:41</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data.html">DRDSP::ReducedData</a></div><div class="ttdef"><b>Definition:</b> reduced_data.h:12</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html">DRDSP::ModelEmbedded</a></div><div class="ttdoc">A model without parameters whose state space is embedded into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:38</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_model_embedded_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_model_embedded.html">DRDSP::ModelEmbedded</a></div><div class="ttdoc">A model without parameters whose state space is embedded into R^n. </div><div class="ttdef"><b>Definition:</b> model.h:39</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 10 2014 02:49:03 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 31 2014 01:37:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

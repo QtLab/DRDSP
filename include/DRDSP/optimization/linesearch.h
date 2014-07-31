@@ -18,28 +18,28 @@ namespace DRDSP {
 		double S0, DS0;
 
 		template<typename S,typename DS>
-		double Search( S&& cost, DS&& costDeriv ) {
+		double Search( const S& cost, const DS& costDeriv ) {
 			static const double ratio = 2.0;
 			static const uint8_t maxIterations = 5;
 
-			DS0 = std::forward<DS>(costDeriv)(0.0);
+			DS0 = costDeriv(0.0);
 			
 			if( DS0 >= 0.0 ) {
 				cout << "LineSearch: Bad Tangent Vector." << endl;
 				return 0.0;
 			}
 
-			S0 = std::forward<S>(cost)(0.0);
+			S0 = cost(0.0);
 			double a = 0.0;
 			double ga = DS0;
 			double c = alpha / ratio;
 			double gc;
 			do {
 				c = Clamp( c * ratio, 0.0, alphaMax );
-				gc = std::forward<DS>(costDeriv)(c);
+				gc = costDeriv(c);
 				if( c == alphaMax ) {
 					if( gc < 0.0 ) {
-						if( std::forward<S>(cost)(c) < S0 ) {
+						if( cost(c) < S0 ) {
 							alpha = c;
 							return alpha;
 						} else return 0.0;
@@ -53,8 +53,8 @@ namespace DRDSP {
 			double Sc = 0.0;
 			for(uint8_t i=0;i<maxIterations;++i) {
 				c = Secant(a,b,ga,gb);
-				gc = std::forward<DS>(costDeriv)(c);
-				Sc = std::forward<S>(cost)(c);
+				gc = costDeriv(c);
+				Sc = cost(c);
 
 				if( Wolfe(Sc,gc) ) {
 					alpha = c;

@@ -20,27 +20,22 @@ void Geodesic::Set( const MatrixXd& x, const MatrixXd& v ) {
 MatrixXd Geodesic::operator()( double t ) const {
 	if( t == 0.0 ) return position;
 
-	svType DH = svd.singularValues() * t;
+	svType st = svd.singularValues() * t;
 
-	MatrixXd Wt = position;
-	Wt *= svd.matrixV() * DH.array().cos().matrix().asDiagonal(); 
-	Wt += svd.matrixU() * DH.array().sin().matrix().asDiagonal();
-	Wt *= svd.matrixV().transpose();
-
-	return Wt;
+	return (
+		     position * svd.matrixV() * st.array().cos().matrix().asDiagonal()
+	       + svd.matrixU() * st.array().sin().matrix().asDiagonal()
+	) * svd.matrixV().transpose();
 }
 
 MatrixXd Geodesic::ParallelTranslate( const MatrixXd& V, double t ) const {
-	if( t == 0.0 ) return velocity;
+	if( t == 0.0 ) return V;
 	
-	svType DH = svd.singularValues() * t;
-	MatrixXd UtV = svd.matrixU().transpose() * velocity;
+	svType st = svd.singularValues() * t;
 
-	MatrixXd Vt = position;
-	Vt *= -svd.matrixV() * DH.array().sin().matrix().asDiagonal(); 
-	Vt += svd.matrixU() * DH.array().cos().matrix().asDiagonal();
-	Vt *= UtV;
-	Vt += V - svd.matrixU() * UtV;
-
-	return Vt;
+	return V + ( 
+	      svd.matrixU() * st.array().cos().matrix().asDiagonal()
+		- position * svd.matrixV() * st.array().sin().matrix().asDiagonal()
+	    - svd.matrixU()
+	) * svd.matrixU().transpose() * V;
 }

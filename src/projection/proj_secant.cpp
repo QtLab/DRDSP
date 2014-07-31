@@ -127,11 +127,11 @@ ProjSecant& ProjSecant::ComputeInitial( const DataSet& data ) {
 	uint32_t bigAxis;
 
 	for(uint32_t k=0;k<n;++k)
-		maxVal[k] = minVal[k] = data.points[0](0);
+		maxVal[k] = minVal[k] = data[0](0);
 
-	for(size_t j=0;j<data.points.size();++j)
+	for( const auto& x : data.points )
 		for(uint32_t k=0;k<n;++k) {
-			val = data.points[j](k);
+			val = x(k);
 			if( val > maxVal[k] )
 				maxVal[k] = val;
 			if( val < minVal[k] )
@@ -176,10 +176,10 @@ ProjSecant& ProjSecant::ComputeInitial( const DataSystem& data ) {
 	for(uint32_t k=0;k<n;++k)
 		maxVal[k] = minVal[k] = data.dataSets[0].points[0](k);
 
-	for(uint32_t i=0;i<data.numParameters;++i)
-		for(size_t j=0;j<data.dataSets[i].points.size();++j)
+	for( const auto& set : data.dataSets )
+		for( const auto& x : set.points )
 			for(uint32_t k=0;k<n;++k) {
-				val = data.dataSets[i].points[j](k);
+				val = x(k);
 				if( val > maxVal[k] )
 					maxVal[k] = val;
 				if( val < minVal[k] )

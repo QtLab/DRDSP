@@ -100,9 +100,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">   11</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a> {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        vector&lt;ReducedData&gt; reducedData;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        uint32_t numParameters;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        uint32_t numParameters = 0;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>();</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>( uint32_t N );</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> Create( uint32_t N );</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
@@ -187,23 +187,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    };</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">void</span> Compare( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>&amp; reducedData, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; rdata );</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;}</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">void</span> ComparePeriods( <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_reduced_data_system.html">ReducedDataSystem</a>&amp; reducedData, <span class="keyword">const</span> <a class="code" href="struct_d_r_d_s_p_1_1_data_system.html">DataSystem</a>&amp; rdata, <span class="keywordtype">double</span> dt, <span class="keywordtype">double</span> tolerance = 0.001 );</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html">DRDSP::DataSystem</a></div><div class="ttdoc">A family of data sets with corresponding parameter values. </div><div class="ttdef"><b>Definition:</b> data_system.h:10</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_a_a_b_b_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_a_a_b_b.html">DRDSP::AABB</a></div><div class="ttdoc">An axis-aligned bounding box in n-dimensions. </div><div class="ttdef"><b>Definition:</b> aabb.h:10</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_set_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_set.html">DRDSP::DataSet</a></div><div class="ttdoc">A set of data points. </div><div class="ttdef"><b>Definition:</b> data_set.h:14</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_aae14ac3e8c2e1a397759cd3a4d8a102f"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#aae14ac3e8c2e1a397759cd3a4d8a102f">DRDSP::DataSystem::parameters</a></div><div class="ttdeci">vector&lt; VectorXd &gt; parameters</div><div class="ttdoc">Array of parameter values. </div><div class="ttdef"><b>Definition:</b> data_system.h:15</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_system_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data_system.html">DRDSP::ReducedDataSystem</a></div><div class="ttdef"><b>Definition:</b> reduced_data_system.h:11</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_reduced_data_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_reduced_data.html">DRDSP::ReducedData</a></div><div class="ttdef"><b>Definition:</b> reduced_data.h:12</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a621ef4f4452821030bb57e93dadf334e"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">DRDSP::DataSystem::numParameters</a></div><div class="ttdeci">uint32_t numParameters</div><div class="ttdoc">Number of parameters/data sets in the family. </div><div class="ttdef"><b>Definition:</b> data_system.h:11</div></div>
-<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html">DRDSP::Family</a></div><div class="ttdoc">Base for model with parameters. </div><div class="ttdef"><b>Definition:</b> model.h:24</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a621ef4f4452821030bb57e93dadf334e"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a621ef4f4452821030bb57e93dadf334e">DRDSP::DataSystem::numParameters</a></div><div class="ttdeci">uint32_t numParameters</div><div class="ttdoc">Number of parameters/data sets in the family. </div><div class="ttdef"><b>Definition:</b> data_system.h:12</div></div>
+<div class="ttc" id="struct_d_r_d_s_p_1_1_family_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_family.html">DRDSP::Family</a></div><div class="ttdoc">Base for model with parameters. </div><div class="ttdef"><b>Definition:</b> model.h:25</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_data_system_html_a5fe0b41909f9056f986b4284e0fcb614"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_data_system.html#a5fe0b41909f9056f986b4284e0fcb614">DRDSP::DataSystem::dataSets</a></div><div class="ttdeci">vector&lt; DataSet &gt; dataSets</div><div class="ttdoc">Array of data sets. </div><div class="ttdef"><b>Definition:</b> data_system.h:14</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 10 2014 02:49:03 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 31 2014 01:37:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
