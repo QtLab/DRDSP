@@ -66,8 +66,7 @@ template<typename Derived> class MatrixBase
     using Base::MaxSizeAtCompileTime;
     using Base::IsVectorAtCompileTime;
     using Base::Flags;
-    using Base::CoeffReadCost;
-
+    
     using Base::derived;
     using Base::const_cast_derived;
     using Base::rows;
@@ -81,6 +80,7 @@ template<typename Derived> class MatrixBase
     using Base::operator-=;
     using Base::operator*=;
     using Base::operator/=;
+    using Base::operator*;
 
     typedef typename Base::CoeffReturnType CoeffReturnType;
     typedef typename Base::ConstTransposeReturnType ConstTransposeReturnType;
@@ -180,26 +180,20 @@ template<typename Derived> class MatrixBase
 #ifdef __CUDACC__
     template<typename OtherDerived>
     EIGEN_DEVICE_FUNC
-    const typename LazyProductReturnType<Derived,OtherDerived>::Type
+    const Product<Derived,OtherDerived,LazyProduct>
     operator*(const MatrixBase<OtherDerived> &other) const
     { return this->lazyProduct(other); }
 #else
 
-#ifdef EIGEN_TEST_EVALUATORS
     template<typename OtherDerived>
     const Product<Derived,OtherDerived>
     operator*(const MatrixBase<OtherDerived> &other) const;
-#else
-    template<typename OtherDerived>
-    const typename ProductReturnType<Derived,OtherDerived>::Type
-    operator*(const MatrixBase<OtherDerived> &other) const;
-#endif
 
 #endif
 
     template<typename OtherDerived>
     EIGEN_DEVICE_FUNC 
-    const typename LazyProductReturnType<Derived,OtherDerived>::Type
+    const Product<Derived,OtherDerived,LazyProduct>
     lazyProduct(const MatrixBase<OtherDerived> &other) const;
 
     template<typename OtherDerived>
@@ -213,7 +207,7 @@ template<typename Derived> class MatrixBase
 
     template<typename DiagonalDerived>
     EIGEN_DEVICE_FUNC
-    const DiagonalProduct<Derived, DiagonalDerived, OnTheRight>
+    const Product<Derived, DiagonalDerived, LazyProduct>
     operator*(const DiagonalBase<DiagonalDerived> &diagonal) const;
 
     template<typename OtherDerived>
@@ -333,10 +327,12 @@ template<typename Derived> class MatrixBase
 
     NoAlias<Derived,Eigen::MatrixBase > noalias();
 
-    inline const ForceAlignedAccess<Derived> forceAlignedAccess() const;
-    inline ForceAlignedAccess<Derived> forceAlignedAccess();
-    template<bool Enable> inline typename internal::add_const_on_value_type<typename internal::conditional<Enable,ForceAlignedAccess<Derived>,Derived&>::type>::type forceAlignedAccessIf() const;
-    template<bool Enable> inline typename internal::conditional<Enable,ForceAlignedAccess<Derived>,Derived&>::type forceAlignedAccessIf();
+    // TODO forceAlignedAccess is temporarily disabled
+    // Need to find a nicer workaround.
+    inline const Derived& forceAlignedAccess() const { return derived(); }
+    inline Derived& forceAlignedAccess() { return derived(); }
+    template<bool Enable> inline const Derived& forceAlignedAccessIf() const { return derived(); }
+    template<bool Enable> inline Derived& forceAlignedAccessIf() { return derived(); }
 
     Scalar trace() const;
 
@@ -347,10 +343,10 @@ template<typename Derived> class MatrixBase
 
     /** \returns an \link Eigen::ArrayBase Array \endlink expression of this matrix
       * \sa ArrayBase::matrix() */
-    EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE ArrayWrapper<Derived> array() { return derived(); }
+    EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE ArrayWrapper<Derived> array() { return ArrayWrapper<Derived>(derived()); }
     /** \returns a const \link Eigen::ArrayBase Array \endlink expression of this matrix
       * \sa ArrayBase::matrix() */
-    EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const ArrayWrapper<const Derived> array() const { return derived(); }
+    EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const ArrayWrapper<const Derived> array() const { return ArrayWrapper<const Derived>(derived()); }
 
 /////////// LU module ///////////
 
@@ -360,7 +356,8 @@ template<typename Derived> class MatrixBase
     const PartialPivLU<PlainObject> lu() const;
 
     EIGEN_DEVICE_FUNC
-    const internal::inverse_impl<Derived> inverse() const;
+    const Inverse<Derived> inverse() const;
+    
     template<typename ResultType>
     void computeInverseAndDetWithCheck(
       ResultType& inverse,

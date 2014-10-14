@@ -9,11 +9,12 @@ using namespace std;
 using namespace DRDSP;
 
 struct Options {
-	uint32_t targetDimension, numRBFs, numIterations, numThreads;
-
-	Options() : targetDimension(3), numRBFs(100), numIterations(120), numThreads(4) {}
+	uint32_t targetDimension = 3,
+	         numRBFs = 100,
+	         numIterations = 120,
+	         numThreads = 4;
 	
-	Options( int argc, char** argv ) : Options() {
+	Options( int argc, char** argv ) {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
 		if( argc >= 3 )         numRBFs = (uint32_t)atoi(argv[2]);
 		if( argc >= 4 )   numIterations = (uint32_t)atoi(argv[3]);
@@ -99,7 +100,7 @@ int main( int argc, char** argv ) {
 	auto reducedFamily = producer.BruteForce( reducedData,
 	                                          data.parameters,
 	                                          options.numIterations,
-											  options.numThreads );
+	                                          options.numThreads );
 
 	cout << "Total Cost = "
 		 << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters )

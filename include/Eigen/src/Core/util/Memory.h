@@ -64,7 +64,7 @@
 // Currently, let's include it only on unix systems:
 #if defined(__unix__) || defined(__unix)
   #include <unistd.h>
-  #if ((defined __QNXNTO__) || (defined _GNU_SOURCE) || ((defined _XOPEN_SOURCE) && (_XOPEN_SOURCE >= 600))) && (defined _POSIX_ADVISORY_INFO) && (_POSIX_ADVISORY_INFO > 0)
+  #if ((defined __QNXNTO__) || (defined _GNU_SOURCE) || (defined __PGI) || ((defined _XOPEN_SOURCE) && (_XOPEN_SOURCE >= 600))) && (defined _POSIX_ADVISORY_INFO) && (_POSIX_ADVISORY_INFO > 0)
     #define EIGEN_HAS_POSIX_MEMALIGN 1
   #endif
 #endif
@@ -454,6 +454,8 @@ template<typename T, bool Align> inline T* conditional_aligned_realloc_new(T* pt
 
 template<typename T, bool Align> inline T* conditional_aligned_new_auto(size_t size)
 {
+  if(size==0)
+    return 0; // short-cut. Also fixes Bug 884
   check_size_for_overflow<T>(size);
   T *result = reinterpret_cast<T*>(conditional_aligned_malloc<Align>(sizeof(T)*size));
   if(NumTraits<T>::RequireInitialization)
@@ -576,27 +578,27 @@ template<typename T, bool UseMemmove> struct smart_memmove_helper;
 
 template<typename T> void smart_memmove(const T* start, const T* end, T* target)
 {
-    smart_memmove_helper<T,!NumTraits<T>::RequireInitialization>::run(start, end, target);
+  smart_memmove_helper<T,!NumTraits<T>::RequireInitialization>::run(start, end, target);
 }
 
 template<typename T> struct smart_memmove_helper<T,true> {
-    static inline void run(const T* start, const T* end, T* target)
-    { std::memmove(target, start, std::ptrdiff_t(end)-std::ptrdiff_t(start)); }
+  static inline void run(const T* start, const T* end, T* target)
+  { std::memmove(target, start, std::ptrdiff_t(end)-std::ptrdiff_t(start)); }
 };
 
 template<typename T> struct smart_memmove_helper<T,false> {
-    static inline void run(const T* start, const T* end, T* target)
-    { 
-        if (uintptr_t(target) < uintptr_t(start))
-        {
-            std::copy(start, end, target);
-        }
-        else                                 
-        {
-            std::ptrdiff_t count = (std::ptrdiff_t(end)-std::ptrdiff_t(start)) / sizeof(T);
-            std::copy_backward(start, end, target + count); 
-        }
+  static inline void run(const T* start, const T* end, T* target)
+  { 
+    if (uintptr_t(target) < uintptr_t(start))
+    {
+      std::copy(start, end, target);
     }
+    else                                 
+    {
+      std::ptrdiff_t count = (std::ptrdiff_t(end)-std::ptrdiff_t(start)) / sizeof(T);
+      std::copy_backward(start, end, target + count); 
+    }
+  }
 };
 
 
@@ -616,7 +618,7 @@ template<typename T> struct smart_memmove_helper<T,false> {
 
 // This helper class construct the allocated memory, and takes care of destructing and freeing the handled data
 // at destruction time. In practice this helper class is mainly useful to avoid memory leak in case of exceptions.
-template<typename T> class aligned_stack_memory_handler
+template<typename T> class aligned_stack_memory_handler : noncopyable
 {
   public:
     /* Creates a stack_memory_handler responsible for the buffer \a ptr of size \a size.
@@ -644,6 +646,30 @@ template<typename T> class aligned_stack_memory_handler
     bool m_deallocate;
 };
 
+template<typename T> class scoped_array : noncopyable
+{
+  T* m_ptr;
+public:
+  explicit scoped_array(std::ptrdiff_t size)
+  {
+    m_ptr = new T[size];
+  }
+  ~scoped_array()
+  {
+    delete[] m_ptr;
+  }
+  T& operator[](std::ptrdiff_t i) { return m_ptr[i]; }
+  const T& operator[](std::ptrdiff_t i) const { return m_ptr[i]; }
+  T* &ptr() { return m_ptr; }
+  const T* ptr() const { return m_ptr; }
+  operator const T*() const { return m_ptr; }
+};
+
+template<typename T> void swap(scoped_array<T> &a,scoped_array<T> &b)
+{
+  std::swap(a.ptr(),b.ptr());
+}
+    
 } // end namespace internal
 
 /** \internal

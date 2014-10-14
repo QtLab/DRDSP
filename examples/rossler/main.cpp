@@ -13,11 +13,12 @@ using namespace DRDSP;
 typedef RBF<PolyharmonicSpline<3>> RBFType;
 
 struct Options {
-	uint32_t targetDimension, numRBFs, numIterations, numThreads;
-
-	Options() : targetDimension(3), numRBFs(40), numIterations(250), numThreads(4) {}
+	uint32_t targetDimension = 3,
+	         numRBFs = 40,
+	         numIterations = 250,
+	         numThreads = 4;
 	
-	Options( int argc, char** argv ) : Options() {
+	Options( int argc, char** argv ) {
 		if( argc >= 2 ) targetDimension = (uint32_t)atoi(argv[1]);
 		if( argc >= 3 )         numRBFs = (uint32_t)atoi(argv[2]);
 		if( argc >= 4 )   numIterations = (uint32_t)atoi(argv[3]);
@@ -159,9 +160,9 @@ void ComputeReduced( const Options& options ) {
 	RBFFamilyProducer<RBFType> producer( options.numRBFs );
 	producer.boxScale = 1.6;
 	auto reducedFamily = producer.BruteForce( reducedData,
-											  data.parameters,
-											  options.numIterations,
-											  options.numThreads );
+	                                          data.parameters,
+	                                          options.numIterations,
+	                                          options.numThreads );
 	
 	cout << "Total Cost = " << producer.ComputeTotalCost( reducedFamily, reducedData, data.parameters ) << endl;
 	
@@ -364,8 +365,8 @@ void Test2( const Options& options ) {
 	RBFModelProducer<RBFFamily<RBFType>> producer( options.numRBFs );
 	producer.boxScale = 1.6;
 	auto reducedModel = producer.BruteForce( reducedData[20],
-											 options.numIterations,
-											 options.numThreads );
+	                                         options.numIterations,
+	                                         options.numThreads );
 	
 	cout << "Total Cost = " << producer.ComputeTotalCost( reducedModel, reducedData[20] ) << endl;
 

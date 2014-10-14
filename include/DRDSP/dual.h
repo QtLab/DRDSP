@@ -5,7 +5,6 @@
  *
  */
 #include "geometry/trig.h"
-#include <complex>
 
 namespace DRDSP {
 
@@ -176,55 +175,55 @@ namespace DRDSP {
 
 	template<typename T>
 	dual<T> sqrt( const dual<T>& d ) {
-		T a = ::sqrt(d.x);
+		T a = std::sqrt(d.x);
 		return dual<T>(a,d.y/(a*T(2)));
 	}
 
 	template<typename T>
 	dual<T> exp( const dual<T>& d ) {
-		T ex = ::exp(d.x);
+		T ex = std::exp(d.x);
 		return dual<T>(ex,ex*d.y);
 	}
 
 	template<typename T>
 	dual<T> log( const dual<T>& d ) {
-		return dual<T>(::log(d.x),d.y/d.x);
+		return dual<T>(std::log(d.x),d.y/d.x);
 	}
 
 	template<typename T>
 	dual<T> pow( const dual<T>& d, const dual<T>& p ) {
 		if( d.x == T(0) ) return dual<T>(0,0);
-		T rp = ::pow(d.x,p.x);
+		T rp = std::pow(d.x,p.x);
 		return dual<T>( rp, rp*( p.y*::log(d.x) + p.x*d.y/d.x ) );
 	}
 
 	template<typename T>
 	dual<T> pow( const dual<T>& d, T p ) {
 		if( d.x == T(0) ) return dual<T>(0,0);
-		T rp = ::pow(d.x,p.x);
+		T rp = std::pow(d.x,p.x);
 		return dual<T>( rp, (rp*p*d.y)/d.x );
 	}
 
 	template<typename T>
 	dual<T> sin( const dual<T> &d ) {
-		return dual<T>(::sin(d.x),d.y*::cos(d.x));
+		return dual<T>(std::sin(d.x),d.y*std::cos(d.x));
 	}
 
 	template<typename T>
 	dual<T> cos( const dual<T>& d ) {
-		return dual<T>(::cos(d.x),-d.y*::sin(d.x));
+		return dual<T>(std::cos(d.x),-d.y*std::sin(d.x));
 	}
 
 	template<typename T>
 	dual<T> tan( const dual<T>& d ) {
-		T t = ::tan(d.x);
+		T t = std::tan(d.x);
 		return dual<T>(t,d.y*(T(1)+t*t));
 	}
 
 	template<typename T>
 	dual<T> sec( const dual<T>& d ) {
 		T s = sec(d.x);
-		return dual<T>(s,d.y*s*::tan(d.x));
+		return dual<T>(s,d.y*s*std::tan(d.x));
 	}
 
 	template<typename T>
@@ -241,17 +240,17 @@ namespace DRDSP {
 
 	template<typename T>
 	dual<T> asin( const dual<T>& d ) {
-		return dual<T>( ::asin(d.x), d.y*dasin(d.x) );
+		return dual<T>( std::asin(d.x), d.y*dasin(d.x) );
 	}
 
 	template<typename T>
 	dual<T> acos( const dual<T>& d ) {
-		return dual<T>( ::acos(d.x), d.y*dacos(d.x) );
+		return dual<T>( std::acos(d.x), d.y*dacos(d.x) );
 	}
 
 	template<typename T>
 	dual<T> atan( const dual<T>& d ) {
-		return dual<T>( ::atan(d.x), d.y*datan(d.x) );
+		return dual<T>( std::atan(d.x), d.y*datan(d.x) );
 	}
 
 	template<typename T>
@@ -271,17 +270,17 @@ namespace DRDSP {
 
 	template<typename T>
 	dual<T> sinh( const dual<T>& d ) {
-		return dual<T>( ::sinh(d.x), d.y*::cosh(d.x) );
+		return dual<T>( std::sinh(d.x), d.y*std::cosh(d.x) );
 	}
 
 	template<typename T>
 	dual<T> cosh( const dual<T>& d ) {
-		return dual<T>( ::cosh(d.x), d.y*::sinh(d.x) );
+		return dual<T>( std::cosh(d.x), d.y*std::sinh(d.x) );
 	}
 
 	template<typename T>
 	dual<T> tanh( const dual<T>& d ) {
-		T t = ::tanh(d.x);
+		T t = std::tanh(d.x);
 		return dual<T>( t, d.y*(T(1)-t*t) );
 	}
 
@@ -300,22 +299,22 @@ namespace DRDSP {
 	template<typename T>
 	dual<T> sech( const dual<T>& d ) {
 		T s = sech(d.x);
-		return dual<T>( s, -d.y*s*::tanh(d.x) );
+		return dual<T>( s, -d.y*s*std::tanh(d.x) );
 	}
 
 	template<typename T>
 	dual<T> asinh( const dual<T>& d ) {
-		return dual<T>( ::asinh(d.x), d.y*dasinh(d.x) );
+		return dual<T>( std::asinh(d.x), d.y*dasinh(d.x) );
 	}
 
 	template<typename T>
 	dual<T> acosh( const dual<T>& d ) {
-		return dual<T>( ::acosh(d.x), d.y*dacosh(d.x) );
+		return dual<T>( std::acosh(d.x), d.y*dacosh(d.x) );
 	}
 
 	template<typename T>
 	dual<T> atanh( const dual<T>& d ) {
-		return dual<T>( ::atanh(d.x), d.y*datanh(d.x) );
+		return dual<T>( std::atanh(d.x), d.y*datanh(d.x) );
 	}
 
 	template<typename T>

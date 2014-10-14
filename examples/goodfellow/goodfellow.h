@@ -36,7 +36,7 @@ struct Goodfellow : Model<> {
 			res[i] = y(state,i) * temp1 + x(state,i) * temp2;
 			res[N+i] = -x(state,i) * temp1 + y(state,i) * temp2;
 		}
-		res.head(N) += (p / N) * (adjacency * state.head(N));
+		res.head(N) += (p / N) * (adjacency.cast<Scalar>() * state.head(N));
 		return res;
 	}
 
@@ -74,6 +74,8 @@ struct Goodfellow : Model<> {
 
 struct GoodfellowFamily : Family<Goodfellow> {
 	uint32_t N;
+
+	GoodfellowFamily() : GoodfellowFamily(100) {}
 
 	explicit GoodfellowFamily( uint32_t N ) : Family<Goodfellow>(2*N,1), N(N) {}
 

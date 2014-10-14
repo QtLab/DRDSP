@@ -60,7 +60,9 @@ struct FlatEmbedding : Embedding {
 
 struct KuramotoAFamily : Family<KuramotoA> {
 	uint32_t N;
-	
+
+	KuramotoAFamily() : KuramotoAFamily(100) {}
+
 	explicit KuramotoAFamily( uint32_t N ) : Family<KuramotoA>(N+1,1), N(N) {}
 	
 	KuramotoA operator()( const VectorXd& parameter ) const {
@@ -72,7 +74,9 @@ struct KuramotoAFamily : Family<KuramotoA> {
 
 struct KuramotoBFamily : Family<KuramotoB> {
 	uint32_t N;
-	
+
+	KuramotoBFamily() : KuramotoBFamily(100) {}
+
 	explicit KuramotoBFamily( uint32_t N ) : Family<KuramotoB>(N+1,1), N(N) {}
 	
 	KuramotoB operator()( const VectorXd& parameter ) const {

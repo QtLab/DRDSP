@@ -348,7 +348,7 @@ namespace DRDSP {
 				return ( 2.0 * M_PI * func( (x-centre.cast<Scalar>()).norm() ) ) * ( weight - W * ( W.adjoint() * weight ) ).cast<Scalar>();
 			}
 			auto rotation = ComputeRotation( Wtc, Wtx ).transpose();
-			return (-M_PI / sqrt(rR)) * ( W * ( rotation * ( W.adjoint() * weight ) ) );
+			return (-M_PI / sqrt(rR)) * ( W.cast<Scalar>() * ( rotation * ( W.adjoint() * weight ) ) );
 		}
 
 		MatrixXd Derivative( const VectorXd& x ) const {
@@ -407,6 +407,7 @@ namespace DRDSP {
 			return rotation;
 		}
 	};
+	
 }
 
 #endif

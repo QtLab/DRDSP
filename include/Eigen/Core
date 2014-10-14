@@ -42,7 +42,7 @@
   #define EIGEN_USING_STD_MATH(FUNC) using std::FUNC;
 #endif
 
-#if (defined(_CPPUNWIND) || defined(__EXCEPTIONS)) && !defined(__CUDA_ARCH__)
+#if (defined(_CPPUNWIND) || defined(__EXCEPTIONS)) && !defined(__CUDA_ARCH__) && !defined(EIGEN_EXCEPTIONS)
   #define EIGEN_EXCEPTIONS
 #endif
 
@@ -171,6 +171,15 @@
     #undef bool
     #undef vector
     #undef pixel
+  #elif defined __VSX__
+    #define EIGEN_VECTORIZE
+    #define EIGEN_VECTORIZE_VSX
+    #include <altivec.h>
+    // We need to #undef all these ugly tokens defined in <altivec.h>
+    // => use __vector instead of vector
+    #undef bool
+    #undef vector
+    #undef pixel
   #elif defined  __ARM_NEON__
     #define EIGEN_VECTORIZE
     #define EIGEN_VECTORIZE_NEON
@@ -235,6 +244,8 @@ inline static const char *SimdInstructionSetsInUse(void) {
   return "SSE, SSE2";
 #elif defined(EIGEN_VECTORIZE_ALTIVEC)
   return "AltiVec";
+#elif defined(EIGEN_VECTORIZE_VSX)
+  return "VSX";
 #elif defined(EIGEN_VECTORIZE_NEON)
   return "ARM NEON";
 #else
@@ -266,8 +277,8 @@ using std::ptrdiff_t;
   */
 
 #include "src/Core/util/Constants.h"
-#include "src/Core/util/ForwardDeclarations.h"
 #include "src/Core/util/Meta.h"
+#include "src/Core/util/ForwardDeclarations.h"
 #include "src/Core/util/StaticAssert.h"
 #include "src/Core/util/XprHelper.h"
 #include "src/Core/util/Memory.h"
@@ -286,7 +297,7 @@ using std::ptrdiff_t;
   #include "src/Core/arch/SSE/PacketMath.h"
   #include "src/Core/arch/SSE/MathFunctions.h"
   #include "src/Core/arch/SSE/Complex.h"
-#elif defined EIGEN_VECTORIZE_ALTIVEC
+#elif defined(EIGEN_VECTORIZE_ALTIVEC) || defined(EIGEN_VECTORIZE_VSX)
   #include "src/Core/arch/AltiVec/PacketMath.h"
   #include "src/Core/arch/AltiVec/Complex.h"
 #elif defined EIGEN_VECTORIZE_NEON
@@ -300,19 +311,16 @@ using std::ptrdiff_t;
 #include "src/Core/functors/UnaryFunctors.h"
 #include "src/Core/functors/NullaryFunctors.h"
 #include "src/Core/functors/StlFunctors.h"
+#include "src/Core/functors/AssignmentFunctors.h"
 
 #include "src/Core/DenseCoeffsBase.h"
 #include "src/Core/DenseBase.h"
 #include "src/Core/MatrixBase.h"
 #include "src/Core/EigenBase.h"
 
-#ifdef EIGEN_ENABLE_EVALUATORS
-#include "src/Core/functors/AssignmentFunctors.h"
 #include "src/Core/Product.h"
 #include "src/Core/CoreEvaluators.h"
 #include "src/Core/AssignEvaluator.h"
-#include "src/Core/ProductEvaluators.h"
-#endif
 
 #ifndef EIGEN_PARSED_BY_DOXYGEN // work around Doxygen bug triggered by Assign.h r814874
                                 // at least confirmed with Doxygen 1.5.5 and 1.5.6
@@ -323,7 +331,10 @@ using std::ptrdiff_t;
 #include "src/Core/util/BlasUtil.h"
 #include "src/Core/DenseStorage.h"
 #include "src/Core/NestByValue.h"
-#include "src/Core/ForceAlignedAccess.h"
+
+// #include "src/Core/ForceAlignedAccess.h"
+// #include "src/Core/Flagged.h"
+
 #include "src/Core/ReturnByValue.h"
 #include "src/Core/NoAlias.h"
 #include "src/Core/PlainObjectBase.h"
@@ -336,12 +347,12 @@ using std::ptrdiff_t;
 #include "src/Core/SelfCwiseBinaryOp.h"
 #include "src/Core/Dot.h"
 #include "src/Core/StableNorm.h"
-#include "src/Core/MapBase.h"
 #include "src/Core/Stride.h"
+#include "src/Core/MapBase.h"
 #include "src/Core/Map.h"
+#include "src/Core/Ref.h"
 #include "src/Core/Block.h"
 #include "src/Core/VectorBlock.h"
-#include "src/Core/Ref.h"
 #include "src/Core/Transpose.h"
 #include "src/Core/DiagonalMatrix.h"
 #include "src/Core/Diagonal.h"
@@ -354,14 +365,15 @@ using std::ptrdiff_t;
 #include "src/Core/IO.h"
 #include "src/Core/Swap.h"
 #include "src/Core/CommaInitializer.h"
-#include "src/Core/Flagged.h"
 #include "src/Core/ProductBase.h"
 #include "src/Core/GeneralProduct.h"
+#include "src/Core/Solve.h"
+#include "src/Core/Inverse.h"
 #include "src/Core/TriangularMatrix.h"
 #include "src/Core/SelfAdjointView.h"
 #include "src/Core/products/GeneralBlockPanelKernel.h"
 #include "src/Core/products/Parallelizer.h"
-#include "src/Core/products/CoeffBasedProduct.h"
+#include "src/Core/ProductEvaluators.h"
 #include "src/Core/products/GeneralMatrixVector.h"
 #include "src/Core/products/GeneralMatrixMatrix.h"
 #include "src/Core/SolveTriangular.h"
