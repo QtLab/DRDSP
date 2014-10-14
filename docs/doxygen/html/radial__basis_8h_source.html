@@ -438,7 +438,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                <span class="keywordflow">return</span> ( 2.0 * M_PI * func( (x-centre.cast&lt;Scalar&gt;()).norm() ) ) * ( weight - W * ( W.adjoint() * weight ) ).cast&lt;Scalar&gt;();</div>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            }</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            <span class="keyword">auto</span> rotation = ComputeRotation( Wtc, Wtx ).transpose();</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            <span class="keywordflow">return</span> (-M_PI / sqrt(rR)) * ( W * ( rotation * ( W.adjoint() * weight ) ) );</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            <span class="keywordflow">return</span> (-M_PI / sqrt(rR)) * ( W.cast&lt;Scalar&gt;() * ( rotation * ( W.adjoint() * weight ) ) );</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        }</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        MatrixXd Derivative( <span class="keyword">const</span> VectorXd&amp; x )<span class="keyword"> const </span>{</div>
@@ -497,9 +497,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <span class="keywordflow">return</span> rotation;</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        }</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    };</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;}</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    </div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;}</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_r_b_f_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_r_b_f.html">DRDSP::RBF</a></div><div class="ttdef"><b>Definition:</b> radial_basis.h:95</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_equi_r_b_f_cyclic_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_equi_r_b_f_cyclic.html">DRDSP::EquiRBFCyclic</a></div><div class="ttdef"><b>Definition:</b> radial_basis.h:191</div></div>
 <div class="ttc" id="struct_d_r_d_s_p_1_1_equi_r_b_f_s_o2_html"><div class="ttname"><a href="struct_d_r_d_s_p_1_1_equi_r_b_f_s_o2.html">DRDSP::EquiRBFSO2</a></div><div class="ttdef"><b>Definition:</b> radial_basis.h:328</div></div>
@@ -512,7 +513,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 31 2014 01:37:05 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 14 2014 04:47:12 for DRDSP by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
