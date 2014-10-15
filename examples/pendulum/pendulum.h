@@ -21,10 +21,10 @@ struct Pendulum : Model<> {
 protected:
 	double Omega = 1.0,
 	       length = 1.1,
-		   mass = 7.0,
-		   A = 0.15,
-		   delta1 = 0.245,
-		   delta2 = 0.245;
+	       mass = 7.0,
+	       A = 0.15,
+	       delta1 = 0.245,
+	       delta2 = 0.245;
 
 	double f1( double sinphi, double cosphi ) const;
 	double f2( double cosphi ) const;
@@ -59,8 +59,8 @@ struct FlatEmbedding : Embedding {
 };
 
 struct DoughnutEmbedding : Embedding {
-	double R1, R2;
-	DoughnutEmbedding() : Embedding(5,6), R1(2.0), R2(4.0) {}
+	double R1 = 2.0, R2 = 4.0;
+	DoughnutEmbedding() : Embedding(5,6) {}
 	VectorXd operator()( const VectorXd& x ) const;
 	MatrixXd Derivative( const VectorXd& x ) const;
 	MatrixXd DerivativeAdjoint( const VectorXd& x ) const;
