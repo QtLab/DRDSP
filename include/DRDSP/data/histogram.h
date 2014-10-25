@@ -32,9 +32,7 @@ namespace DRDSP {
 		vector<Bin> bins;
 	
 		Histogram() = default;
-		Histogram( uint32_t nBins ) : bins(nBins) {}
-		void Create( uint32_t nBins );
-		void Destroy();
+		explicit Histogram( uint32_t nBins ) : bins(nBins) {}
 		uint32_t TotalFrequency() const;              ///< Sums the bin frequencies
 		void WriteCSV( const char* filename ) const;
 	};
@@ -43,12 +41,13 @@ namespace DRDSP {
 	 * \brief A class for generating histograms from data.
 	 */
 	struct HistogramGenerator {
-		uint32_t numBins = 0;               ///< The number of bins that we want the histogram to contain
+		uint32_t numBins = 100;             ///< The number of bins that we want the histogram to contain
 		double clampMin = 0, clampMax = 0;  ///< clamping limits the range of the bins
 		bool clamp = false,                 ///< Perform clamping
 		     logScale = false;              ///< Use a logarithmic scale for the bin sizes
 
-		HistogramGenerator( uint32_t nBins ) : numBins(nBins) {}
+		HistogramGenerator() = default;
+		explicit HistogramGenerator( uint32_t nBins ) : numBins(nBins) {}
 		Histogram Generate( const double* data, size_t N ) const;   ///< Generates a histogram from the given data
 		Histogram Generate( const vector<double>& data ) const;     ///< Generates a histogram from the given data
 	};

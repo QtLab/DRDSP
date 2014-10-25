@@ -31,15 +31,7 @@ Bin& Bin::operator--() {
 	--frequency;
 	return *this;
 }
-	
-void Histogram::Create( uint32_t nBins ) {
-	bins.resize(nBins);
-}
-	
-void Histogram::Destroy() {
-	bins = vector<Bin>();
-}
-	
+
 uint32_t Histogram::TotalFrequency() const {
 	return accumulate(
 		begin(bins),
