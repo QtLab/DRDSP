@@ -1,6 +1,6 @@
 #ifndef INCLUDED_BITMAP
 #define INCLUDED_BITMAP
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 
 using namespace std;
@@ -13,51 +13,35 @@ namespace DRDSP {
 	};
 
 	struct bmpFileHead {
-		uint16_t bfType;
+		uint16_t bfType = 0x4D42;
 		uint32_t bfSize;
-		uint16_t bfReserved1;
-		uint16_t bfReserved2;
-		uint32_t bfOffBits;
+		uint16_t bfReserved1 = 0;
+		uint16_t bfReserved2 = 0;
+		uint32_t bfOffBits = 54;
 
-		bmpFileHead() :
-			bfType(0x4D42),
-			bfReserved1(0),
-			bfReserved2(0),
-			bfOffBits(54)
-		{}
-
+		bmpFileHead() = default;
+		explicit bmpFileHead( uint32_t size ) : bfSize(size) {}
 	};
 
 	struct bmpInfoHead {
-		uint32_t biSize;
+		uint32_t biSize = 40;
 		uint32_t biWidth;
 		uint32_t biHeight;
-		uint16_t biPlanes;
-		uint16_t biBitCount;
-		uint32_t biCompression;
-		uint32_t biSizeImage;
-		uint32_t biXPelsPerMeter;
-		uint32_t biYPelsPerMeter;
-		uint32_t biClrUsed;
-		uint32_t biClrImportant;
+		uint16_t biPlanes = 1;
+		uint16_t biBitCount = 24;
+		uint32_t biCompression = 0;
+		uint32_t biSizeImage = 0;
+		uint32_t biXPelsPerMeter = 0;
+		uint32_t biYPelsPerMeter = 0;
+		uint32_t biClrUsed = 0;
+		uint32_t biClrImportant = 0;
 
-		bmpInfoHead() :
-			biSize(40),
-			biPlanes(1),
-			biBitCount(24),
-			biCompression(0),
-			biSizeImage(0),
-			biXPelsPerMeter(0),
-			biYPelsPerMeter(0),
-			biClrUsed(0),
-			biClrImportant(0)
-		{}
-
+		bmpInfoHead() = default;
+		bmpInfoHead( uint32_t width, uint32_t height ) : biWidth(width), biHeight(height) {}
 	};
 	#pragma pack()
 
 	struct Bitmap {
-
 		Bitmap(uint32_t x,uint32_t y);
 		void Clear();
 		void Clear( uint8_t R, uint8_t G, uint8_t B );
@@ -69,8 +53,6 @@ namespace DRDSP {
 	protected:
 		uint32_t sizeX, sizeY;
 		vector<bmpPixel> pixels;
-		bmpFileHead fileHeader;
-		bmpInfoHead infoHeader;
 	};
 
 }

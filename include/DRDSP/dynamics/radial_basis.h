@@ -345,10 +345,10 @@ namespace DRDSP {
 			Matrix<double,2,1> Wtc = W.adjoint() * centre;
 			Scalar rR = Wtx.squaredNorm() * Wtc.squaredNorm();
 			if( rR == Scalar() ) {
-				return ( 2.0 * M_PI * func( (x-centre.cast<Scalar>()).norm() ) ) * ( weight - W * ( W.adjoint() * weight ) ).cast<Scalar>();
+				return ( 2.0 * PI * func( (x-centre.cast<Scalar>()).norm() ) ) * ( weight - W * ( W.adjoint() * weight ) ).cast<Scalar>();
 			}
 			auto rotation = ComputeRotation( Wtc, Wtx ).transpose();
-			return (-M_PI / sqrt(rR)) * ( W.cast<Scalar>() * ( rotation * ( W.adjoint() * weight ) ) );
+			return (-PI / sqrt(rR)) * ( W.cast<Scalar>() * ( rotation * ( W.adjoint() * weight ) ) );
 		}
 
 		MatrixXd Derivative( const VectorXd& x ) const {
@@ -360,10 +360,10 @@ namespace DRDSP {
 			Vector2d Wtc = W.adjoint() * centre;
 			double rR = Wtx.squaredNorm() * Wtc.squaredNorm();
 			if( rR == 0.0 ) {
-				return ( 2.0 * M_PI * func( (x-centre).norm() ) ) * ( MatrixXd::Identity(W.rows(),W.rows()) - W * W.adjoint() );
+				return ( 2.0 * PI * func( (x-centre).norm() ) ) * ( MatrixXd::Identity(W.rows(),W.rows()) - W * W.adjoint() );
 			}
 			auto rotation = ComputeRotation( Wtc, Wtx ).transpose();
-			return (-M_PI / sqrt(rR)) * ( W * rotation * W.adjoint() );
+			return (-PI / sqrt(rR)) * ( W * rotation * W.adjoint() );
 		}
 
 		MatrixXd LinearDerivativeWeight( const VectorXd& x ) const {
@@ -377,7 +377,7 @@ namespace DRDSP {
 				VectorXd r = x - centre;
 				double rnorm = r.norm();
 				if( rnorm == 0.0 ) return C;
-				double dphi = 2.0 * M_PI * func.Derivative( rnorm ) / rnorm;
+				double dphi = 2.0 * PI * func.Derivative( rnorm ) / rnorm;
 				MatrixXd g = MatrixXd::Identity(dim,dim) - W * W.adjoint();
 				for(int64_t i=0;i<dim;++i) {
 					C.block(i*dim,0,dim,dim) = g * ( dphi * r[i] );

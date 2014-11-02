@@ -1,8 +1,6 @@
 #ifndef INCLUDED_GEOMETRY_METRIC
 #define INCLUDED_GEOMETRY_METRIC
-#include <Eigen/Core>
-
-using namespace Eigen;
+#include "../types.h"
 
 namespace DRDSP {
 

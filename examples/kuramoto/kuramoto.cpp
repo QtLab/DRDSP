@@ -1,6 +1,6 @@
 #include "kuramoto.h"
 #include <DRDSP/misc.h>
-#include <cmath>
+#include <DRDSP/geometry/trig.h>
 
 using namespace std;
 
@@ -53,7 +53,7 @@ MatrixXd FlatEmbedding::Derivative2( const VectorXd &x, uint32_t mu ) const {
 
 void KuramotoWrap::operator()( VectorXd& state ) const {
 	for(int i=0;i<state.size();++i)
-		Wrap(state[i],-M_PI,M_PI);
+		Wrap(state[i],-PI,PI);
 }
 
 

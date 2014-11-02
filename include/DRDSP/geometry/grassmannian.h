@@ -1,10 +1,14 @@
 #ifndef INCLUDED_GEOMETRY_GRASSMANNIAN
 #define INCLUDED_GEOMETRY_GRASSMANNIAN
-#pragma warning( disable : 4714 ) // function '...' marked as __forceinline not inlined
-#include <Eigen/SVD>
 #include "metric.h"
 
-using namespace Eigen;
+#pragma warning( disable : 4510 ) // default constructor could not be generated
+#pragma warning( disable : 4610 ) // can never be instantiated - user defined constructor required
+
+#include <Eigen/SVD>
+
+#pragma warning( default : 4610 )
+#pragma warning( default : 4510 )
 
 namespace DRDSP {
 

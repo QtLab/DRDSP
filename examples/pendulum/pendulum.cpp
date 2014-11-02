@@ -1,12 +1,13 @@
 #include "pendulum.h"
 #include <DRDSP/misc.h>
+#include <DRDSP/geometry/angle.h>
 
 using namespace std;
 
 void PendulumWrap::operator()( VectorXd& state ) const {
-	Wrap(state(0),-M_PI,M_PI);
-	Wrap(state(1),-M_PI,M_PI);
-	Wrap(state(2),-M_PI,M_PI);
+	Wrap(state(0),-PI,PI);
+	Wrap(state(1),-PI,PI);
+	Wrap(state(2),-PI,PI);
 }
 
 // Embeddings

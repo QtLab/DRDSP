@@ -50,6 +50,13 @@ protected:
 
     template<typename OtherDerived> void solveInPlace(MatrixBase<OtherDerived>& other) const;
     template<typename OtherDerived> void solveInPlace(SparseMatrixBase<OtherDerived>& other) const;
+
+    inline Index nonZeros() const {
+      // FIXME HACK number of nonZeros is required for product logic
+      // this returns only an upper bound (but should be OK for most purposes)
+      return derived().nestedExpression().nonZeros();
+    }
+
   
 };
 
@@ -206,7 +213,7 @@ public:
         {
           if((!SkipFirst) && Base::operator bool())
             Base::operator++();
-          m_returnOne = true;
+          m_returnOne = true; // FIXME check innerSize()>outer();
         }
       }
 
@@ -221,7 +228,7 @@ public:
           {
             if((!SkipFirst) && Base::operator bool())
               Base::operator++();
-            m_returnOne = true;
+            m_returnOne = true; // FIXME check innerSize()>outer();
           }
         }
         return *this;

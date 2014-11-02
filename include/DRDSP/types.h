@@ -10,18 +10,14 @@
 
 #include <Eigen/Core>
 
-#pragma warning( default : 4800 )
-#pragma warning( default : 4510 )
 #pragma warning( default : 4610 )
+#pragma warning( default : 4510 )
+#pragma warning( default : 4800 )
 
 namespace Eigen {
 	typedef Matrix<double,1,1> Vector1d;
 }
 
 using namespace Eigen;
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 #endif

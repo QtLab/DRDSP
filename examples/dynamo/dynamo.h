@@ -52,7 +52,7 @@ namespace DRDSP {
 		static const uint32_t N = nI*nJ;
 
 		const double ds = 1.0 / double( nI - 1 ),
-		             dth = (2.0 * M_PI) / double( nJ ),
+		             dth = (2.0 * PI) / double( nJ ),
 		             eta0 = 1.0;
 
 		VectorXd sinheta, cosheta, cotheta, sintheta, costheta, s;
