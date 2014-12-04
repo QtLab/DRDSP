@@ -26,7 +26,7 @@
 
 #ifndef EIGEN_NO_STATIC_ASSERT
 
-  #if defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_MSC_VER) && (_MSC_VER >= 1600))
+  #if defined(__GXX_EXPERIMENTAL_CXX0X__) || (EIGEN_COMP_MSVC >= 1600)
 
     // if native static_assert is enabled, let's use it
     #define EIGEN_STATIC_ASSERT(X,MSG) static_assert(X,#MSG);
@@ -92,7 +92,8 @@
         THE_INDEX_TYPE_MUST_BE_A_SIGNED_TYPE,
         THE_STORAGE_ORDER_OF_BOTH_SIDES_MUST_MATCH,
         OBJECT_ALLOCATED_ON_STACK_IS_TOO_BIG,
-        IMPLICIT_CONVERSION_TO_SCALAR_IS_FOR_INNER_PRODUCT_ONLY
+        IMPLICIT_CONVERSION_TO_SCALAR_IS_FOR_INNER_PRODUCT_ONLY,
+        STORAGE_LAYOUT_DOES_NOT_MATCH
       };
     };
 
@@ -103,7 +104,7 @@
     // Specialized implementation for MSVC to avoid "conditional
     // expression is constant" warnings.  This implementation doesn't
     // appear to work under GCC, hence the multiple implementations.
-    #ifdef _MSC_VER
+    #if EIGEN_COMP_MSVC
 
       #define EIGEN_STATIC_ASSERT(CONDITION,MSG) \
         {Eigen::internal::static_assertion<bool(CONDITION)>::MSG;}
