@@ -1,7 +1,7 @@
 // This file is part of Eigen, a lightweight C++ template library
 // for linear algebra.
 //
-// Copyright (C) 2008-2010 Gael Guennebaud <gael.guennebaud@inria.fr>
+// Copyright (C) 2008-2015 Gael Guennebaud <gael.guennebaud@inria.fr>
 // Copyright (C) 2006-2008 Benoit Jacob <jacob.benoit.1@gmail.com>
 //
 // This Source Code Form is subject to the terms of the Mozilla
@@ -73,7 +73,7 @@
 
 /// \internal EIGEN_COMP_MSVC_STRICT set to 1 if the compiler is really Microsoft Visual C++ and not ,e.g., ICC
 #if EIGEN_COMP_MSVC && !(EIGEN_COMP_ICC)
-  #define EIGEN_COMP_MSVC_STRICT 1
+  #define EIGEN_COMP_MSVC_STRICT _MSC_VER
 #else
   #define EIGEN_COMP_MSVC_STRICT 0
 #endif
@@ -101,7 +101,7 @@
 
 
 /// \internal EIGEN_GNUC_STRICT set to 1 if the compiler is really GCC and not a compatible compiler (e.g., ICC, clang, mingw, etc.)
-#if EIGEN_COMP_GNUC && !(EIGEN_COMP_CLANG || EIGEN_COMP_CLANG || EIGEN_COMP_MINGW || EIGEN_COMP_PGI || EIGEN_COMP_IBM || EIGEN_COMP_ARM )
+#if EIGEN_COMP_GNUC && !(EIGEN_COMP_CLANG || EIGEN_COMP_ICC || EIGEN_COMP_MINGW || EIGEN_COMP_PGI || EIGEN_COMP_IBM || EIGEN_COMP_ARM )
   #define EIGEN_COMP_GNUC_STRICT 1
 #else
   #define EIGEN_COMP_GNUC_STRICT 0
@@ -160,6 +160,12 @@
   #define EIGEN_ARCH_ARM64 0
 #endif
 
+#if EIGEN_ARCH_ARM || EIGEN_ARCH_ARM64
+  #define EIGEN_ARCH_ARM_OR_ARM64 1
+#else
+  #define EIGEN_ARCH_ARM_OR_ARM64 0
+#endif
+
 /// \internal EIGEN_ARCH_MIPS set to 1 if the architecture is MIPS
 #if defined(__mips__) || defined(__mips)
   #define EIGEN_ARCH_MIPS 1
@@ -207,7 +213,8 @@
 #endif
 
 /// \internal EIGEN_OS_ANDROID set to 1 if the OS is Android
-#if defined(__ANDROID__)
+// note: ANDROID is defined when using ndk_build, __ANDROID__ is defined when using a standalone toolchain.
+#if defined(__ANDROID__) || defined(ANDROID)
   #define EIGEN_OS_ANDROID 1
 #else
   #define EIGEN_OS_ANDROID 0
@@ -276,6 +283,19 @@
   #define EIGEN_OS_WIN_STRICT 0
 #endif
 
+/// \internal EIGEN_OS_SUN set to 1 if the OS is SUN
+#if (defined(sun) || defined(__sun)) && !(defined(__SVR4) || defined(__svr4__))
+  #define EIGEN_OS_SUN 1
+#else
+  #define EIGEN_OS_SUN 0
+#endif
+
+/// \internal EIGEN_OS_SOLARIS set to 1 if the OS is Solaris
+#if (defined(sun) || defined(__sun)) && (defined(__SVR4) || defined(__svr4__))
+  #define EIGEN_OS_SOLARIS 1
+#else
+  #define EIGEN_OS_SOLARIS 0
+#endif
 
 
 
@@ -286,64 +306,9 @@
   #define EIGEN_SAFE_TO_USE_STANDARD_ASSERT_MACRO 1
 #endif
 
-// 16 byte alignment is only useful for vectorization. Since it affects the ABI, we need to enable
-// 16 byte alignment on all platforms where vectorization might be enabled. In theory we could always
-// enable alignment, but it can be a cause of problems on some platforms, so we just disable it in
-// certain common platform (compiler+architecture combinations) to avoid these problems.
-// Only static alignment is really problematic (relies on nonstandard compiler extensions that don't
-// work everywhere, for example don't work on GCC/ARM), try to keep heap alignment even
-// when we have to disable static alignment.
-#if EIGEN_COMP_GNUC && !(EIGEN_ARCH_i386_OR_x86_64 || EIGEN_ARCH_PPC || EIGEN_ARCH_IA64)
-#define EIGEN_GCC_AND_ARCH_DOESNT_WANT_STACK_ALIGNMENT 1
-#else
-#define EIGEN_GCC_AND_ARCH_DOESNT_WANT_STACK_ALIGNMENT 0
-#endif
-
-// static alignment is completely disabled with GCC 3, Sun Studio, and QCC/QNX
-#if !EIGEN_GCC_AND_ARCH_DOESNT_WANT_STACK_ALIGNMENT \
- && !EIGEN_GCC3_OR_OLDER \
- && !EIGEN_COMP_SUNCC \
- && !EIGEN_OS_QNX
-  #define EIGEN_ARCH_WANTS_STACK_ALIGNMENT 1
-#else
-  #define EIGEN_ARCH_WANTS_STACK_ALIGNMENT 0
-#endif
-
-// Defined the boundary (in bytes) on which the data needs to be aligned. Note
-// that unless EIGEN_ALIGN is defined and not equal to 0, the data may not be
-// aligned at all regardless of the value of this #define.
-#define EIGEN_ALIGN_BYTES 16
-
-#ifdef EIGEN_DONT_ALIGN
-  #ifndef EIGEN_DONT_ALIGN_STATICALLY
-    #define EIGEN_DONT_ALIGN_STATICALLY
-  #endif
-  #define EIGEN_ALIGN 0
-#elif !defined(EIGEN_DONT_VECTORIZE)
-  #if defined(__AVX__)
-    #undef EIGEN_ALIGN_BYTES
-    #define EIGEN_ALIGN_BYTES 32
-  #endif
-  #define EIGEN_ALIGN 1
-#else
-  #define EIGEN_ALIGN 0
-#endif
-
-
 // This macro can be used to prevent from macro expansion, e.g.:
 //   std::max EIGEN_NOT_A_MACRO(a,b)
 #define EIGEN_NOT_A_MACRO
-
-// EIGEN_ALIGN_STATICALLY is the true test whether we want to align arrays on the stack or not. It takes into account both the user choice to explicitly disable
-// alignment (EIGEN_DONT_ALIGN_STATICALLY) and the architecture config (EIGEN_ARCH_WANTS_STACK_ALIGNMENT). Henceforth, only EIGEN_ALIGN_STATICALLY should be used.
-#if EIGEN_ARCH_WANTS_STACK_ALIGNMENT && !defined(EIGEN_DONT_ALIGN_STATICALLY)
-  #define EIGEN_ALIGN_STATICALLY 1
-#else
-  #define EIGEN_ALIGN_STATICALLY 0
-  #ifndef EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
-    #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
-  #endif
-#endif
 
 #ifdef EIGEN_DEFAULT_TO_ROW_MAJOR
 #define EIGEN_DEFAULT_MATRIX_STORAGE_ORDER_OPTION Eigen::RowMajor
@@ -376,10 +341,48 @@
   #define EIGEN_HAVE_RVALUE_REFERENCES
 #endif
 
+// Does the compiler support result_of?
+#if (__has_feature(cxx_lambdas) || (defined(__cplusplus) && __cplusplus >= 201103L))
+#define EIGEN_HAS_STD_RESULT_OF 1
+#endif
+
+// Does the compiler support variadic templates?
+#if __cplusplus > 199711L
+#define EIGEN_HAS_VARIADIC_TEMPLATES 1
+#endif
+
+// Does the compiler support const expressions?
+#ifdef __CUDACC__
+  // Const expressions are not supported regardless of what host compiler is used 
+#elif (defined(__cplusplus) && __cplusplus >= 201402L) || \
+    EIGEN_GNUC_AT_LEAST(4,9)
+#define EIGEN_HAS_CONSTEXPR 1
+#endif
+
+// Does the compiler support C++11 math?
+// Let's be conservative and enable the default C++11 implementation only if we are sure it exists
+#ifndef EIGEN_HAS_CXX11_MATH
+  #if (__cplusplus >= 201103L) && (EIGEN_COMP_GNUC_STRICT || EIGEN_COMP_CLANG || EIGEN_COMP_MSVC || EIGEN_COMP_ICC)  \
+      && (EIGEN_ARCH_i386_OR_x86_64) && (EIGEN_OS_GNULINUX || EIGEN_OS_WIN_STRICT || EIGEN_OS_MAC)
+    #define EIGEN_HAS_CXX11_MATH 1
+  #else
+    #define EIGEN_HAS_CXX11_MATH 0
+  #endif
+#endif
+
+// Does the compiler support proper C++11 containers?
+#ifndef EIGEN_HAS_CXX11_CONTAINERS
+  #if ((__cplusplus >= 201103L) && (EIGEN_COMP_GNUC_STRICT || EIGEN_COMP_CLANG)) || EIGEN_COMP_MSVC >= 1900
+    #define EIGEN_HAS_CXX11_CONTAINERS 1
+  #else
+    #define EIGEN_HAS_CXX11_CONTAINERS 0
+  #endif
+#endif
+
 /** Allows to disable some optimizations which might affect the accuracy of the result.
   * Such optimization are enabled by default, and set EIGEN_FAST_MATH to 0 to disable them.
   * They currently include:
-  *   - single precision Cwise::sin() and Cwise::cos() when SSE vectorization is enabled.
+  *   - single precision ArrayBase::sin() and ArrayBase::cos() when SSE vectorization is enabled.
   */
 #ifndef EIGEN_FAST_MATH
 #define EIGEN_FAST_MATH 1
@@ -526,12 +529,26 @@ namespace Eigen {
 #define EIGEN_UNUSED_VARIABLE(var) Eigen::internal::ignore_unused_variable(var);
 
 #if !defined(EIGEN_ASM_COMMENT)
-  #if EIGEN_COMP_GNUC && EIGEN_ARCH_i386_OR_x86_64
+  #if EIGEN_COMP_GNUC && (EIGEN_ARCH_i386_OR_x86_64 || EIGEN_ARCH_ARM_OR_ARM64)
     #define EIGEN_ASM_COMMENT(X)  __asm__("#" X)
   #else
     #define EIGEN_ASM_COMMENT(X)
   #endif
 #endif
+
+
+//------------------------------------------------------------------------------------------
+// Static and dynamic alignment control
+// 
+// The main purpose of this section is to define EIGEN_MAX_ALIGN_BYTES and EIGEN_MAX_STATIC_ALIGN_BYTES
+// as the maximal boundary in bytes on which dynamically and statically allocated data may be alignment respectively.
+// The values of EIGEN_MAX_ALIGN_BYTES and EIGEN_MAX_STATIC_ALIGN_BYTES can be specified by the user. If not,
+// a default value is automatically computed based on architecture, compiler, and OS.
+// 
+// This section also defines macros EIGEN_ALIGN_TO_BOUNDARY(N) and the shortcuts EIGEN_ALIGN{8,16,32,_MAX}
+// to be used to declare statically aligned buffers.
+//------------------------------------------------------------------------------------------
+
 
 /* EIGEN_ALIGN_TO_BOUNDARY(n) forces data to be n-byte aligned. This is used to satisfy SIMD requirements.
  * However, we do that EVEN if vectorization (EIGEN_VECTORIZE) is disabled,
@@ -540,7 +557,9 @@ namespace Eigen {
  * If we made alignment depend on whether or not EIGEN_VECTORIZE is defined, it would be impossible to link
  * vectorized and non-vectorized code.
  */
-#if EIGEN_COMP_GNUC || EIGEN_COMP_PGI || EIGEN_COMP_IBM || EIGEN_COMP_ARM
+#if (defined __CUDACC__)
+  #define EIGEN_ALIGN_TO_BOUNDARY(n) __align__(n)
+#elif EIGEN_COMP_GNUC || EIGEN_COMP_PGI || EIGEN_COMP_IBM || EIGEN_COMP_ARM
   #define EIGEN_ALIGN_TO_BOUNDARY(n) __attribute__((aligned(n)))
 #elif EIGEN_COMP_MSVC
   #define EIGEN_ALIGN_TO_BOUNDARY(n) __declspec(align(n))
@@ -551,21 +570,123 @@ namespace Eigen {
   #error Please tell me what is the equivalent of __attribute__((aligned(n))) for your compiler
 #endif
 
+// If the user explicitly disable vectorization, then we also disable alignment
+#if defined(EIGEN_DONT_VECTORIZE)
+  #define EIGEN_IDEAL_MAX_ALIGN_BYTES 0
+#elif defined(__AVX__)
+  // 32 bytes static alignmeent is preferred only if really required
+  #define EIGEN_IDEAL_MAX_ALIGN_BYTES 32
+#else
+  #define EIGEN_IDEAL_MAX_ALIGN_BYTES 16
+#endif
+
+
+// EIGEN_MIN_ALIGN_BYTES defines the minimal value for which the notion of explicit alignment makes sense
+#define EIGEN_MIN_ALIGN_BYTES 16
+
+// Defined the boundary (in bytes) on which the data needs to be aligned. Note
+// that unless EIGEN_ALIGN is defined and not equal to 0, the data may not be
+// aligned at all regardless of the value of this #define.
+
+#if (defined(EIGEN_DONT_ALIGN_STATICALLY) || defined(EIGEN_DONT_ALIGN))  && defined(EIGEN_MAX_STATIC_ALIGN_BYTES) && EIGEN_MAX_STATIC_ALIGN_BYTES>0
+#error EIGEN_MAX_STATIC_ALIGN_BYTES and EIGEN_DONT_ALIGN[_STATICALLY] are both defined with EIGEN_MAX_STATIC_ALIGN_BYTES!=0. Use EIGEN_MAX_STATIC_ALIGN_BYTES=0 as a synonym of EIGEN_DONT_ALIGN_STATICALLY.
+#endif
+
+// EIGEN_DONT_ALIGN_STATICALLY and EIGEN_DONT_ALIGN are deprectated
+// They imply EIGEN_MAX_STATIC_ALIGN_BYTES=0
+#if defined(EIGEN_DONT_ALIGN_STATICALLY) || defined(EIGEN_DONT_ALIGN)
+  #ifdef EIGEN_MAX_STATIC_ALIGN_BYTES
+    #undef EIGEN_MAX_STATIC_ALIGN_BYTES
+  #endif
+  #define EIGEN_MAX_STATIC_ALIGN_BYTES 0
+#endif
+
+#ifndef EIGEN_MAX_STATIC_ALIGN_BYTES
+
+  // Try to automatically guess what is the best default value for EIGEN_MAX_STATIC_ALIGN_BYTES
+  
+  // 16 byte alignment is only useful for vectorization. Since it affects the ABI, we need to enable
+  // 16 byte alignment on all platforms where vectorization might be enabled. In theory we could always
+  // enable alignment, but it can be a cause of problems on some platforms, so we just disable it in
+  // certain common platform (compiler+architecture combinations) to avoid these problems.
+  // Only static alignment is really problematic (relies on nonstandard compiler extensions that don't
+  // work everywhere, for example don't work on GCC/ARM), try to keep heap alignment even
+  // when we have to disable static alignment.
+  #if EIGEN_COMP_GNUC && !(EIGEN_ARCH_i386_OR_x86_64 || EIGEN_ARCH_PPC || EIGEN_ARCH_IA64)
+  #define EIGEN_GCC_AND_ARCH_DOESNT_WANT_STACK_ALIGNMENT 1
+  #else
+  #define EIGEN_GCC_AND_ARCH_DOESNT_WANT_STACK_ALIGNMENT 0
+  #endif
+
+  // static alignment is completely disabled with GCC 3, Sun Studio, and QCC/QNX
+  #if !EIGEN_GCC_AND_ARCH_DOESNT_WANT_STACK_ALIGNMENT \
+  && !EIGEN_GCC3_OR_OLDER \
+  && !EIGEN_COMP_SUNCC \
+  && !EIGEN_OS_QNX
+    #define EIGEN_ARCH_WANTS_STACK_ALIGNMENT 1
+  #else
+    #define EIGEN_ARCH_WANTS_STACK_ALIGNMENT 0
+  #endif
+  
+  #if EIGEN_ARCH_WANTS_STACK_ALIGNMENT
+    #define EIGEN_MAX_STATIC_ALIGN_BYTES EIGEN_IDEAL_MAX_ALIGN_BYTES
+  #else
+    #define EIGEN_MAX_STATIC_ALIGN_BYTES 0
+  #endif
+  
+#endif
+
+// If EIGEN_MAX_ALIGN_BYTES is defined, then it is considered as an upper bound for EIGEN_MAX_ALIGN_BYTES
+#if defined(EIGEN_MAX_ALIGN_BYTES) && EIGEN_MAX_ALIGN_BYTES<EIGEN_MAX_STATIC_ALIGN_BYTES
+#undef EIGEN_MAX_STATIC_ALIGN_BYTES
+#define EIGEN_MAX_STATIC_ALIGN_BYTES EIGEN_MAX_ALIGN_BYTES
+#endif
+
+#if EIGEN_MAX_STATIC_ALIGN_BYTES==0 && !defined(EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
+  #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
+#endif
+
+// At this stage, EIGEN_MAX_STATIC_ALIGN_BYTES>0 is the true test whether we want to align arrays on the stack or not.
+// It takes into account both the user choice to explicitly enable/disable alignment (by settting EIGEN_MAX_STATIC_ALIGN_BYTES)
+// and the architecture config (EIGEN_ARCH_WANTS_STACK_ALIGNMENT).
+// Henceforth, only EIGEN_MAX_STATIC_ALIGN_BYTES should be used.
+
+
+// Shortcuts to EIGEN_ALIGN_TO_BOUNDARY
+#define EIGEN_ALIGN8  EIGEN_ALIGN_TO_BOUNDARY(8)
 #define EIGEN_ALIGN16 EIGEN_ALIGN_TO_BOUNDARY(16)
 #define EIGEN_ALIGN32 EIGEN_ALIGN_TO_BOUNDARY(32)
-#define EIGEN_ALIGN_DEFAULT EIGEN_ALIGN_TO_BOUNDARY(EIGEN_ALIGN_BYTES)
-
-#if EIGEN_ALIGN_STATICALLY
-#define EIGEN_USER_ALIGN_TO_BOUNDARY(n) EIGEN_ALIGN_TO_BOUNDARY(n)
-#define EIGEN_USER_ALIGN16 EIGEN_ALIGN16
-#define EIGEN_USER_ALIGN32 EIGEN_ALIGN32
-#define EIGEN_USER_ALIGN_DEFAULT EIGEN_ALIGN_DEFAULT
+#define EIGEN_ALIGN64 EIGEN_ALIGN_TO_BOUNDARY(64)
+#if EIGEN_MAX_STATIC_ALIGN_BYTES>0
+#define EIGEN_ALIGN_MAX EIGEN_ALIGN_TO_BOUNDARY(EIGEN_MAX_STATIC_ALIGN_BYTES)
 #else
-#define EIGEN_USER_ALIGN_TO_BOUNDARY(n)
-#define EIGEN_USER_ALIGN16
-#define EIGEN_USER_ALIGN32
-#define EIGEN_USER_ALIGN_DEFAULT
+#define EIGEN_ALIGN_MAX
 #endif
+
+
+// Dynamic alignment control
+
+#if defined(EIGEN_DONT_ALIGN) && defined(EIGEN_MAX_ALIGN_BYTES) && EIGEN_MAX_ALIGN_BYTES>0
+#error EIGEN_MAX_ALIGN_BYTES and EIGEN_DONT_ALIGN are both defined with EIGEN_MAX_ALIGN_BYTES!=0. Use EIGEN_MAX_ALIGN_BYTES=0 as a synonym of EIGEN_DONT_ALIGN.
+#endif
+
+#ifdef EIGEN_DONT_ALIGN
+  #ifdef EIGEN_MAX_ALIGN_BYTES
+    #undef EIGEN_MAX_ALIGN_BYTES
+  #endif
+  #define EIGEN_MAX_ALIGN_BYTES 0
+#elif !defined(EIGEN_MAX_ALIGN_BYTES)
+  #define EIGEN_MAX_ALIGN_BYTES EIGEN_IDEAL_MAX_ALIGN_BYTES
+#endif
+
+#if EIGEN_IDEAL_MAX_ALIGN_BYTES > EIGEN_MAX_ALIGN_BYTES
+#define EIGEN_DEFAULT_ALIGN_BYTES EIGEN_IDEAL_MAX_ALIGN_BYTES
+#else
+#define EIGEN_DEFAULT_ALIGN_BYTES EIGEN_MAX_ALIGN_BYTES
+#endif
+
+//----------------------------------------------------------------------
+
 
 #ifdef EIGEN_DONT_USE_RESTRICT_KEYWORD
   #define EIGEN_RESTRICT
@@ -592,7 +713,7 @@ namespace Eigen {
 // just an empty macro !
 #define EIGEN_EMPTY
 
-#if EIGEN_COMP_MSVC_STRICT
+#if EIGEN_COMP_MSVC_STRICT && EIGEN_COMP_MSVC < 1900 // for older MSVC versions using the base operator is sufficient (cf Bug 1000)
   #define EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR(Derived) \
     using Base::operator =;
 #elif EIGEN_COMP_CLANG // workaround clang bug (see http://forum.kde.org/viewtopic.php?f=74&t=102653)
@@ -611,6 +732,11 @@ namespace Eigen {
     }
 #endif
 
+
+/** \internal
+ * \brief Macro to manually inherit assignment operators.
+ * This is necessary, because the implicitly defined assignment operator gets deleted when a custom operator= is defined.
+ */
 #define EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Derived) EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR(Derived)
 
 /**
@@ -627,9 +753,9 @@ namespace Eigen {
   typedef typename Eigen::internal::traits<Derived>::Scalar Scalar; /*!< \brief Numeric type, e.g. float, double, int or std::complex<float>. */ \
   typedef typename Eigen::NumTraits<Scalar>::Real RealScalar; /*!< \brief The underlying numeric type for composed scalar types. \details In cases where Scalar is e.g. std::complex<T>, T were corresponding to RealScalar. */ \
   typedef typename Base::CoeffReturnType CoeffReturnType; /*!< \brief The return type for coefficient access. \details Depending on whether the object allows direct coefficient access (e.g. for a MatrixXd), this type is either 'const Scalar&' or simply 'Scalar' for objects that do not allow direct coefficient access. */ \
-  typedef typename Eigen::internal::nested<Derived>::type Nested; \
+  typedef typename Eigen::internal::ref_selector<Derived>::type Nested; \
   typedef typename Eigen::internal::traits<Derived>::StorageKind StorageKind; \
-  typedef typename Eigen::internal::traits<Derived>::Index Index; \
+  typedef typename Eigen::internal::traits<Derived>::StorageIndex StorageIndex; \
   enum { RowsAtCompileTime = Eigen::internal::traits<Derived>::RowsAtCompileTime, \
         ColsAtCompileTime = Eigen::internal::traits<Derived>::ColsAtCompileTime, \
         Flags = Eigen::internal::traits<Derived>::Flags, \
@@ -639,23 +765,12 @@ namespace Eigen {
 
 
 #define EIGEN_DENSE_PUBLIC_INTERFACE(Derived) \
-  typedef typename Eigen::internal::traits<Derived>::Scalar Scalar; /*!< \brief Numeric type, e.g. float, double, int or std::complex<float>. */ \
-  typedef typename Eigen::NumTraits<Scalar>::Real RealScalar; /*!< \brief The underlying numeric type for composed scalar types. \details In cases where Scalar is e.g. std::complex<T>, T were corresponding to RealScalar. */ \
+  EIGEN_GENERIC_PUBLIC_INTERFACE(Derived) \
   typedef typename Base::PacketScalar PacketScalar; \
-  typedef typename Base::CoeffReturnType CoeffReturnType; /*!< \brief The return type for coefficient access. \details Depending on whether the object allows direct coefficient access (e.g. for a MatrixXd), this type is either 'const Scalar&' or simply 'Scalar' for objects that do not allow direct coefficient access. */ \
-  typedef typename Eigen::internal::nested<Derived>::type Nested; \
-  typedef typename Eigen::internal::traits<Derived>::StorageKind StorageKind; \
-  typedef typename Eigen::internal::traits<Derived>::Index Index; \
-  enum { RowsAtCompileTime = Eigen::internal::traits<Derived>::RowsAtCompileTime, \
-        ColsAtCompileTime = Eigen::internal::traits<Derived>::ColsAtCompileTime, \
-        MaxRowsAtCompileTime = Eigen::internal::traits<Derived>::MaxRowsAtCompileTime, \
-        MaxColsAtCompileTime = Eigen::internal::traits<Derived>::MaxColsAtCompileTime, \
-        Flags = Eigen::internal::traits<Derived>::Flags, \
-        SizeAtCompileTime = Base::SizeAtCompileTime, \
-        MaxSizeAtCompileTime = Base::MaxSizeAtCompileTime, \
-        IsVectorAtCompileTime = Base::IsVectorAtCompileTime }; \
+  enum { MaxRowsAtCompileTime = Eigen::internal::traits<Derived>::MaxRowsAtCompileTime, \
+        MaxColsAtCompileTime = Eigen::internal::traits<Derived>::MaxColsAtCompileTime}; \
   using Base::derived; \
-  using Base::const_cast_derived;  
+  using Base::const_cast_derived;
 
 #define EIGEN_PLAIN_ENUM_MIN(a,b) (((int)a <= (int)b) ? (int)a : (int)b)
 #define EIGEN_PLAIN_ENUM_MAX(a,b) (((int)a >= (int)b) ? (int)a : (int)b)
@@ -711,8 +826,13 @@ namespace Eigen {
 #  define EIGEN_TRY try
 #  define EIGEN_CATCH(X) catch (X)
 #else
-#  define EIGEN_THROW_X(X) std::abort()
-#  define EIGEN_THROW std::abort()
+#  ifdef __CUDA_ARCH__
+#    define EIGEN_THROW_X(X) asm("trap;") return {}
+#    define EIGEN_THROW asm("trap;"); return {}
+#  else
+#    define EIGEN_THROW_X(X) std::abort()
+#    define EIGEN_THROW std::abort()
+#  endif
 #  define EIGEN_TRY if (true)
 #  define EIGEN_CATCH(X) else
 #endif

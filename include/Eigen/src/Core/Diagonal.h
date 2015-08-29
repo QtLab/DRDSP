@@ -37,7 +37,7 @@ template<typename MatrixType, int DiagIndex>
 struct traits<Diagonal<MatrixType,DiagIndex> >
  : traits<MatrixType>
 {
-  typedef typename nested<MatrixType>::type MatrixTypeNested;
+  typedef typename ref_selector<MatrixType>::type MatrixTypeNested;
   typedef typename remove_reference<MatrixTypeNested>::type _MatrixTypeNested;
   typedef typename MatrixType::StorageKind StorageKind;
   enum {
@@ -77,8 +77,8 @@ template<typename MatrixType, int _DiagIndex> class Diagonal
     EIGEN_DEVICE_FUNC
     inline Index rows() const
     {
-      return m_index.value()<0 ? numext::mini(Index(m_matrix.cols()),Index(m_matrix.rows()+m_index.value()))
-                               : numext::mini(Index(m_matrix.rows()),Index(m_matrix.cols()-m_index.value()));
+      return m_index.value()<0 ? numext::mini<Index>(m_matrix.cols(),m_matrix.rows()+m_index.value())
+                               : numext::mini<Index>(m_matrix.rows(),m_matrix.cols()-m_index.value());
     }
 
     EIGEN_DEVICE_FUNC
@@ -170,7 +170,7 @@ template<typename MatrixType, int _DiagIndex> class Diagonal
     EIGEN_STRONG_INLINE Index rowOffset() const { return m_index.value()>0 ? 0 : -m_index.value(); }
     EIGEN_DEVICE_FUNC
     EIGEN_STRONG_INLINE Index colOffset() const { return m_index.value()>0 ? m_index.value() : 0; }
-    // trigger a compile time error is someone try to call packet
+    // trigger a compile-time error if someone try to call packet
     template<int LoadMode> typename MatrixType::PacketReturnType packet(Index) const;
     template<int LoadMode> typename MatrixType::PacketReturnType packet(Index,Index) const;
 };

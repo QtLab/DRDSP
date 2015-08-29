@@ -11,8 +11,17 @@
 #ifndef EIGEN_SPARSE_TRIANGULARVIEW_H
 #define EIGEN_SPARSE_TRIANGULARVIEW_H
 
-namespace Eigen { 
+namespace Eigen {
 
+/** \ingroup SparseCore_Module
+  *
+  * \brief Base class for a triangular part in a \b sparse matrix
+  *
+  * This class is an abstract base class of class TriangularView, and objects of type TriangularViewImpl cannot be instantiated.
+  * It extends class TriangularView with additional methods which are available for sparse expressions only.
+  *
+  * \sa class TriangularView, SparseMatrixBase::triangularView()
+  */
 template<typename MatrixType, unsigned int Mode> class TriangularViewImpl<MatrixType,Mode,Sparse>
   : public SparseMatrixBase<TriangularView<MatrixType,Mode> >
 {
@@ -50,13 +59,6 @@ protected:
 
     template<typename OtherDerived> void solveInPlace(MatrixBase<OtherDerived>& other) const;
     template<typename OtherDerived> void solveInPlace(SparseMatrixBase<OtherDerived>& other) const;
-
-    inline Index nonZeros() const {
-      // FIXME HACK number of nonZeros is required for product logic
-      // this returns only an upper bound (but should be OK for most purposes)
-      return derived().nestedExpression().nonZeros();
-    }
-
   
 };
 
@@ -64,7 +66,6 @@ template<typename MatrixType, unsigned int Mode>
 class TriangularViewImpl<MatrixType,Mode,Sparse>::InnerIterator : public MatrixTypeNestedCleaned::InnerIterator
 {
     typedef typename MatrixTypeNestedCleaned::InnerIterator Base;
-    typedef typename TriangularViewType::Index Index;
   public:
 
     EIGEN_STRONG_INLINE InnerIterator(const TriangularViewImpl& view, Index outer)
@@ -134,7 +135,6 @@ template<typename MatrixType, unsigned int Mode>
 class TriangularViewImpl<MatrixType,Mode,Sparse>::ReverseInnerIterator : public MatrixTypeNestedCleaned::ReverseInnerIterator
 {
     typedef typename MatrixTypeNestedCleaned::ReverseInnerIterator Base;
-    typedef typename TriangularViewImpl::Index Index;
   public:
 
     EIGEN_STRONG_INLINE ReverseInnerIterator(const TriangularViewType& view, Index outer)
@@ -175,7 +175,6 @@ struct unary_evaluator<TriangularView<ArgType,Mode>, IteratorBased>
 protected:
   
   typedef typename XprType::Scalar Scalar;
-  typedef typename XprType::Index Index;
   typedef typename evaluator<ArgType>::InnerIterator EvalIterator;
   
   enum { SkipFirst = ((Mode&Lower) && !(ArgType::Flags&RowMajorBit))
@@ -193,6 +192,10 @@ public:
   };
     
   explicit unary_evaluator(const XprType &xpr) : m_argImpl(xpr.nestedExpression()) {}
+  
+  inline Index nonZerosEstimate() const {
+    return m_argImpl.nonZerosEstimate();
+  }
   
   class InnerIterator : public EvalIterator
   {

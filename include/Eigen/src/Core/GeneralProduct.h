@@ -11,7 +11,7 @@
 #ifndef EIGEN_GENERAL_PRODUCT_H
 #define EIGEN_GENERAL_PRODUCT_H
 
-namespace Eigen { 
+namespace Eigen {
 
 enum {
   Large = 2,
@@ -183,7 +183,7 @@ struct gemv_static_vector_if<Scalar,Size,Dynamic,true>
 template<typename Scalar,int Size,int MaxSize>
 struct gemv_static_vector_if<Scalar,Size,MaxSize,true>
 {
-  #if EIGEN_ALIGN_STATICALLY
+  #if EIGEN_MAX_STATIC_ALIGN_BYTES!=0
   internal::plain_array<Scalar,EIGEN_SIZE_MIN_PREFER_FIXED(Size,MaxSize),0> m_data;
   EIGEN_STRONG_INLINE Scalar* data() { return m_data.array; }
   #else
@@ -196,7 +196,7 @@ struct gemv_static_vector_if<Scalar,Size,MaxSize,true>
   internal::plain_array<Scalar,EIGEN_SIZE_MIN_PREFER_FIXED(Size,MaxSize)+(ForceAlignment?PacketSize:0),0> m_data;
   EIGEN_STRONG_INLINE Scalar* data() {
     return ForceAlignment
-            ? reinterpret_cast<Scalar*>((reinterpret_cast<size_t>(m_data.array) & ~(size_t(EIGEN_ALIGN_BYTES-1))) + EIGEN_ALIGN_BYTES)
+            ? reinterpret_cast<Scalar*>((reinterpret_cast<size_t>(m_data.array) & ~(size_t(EIGEN_MAX_ALIGN_BYTES-1))) + EIGEN_MAX_ALIGN_BYTES)
             : m_data.array;
   }
   #endif
@@ -221,7 +221,6 @@ template<> struct gemv_dense_sense_selector<OnTheRight,ColMajor,true>
   template<typename Lhs, typename Rhs, typename Dest>
   static inline void run(const Lhs &lhs, const Rhs &rhs, Dest& dest, const typename Dest::Scalar& alpha)
   {
-    typedef typename Dest::Index Index;
     typedef typename Lhs::Scalar   LhsScalar;
     typedef typename Rhs::Scalar   RhsScalar;
     typedef typename Dest::Scalar  ResScalar;
@@ -250,14 +249,14 @@ template<> struct gemv_dense_sense_selector<OnTheRight,ColMajor,true>
 
     gemv_static_vector_if<ResScalar,Dest::SizeAtCompileTime,Dest::MaxSizeAtCompileTime,MightCannotUseDest> static_dest;
 
-    bool alphaIsCompatible = (!ComplexByReal) || (numext::imag(actualAlpha)==RealScalar(0));
-    bool evalToDest = EvalToDestAtCompileTime && alphaIsCompatible;
-    
+    const bool alphaIsCompatible = (!ComplexByReal) || (numext::imag(actualAlpha)==RealScalar(0));
+    const bool evalToDest = EvalToDestAtCompileTime && alphaIsCompatible;
+
     RhsScalar compatibleAlpha = get_factor<ResScalar,RhsScalar>::run(actualAlpha);
 
     ei_declare_aligned_stack_constructed_variable(ResScalar,actualDestPtr,dest.size(),
                                                   evalToDest ? dest.data() : static_dest.data());
-    
+
     if(!evalToDest)
     {
       #ifdef EIGEN_DENSE_STORAGE_CTOR_PLUGIN
@@ -273,11 +272,13 @@ template<> struct gemv_dense_sense_selector<OnTheRight,ColMajor,true>
         MappedDest(actualDestPtr, dest.size()) = dest;
     }
 
+    typedef const_blas_data_mapper<LhsScalar,Index,ColMajor> LhsMapper;
+    typedef const_blas_data_mapper<RhsScalar,Index,RowMajor> RhsMapper;
     general_matrix_vector_product
-      <Index,LhsScalar,ColMajor,LhsBlasTraits::NeedToConjugate,RhsScalar,RhsBlasTraits::NeedToConjugate>::run(
+        <Index,LhsScalar,LhsMapper,ColMajor,LhsBlasTraits::NeedToConjugate,RhsScalar,RhsMapper,RhsBlasTraits::NeedToConjugate>::run(
         actualLhs.rows(), actualLhs.cols(),
-        actualLhs.data(), actualLhs.outerStride(),
-        actualRhs.data(), actualRhs.innerStride(),
+        LhsMapper(actualLhs.data(), actualLhs.outerStride()),
+        RhsMapper(actualRhs.data(), actualRhs.innerStride()),
         actualDestPtr, 1,
         compatibleAlpha);
 
@@ -296,7 +297,6 @@ template<> struct gemv_dense_sense_selector<OnTheRight,RowMajor,true>
   template<typename Lhs, typename Rhs, typename Dest>
   static void run(const Lhs &lhs, const Rhs &rhs, Dest& dest, const typename Dest::Scalar& alpha)
   {
-    typedef typename Dest::Index Index;
     typedef typename Lhs::Scalar   LhsScalar;
     typedef typename Rhs::Scalar   RhsScalar;
     typedef typename Dest::Scalar  ResScalar;
@@ -333,11 +333,13 @@ template<> struct gemv_dense_sense_selector<OnTheRight,RowMajor,true>
       Map<typename ActualRhsTypeCleaned::PlainObject>(actualRhsPtr, actualRhs.size()) = actualRhs;
     }
 
+    typedef const_blas_data_mapper<LhsScalar,Index,RowMajor> LhsMapper;
+    typedef const_blas_data_mapper<RhsScalar,Index,ColMajor> RhsMapper;
     general_matrix_vector_product
-      <Index,LhsScalar,RowMajor,LhsBlasTraits::NeedToConjugate,RhsScalar,RhsBlasTraits::NeedToConjugate>::run(
+        <Index,LhsScalar,LhsMapper,RowMajor,LhsBlasTraits::NeedToConjugate,RhsScalar,RhsMapper,RhsBlasTraits::NeedToConjugate>::run(
         actualLhs.rows(), actualLhs.cols(),
-        actualLhs.data(), actualLhs.outerStride(),
-        actualRhsPtr, 1,
+        LhsMapper(actualLhs.data(), actualLhs.outerStride()),
+        RhsMapper(actualRhsPtr, 1),
         dest.data(), dest.innerStride(),
         actualAlpha);
   }
@@ -348,7 +350,6 @@ template<> struct gemv_dense_sense_selector<OnTheRight,ColMajor,false>
   template<typename Lhs, typename Rhs, typename Dest>
   static void run(const Lhs &lhs, const Rhs &rhs, Dest& dest, const typename Dest::Scalar& alpha)
   {
-    typedef typename Dest::Index Index;
     // TODO makes sure dest is sequentially stored in memory, otherwise use a temp
     const Index size = rhs.rows();
     for(Index k=0; k<size; ++k)
@@ -361,7 +362,6 @@ template<> struct gemv_dense_sense_selector<OnTheRight,RowMajor,false>
   template<typename Lhs, typename Rhs, typename Dest>
   static void run(const Lhs &lhs, const Rhs &rhs, Dest& dest, const typename Dest::Scalar& alpha)
   {
-    typedef typename Dest::Index Index;
     // TODO makes sure rhs is sequentially stored in memory, otherwise use a temp
     const Index rows = dest.rows();
     for(Index i=0; i<rows; ++i)
@@ -410,7 +410,7 @@ MatrixBase<Derived>::operator*(const MatrixBase<OtherDerived> &other) const
 #ifdef EIGEN_DEBUG_PRODUCT
   internal::product_type<Derived,OtherDerived>::debug();
 #endif
-  
+
   return Product<Derived, OtherDerived>(derived(), other.derived());
 }
 

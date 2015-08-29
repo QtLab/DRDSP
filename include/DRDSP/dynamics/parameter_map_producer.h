@@ -35,7 +35,7 @@ namespace DRDSP {
 
 			Eigen::FullPivLU<MatrixXd> lu(A);
 			if( !lu.isInjective() ) {
-				//cout << "Matrix not injective, rank = " << lu.rank() << " != (" << lu.matrixLU().rows() << "," << lu.matrixLU().cols() << ")" << endl;
+				//cout << "Matrix not injective, rank = " << lu.rank() << " != (" << lu.matrixLU().rows() << ',' << lu.matrixLU().cols() << ")" << endl;
 			}
 
 			return VecToAffine( lu.solve(B), family.paramDim );

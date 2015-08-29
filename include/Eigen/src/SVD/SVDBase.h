@@ -52,7 +52,8 @@ public:
   typedef typename internal::traits<Derived>::MatrixType MatrixType;
   typedef typename MatrixType::Scalar Scalar;
   typedef typename NumTraits<typename MatrixType::Scalar>::Real RealScalar;
-  typedef typename MatrixType::Index Index;
+  typedef typename MatrixType::StorageIndex StorageIndex;
+  typedef Eigen::Index Index; ///< \deprecated since Eigen 3.3
   enum {
     RowsAtCompileTime = MatrixType::RowsAtCompileTime,
     ColsAtCompileTime = MatrixType::ColsAtCompileTime,
@@ -129,9 +130,10 @@ public:
   inline Index rank() const
   {
     using std::abs;
+    using std::max;
     eigen_assert(m_isInitialized && "JacobiSVD is not initialized.");
     if(m_singularValues.size()==0) return 0;
-    RealScalar premultiplied_threshold = m_singularValues.coeff(0) * threshold();
+    RealScalar premultiplied_threshold = (max)(m_singularValues.coeff(0) * threshold(), (std::numeric_limits<RealScalar>::min)());
     Index i = m_nonzeroSingularValues-1;
     while(i>=0 && m_singularValues.coeff(i) < premultiplied_threshold) --i;
     return i+1;
@@ -216,6 +218,12 @@ public:
   #endif
 
 protected:
+  
+  static void check_template_parameters()
+  {
+    EIGEN_STATIC_ASSERT_NON_INTEGER(Scalar);
+  }
+  
   // return true if already allocated
   bool allocate(Index rows, Index cols, unsigned int computationOptions) ;
 
@@ -239,7 +247,9 @@ protected:
       m_usePrescribedThreshold(false),
       m_computationOptions(0),
       m_rows(-1), m_cols(-1), m_diagSize(0)
-  {}
+  {
+    check_template_parameters();
+  }
 
 
 };

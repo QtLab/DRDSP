@@ -6,11 +6,12 @@
 #include <DRDSP/dynamics/monodromy.h>
 #include <DRDSP/misc.h>
 #include "rossler.h"
+#include <iterator>
 
 using namespace std;
 using namespace DRDSP;
 
-typedef RBF<PolyharmonicSpline<3>> RBFType;
+using RBFType = RBF<PolyharmonicSpline<3>>;
 
 struct Options {
 	uint32_t targetDimension = 3,
@@ -82,9 +83,9 @@ void ReducedFloquet( const Options& options ) {
 	for(size_t i=0;i<parameters.size();++i) {
 		double dt = periods[i] / (dataGenerator.print-1);
 		auto floquet = ComputeFloquetMultipliers( reducedFamily(parameters[i]), data.dataSets[i].points, dt );
-		out << parameters[i] << ",";
+		out << parameters[i] << ',';
 		for(int64_t j=0;j<floquet.size();++j)
-			out << floquet[j].real() << "," << floquet[j].imag() << ",";
+			out << floquet[j].real() << ',' << floquet[j].imag() << ',';
 		out << endl;
 	}
 }
@@ -124,9 +125,9 @@ void OriginalFloquet( const Options& options ) {
 	for(size_t i=0;i<parameters.size();++i) {
 		double dt = periods[i] / (dataGenerator.print-1);
 		auto floquet = ComputeFloquetMultipliers( rossler(parameters[i]), data.dataSets[i].points, dt );
-		out << parameters[i] << ",";
+		out << parameters[i] << ',';
 		for(int64_t j=0;j<floquet.size();++j)
-			out << floquet[j].real() << "," << floquet[j].imag() << ",";
+			out << floquet[j].real() << ',' << floquet[j].imag() << ',';
 		out << endl;
 	}
 }

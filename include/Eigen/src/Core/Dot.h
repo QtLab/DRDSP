@@ -99,7 +99,7 @@ EIGEN_STRONG_INLINE typename NumTraits<typename internal::traits<Derived>::Scala
 template<typename Derived>
 inline typename NumTraits<typename internal::traits<Derived>::Scalar>::Real MatrixBase<Derived>::norm() const
 {
-  using std::sqrt;
+  EIGEN_USING_STD_MATH(sqrt)
   return sqrt(squaredNorm());
 }
 
@@ -141,7 +141,7 @@ struct lpNorm_selector
   EIGEN_DEVICE_FUNC
   static inline RealScalar run(const MatrixBase<Derived>& m)
   {
-    using std::pow;
+    EIGEN_USING_STD_MATH(pow)
     return pow(m.cwiseAbs().array().pow(p).sum(), RealScalar(1)/p);
   }
 };
@@ -224,13 +224,13 @@ bool MatrixBase<Derived>::isOrthogonal
 template<typename Derived>
 bool MatrixBase<Derived>::isUnitary(const RealScalar& prec) const
 {
-  typename Derived::Nested nested(derived());
+  typename internal::nested_eval<Derived,1>::type self(derived());
   for(Index i = 0; i < cols(); ++i)
   {
-    if(!internal::isApprox(nested.col(i).squaredNorm(), static_cast<RealScalar>(1), prec))
+    if(!internal::isApprox(self.col(i).squaredNorm(), static_cast<RealScalar>(1), prec))
       return false;
     for(Index j = 0; j < i; ++j)
-      if(!internal::isMuchSmallerThan(nested.col(i).dot(nested.col(j)), static_cast<Scalar>(1), prec))
+      if(!internal::isMuchSmallerThan(self.col(i).dot(self.col(j)), static_cast<Scalar>(1), prec))
         return false;
   }
   return true;

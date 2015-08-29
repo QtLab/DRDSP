@@ -26,7 +26,24 @@ namespace Eigen {
 
 typedef EIGEN_DEFAULT_DENSE_INDEX_TYPE DenseIndex;
 
+/**
+ * \brief The Index type as used for the API.
+ * \details To change this, \c \#define the preprocessor symbol \c EIGEN_DEFAULT_DENSE_INDEX_TYPE.
+ * \sa \ref TopicPreprocessorDirectives, StorageIndex.
+ */
+
+typedef EIGEN_DEFAULT_DENSE_INDEX_TYPE Index;
+
 namespace internal {
+
+template<typename IndexDest, typename IndexSrc>
+EIGEN_DEVICE_FUNC
+inline IndexDest convert_index(const IndexSrc& idx) {
+  // for sizeof(IndexDest)>=sizeof(IndexSrc) compilers should be able to optimize this away:
+  eigen_internal_assert(idx <= NumTraits<IndexDest>::highest() && "Index value to big for target type");
+  return IndexDest(idx);
+}
+
 
 //classes inheriting no_assignment_operator don't generate a default operator=.
 class no_assignment_operator
@@ -102,7 +119,72 @@ template<typename T> struct unpacket_traits
 {
   typedef T type;
   typedef T half;
-  enum {size=1};
+  enum
+  {
+    size = 1,
+    alignment = 1
+  };
+};
+
+template<int Size, typename PacketType,
+         bool Stop = (Size%unpacket_traits<PacketType>::size)==0 || is_same<PacketType,typename unpacket_traits<PacketType>::half>::value>
+struct find_best_packet_helper;
+
+template< int Size, typename PacketType>
+struct find_best_packet_helper<Size,PacketType,true>
+{
+  typedef PacketType type;
+};
+
+template<int Size, typename PacketType>
+struct find_best_packet_helper<Size,PacketType,false>
+{
+  typedef typename find_best_packet_helper<Size,typename unpacket_traits<PacketType>::half>::type type;
+};
+
+template<typename T, int Size>
+struct find_best_packet
+{
+  typedef typename find_best_packet_helper<Size,typename packet_traits<T>::type>::type type;
+};
+
+#if EIGEN_MAX_STATIC_ALIGN_BYTES>0
+template<int ArrayBytes, int AlignmentBytes,
+         bool Match     =  bool((ArrayBytes%AlignmentBytes)==0),
+         bool TryHalf   =  bool(AlignmentBytes>EIGEN_MIN_ALIGN_BYTES) >
+struct compute_default_alignment_helper
+{
+  enum { value = 0 };
+};
+
+template<int ArrayBytes, int AlignmentBytes, bool TryHalf>
+struct compute_default_alignment_helper<ArrayBytes, AlignmentBytes, true, TryHalf> // Match
+{
+  enum { value = AlignmentBytes };
+};
+
+template<int ArrayBytes, int AlignmentBytes>
+struct compute_default_alignment_helper<ArrayBytes, AlignmentBytes, false, true> // Try-half
+{
+  // current packet too large, try with an half-packet
+  enum { value = compute_default_alignment_helper<ArrayBytes, AlignmentBytes/2>::value };
+};
+#else
+// If static alignment is disabled, no need to bother.
+// This also avoids a division by zero in "bool Match =  bool((ArrayBytes%AlignmentBytes)==0)"
+template<int ArrayBytes, int AlignmentBytes>
+struct compute_default_alignment_helper
+{
+  enum { value = 0 };
+};
+#endif
+
+template<typename T, int Size> struct compute_default_alignment {
+  enum { value = compute_default_alignment_helper<Size*sizeof(T),EIGEN_MAX_STATIC_ALIGN_BYTES>::value };
+};
+
+template<typename T> struct compute_default_alignment<T,Dynamic> {
+  enum { value = EIGEN_MAX_ALIGN_BYTES };
 };
 
 template<typename _Scalar, int _Rows, int _Cols,
@@ -134,40 +216,6 @@ class compute_matrix_flags
     // and then propagate this information to the evaluator's flags.
     // However, I (Gael) think that DirectAccessBit should only matter at the evaluation stage.
     enum { ret = DirectAccessBit | LvalueBit | NestByRefBit | row_major_bit };
-};
-
-template<typename Scalar, int Rows, int Cols, int Options, int MaxRows, int MaxCols>
-class compute_matrix_evaluator_flags
-{
-    enum {
-      row_major_bit = Options&RowMajor ? RowMajorBit : 0,
-      is_dynamic_size_storage = MaxRows==Dynamic || MaxCols==Dynamic,
-
-      aligned_bit =
-      (
-            ((Options&DontAlign)==0)
-        && (
-#if EIGEN_ALIGN_STATICALLY
-             ((!is_dynamic_size_storage) && (((MaxCols*MaxRows*int(sizeof(Scalar))) % EIGEN_ALIGN_BYTES) == 0))
-#else
-             0
-#endif
-
-          ||
-
-#if EIGEN_ALIGN
-             is_dynamic_size_storage
-#else
-             0
-#endif
-
-          )
-      ) ? AlignedBit : 0,
-      packet_access_bit = packet_traits<Scalar>::Vectorizable && aligned_bit ? PacketAccessBit : 0
-    };
-
-  public:
-    enum { ret = LinearAccessBit | DirectAccessBit | packet_access_bit | row_major_bit | aligned_bit };
 };
 
 template<int _Rows, int _Cols> struct size_at_compile_time
@@ -292,9 +340,6 @@ template<typename T> struct plain_matrix_type_row_major
           > type;
 };
 
-// we should be able to get rid of this one too
-template<typename T> struct must_nest_by_value { enum { ret = false }; };
-
 /** \internal The reference selector for template expressions. The idea is that we don't
   * need to use references for expressions since they are light weight proxy
   * objects which should generate no copying overhead. */
@@ -306,6 +351,12 @@ struct ref_selector
     T const&,
     const T
   >::type type;
+  
+  typedef typename conditional<
+    bool(traits<T>::Flags & NestByRefBit),
+    T &,
+    T
+  >::type non_const_type;
 };
 
 /** \internal Adds the const qualifier on the value-type of T2 if and only if T1 is a const type */
@@ -319,13 +370,6 @@ struct transfer_constness
   >::type type;
 };
 
-
-// When using evaluators, we never evaluate when assembling the expression!!
-// TODO: get rid of this nested class since it's just an alias for ref_selector.
-template<typename T, int n=1, typename PlainObject = void> struct nested
-{
-  typedef typename ref_selector<T>::type type;
-};
 
 // However, we still need a mechanism to detect whether an expression which is evaluated multiple time
 // has to be evaluated into a temporary.
@@ -411,7 +455,9 @@ struct special_scalar_op_base : public DenseCoeffsBase<Derived>
 {
   // dummy operator* so that the
   // "using special_scalar_op_base::operator*" compiles
-  void operator*() const;
+  struct dummy {};
+  void operator*(dummy) const;
+  void operator/(dummy) const;
 };
 
 template<typename Derived,typename Scalar,typename OtherScalar>
@@ -435,6 +481,16 @@ struct special_scalar_op_base<Derived,Scalar,OtherScalar,true>  : public DenseCo
 #endif
     return static_cast<const special_scalar_op_base&>(matrix).operator*(scalar);
   }
+  
+  const CwiseUnaryOp<scalar_quotient2_op<Scalar,OtherScalar>, Derived>
+  operator/(const OtherScalar& scalar) const
+  {
+#ifdef EIGEN_SPECIAL_SCALAR_MULTIPLE_PLUGIN
+    EIGEN_SPECIAL_SCALAR_MULTIPLE_PLUGIN
+#endif
+    return CwiseUnaryOp<scalar_quotient2_op<Scalar,OtherScalar>, Derived>
+      (*static_cast<const Derived*>(this), scalar_quotient2_op<Scalar,OtherScalar>(scalar));
+  }
 };
 
 template<typename XprType, typename CastType> struct cast_return_type
@@ -444,6 +500,21 @@ template<typename XprType, typename CastType> struct cast_return_type
   typedef typename _CastType::Scalar NewScalarType;
   typedef typename conditional<is_same<CurrentScalarType,NewScalarType>::value,
                               const XprType&,CastType>::type type;
+};
+
+template <typename A, typename B> struct promote_storage_type;
+
+template <typename A> struct promote_storage_type<A,A>
+{
+  typedef A ret;
+};
+template <typename A> struct promote_storage_type<A, const A>
+{
+  typedef A ret;
+};
+template <typename A> struct promote_storage_type<const A, A>
+{
+  typedef A ret;
 };
 
 /** \internal Specify the "storage kind" of applying a coefficient-wise
@@ -570,6 +641,18 @@ template<typename T, int S> struct is_diagonal<DiagonalMatrix<T,S> >
 
 template<typename S1, typename S2> struct glue_shapes;
 template<> struct glue_shapes<DenseShape,TriangularShape> { typedef TriangularShape type;  };
+
+template<typename T1, typename T2>
+bool is_same_dense(const T1 &mat1, const T2 &mat2, typename enable_if<has_direct_access<T1>::ret&&has_direct_access<T2>::ret, T1>::type * = 0)
+{
+  return (mat1.data()==mat2.data()) && (mat1.innerStride()==mat2.innerStride()) && (mat1.outerStride()==mat2.outerStride());
+}
+
+template<typename T1, typename T2>
+bool is_same_dense(const T1 &, const T2 &, typename enable_if<!(has_direct_access<T1>::ret&&has_direct_access<T2>::ret), T1>::type * = 0)
+{
+  return false;
+}
 
 } // end namespace internal
 

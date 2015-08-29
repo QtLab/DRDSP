@@ -59,7 +59,8 @@ template<typename _MatrixType, int _UpLo> class LDLT
     };
     typedef typename MatrixType::Scalar Scalar;
     typedef typename NumTraits<typename MatrixType::Scalar>::Real RealScalar;
-    typedef typename MatrixType::Index Index;
+    typedef Eigen::Index Index; ///< \deprecated since Eigen 3.3
+    typedef typename MatrixType::StorageIndex StorageIndex;
     typedef Matrix<Scalar, RowsAtCompileTime, 1, Options, MaxRowsAtCompileTime, 1> TmpMatrixType;
 
     typedef Transpositions<RowsAtCompileTime, MaxRowsAtCompileTime> TranspositionType;
@@ -225,6 +226,11 @@ template<typename _MatrixType, int _UpLo> class LDLT
     #endif
 
   protected:
+    
+    static void check_template_parameters()
+    {
+      EIGEN_STATIC_ASSERT_NON_INTEGER(Scalar);
+    }
 
     /** \internal
       * Used to compute and store the Cholesky decomposition A = L D L^* = U^* D U.
@@ -251,8 +257,7 @@ template<> struct ldlt_inplace<Lower>
     using std::abs;
     typedef typename MatrixType::Scalar Scalar;
     typedef typename MatrixType::RealScalar RealScalar;
-    typedef typename MatrixType::Index Index;
-    typedef typename TranspositionType::StorageIndexType IndexType;
+    typedef typename TranspositionType::StorageIndex IndexType;
     eigen_assert(mat.rows()==mat.cols());
     const Index size = mat.rows();
 
@@ -309,9 +314,9 @@ template<> struct ldlt_inplace<Lower>
       }
       
       // In some previous versions of Eigen (e.g., 3.2.1), the scaling was omitted if the pivot
-      // was smaller than the cutoff value. However, soince LDLT is not rank-revealing
-      // we should only make sure we do not introduce INF or NaN values.
-      // LAPACK also uses 0 as the cutoff value.
+      // was smaller than the cutoff value. However, since LDLT is not rank-revealing
+      // we should only make sure that we do not introduce INF or NaN values.
+      // Remark that LAPACK also uses 0 as the cutoff value.
       RealScalar realAkk = numext::real(mat.coeffRef(k,k));
       if((rs>0) && (abs(realAkk) > RealScalar(0)))
         A21 /= realAkk;
@@ -342,7 +347,6 @@ template<> struct ldlt_inplace<Lower>
     using numext::isfinite;
     typedef typename MatrixType::Scalar Scalar;
     typedef typename MatrixType::RealScalar RealScalar;
-    typedef typename MatrixType::Index Index;
 
     const Index size = mat.rows();
     eigen_assert(mat.cols() == size && w.size()==size);
@@ -425,6 +429,8 @@ template<typename MatrixType> struct LDLT_Traits<MatrixType,Upper>
 template<typename MatrixType, int _UpLo>
 LDLT<MatrixType,_UpLo>& LDLT<MatrixType,_UpLo>::compute(const MatrixType& a)
 {
+  check_template_parameters();
+  
   eigen_assert(a.rows()==a.cols());
   const Index size = a.rows();
 
@@ -450,7 +456,7 @@ template<typename MatrixType, int _UpLo>
 template<typename Derived>
 LDLT<MatrixType,_UpLo>& LDLT<MatrixType,_UpLo>::rankUpdate(const MatrixBase<Derived>& w, const typename NumTraits<typename MatrixType::Scalar>::Real& sigma)
 {
-  typedef typename TranspositionType::StorageIndexType IndexType;
+  typedef typename TranspositionType::StorageIndex IndexType;
   const Index size = w.rows();
   if (m_isInitialized)
   {
@@ -491,9 +497,9 @@ void LDLT<_MatrixType,_UpLo>::_solve_impl(const RhsType &rhs, DstType &dst) cons
   const typename Diagonal<const MatrixType>::RealReturnType vecD(vectorD());
   // In some previous versions, tolerance was set to the max of 1/highest and the maximal diagonal entry * epsilon
   // as motivated by LAPACK's xGELSS:
-  // RealScalar tolerance = numext::maxi(vectorD.array().abs().maxCoeff() *NumTraits<RealScalar>::epsilon(),RealScalar(1) / NumTraits<RealScalar>::highest());
+  // RealScalar tolerance = numext::maxi(vecD.array().abs().maxCoeff() * NumTraits<RealScalar>::epsilon(),RealScalar(1) / NumTraits<RealScalar>::highest());
   // However, LDLT is not rank revealing, and so adjusting the tolerance wrt to the highest
-  // diagonal element is not well justified and to numerical issues in some cases.
+  // diagonal element is not well justified and leads to numerical issues in some cases.
   // Moreover, Lapack's xSYTRS routines use 0 for the tolerance.
   RealScalar tolerance = RealScalar(1) / NumTraits<RealScalar>::highest();
   

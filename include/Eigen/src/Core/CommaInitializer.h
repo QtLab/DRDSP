@@ -28,7 +28,6 @@ template<typename XprType>
 struct CommaInitializer
 {
   typedef typename XprType::Scalar Scalar;
-  typedef typename XprType::Index Index;
 
   EIGEN_DEVICE_FUNC
   inline CommaInitializer(XprType& xpr, const Scalar& s)
@@ -106,6 +105,9 @@ struct CommaInitializer
 
   EIGEN_DEVICE_FUNC
   inline ~CommaInitializer()
+#if defined VERIFY_RAISES_ASSERT && (!defined EIGEN_NO_ASSERTION_CHECKING) && defined EIGEN_EXCEPTIONS
+  throw(Eigen::eigen_assert_exception)
+#endif
   {
     eigen_assert((m_row+m_currentBlockRows) == m_xpr.rows()
          && m_col == m_xpr.cols()

@@ -24,13 +24,13 @@ namespace DRDSP {
 		void WriteCSV( const char* filename ) const {
 			ofstream out(filename);
 			Parameter param = data[0].first;
-			out << param << ",";
+			out << param << ',';
 			for(const auto& p : data) {
 				if( p.first != param ) {
-					out << endl << p.first << ",";
+					out << endl << p.first << ',';
 					param = p.first;
 				}
-				out << p.second << ",";
+				out << p.second << ',';
 			}
 		}
 

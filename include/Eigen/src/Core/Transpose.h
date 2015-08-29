@@ -29,14 +29,10 @@ namespace Eigen {
 
 namespace internal {
 template<typename MatrixType>
-struct traits<Transpose<MatrixType> >
+struct traits<Transpose<MatrixType> > : public traits<MatrixType>
 {
-  typedef typename traits<MatrixType>::Scalar Scalar;
-  typedef typename traits<MatrixType>::Index Index;
-  typedef typename nested<MatrixType>::type MatrixTypeNested;
+  typedef typename ref_selector<MatrixType>::type MatrixTypeNested;
   typedef typename remove_reference<MatrixTypeNested>::type MatrixTypeNestedPlain;
-  typedef typename traits<MatrixType>::StorageKind StorageKind;
-  typedef typename traits<MatrixType>::XprKind XprKind;
   enum {
     RowsAtCompileTime = MatrixType::ColsAtCompileTime,
     ColsAtCompileTime = MatrixType::RowsAtCompileTime,
@@ -64,7 +60,7 @@ template<typename MatrixType> class Transpose
     typedef typename internal::remove_all<MatrixType>::type NestedExpression;
 
     EIGEN_DEVICE_FUNC
-    explicit inline Transpose(MatrixType& a_matrix) : m_matrix(a_matrix) {}
+    explicit inline Transpose(MatrixType& matrix) : m_matrix(matrix) {}
 
     EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Transpose)
 
@@ -217,18 +213,38 @@ MatrixBase<Derived>::adjoint() const
 namespace internal {
 
 template<typename MatrixType,
-  bool IsSquare = (MatrixType::RowsAtCompileTime == MatrixType::ColsAtCompileTime) && MatrixType::RowsAtCompileTime!=Dynamic>
+  bool IsSquare = (MatrixType::RowsAtCompileTime == MatrixType::ColsAtCompileTime) && MatrixType::RowsAtCompileTime!=Dynamic,
+  bool MatchPacketSize =
+        (int(MatrixType::RowsAtCompileTime) == int(internal::packet_traits<typename MatrixType::Scalar>::size))
+    &&  (internal::evaluator<MatrixType>::Flags&PacketAccessBit) >
 struct inplace_transpose_selector;
 
 template<typename MatrixType>
-struct inplace_transpose_selector<MatrixType,true> { // square matrix
+struct inplace_transpose_selector<MatrixType,true,false> { // square matrix
   static void run(MatrixType& m) {
     m.matrix().template triangularView<StrictlyUpper>().swap(m.matrix().transpose());
   }
 };
 
+// TODO: vectorized path is currently limited to LargestPacketSize x LargestPacketSize cases only.
 template<typename MatrixType>
-struct inplace_transpose_selector<MatrixType,false> { // non square matrix
+struct inplace_transpose_selector<MatrixType,true,true> { // PacketSize x PacketSize
+  static void run(MatrixType& m) {
+    typedef typename MatrixType::Scalar Scalar;
+    typedef typename internal::packet_traits<typename MatrixType::Scalar>::type Packet;
+    const Index PacketSize = internal::packet_traits<Scalar>::size;
+    const Index Alignment = internal::evaluator<MatrixType>::Alignment;
+    PacketBlock<Packet> A;
+    for (Index i=0; i<PacketSize; ++i)
+      A.packet[i] = m.template packetByOuterInner<Alignment>(i,0);
+    internal::ptranspose(A);
+    for (Index i=0; i<PacketSize; ++i)
+      m.template writePacket<Alignment>(m.rowIndexByOuterInner(i,0), m.colIndexByOuterInner(i,0), A.packet[i]);
+  }
+};
+
+template<typename MatrixType,bool MatchPacketSize>
+struct inplace_transpose_selector<MatrixType,false,MatchPacketSize> { // non square matrix
   static void run(MatrixType& m) {
     if (m.rows()==m.cols())
       m.matrix().template triangularView<StrictlyUpper>().swap(m.matrix().transpose());
@@ -300,14 +316,6 @@ inline void MatrixBase<Derived>::adjointInPlace()
 // The following is to detect aliasing problems in most common cases.
 
 namespace internal {
-
-template<typename BinOp,typename NestedXpr,typename Rhs>
-struct blas_traits<SelfCwiseBinaryOp<BinOp,NestedXpr,Rhs> >
- : blas_traits<NestedXpr>
-{
-  typedef SelfCwiseBinaryOp<BinOp,NestedXpr,Rhs> XprType;
-  static inline const XprType extract(const XprType& x) { return x; }
-};
 
 template<bool DestIsTransposed, typename OtherDerived>
 struct check_transpose_aliasing_compile_time_selector

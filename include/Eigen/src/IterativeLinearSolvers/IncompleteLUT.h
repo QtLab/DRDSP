@@ -25,7 +25,7 @@ namespace internal {
   * \param ind The array of index for the elements in @p row
   * \param ncut  The number of largest elements to keep
   **/ 
-template <typename VectorV, typename VectorI, typename Index>
+template <typename VectorV, typename VectorI>
 Index QuickSplit(VectorV &row, VectorI &ind, Index ncut)
 {
   typedef typename VectorV::RealScalar RealScalar;
@@ -93,21 +93,23 @@ Index QuickSplit(VectorV &row, VectorI &ind, Index ncut)
   * alternatively, on GMANE:
   *   http://comments.gmane.org/gmane.comp.lib.eigen/3302
   */
-template <typename _Scalar>
-class IncompleteLUT : public SparseSolverBase<IncompleteLUT<_Scalar> >
+template <typename _Scalar, typename _StorageIndex = int>
+class IncompleteLUT : public SparseSolverBase<IncompleteLUT<_Scalar, _StorageIndex> >
 {
   protected:
-    typedef SparseSolverBase<IncompleteLUT<_Scalar> > Base;
+    typedef SparseSolverBase<IncompleteLUT> Base;
     using Base::m_isInitialized;
   public:
     typedef _Scalar Scalar;
+    typedef _StorageIndex StorageIndex;
     typedef typename NumTraits<Scalar>::Real RealScalar;
     typedef Matrix<Scalar,Dynamic,1> Vector;
-    typedef SparseMatrix<Scalar,RowMajor> FactorType;
-    typedef SparseMatrix<Scalar,ColMajor> PermutType;
-    typedef typename FactorType::Index Index;
+    typedef Matrix<StorageIndex,Dynamic,1> VectorI;
+    typedef SparseMatrix<Scalar,RowMajor,StorageIndex> FactorType;
 
   public:
+    
+    // this typedef is only to export the scalar type and compile-time dimensions to solve_retval
     typedef Matrix<Scalar,Dynamic,Dynamic> MatrixType;
     
     IncompleteLUT()
@@ -151,11 +153,10 @@ class IncompleteLUT : public SparseSolverBase<IncompleteLUT<_Scalar> >
       * 
       **/
     template<typename MatrixType>
-    IncompleteLUT<Scalar>& compute(const MatrixType& amat)
+    IncompleteLUT& compute(const MatrixType& amat)
     {
       analyzePattern(amat); 
       factorize(amat);
-      m_isInitialized = m_factorizationIsOk;
       return *this;
     }
 
@@ -189,16 +190,16 @@ protected:
     bool m_analysisIsOk;
     bool m_factorizationIsOk;
     ComputationInfo m_info;
-    PermutationMatrix<Dynamic,Dynamic,Index> m_P;     // Fill-reducing permutation
-    PermutationMatrix<Dynamic,Dynamic,Index> m_Pinv;  // Inverse permutation
+    PermutationMatrix<Dynamic,Dynamic,StorageIndex> m_P;     // Fill-reducing permutation
+    PermutationMatrix<Dynamic,Dynamic,StorageIndex> m_Pinv;  // Inverse permutation
 };
 
 /**
  * Set control parameter droptol
  *  \param droptol   Drop any element whose magnitude is less than this tolerance 
  **/ 
-template<typename Scalar>
-void IncompleteLUT<Scalar>::setDroptol(const RealScalar& droptol)
+template<typename Scalar, typename StorageIndex>
+void IncompleteLUT<Scalar,StorageIndex>::setDroptol(const RealScalar& droptol)
 {
   this->m_droptol = droptol;   
 }
@@ -207,50 +208,53 @@ void IncompleteLUT<Scalar>::setDroptol(const RealScalar& droptol)
  * Set control parameter fillfactor
  * \param fillfactor  This is used to compute the  number @p fill_in of largest elements to keep on each row. 
  **/ 
-template<typename Scalar>
-void IncompleteLUT<Scalar>::setFillfactor(int fillfactor)
+template<typename Scalar, typename StorageIndex>
+void IncompleteLUT<Scalar,StorageIndex>::setFillfactor(int fillfactor)
 {
   this->m_fillfactor = fillfactor;   
 }
 
-template <typename Scalar>
+template <typename Scalar, typename StorageIndex>
 template<typename _MatrixType>
-void IncompleteLUT<Scalar>::analyzePattern(const _MatrixType& amat)
+void IncompleteLUT<Scalar,StorageIndex>::analyzePattern(const _MatrixType& amat)
 {
   // Compute the Fill-reducing permutation
-  SparseMatrix<Scalar,ColMajor, Index> mat1 = amat;
-  SparseMatrix<Scalar,ColMajor, Index> mat2 = amat.transpose();
+  SparseMatrix<Scalar,ColMajor, StorageIndex> mat1 = amat;
+  SparseMatrix<Scalar,ColMajor, StorageIndex> mat2 = amat.transpose();
   // Symmetrize the pattern
   // FIXME for a matrix with nearly symmetric pattern, mat2+mat1 is the appropriate choice.
   //       on the other hand for a really non-symmetric pattern, mat2*mat1 should be prefered...
-  SparseMatrix<Scalar,ColMajor, Index> AtA = mat2 + mat1;
+  SparseMatrix<Scalar,ColMajor, StorageIndex> AtA = mat2 + mat1;
   AtA.prune(keep_diag());
-  internal::minimum_degree_ordering<Scalar, Index>(AtA, m_P);  // Then compute the AMD ordering...
+  internal::minimum_degree_ordering<Scalar, StorageIndex>(AtA, m_P);  // Then compute the AMD ordering...
 
   m_Pinv  = m_P.inverse(); // ... and the inverse permutation
 
   m_analysisIsOk = true;
+  m_factorizationIsOk = false;
+  m_isInitialized = true;
 }
 
-template <typename Scalar>
+template <typename Scalar, typename StorageIndex>
 template<typename _MatrixType>
-void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
+void IncompleteLUT<Scalar,StorageIndex>::factorize(const _MatrixType& amat)
 {
   using std::sqrt;
   using std::swap;
   using std::abs;
+  using internal::convert_index;
 
   eigen_assert((amat.rows() == amat.cols()) && "The factorization should be done on a square matrix");
   Index n = amat.cols();  // Size of the matrix
   m_lu.resize(n,n);
   // Declare Working vectors and variables
   Vector u(n) ;     // real values of the row -- maximum size is n --
-  VectorXi ju(n);   // column position of the values in u -- maximum size  is n
-  VectorXi jr(n);   // Indicate the position of the nonzero elements in the vector u -- A zero location is indicated by -1
+  VectorI ju(n);   // column position of the values in u -- maximum size  is n
+  VectorI jr(n);   // Indicate the position of the nonzero elements in the vector u -- A zero location is indicated by -1
 
   // Apply the fill-reducing permutation
   eigen_assert(m_analysisIsOk && "You must first call analyzePattern()");
-  SparseMatrix<Scalar,RowMajor, Index> mat;
+  SparseMatrix<Scalar,RowMajor, StorageIndex> mat;
   mat = amat.twistedBy(m_Pinv);
 
   // Initialization
@@ -259,7 +263,7 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
   u.fill(0);
 
   // number of largest elements to keep in each row:
-  Index fill_in =   static_cast<Index> (amat.nonZeros()*m_fillfactor)/n+1;
+  Index fill_in = (amat.nonZeros()*m_fillfactor)/n + 1;
   if (fill_in > n) fill_in = n;
 
   // number of largest nonzero elements to keep in the L and the U part of the current row:
@@ -274,9 +278,9 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
 
     Index sizeu = 1; // number of nonzero elements in the upper part of the current row
     Index sizel = 0; // number of nonzero elements in the lower part of the current row
-    ju(ii)    = ii;
+    ju(ii)    = convert_index<StorageIndex>(ii);
     u(ii)     = 0;
-    jr(ii)    = ii;
+    jr(ii)    = convert_index<StorageIndex>(ii);
     RealScalar rownorm = 0;
 
     typename FactorType::InnerIterator j_it(mat, ii); // Iterate through the current row ii
@@ -286,9 +290,9 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
       if (k < ii)
       {
         // copy the lower part
-        ju(sizel) = k;
+        ju(sizel) = convert_index<StorageIndex>(k);
         u(sizel) = j_it.value();
-        jr(k) = sizel;
+        jr(k) = convert_index<StorageIndex>(sizel);
         ++sizel;
       }
       else if (k == ii)
@@ -299,9 +303,9 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
       {
         // copy the upper part
         Index jpos = ii + sizeu;
-        ju(jpos) = k;
+        ju(jpos) = convert_index<StorageIndex>(k);
         u(jpos) = j_it.value();
-        jr(k) = jpos;
+        jr(k) = convert_index<StorageIndex>(jpos);
         ++sizeu;
       }
       rownorm += numext::abs2(j_it.value());
@@ -331,7 +335,8 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
         // swap the two locations
         Index j = ju(jj);
         swap(ju(jj), ju(k));
-        jr(minrow) = jj;   jr(j) = k;
+        jr(minrow) = convert_index<StorageIndex>(jj);
+        jr(j) = convert_index<StorageIndex>(k);
         swap(u(jj), u(k));
       }
       // Reset this location
@@ -355,8 +360,8 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
       for (; ki_it; ++ki_it)
       {
         Scalar prod = fact * ki_it.value();
-        Index j       = ki_it.index();
-        Index jpos    = jr(j);
+        Index j     = ki_it.index();
+        Index jpos  = jr(j);
         if (jpos == -1) // fill-in element
         {
           Index newpos;
@@ -372,16 +377,16 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
             sizel++;
             eigen_internal_assert(sizel<=ii);
           }
-          ju(newpos) = j;
+          ju(newpos) = convert_index<StorageIndex>(j);
           u(newpos) = -prod;
-          jr(j) = newpos;
+          jr(j) = convert_index<StorageIndex>(newpos);
         }
         else
           u(jpos) -= prod;
       }
       // store the pivot element
-      u(len) = fact;
-      ju(len) = minrow;
+      u(len)  = fact;
+      ju(len) = convert_index<StorageIndex>(minrow);
       ++len;
 
       jj++;
@@ -396,7 +401,7 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
     sizel = len;
     len = (std::min)(sizel, nnzL);
     typename Vector::SegmentReturnType ul(u.segment(0, sizel));
-    typename VectorXi::SegmentReturnType jul(ju.segment(0, sizel));
+    typename VectorI::SegmentReturnType jul(ju.segment(0, sizel));
     internal::QuickSplit(ul, jul, len);
 
     // store the largest m_fill elements of the L part
@@ -425,14 +430,13 @@ void IncompleteLUT<Scalar>::factorize(const _MatrixType& amat)
     sizeu = len + 1; // +1 to take into account the diagonal element
     len = (std::min)(sizeu, nnzU);
     typename Vector::SegmentReturnType uu(u.segment(ii+1, sizeu-1));
-    typename VectorXi::SegmentReturnType juu(ju.segment(ii+1, sizeu-1));
+    typename VectorI::SegmentReturnType juu(ju.segment(ii+1, sizeu-1));
     internal::QuickSplit(uu, juu, len);
 
     // store the largest elements of the U part
     for(Index k = ii + 1; k < ii + len; k++)
       m_lu.insertBackByOuterInnerUnordered(ii,ju(k)) = u(k);
   }
-
   m_lu.finalize();
   m_lu.makeCompressed();
 

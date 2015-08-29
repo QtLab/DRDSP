@@ -59,8 +59,8 @@ struct traits<CwiseBinaryOp<BinaryOp, Lhs, Rhs> >
   typedef typename cwise_promote_storage_type<typename traits<Lhs>::StorageKind,
                                               typename traits<Rhs>::StorageKind,
                                               BinaryOp>::ret StorageKind;
-  typedef typename promote_index_type<typename traits<Lhs>::Index,
-                                         typename traits<Rhs>::Index>::type Index;
+  typedef typename promote_index_type<typename traits<Lhs>::StorageIndex,
+                                      typename traits<Rhs>::StorageIndex>::type StorageIndex;
   typedef typename Lhs::Nested LhsNested;
   typedef typename Rhs::Nested RhsNested;
   typedef typename remove_reference<LhsNested>::type _LhsNested;
@@ -95,8 +95,8 @@ class CwiseBinaryOp :
                                                       BinaryOp>::ret>::Base Base;
     EIGEN_GENERIC_PUBLIC_INTERFACE(CwiseBinaryOp)
 
-    typedef typename internal::nested<LhsType>::type LhsNested;
-    typedef typename internal::nested<RhsType>::type RhsNested;
+    typedef typename internal::ref_selector<LhsType>::type LhsNested;
+    typedef typename internal::ref_selector<RhsType>::type RhsNested;
     typedef typename internal::remove_reference<LhsNested>::type _LhsNested;
     typedef typename internal::remove_reference<RhsNested>::type _RhsNested;
 

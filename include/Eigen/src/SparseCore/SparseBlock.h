@@ -27,11 +27,11 @@ public:
     EIGEN_SPARSE_PUBLIC_INTERFACE(BlockType)
 
     inline BlockImpl(const XprType& xpr, Index i)
-      : m_matrix(xpr), m_outerStart(i), m_outerSize(OuterSize)
+      : m_matrix(xpr), m_outerStart(convert_index(i)), m_outerSize(OuterSize)
     {}
 
     inline BlockImpl(const XprType& xpr, Index startRow, Index startCol, Index blockRows, Index blockCols)
-      : m_matrix(xpr), m_outerStart(IsRowMajor ? startRow : startCol), m_outerSize(IsRowMajor ? blockRows : blockCols)
+      : m_matrix(xpr), m_outerStart(convert_index(IsRowMajor ? startRow : startCol)), m_outerSize(convert_index(IsRowMajor ? blockRows : blockCols))
     {}
 
     EIGEN_STRONG_INLINE Index rows() const { return IsRowMajor ? m_outerSize.value() : m_matrix.rows(); }
@@ -43,10 +43,20 @@ public:
       EvaluatorType matEval(m_matrix);
       Index nnz = 0;
       Index end = m_outerStart + m_outerSize.value();
-      for(int j=m_outerStart; j<end; ++j)
+      for(Index j=m_outerStart; j<end; ++j)
         for(typename EvaluatorType::InnerIterator it(matEval, j); it; ++it)
           ++nnz;
       return nnz;
+    }
+    
+    inline const Scalar coeff(Index row, Index col) const
+    {
+      return m_matrix.coeff(row + (IsRowMajor ? m_outerStart : 0), col + (IsRowMajor ? 0 :  m_outerStart));
+    }
+    
+    inline const Scalar coeff(Index index) const
+    {
+      return m_matrix.coeff(IsRowMajor ? m_outerStart : index, IsRowMajor ? index :  m_outerStart);
     }
     
     inline const _MatrixTypeNested& nestedExpression() const { return m_matrix; }
@@ -74,23 +84,25 @@ namespace internal {
 
 template<typename SparseMatrixType, int BlockRows, int BlockCols>
 class sparse_matrix_block_impl
-  : public SparseMatrixBase<Block<SparseMatrixType,BlockRows,BlockCols,true> >
+  : public SparseCompressedBase<Block<SparseMatrixType,BlockRows,BlockCols,true> >
 {
     typedef typename internal::remove_all<typename SparseMatrixType::Nested>::type _MatrixTypeNested;
     typedef Block<SparseMatrixType, BlockRows, BlockCols, true> BlockType;
 public:
     enum { IsRowMajor = internal::traits<BlockType>::IsRowMajor };
-    EIGEN_SPARSE_PUBLIC_INTERFACE(BlockType)
+    typedef SparseCompressedBase<Block<SparseMatrixType,BlockRows,BlockCols,true> > Base;
+    _EIGEN_SPARSE_PUBLIC_INTERFACE(BlockType)
 protected:
+    typedef typename Base::IndexVector IndexVector;
     enum { OuterSize = IsRowMajor ? BlockRows : BlockCols };
 public:
 
     inline sparse_matrix_block_impl(const SparseMatrixType& xpr, Index i)
-      : m_matrix(xpr), m_outerStart(i), m_outerSize(OuterSize)
+      : m_matrix(xpr), m_outerStart(convert_index(i)), m_outerSize(OuterSize)
     {}
 
     inline sparse_matrix_block_impl(const SparseMatrixType& xpr, Index startRow, Index startCol, Index blockRows, Index blockCols)
-      : m_matrix(xpr), m_outerStart(IsRowMajor ? startRow : startCol), m_outerSize(IsRowMajor ? blockRows : blockCols)
+      : m_matrix(xpr), m_outerStart(convert_index(IsRowMajor ? startRow : startCol)), m_outerSize(convert_index(IsRowMajor ? blockRows : blockCols))
     {}
 
     template<typename OtherDerived>
@@ -102,7 +114,7 @@ public:
       // and/or it is not at the end of the nonzeros of the underlying matrix.
 
       // 1 - eval to a temporary to avoid transposition and/or aliasing issues
-      SparseMatrix<Scalar, IsRowMajor ? RowMajor : ColMajor, Index> tmp(other);
+      SparseMatrix<Scalar, IsRowMajor ? RowMajor : ColMajor, StorageIndex> tmp(other);
 
       // 2 - let's check whether there is enough allocated memory
       Index nnz           = tmp.nonZeros();
@@ -148,16 +160,16 @@ public:
       // update innerNonZeros
       if(!m_matrix.isCompressed())
         for(Index j=0; j<m_outerSize.value(); ++j)
-          matrix.innerNonZeroPtr()[m_outerStart+j] = tmp.innerVector(j).nonZeros();
+          matrix.innerNonZeroPtr()[m_outerStart+j] = StorageIndex(tmp.innerVector(j).nonZeros());
 
       // update outer index pointers
-      Index p = start;
+      StorageIndex p = StorageIndex(start);
       for(Index k=0; k<m_outerSize.value(); ++k)
       {
         matrix.outerIndexPtr()[m_outerStart+k] = p;
         p += tmp.innerVector(k).nonZeros();
       }
-      std::ptrdiff_t offset = nnz - block_size;
+      StorageIndex offset = internal::convert_index<StorageIndex>(nnz - block_size);
       for(Index k = m_outerStart + m_outerSize.value(); k<=matrix.outerSize(); ++k)
       {
         matrix.outerIndexPtr()[k] += offset;
@@ -172,35 +184,46 @@ public:
     }
 
     inline const Scalar* valuePtr() const
-    { return m_matrix.valuePtr() + m_matrix.outerIndexPtr()[m_outerStart]; }
+    { return m_matrix.valuePtr(); }
     inline Scalar* valuePtr()
-    { return m_matrix.const_cast_derived().valuePtr() + m_matrix.outerIndexPtr()[m_outerStart]; }
+    { return m_matrix.const_cast_derived().valuePtr(); }
 
-    inline const Index* innerIndexPtr() const
-    { return m_matrix.innerIndexPtr() + m_matrix.outerIndexPtr()[m_outerStart]; }
-    inline Index* innerIndexPtr()
-    { return m_matrix.const_cast_derived().innerIndexPtr() + m_matrix.outerIndexPtr()[m_outerStart]; }
+    inline const StorageIndex* innerIndexPtr() const
+    { return m_matrix.innerIndexPtr(); }
+    inline StorageIndex* innerIndexPtr()
+    { return m_matrix.const_cast_derived().innerIndexPtr(); }
 
-    inline const Index* outerIndexPtr() const
+    inline const StorageIndex* outerIndexPtr() const
     { return m_matrix.outerIndexPtr() + m_outerStart; }
-    inline Index* outerIndexPtr()
+    inline StorageIndex* outerIndexPtr()
     { return m_matrix.const_cast_derived().outerIndexPtr() + m_outerStart; }
-
-    Index nonZeros() const
+    
+    inline const StorageIndex* innerNonZeroPtr() const
+    { return isCompressed() ? 0 : (m_matrix.innerNonZeroPtr()+m_outerStart); }
+    inline StorageIndex* innerNonZeroPtr()
+    { return isCompressed() ? 0 : (m_matrix.const_cast_derived().innerNonZeroPtr()+m_outerStart); }
+    
+    bool isCompressed() const { return m_matrix.innerNonZeroPtr()==0; }
+    
+    inline Scalar& coeffRef(Index row, Index col)
     {
-      if(m_matrix.isCompressed())
-        return  Index(  std::size_t(m_matrix.outerIndexPtr()[m_outerStart+m_outerSize.value()])
-                      - std::size_t(m_matrix.outerIndexPtr()[m_outerStart]));
-      else if(m_outerSize.value()==0)
-        return 0;
-      else
-        return Map<const Matrix<Index,OuterSize,1> >(m_matrix.innerNonZeroPtr()+m_outerStart, m_outerSize.value()).sum();
+      return m_matrix.const_cast_derived().coeffRef(row + (IsRowMajor ? m_outerStart : 0), col + (IsRowMajor ? 0 :  m_outerStart));
+    }
+    
+    inline const Scalar coeff(Index row, Index col) const
+    {
+      return m_matrix.coeff(row + (IsRowMajor ? m_outerStart : 0), col + (IsRowMajor ? 0 :  m_outerStart));
+    }
+    
+    inline const Scalar coeff(Index index) const
+    {
+      return m_matrix.coeff(IsRowMajor ? m_outerStart : index, IsRowMajor ? index :  m_outerStart);
     }
 
     const Scalar& lastCoeff() const
     {
       EIGEN_STATIC_ASSERT_VECTOR_ONLY(sparse_matrix_block_impl);
-      eigen_assert(nonZeros()>0);
+      eigen_assert(Base::nonZeros()>0);
       if(m_matrix.isCompressed())
         return m_matrix.valuePtr()[m_matrix.outerIndexPtr()[m_outerStart+1]-1];
       else
@@ -226,13 +249,13 @@ public:
 
 } // namespace internal
 
-template<typename _Scalar, int _Options, typename _Index, int BlockRows, int BlockCols>
-class BlockImpl<SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols,true,Sparse>
-  : public internal::sparse_matrix_block_impl<SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols>
+template<typename _Scalar, int _Options, typename _StorageIndex, int BlockRows, int BlockCols>
+class BlockImpl<SparseMatrix<_Scalar, _Options, _StorageIndex>,BlockRows,BlockCols,true,Sparse>
+  : public internal::sparse_matrix_block_impl<SparseMatrix<_Scalar, _Options, _StorageIndex>,BlockRows,BlockCols>
 {
 public:
-  typedef _Index Index;
-  typedef SparseMatrix<_Scalar, _Options, _Index> SparseMatrixType;
+  typedef _StorageIndex StorageIndex;
+  typedef SparseMatrix<_Scalar, _Options, _StorageIndex> SparseMatrixType;
   typedef internal::sparse_matrix_block_impl<SparseMatrixType,BlockRows,BlockCols> Base;
   inline BlockImpl(SparseMatrixType& xpr, Index i)
     : Base(xpr, i)
@@ -245,13 +268,13 @@ public:
   using Base::operator=;
 };
 
-template<typename _Scalar, int _Options, typename _Index, int BlockRows, int BlockCols>
-class BlockImpl<const SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols,true,Sparse>
-  : public internal::sparse_matrix_block_impl<const SparseMatrix<_Scalar, _Options, _Index>,BlockRows,BlockCols>
+template<typename _Scalar, int _Options, typename _StorageIndex, int BlockRows, int BlockCols>
+class BlockImpl<const SparseMatrix<_Scalar, _Options, _StorageIndex>,BlockRows,BlockCols,true,Sparse>
+  : public internal::sparse_matrix_block_impl<const SparseMatrix<_Scalar, _Options, _StorageIndex>,BlockRows,BlockCols>
 {
 public:
-  typedef _Index Index;
-  typedef const SparseMatrix<_Scalar, _Options, _Index> SparseMatrixType;
+  typedef _StorageIndex StorageIndex;
+  typedef const SparseMatrix<_Scalar, _Options, _StorageIndex> SparseMatrixType;
   typedef internal::sparse_matrix_block_impl<SparseMatrixType,BlockRows,BlockCols> Base;
   inline BlockImpl(SparseMatrixType& xpr, Index i)
     : Base(xpr, i)
@@ -262,6 +285,9 @@ public:
   {}
   
   using Base::operator=;
+private:
+  template<typename Derived> BlockImpl(const SparseMatrixBase<Derived>& xpr, Index i);
+  template<typename Derived> BlockImpl(const SparseMatrixBase<Derived>& xpr);
 };
   
 //----------
@@ -284,7 +310,8 @@ const typename SparseMatrixBase<Derived>::ConstInnerVectorReturnType SparseMatri
   * is col-major (resp. row-major).
   */
 template<typename Derived>
-Block<Derived,Dynamic,Dynamic,true> SparseMatrixBase<Derived>::innerVectors(Index outerStart, Index outerSize)
+typename SparseMatrixBase<Derived>::InnerVectorsReturnType
+SparseMatrixBase<Derived>::innerVectors(Index outerStart, Index outerSize)
 {
   return Block<Derived,Dynamic,Dynamic,true>(derived(),
                                              IsRowMajor ? outerStart : 0, IsRowMajor ? 0 : outerStart,
@@ -296,23 +323,13 @@ Block<Derived,Dynamic,Dynamic,true> SparseMatrixBase<Derived>::innerVectors(Inde
   * is col-major (resp. row-major). Read-only.
   */
 template<typename Derived>
-const Block<const Derived,Dynamic,Dynamic,true> SparseMatrixBase<Derived>::innerVectors(Index outerStart, Index outerSize) const
+const typename SparseMatrixBase<Derived>::ConstInnerVectorsReturnType
+SparseMatrixBase<Derived>::innerVectors(Index outerStart, Index outerSize) const
 {
   return Block<const Derived,Dynamic,Dynamic,true>(derived(),
                                                   IsRowMajor ? outerStart : 0, IsRowMajor ? 0 : outerStart,
                                                   IsRowMajor ? outerSize : rows(), IsRowMajor ? cols() : outerSize);
   
-}
-
-namespace internal {
-  
-template< typename XprType, int BlockRows, int BlockCols, bool InnerPanel,
-          bool OuterVector =  (BlockCols==1 && XprType::IsRowMajor)
-                               | // FIXME | instead of || to please GCC 4.4.0 stupid warning "suggest parentheses around &&".
-                                 // revert to || as soon as not needed anymore. 
-                              (BlockRows==1 && !XprType::IsRowMajor)>
-class GenericSparseBlockInnerIteratorImpl;
-
 }
 
 /** Generic implementation of sparse Block expression.
@@ -333,8 +350,8 @@ public:
       */
     inline BlockImpl(const XprType& xpr, Index i)
       : m_matrix(xpr),
-        m_startRow( (BlockRows==1) && (BlockCols==XprType::ColsAtCompileTime) ? i : 0),
-        m_startCol( (BlockRows==XprType::RowsAtCompileTime) && (BlockCols==1) ? i : 0),
+        m_startRow( (BlockRows==1) && (BlockCols==XprType::ColsAtCompileTime) ? convert_index(i) : 0),
+        m_startCol( (BlockRows==XprType::RowsAtCompileTime) && (BlockCols==1) ? convert_index(i) : 0),
         m_blockRows(BlockRows==1 ? 1 : xpr.rows()),
         m_blockCols(BlockCols==1 ? 1 : xpr.cols())
     {}
@@ -342,7 +359,7 @@ public:
     /** Dynamic-size constructor
       */
     inline BlockImpl(const XprType& xpr, Index startRow, Index startCol, Index blockRows, Index blockCols)
-      : m_matrix(xpr), m_startRow(startRow), m_startCol(startCol), m_blockRows(blockRows), m_blockCols(blockCols)
+      : m_matrix(xpr), m_startRow(convert_index(startRow)), m_startCol(convert_index(startCol)), m_blockRows(convert_index(blockRows)), m_blockCols(convert_index(blockCols))
     {}
 
     inline Index rows() const { return m_blockRows.value(); }
@@ -380,8 +397,11 @@ public:
     Index blockCols() const { return m_blockCols.value(); }
     
   protected:
-    friend class internal::GenericSparseBlockInnerIteratorImpl<XprType,BlockRows,BlockCols,InnerPanel>;
+//     friend class internal::GenericSparseBlockInnerIteratorImpl<XprType,BlockRows,BlockCols,InnerPanel>;
     friend class ReverseInnerIterator;
+    friend struct internal::unary_evaluator<Block<XprType,BlockRows,BlockCols,InnerPanel>, internal::IteratorBased, Scalar >;
+    
+    Index nonZeros() const { return Dynamic; }
     
     EIGEN_INHERIT_ASSIGNMENT_OPERATORS(BlockImpl)
 
@@ -394,94 +414,6 @@ public:
 };
 
 namespace internal {
-  template<typename XprType, int BlockRows, int BlockCols, bool InnerPanel>
-  class GenericSparseBlockInnerIteratorImpl<XprType,BlockRows,BlockCols,InnerPanel,false> : public Block<XprType, BlockRows, BlockCols, InnerPanel>::_MatrixTypeNested::InnerIterator
-  {
-    typedef Block<XprType, BlockRows, BlockCols, InnerPanel> BlockType;
-    enum {
-      IsRowMajor = BlockType::IsRowMajor
-    };
-    typedef typename BlockType::_MatrixTypeNested _MatrixTypeNested;
-    typedef typename BlockType::Index Index;
-    typedef typename _MatrixTypeNested::InnerIterator Base;
-    const BlockType& m_block;
-    Index m_end;
-  public:
-
-    EIGEN_STRONG_INLINE GenericSparseBlockInnerIteratorImpl(const BlockType& block, Index outer)
-      : Base(block.derived().nestedExpression(), outer + (IsRowMajor ? block.m_startRow.value() : block.m_startCol.value())),
-        m_block(block),
-        m_end(IsRowMajor ? block.m_startCol.value()+block.m_blockCols.value() : block.m_startRow.value()+block.m_blockRows.value())
-    {
-      while( (Base::operator bool()) && (Base::index() < (IsRowMajor ? m_block.m_startCol.value() : m_block.m_startRow.value())) )
-        Base::operator++();
-    }
-    
-    inline Index index()  const { return Base::index() - (IsRowMajor ? m_block.m_startCol.value() : m_block.m_startRow.value()); }
-    inline Index outer()  const { return Base::outer() - (IsRowMajor ? m_block.m_startRow.value() : m_block.m_startCol.value()); }
-    inline Index row()    const { return Base::row()   - m_block.m_startRow.value(); }
-    inline Index col()    const { return Base::col()   - m_block.m_startCol.value(); }
-    
-    inline operator bool() const { return Base::operator bool() && Base::index() < m_end; }
-  };
-  
-  // Row vector of a column-major sparse matrix or column of a row-major one.
-  template<typename XprType, int BlockRows, int BlockCols, bool InnerPanel>
-  class GenericSparseBlockInnerIteratorImpl<XprType,BlockRows,BlockCols,InnerPanel,true>
-  {
-    typedef Block<XprType, BlockRows, BlockCols, InnerPanel> BlockType;
-    enum {
-      IsRowMajor = BlockType::IsRowMajor
-    };
-    typedef typename BlockType::_MatrixTypeNested _MatrixTypeNested;
-    typedef typename BlockType::Index Index;
-    typedef typename BlockType::Scalar Scalar;
-    const BlockType& m_block;
-    Index m_outerPos;
-    Index m_innerIndex;
-    Scalar m_value;
-    Index m_end;
-  public:
-
-    explicit EIGEN_STRONG_INLINE GenericSparseBlockInnerIteratorImpl(const BlockType& block, Index outer = 0)
-      : 
-        m_block(block),
-        m_outerPos( (IsRowMajor ? block.m_startCol.value() : block.m_startRow.value()) - 1), // -1 so that operator++ finds the first non-zero entry
-        m_innerIndex(IsRowMajor ? block.m_startRow.value() : block.m_startCol.value()),
-        m_end(IsRowMajor ? block.m_startCol.value()+block.m_blockCols.value() : block.m_startRow.value()+block.m_blockRows.value())
-    {
-      EIGEN_UNUSED_VARIABLE(outer);
-      eigen_assert(outer==0);
-      
-      ++(*this);
-    }
-    
-    inline Index index()  const { return m_outerPos - (IsRowMajor ? m_block.m_startCol.value() : m_block.m_startRow.value()); }
-    inline Index outer()  const { return 0; }
-    inline Index row()    const { return IsRowMajor ? 0 : index(); }
-    inline Index col()    const { return IsRowMajor ? index() : 0; }
-    
-    inline Scalar value() const { return m_value; }
-    
-    inline GenericSparseBlockInnerIteratorImpl& operator++()
-    {
-      // search next non-zero entry
-      while(++m_outerPos<m_end)
-      {
-        typename XprType::InnerIterator it(m_block.m_matrix, m_outerPos);
-        // search for the key m_innerIndex in the current outer-vector
-        while(it && it.index() < m_innerIndex) ++it;
-        if(it && it.index()==m_innerIndex)
-        {
-          m_value = it.value();
-          break;
-        }
-      }
-      return *this;
-    }
-    
-    inline operator bool() const { return m_outerPos < m_end; }
-  };
 
 template<typename ArgType, int BlockRows, int BlockCols, bool InnerPanel>
 struct unary_evaluator<Block<ArgType,BlockRows,BlockCols,InnerPanel>, IteratorBased >
@@ -491,7 +423,7 @@ struct unary_evaluator<Block<ArgType,BlockRows,BlockCols,InnerPanel>, IteratorBa
     class OuterVectorInnerIterator;
   public:
     typedef Block<ArgType,BlockRows,BlockCols,InnerPanel> XprType;
-    typedef typename XprType::Index Index;
+    typedef typename XprType::StorageIndex StorageIndex;
     typedef typename XprType::Scalar Scalar;
     
     class ReverseInnerIterator;
@@ -513,9 +445,16 @@ struct unary_evaluator<Block<ArgType,BlockRows,BlockCols,InnerPanel>, IteratorBa
     explicit unary_evaluator(const XprType& op)
       : m_argImpl(op.nestedExpression()), m_block(op)
     {}
+    
+    inline Index nonZerosEstimate() const {
+      Index nnz = m_block.nonZeros();
+      if(nnz<0)
+        return m_argImpl.nonZerosEstimate() * m_block.size() / m_block.nestedExpression().size();
+      return nnz;
+    }
 
   protected:
-    typedef typename evaluator<ArgType>::InnerIterator        EvalIterator;
+    typedef typename evaluator<ArgType>::InnerIterator EvalIterator;
     
     typename evaluator<ArgType>::nestedType m_argImpl;
     const XprType &m_block;
@@ -560,6 +499,7 @@ public:
     : m_eval(aEval),
       m_outerPos( (IsRowMajor ? aEval.m_block.startCol() : aEval.m_block.startRow()) - 1), // -1 so that operator++ finds the first non-zero entry
       m_innerIndex(IsRowMajor ? aEval.m_block.startRow() : aEval.m_block.startCol()),
+      m_value(0),
       m_end(IsRowMajor ? aEval.m_block.startCol()+aEval.m_block.blockCols() : aEval.m_block.startRow()+aEval.m_block.blockRows())
   {
     EIGEN_UNUSED_VARIABLE(outer);

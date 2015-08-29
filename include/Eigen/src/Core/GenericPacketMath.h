@@ -49,16 +49,20 @@ struct default_packet_traits
     HasMul    = 1,
     HasNegate = 1,
     HasAbs    = 1,
+    HasArg    = 0,
     HasAbs2   = 1,
     HasMin    = 1,
     HasMax    = 1,
     HasConj   = 1,
     HasSetLinear = 1,
+    HasBlend  = 0,
 
     HasDiv    = 0,
     HasSqrt   = 0,
+    HasRsqrt  = 0,
     HasExp    = 0,
     HasLog    = 0,
+    HasLog10    = 0,
     HasPow    = 0,
 
     HasSin    = 0,
@@ -66,7 +70,14 @@ struct default_packet_traits
     HasTan    = 0,
     HasASin   = 0,
     HasACos   = 0,
-    HasATan   = 0
+    HasATan   = 0,
+    HasSinh    = 0,
+    HasCosh    = 0,
+    HasTanh    = 0,
+
+    HasRound  = 0,
+    HasFloor  = 0,
+    HasCeil   = 0
   };
 };
 
@@ -93,6 +104,30 @@ template<typename T> struct packet_traits : default_packet_traits
     HasSetLinear = 0
   };
 };
+
+template<typename T> struct packet_traits<const T> : packet_traits<T> { };
+
+template <typename Src, typename Tgt> struct type_casting_traits {
+  enum {
+    VectorizedCast = 0,
+    SrcCoeffRatio = 1,
+    TgtCoeffRatio = 1
+  };
+};
+
+
+/** \internal \returns static_cast<TgtType>(a) (coeff-wise) */
+template <typename SrcPacket, typename TgtPacket>
+EIGEN_DEVICE_FUNC inline TgtPacket
+pcast(const SrcPacket& a) {
+  return static_cast<TgtPacket>(a);
+}
+template <typename SrcPacket, typename TgtPacket>
+EIGEN_DEVICE_FUNC inline TgtPacket
+pcast(const SrcPacket& a, const SrcPacket& /*b*/) {
+  return static_cast<TgtPacket>(a);
+}
+
 
 /** \internal \returns a + b (coeff-wise) */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
@@ -136,6 +171,10 @@ pmax(const Packet& a,
 /** \internal \returns the absolute value of \a a */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
 pabs(const Packet& a) { using std::abs; return abs(a); }
+
+/** \internal \returns the phase angle of \a a */
+template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
+parg(const Packet& a) { using numext::arg; return arg(a); }
 
 /** \internal \returns the bitwise and of \a a and \a b */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
@@ -222,8 +261,8 @@ inline void pbroadcast2(const typename unpacket_traits<Packet>::type *a,
 }
 
 /** \internal \brief Returns a packet with coefficients (a,a+1,...,a+packet_size-1). */
-template<typename Scalar> inline typename packet_traits<Scalar>::type
-plset(const Scalar& a) { return a; }
+template<typename Packet> inline Packet
+plset(const typename unpacket_traits<Packet>::type& a) { return a; }
 
 /** \internal copy the packet \a from to \a *to, \a to must be 16 bytes aligned */
 template<typename Scalar, typename Packet> EIGEN_DEVICE_FUNC inline void pstore(Scalar* to, const Packet& from)
@@ -233,16 +272,24 @@ template<typename Scalar, typename Packet> EIGEN_DEVICE_FUNC inline void pstore(
 template<typename Scalar, typename Packet> EIGEN_DEVICE_FUNC inline void pstoreu(Scalar* to, const Packet& from)
 {  (*to) = from; }
 
- template<typename Scalar, typename Packet> EIGEN_DEVICE_FUNC inline Packet pgather(const Scalar* from, DenseIndex /*stride*/)
+ template<typename Scalar, typename Packet> EIGEN_DEVICE_FUNC inline Packet pgather(const Scalar* from, Index /*stride*/)
  { return ploadu<Packet>(from); }
 
- template<typename Scalar, typename Packet> EIGEN_DEVICE_FUNC inline void pscatter(Scalar* to, const Packet& from, DenseIndex /*stride*/)
+ template<typename Scalar, typename Packet> EIGEN_DEVICE_FUNC inline void pscatter(Scalar* to, const Packet& from, Index /*stride*/)
  { pstore(to, from); }
 
 /** \internal tries to do cache prefetching of \a addr */
 template<typename Scalar> inline void prefetch(const Scalar* addr)
 {
-#if !EIGEN_COMP_MSVC
+#ifdef __CUDA_ARCH__
+#if defined(__LP64__)
+  // 64-bit pointer operand constraint for inlined asm
+  asm(" prefetch.L1 [ %1 ];" : "=l"(addr) : "l"(addr));
+#else
+  // 32-bit pointer operand constraint for inlined asm
+  asm(" prefetch.L1 [ %1 ];" : "=r"(addr) : "r"(addr));
+#endif
+#elif !EIGEN_COMP_MSVC
   __builtin_prefetch(addr);
 #endif
 }
@@ -284,6 +331,21 @@ template<typename Packet> EIGEN_DEVICE_FUNC inline typename unpacket_traits<Pack
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet preverse(const Packet& a)
 { return a; }
 
+template<size_t offset, typename Packet>
+struct protate_impl
+{
+  // Empty so attempts to use this unimplemented path will fail to compile.
+  // Only specializations of this template should be used.
+};
+
+/** \internal \returns a packet with the coefficients rotated to the right in little-endian convention,
+  * by the given offset, e.g. for offset == 1:
+  *     (packet[3], packet[2], packet[1], packet[0]) becomes (packet[0], packet[3], packet[2], packet[1])
+  */
+template<size_t offset, typename Packet> EIGEN_DEVICE_FUNC inline Packet protate(const Packet& a)
+{
+  return offset ? protate_impl<offset, Packet>::run(a) : a;
+}
 
 /** \internal \returns \a a with real and imaginary part flipped (for complex type only) */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet pcplxflip(const Packet& a)
@@ -318,9 +380,21 @@ Packet pasin(const Packet& a) { using std::asin; return asin(a); }
 template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
 Packet pacos(const Packet& a) { using std::acos; return acos(a); }
 
-/** \internal \returns the atan of \a a (coeff-wise) */
+/** \internal \returns the arc tangent of \a a (coeff-wise) */
 template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
 Packet patan(const Packet& a) { using std::atan; return atan(a); }
+
+/** \internal \returns the hyperbolic sine of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet psinh(const Packet& a) { using std::sinh; return sinh(a); }
+
+/** \internal \returns the hyperbolic cosine of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet pcosh(const Packet& a) { using std::cosh; return cosh(a); }
+
+/** \internal \returns the hyperbolic tan of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet ptanh(const Packet& a) { using std::tanh; return tanh(a); }
 
 /** \internal \returns the exp of \a a (coeff-wise) */
 template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
@@ -330,9 +404,31 @@ Packet pexp(const Packet& a) { using std::exp; return exp(a); }
 template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
 Packet plog(const Packet& a) { using std::log; return log(a); }
 
+/** \internal \returns the log10 of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet plog10(const Packet& a) { using std::log10; return log10(a); }
+
 /** \internal \returns the square-root of \a a (coeff-wise) */
 template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
 Packet psqrt(const Packet& a) { using std::sqrt; return sqrt(a); }
+
+/** \internal \returns the reciprocal square-root of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet prsqrt(const Packet& a) {
+  return pdiv(pset1<Packet>(1), psqrt(a));
+}
+
+/** \internal \returns the rounded value of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet pround(const Packet& a) { using numext::round; return round(a); }
+
+/** \internal \returns the floor of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet pfloor(const Packet& a) { using numext::floor; return floor(a); }
+
+/** \internal \returns the ceil of \a a (coeff-wise) */
+template<typename Packet> EIGEN_DECLARE_FUNCTION_ALLOWING_MULTIPLE_DEFINITIONS
+Packet pceil(const Packet& a) { using numext::ceil; return ceil(a); }
 
 /***************************************************************************
 * The following functions might not have to be overwritten for vectorized types
@@ -354,25 +450,36 @@ pmadd(const Packet&  a,
 { return padd(pmul(a, b),c); }
 
 /** \internal \returns a packet version of \a *from.
-  * If LoadMode equals #Aligned, \a from must be 16 bytes aligned */
-template<typename Packet, int LoadMode>
-inline Packet ploadt(const typename unpacket_traits<Packet>::type* from)
+  * The pointer \a from must be aligned on a \a Alignment bytes boundary. */
+template<typename Packet, int Alignment>
+EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE Packet ploadt(const typename unpacket_traits<Packet>::type* from)
 {
-  if(LoadMode == Aligned)
+  if(Alignment >= unpacket_traits<Packet>::alignment)
     return pload<Packet>(from);
   else
     return ploadu<Packet>(from);
 }
 
 /** \internal copy the packet \a from to \a *to.
-  * If StoreMode equals #Aligned, \a to must be 16 bytes aligned */
-template<typename Scalar, typename Packet, int LoadMode>
-inline void pstoret(Scalar* to, const Packet& from)
+  * The pointer \a from must be aligned on a \a Alignment bytes boundary. */
+template<typename Scalar, typename Packet, int Alignment>
+EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE void pstoret(Scalar* to, const Packet& from)
 {
-  if(LoadMode == Aligned)
+  if(Alignment >= unpacket_traits<Packet>::alignment)
     pstore(to, from);
   else
     pstoreu(to, from);
+}
+
+/** \internal \returns a packet version of \a *from.
+  * Unlike ploadt, ploadt_ro takes advantage of the read-only memory path on the
+  * hardware if available to speedup the loading of data that won't be modified
+  * by the current computation.
+  */
+template<typename Packet, int LoadMode>
+inline Packet ploadt_ro(const typename unpacket_traits<Packet>::type* from)
+{
+  return ploadt<Packet, LoadMode>(from);
 }
 
 /** \internal default implementation of palign() allowing partial specialization */
@@ -431,6 +538,19 @@ template <typename Packet,int N=unpacket_traits<Packet>::size> struct PacketBloc
 template<typename Packet> EIGEN_DEVICE_FUNC inline void
 ptranspose(PacketBlock<Packet,1>& /*kernel*/) {
   // Nothing to do in the scalar case, i.e. a 1x1 matrix.
+}
+
+/***************************************************************************
+ * Selector, i.e. vector of N boolean values used to select (i.e. blend)
+ * words from 2 packets.
+***************************************************************************/
+template <size_t N> struct Selector {
+  bool select[N];
+};
+
+template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
+pblend(const Selector<unpacket_traits<Packet>::size>& ifPacket, const Packet& thenPacket, const Packet& elsePacket) {
+  return ifPacket.select[0] ? thenPacket : elsePacket;
 }
 
 } // end namespace internal

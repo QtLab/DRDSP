@@ -28,7 +28,7 @@ public:
   typedef typename internal::traits<Derived>::MatrixType MatrixType;
   typedef typename internal::traits<Derived>::Preconditioner Preconditioner;
   typedef typename MatrixType::Scalar Scalar;
-  typedef typename MatrixType::Index Index;
+  typedef typename MatrixType::StorageIndex StorageIndex;
   typedef typename MatrixType::RealScalar RealScalar;
 
 public:
@@ -37,7 +37,7 @@ public:
 
   /** Default constructor. */
   IterativeSolverBase()
-    : mp_matrix(0)
+    : m_dummy(0,0), mp_matrix(m_dummy)
   {
     init();
   }
@@ -52,10 +52,12 @@ public:
     * this class becomes invalid. Call compute() to update it with the new
     * matrix A, or modify a copy of A.
     */
-  explicit IterativeSolverBase(const MatrixType& A)
+  template<typename MatrixDerived>
+  explicit IterativeSolverBase(const EigenBase<MatrixDerived>& A)
+    : mp_matrix(A.derived())
   {
     init();
-    compute(A);
+    compute(mp_matrix);
   }
 
   ~IterativeSolverBase() {}
@@ -65,12 +67,14 @@ public:
     * Currently, this function mostly calls analyzePattern on the preconditioner. In the future
     * we might, for instance, implement column reordering for faster matrix vector products.
     */
-  Derived& analyzePattern(const MatrixType& A)
+  template<typename MatrixDerived>
+  Derived& analyzePattern(const EigenBase<MatrixDerived>& A)
   {
-    m_preconditioner.analyzePattern(A);
+    grab(A.derived());
+    m_preconditioner.analyzePattern(mp_matrix);
     m_isInitialized = true;
     m_analysisIsOk = true;
-    m_info = Success;
+    m_info = m_preconditioner.info();
     return derived();
   }
   
@@ -83,13 +87,14 @@ public:
     * this class becomes invalid. Call compute() to update it with the new
     * matrix A, or modify a copy of A.
     */
-  Derived& factorize(const MatrixType& A)
+  template<typename MatrixDerived>
+  Derived& factorize(const EigenBase<MatrixDerived>& A)
   {
     eigen_assert(m_analysisIsOk && "You must first call analyzePattern()"); 
-    mp_matrix = &A;
-    m_preconditioner.factorize(A);
+    grab(A.derived());
+    m_preconditioner.factorize(mp_matrix);
     m_factorizationIsOk = true;
-    m_info = Success;
+    m_info = m_preconditioner.info();
     return derived();
   }
 
@@ -103,26 +108,34 @@ public:
     * this class becomes invalid. Call compute() to update it with the new
     * matrix A, or modify a copy of A.
     */
-  Derived& compute(const MatrixType& A)
+  template<typename MatrixDerived>
+  Derived& compute(const EigenBase<MatrixDerived>& A)
   {
-    mp_matrix = &A;
-    m_preconditioner.compute(A);
+    grab(A.derived());
+    m_preconditioner.compute(mp_matrix);
     m_isInitialized = true;
     m_analysisIsOk = true;
     m_factorizationIsOk = true;
-    m_info = Success;
+    m_info = m_preconditioner.info();
     return derived();
   }
 
   /** \internal */
-  Index rows() const { return mp_matrix ? mp_matrix->rows() : 0; }
-  /** \internal */
-  Index cols() const { return mp_matrix ? mp_matrix->cols() : 0; }
+  Index rows() const { return mp_matrix.rows(); }
 
-  /** \returns the tolerance threshold used by the stopping criteria */
+  /** \internal */
+  Index cols() const { return mp_matrix.cols(); }
+
+  /** \returns the tolerance threshold used by the stopping criteria.
+    * \sa setTolerance()
+    */
   RealScalar tolerance() const { return m_tolerance; }
   
-  /** Sets the tolerance threshold used by the stopping criteria */
+  /** Sets the tolerance threshold used by the stopping criteria.
+    *
+    * This value is used as an upper bound to the relative residual error: |Ax-b|/|b|.
+    * The default value is the machine precision given by NumTraits<Scalar>::epsilon()
+    */
   Derived& setTolerance(const RealScalar& tolerance)
   {
     m_tolerance = tolerance;
@@ -135,27 +148,34 @@ public:
   /** \returns a read-only reference to the preconditioner. */
   const Preconditioner& preconditioner() const { return m_preconditioner; }
 
-  /** \returns the max number of iterations */
-  int maxIterations() const
+  /** \returns the max number of iterations.
+    * It is either the value setted by setMaxIterations or, by default,
+    * twice the number of columns of the matrix.
+    */
+  Index maxIterations() const
   {
-    return (mp_matrix && m_maxIterations<0) ? mp_matrix->cols() : m_maxIterations;
+    return (m_maxIterations<0) ? 2*mp_matrix.cols() : m_maxIterations;
   }
   
-  /** Sets the max number of iterations */
-  Derived& setMaxIterations(int maxIters)
+  /** Sets the max number of iterations.
+    * Default is twice the number of columns of the matrix.
+    */
+  Derived& setMaxIterations(Index maxIters)
   {
     m_maxIterations = maxIters;
     return derived();
   }
 
   /** \returns the number of iterations performed during the last solve */
-  int iterations() const
+  Index iterations() const
   {
     eigen_assert(m_isInitialized && "ConjugateGradient is not initialized.");
     return m_iterations;
   }
 
-  /** \returns the tolerance error reached during the last solve */
+  /** \returns the tolerance error reached during the last solve.
+    * It is a close approximation of the true relative residual error |Ax-b|/|b|.
+    */
   RealScalar error() const
   {
     eigen_assert(m_isInitialized && "ConjugateGradient is not initialized.");
@@ -189,11 +209,11 @@ public:
   {
     eigen_assert(rows()==b.rows());
     
-    int rhsCols = b.cols();
-    int size = b.rows();
+    Index rhsCols = b.cols();
+    Index size = b.rows();
     Eigen::Matrix<DestScalar,Dynamic,1> tb(size);
     Eigen::Matrix<DestScalar,Dynamic,1> tx(size);
-    for(int k=0; k<rhsCols; ++k)
+    for(Index k=0; k<rhsCols; ++k)
     {
       tb = b.col(k);
       tx = derived().solve(tb);
@@ -210,14 +230,32 @@ protected:
     m_maxIterations = -1;
     m_tolerance = NumTraits<Scalar>::epsilon();
   }
-  const MatrixType* mp_matrix;
+  
+  template<typename MatrixDerived>
+  void grab(const EigenBase<MatrixDerived> &A)
+  {
+    mp_matrix.~Ref<const MatrixType>();
+    ::new (&mp_matrix) Ref<const MatrixType>(A.derived());
+  }
+  
+  void grab(const Ref<const MatrixType> &A)
+  {
+    if(&(A.derived()) != &mp_matrix)
+    {
+      mp_matrix.~Ref<const MatrixType>();
+      ::new (&mp_matrix) Ref<const MatrixType>(A);
+    }
+  }
+  
+  MatrixType m_dummy;
+  Ref<const MatrixType> mp_matrix;
   Preconditioner m_preconditioner;
 
-  int m_maxIterations;
+  Index m_maxIterations;
   RealScalar m_tolerance;
   
   mutable RealScalar m_error;
-  mutable int m_iterations;
+  mutable Index m_iterations;
   mutable ComputationInfo m_info;
   mutable bool m_analysisIsOk, m_factorizationIsOk;
 };

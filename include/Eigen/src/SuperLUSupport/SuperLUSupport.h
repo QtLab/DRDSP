@@ -156,37 +156,38 @@ struct SluMatrix : SuperMatrix
     res.setScalarType<typename MatrixType::Scalar>();
     res.Mtype     = SLU_GE;
 
-    res.nrow      = mat.rows();
-    res.ncol      = mat.cols();
+    res.nrow      = internal::convert_index<int>(mat.rows());
+    res.ncol      = internal::convert_index<int>(mat.cols());
 
-    res.storage.lda       = MatrixType::IsVectorAtCompileTime ? mat.size() : mat.outerStride();
+    res.storage.lda       = internal::convert_index<int>(MatrixType::IsVectorAtCompileTime ? mat.size() : mat.outerStride());
     res.storage.values    = (void*)(mat.data());
     return res;
   }
 
   template<typename MatrixType>
-  static SluMatrix Map(SparseMatrixBase<MatrixType>& mat)
+  static SluMatrix Map(SparseMatrixBase<MatrixType>& a_mat)
   {
+    MatrixType &mat(a_mat.derived());
     SluMatrix res;
     if ((MatrixType::Flags&RowMajorBit)==RowMajorBit)
     {
       res.setStorageType(SLU_NR);
-      res.nrow      = mat.cols();
-      res.ncol      = mat.rows();
+      res.nrow      = internal::convert_index<int>(mat.cols());
+      res.ncol      = internal::convert_index<int>(mat.rows());
     }
     else
     {
       res.setStorageType(SLU_NC);
-      res.nrow      = mat.rows();
-      res.ncol      = mat.cols();
+      res.nrow      = internal::convert_index<int>(mat.rows());
+      res.ncol      = internal::convert_index<int>(mat.cols());
     }
 
     res.Mtype       = SLU_GE;
 
-    res.storage.nnz       = mat.nonZeros();
-    res.storage.values    = mat.derived().valuePtr();
-    res.storage.innerInd  = mat.derived().innerIndexPtr();
-    res.storage.outerInd  = mat.derived().outerIndexPtr();
+    res.storage.nnz       = internal::convert_index<int>(mat.nonZeros());
+    res.storage.values    = mat.valuePtr();
+    res.storage.innerInd  = mat.innerIndexPtr();
+    res.storage.outerInd  = mat.outerIndexPtr();
 
     res.setScalarType<typename MatrixType::Scalar>();
 
@@ -298,10 +299,11 @@ class SuperLUBase : public SparseSolverBase<Derived>
     typedef _MatrixType MatrixType;
     typedef typename MatrixType::Scalar Scalar;
     typedef typename MatrixType::RealScalar RealScalar;
-    typedef typename MatrixType::Index Index;
+    typedef typename MatrixType::StorageIndex StorageIndex;
     typedef Matrix<Scalar,Dynamic,1> Vector;
     typedef Matrix<int, 1, MatrixType::ColsAtCompileTime> IntRowVectorType;
     typedef Matrix<int, MatrixType::RowsAtCompileTime, 1> IntColVectorType;    
+    typedef Map<PermutationMatrix<Dynamic,Dynamic,int> > PermutationMap;
     typedef SparseMatrix<Scalar> LUMatrixType;
 
   public:
@@ -361,7 +363,7 @@ class SuperLUBase : public SparseSolverBase<Derived>
     {
       set_default_options(&this->m_sluOptions);
       
-      const int size = a.rows();
+      const Index size = a.rows();
       m_matrix = a;
 
       m_sluA = internal::asSluMatrix(m_matrix);
@@ -380,7 +382,7 @@ class SuperLUBase : public SparseSolverBase<Derived>
       m_sluB.storage.values = 0;
       m_sluB.nrow           = 0;
       m_sluB.ncol           = 0;
-      m_sluB.storage.lda    = size;
+      m_sluB.storage.lda    = internal::convert_index<int>(size);
       m_sluX                = m_sluB;
       
       m_extractedDataAreDirty = true;
@@ -457,12 +459,13 @@ class SuperLU : public SuperLUBase<_MatrixType,SuperLU<_MatrixType> >
     typedef _MatrixType MatrixType;
     typedef typename Base::Scalar Scalar;
     typedef typename Base::RealScalar RealScalar;
-    typedef typename Base::Index Index;
+    typedef typename Base::StorageIndex StorageIndex;
     typedef typename Base::IntRowVectorType IntRowVectorType;
-    typedef typename Base::IntColVectorType IntColVectorType;    
+    typedef typename Base::IntColVectorType IntColVectorType;   
+    typedef typename Base::PermutationMap PermutationMap;
     typedef typename Base::LUMatrixType LUMatrixType;
     typedef TriangularView<LUMatrixType, Lower|UnitDiag>  LMatrixType;
-    typedef TriangularView<LUMatrixType,  Upper>           UMatrixType;
+    typedef TriangularView<LUMatrixType,  Upper>          UMatrixType;
 
   public:
     using Base::_solve_impl;
@@ -500,11 +503,9 @@ class SuperLU : public SuperLUBase<_MatrixType,SuperLU<_MatrixType> >
       */
     void factorize(const MatrixType& matrix);
     
-    #ifndef EIGEN_PARSED_BY_DOXYGEN
     /** \internal */
     template<typename Rhs,typename Dest>
     void _solve_impl(const MatrixBase<Rhs> &b, MatrixBase<Dest> &dest) const;
-    #endif // EIGEN_PARSED_BY_DOXYGEN
     
     inline const LMatrixType& matrixL() const
     {
@@ -616,8 +617,8 @@ void SuperLU<MatrixType>::_solve_impl(const MatrixBase<Rhs> &b, MatrixBase<Dest>
 {
   eigen_assert(m_factorizationIsOk && "The decomposition is not in a valid state for solving, you must first call either compute() or analyzePattern()/factorize()");
 
-  const int size = m_matrix.rows();
-  const int rhsCols = b.cols();
+  const Index size = m_matrix.rows();
+  const Index rhsCols = b.cols();
   eigen_assert(size==b.rows());
 
   m_sluOptions.Trans = NOTRANS;
@@ -627,8 +628,12 @@ void SuperLU<MatrixType>::_solve_impl(const MatrixBase<Rhs> &b, MatrixBase<Dest>
 
   m_sluFerr.resize(rhsCols);
   m_sluBerr.resize(rhsCols);
-  m_sluB = SluMatrix::Map(b.const_cast_derived());
-  m_sluX = SluMatrix::Map(x.derived());
+  
+  Ref<const Matrix<typename Rhs::Scalar,Dynamic,Dynamic,ColMajor> > b_ref(b);
+  Ref<const Matrix<typename Dest::Scalar,Dynamic,Dynamic,ColMajor> > x_ref(x);
+  
+  m_sluB = SluMatrix::Map(b_ref.const_cast_derived());
+  m_sluX = SluMatrix::Map(x_ref.const_cast_derived());
   
   typename Rhs::PlainObject b_cpy;
   if(m_sluEqued!='N')
@@ -651,6 +656,10 @@ void SuperLU<MatrixType>::_solve_impl(const MatrixBase<Rhs> &b, MatrixBase<Dest>
                 &m_sluFerr[0], &m_sluBerr[0],
                 &m_sluStat, &info, Scalar());
   StatFree(&m_sluStat);
+  
+  if(&x.coeffRef(0) != x_ref.data())
+    x = x_ref;
+  
   m_info = info==0 ? Success : NumericalIssue;
 }
 
@@ -674,7 +683,7 @@ void SuperLUBase<MatrixType,Derived>::extractData() const
     NCformat    *Ustore = static_cast<NCformat*>(m_sluU.Store);
     Scalar      *SNptr;
 
-    const int size = m_matrix.rows();
+    const Index size = m_matrix.rows();
     m_l.resize(size,size);
     m_l.resizeNonZeros(Lstore->nnz);
     m_u.resize(size,size);
@@ -766,6 +775,8 @@ typename SuperLU<MatrixType>::Scalar SuperLU<MatrixType>::determinant() const
         det *= m_u.valuePtr()[lastId];
     }
   }
+  if(PermutationMap(m_p.data(),m_p.size()).determinant()*PermutationMap(m_q.data(),m_q.size()).determinant()<0)
+    det = -det;
   if(m_sluEqued!='N')
     return det/m_sluRscale.prod()/m_sluCscale.prod();
   else
@@ -800,7 +811,6 @@ class SuperILU : public SuperLUBase<_MatrixType,SuperILU<_MatrixType> >
     typedef _MatrixType MatrixType;
     typedef typename Base::Scalar Scalar;
     typedef typename Base::RealScalar RealScalar;
-    typedef typename Base::Index Index;
 
   public:
     using Base::_solve_impl;
@@ -938,8 +948,12 @@ void SuperILU<MatrixType>::_solve_impl(const MatrixBase<Rhs> &b, MatrixBase<Dest
 
   m_sluFerr.resize(rhsCols);
   m_sluBerr.resize(rhsCols);
-  m_sluB = SluMatrix::Map(b.const_cast_derived());
-  m_sluX = SluMatrix::Map(x.derived());
+  
+  Ref<const Matrix<typename Rhs::Scalar,Dynamic,Dynamic,ColMajor> > b_ref(b);
+  Ref<const Matrix<typename Dest::Scalar,Dynamic,Dynamic,ColMajor> > x_ref(x);
+  
+  m_sluB = SluMatrix::Map(b_ref.const_cast_derived());
+  m_sluX = SluMatrix::Map(x_ref.const_cast_derived());
 
   typename Rhs::PlainObject b_cpy;
   if(m_sluEqued!='N')
@@ -962,6 +976,9 @@ void SuperILU<MatrixType>::_solve_impl(const MatrixBase<Rhs> &b, MatrixBase<Dest
                 &recip_pivot_growth, &rcond,
                 &m_sluStat, &info, Scalar());
   StatFree(&m_sluStat);
+  
+  if(&x.coeffRef(0) != x_ref.data())
+    x = x_ref;
 
   m_info = info==0 ? Success : NumericalIssue;
 }

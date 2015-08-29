@@ -45,9 +45,9 @@ template<typename XprType>
 class Inverse : public InverseImpl<XprType,typename internal::traits<XprType>::StorageKind>
 {
 public:
-  typedef typename XprType::Index Index;
+  typedef typename XprType::StorageIndex StorageIndex;
   typedef typename XprType::PlainObject                       PlainObject;
-  typedef typename internal::nested<XprType>::type            XprTypeNested;
+  typedef typename internal::ref_selector<XprType>::type      XprTypeNested;
   typedef typename internal::remove_all<XprTypeNested>::type  XprTypeNestedCleaned;
   
   explicit Inverse(const XprType &xpr)

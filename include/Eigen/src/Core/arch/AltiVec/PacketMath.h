@@ -18,12 +18,12 @@ namespace internal {
 #define EIGEN_CACHEFRIENDLY_PRODUCT_THRESHOLD 4
 #endif
 
-#ifndef EIGEN_HAS_FUSED_MADD
-#define EIGEN_HAS_FUSED_MADD 1
+#ifndef EIGEN_HAS_SINGLE_INSTRUCTION_MADD
+#define EIGEN_HAS_SINGLE_INSTRUCTION_MADD
 #endif
 
-#ifndef EIGEN_HAS_FUSE_CJMADD
-#define EIGEN_HAS_FUSE_CJMADD 1
+#ifndef EIGEN_HAS_SINGLE_INSTRUCTION_CJMADD
+#define EIGEN_HAS_SINGLE_INSTRUCTION_CJMADD
 #endif
 
 // NOTE Altivec has 32 registers, but Eigen only accepts a value of 8 or 16
@@ -148,8 +148,8 @@ template<> struct packet_traits<int>    : default_packet_traits
 };
 
 
-template<> struct unpacket_traits<Packet4f> { typedef float  type; enum {size=4}; typedef Packet4f half; };
-template<> struct unpacket_traits<Packet4i> { typedef int    type; enum {size=4}; typedef Packet4i half; };
+template<> struct unpacket_traits<Packet4f> { typedef float  type; enum {size=4, alignment=Aligned16}; typedef Packet4f half; };
+template<> struct unpacket_traits<Packet4i> { typedef int    type; enum {size=4, alignment=Aligned16}; typedef Packet4i half; };
 
 inline std::ostream & operator <<(std::ostream & s, const Packet16uc & v)
 {
@@ -252,7 +252,7 @@ pbroadcast4<Packet4i>(const int *a,
   a3 = vec_splat(a3, 3);
 }
 
-template<> EIGEN_DEVICE_FUNC inline Packet4f pgather<float, Packet4f>(const float* from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline Packet4f pgather<float, Packet4f>(const float* from, Index stride)
 {
   float EIGEN_ALIGN16 af[4];
   af[0] = from[0*stride];
@@ -261,7 +261,7 @@ template<> EIGEN_DEVICE_FUNC inline Packet4f pgather<float, Packet4f>(const floa
   af[3] = from[3*stride];
  return pload<Packet4f>(af);
 }
-template<> EIGEN_DEVICE_FUNC inline Packet4i pgather<int, Packet4i>(const int* from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline Packet4i pgather<int, Packet4i>(const int* from, Index stride)
 {
   int EIGEN_ALIGN16 ai[4];
   ai[0] = from[0*stride];
@@ -270,7 +270,7 @@ template<> EIGEN_DEVICE_FUNC inline Packet4i pgather<int, Packet4i>(const int* f
   ai[3] = from[3*stride];
  return pload<Packet4i>(ai);
 }
-template<> EIGEN_DEVICE_FUNC inline void pscatter<float, Packet4f>(float* to, const Packet4f& from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline void pscatter<float, Packet4f>(float* to, const Packet4f& from, Index stride)
 {
   float EIGEN_ALIGN16 af[4];
   pstore<float>(af, from);
@@ -279,7 +279,7 @@ template<> EIGEN_DEVICE_FUNC inline void pscatter<float, Packet4f>(float* to, co
   to[2*stride] = af[2];
   to[3*stride] = af[3];
 }
-template<> EIGEN_DEVICE_FUNC inline void pscatter<int, Packet4i>(int* to, const Packet4i& from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline void pscatter<int, Packet4i>(int* to, const Packet4i& from, Index stride)
 {
   int EIGEN_ALIGN16 ai[4];
   pstore<int>((int *)ai, from);
@@ -289,8 +289,8 @@ template<> EIGEN_DEVICE_FUNC inline void pscatter<int, Packet4i>(int* to, const 
   to[3*stride] = ai[3];
 }
 
-template<> EIGEN_STRONG_INLINE Packet4f plset<float>(const float& a) { return vec_add(pset1<Packet4f>(a), p4f_COUNTDOWN); }
-template<> EIGEN_STRONG_INLINE Packet4i plset<int>(const int& a)     { return vec_add(pset1<Packet4i>(a), p4i_COUNTDOWN); }
+template<> EIGEN_STRONG_INLINE Packet4f plset<Packet4f>(const float& a) { return vec_add(pset1<Packet4f>(a), p4f_COUNTDOWN); }
+template<> EIGEN_STRONG_INLINE Packet4i plset<Packet4i>(const int& a)   { return vec_add(pset1<Packet4i>(a), p4i_COUNTDOWN); }
 
 template<> EIGEN_STRONG_INLINE Packet4f padd<Packet4f>(const Packet4f& a, const Packet4f& b) { return vec_add(a,b); }
 template<> EIGEN_STRONG_INLINE Packet4i padd<Packet4i>(const Packet4i& a, const Packet4i& b) { return vec_add(a,b); }
@@ -756,7 +756,7 @@ template<> struct packet_traits<double> : default_packet_traits
   };
 };
 
-template<> struct unpacket_traits<Packet2d> { typedef double type; enum {size=2}; typedef Packet2d half; };
+template<> struct unpacket_traits<Packet2d> { typedef double type; enum {size=2, alignment=Aligned16}; typedef Packet2d half; };
 
 
 inline std::ostream & operator <<(std::ostream & s, const Packet2d & v)
@@ -793,21 +793,21 @@ pbroadcast4<Packet2d>(const double *a,
   a2 = vec_splat_dbl(a3, 0);
   a3 = vec_splat_dbl(a3, 1);
 }
-template<> EIGEN_DEVICE_FUNC inline Packet2d pgather<double, Packet2d>(const double* from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline Packet2d pgather<double, Packet2d>(const double* from, Index stride)
 {
   double EIGEN_ALIGN16 af[2];
   af[0] = from[0*stride];
   af[1] = from[1*stride];
  return pload<Packet2d>(af);
 }
-template<> EIGEN_DEVICE_FUNC inline void pscatter<double, Packet2d>(double* to, const Packet2d& from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline void pscatter<double, Packet2d>(double* to, const Packet2d& from, Index stride)
 {
   double EIGEN_ALIGN16 af[2];
   pstore<double>(af, from);
   to[0*stride] = af[0];
   to[1*stride] = af[1];
 }
-template<> EIGEN_STRONG_INLINE Packet2d plset<double>(const double& a) { return vec_add(pset1<Packet2d>(a), p2d_COUNTDOWN); }
+template<> EIGEN_STRONG_INLINE Packet2d plset<Packet2d>(const double& a) { return vec_add(pset1<Packet2d>(a), p2d_COUNTDOWN); }
 
 template<> EIGEN_STRONG_INLINE Packet2d padd<Packet2d>(const Packet2d& a, const Packet2d& b) { return vec_add(a,b); }
 

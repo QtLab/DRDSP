@@ -18,7 +18,7 @@ namespace Eigen {
   * \brief A matrix or vector expression mapping an existing expression
   *
   * \tparam PlainObjectType the equivalent matrix type of the mapped data
-  * \tparam Options specifies whether the pointer is \c #Aligned, or \c #Unaligned.
+  * \tparam MapOptions specifies the pointer alignment in bytes. It can be: \c #Aligned128, , \c #Aligned64, \c #Aligned32, \c #Aligned16, \c #Aligned8 or \c #Unaligned.
   *                The default is \c #Unaligned.
   * \tparam StrideType optionally specifies strides. By default, Ref implies a contiguous storage along the inner dimension (inner stride==1),
   *                   but accepts a variable outer stride (leading dimension).
@@ -48,8 +48,9 @@ namespace Eigen {
   * VectorXf a;
   * foo1(a.head());             // OK
   * foo1(A.col());              // OK
-  * foo1(A.row());              // compilation error because here innerstride!=1
-  * foo2(A.row());              // The row is copied into a contiguous temporary
+  * foo1(A.row());              // Compilation error because here innerstride!=1
+  * foo2(A.row());              // Compilation error because A.row() is a 1xN object while foo2 is expecting a Nx1 object
+  * foo2(A.row().transpose());  // The row is copied into a contiguous temporary
   * foo2(2*a);                  // The expression is evaluated into a temporary
   * foo2(A.col().segment(2,4)); // No temporary
   * \endcode
@@ -91,7 +92,8 @@ struct traits<Ref<_PlainObjectType, _Options, _StrideType> >
   typedef _StrideType StrideType;
   enum {
     Options = _Options,
-    Flags = traits<Map<_PlainObjectType, _Options, _StrideType> >::Flags | NestByRefBit
+    Flags = traits<Map<_PlainObjectType, _Options, _StrideType> >::Flags | NestByRefBit,
+    Alignment = traits<Map<_PlainObjectType, _Options, _StrideType> >::Alignment
   };
 
   template<typename Derived> struct match {
@@ -103,8 +105,9 @@ struct traits<Ref<_PlainObjectType, _Options, _StrideType> >
                       || (int(StrideType::InnerStrideAtCompileTime)==0 && int(Derived::InnerStrideAtCompileTime)==1),
       OuterStrideMatch = Derived::IsVectorAtCompileTime
                       || int(StrideType::OuterStrideAtCompileTime)==int(Dynamic) || int(StrideType::OuterStrideAtCompileTime)==int(Derived::OuterStrideAtCompileTime),
-      AlignmentMatch = (_Options!=Aligned) || ((PlainObjectType::Flags&AlignedBit)==0) || ((traits<Derived>::Flags&AlignedBit)==AlignedBit),
-      MatchAtCompileTime = HasDirectAccess && StorageOrderMatch && InnerStrideMatch && OuterStrideMatch && AlignmentMatch
+      AlignmentMatch = (int(traits<PlainObjectType>::Alignment)==int(Unaligned)) || (int(evaluator<Derived>::Alignment) >= int(Alignment)), // FIXME the first condition is not very clear, it should be replaced by the required alignment
+      ScalarTypeMatch = internal::is_same<typename PlainObjectType::Scalar, typename Derived::Scalar>::value,
+      MatchAtCompileTime = HasDirectAccess && StorageOrderMatch && InnerStrideMatch && OuterStrideMatch && AlignmentMatch && ScalarTypeMatch
     };
     typedef typename internal::conditional<MatchAtCompileTime,internal::true_type,internal::false_type>::type type;
   };
@@ -183,9 +186,11 @@ protected:
 template<typename PlainObjectType, int Options, typename StrideType> class Ref
   : public RefBase<Ref<PlainObjectType, Options, StrideType> >
 {
+  private:
     typedef internal::traits<Ref> Traits;
     template<typename Derived>
-    EIGEN_DEVICE_FUNC inline Ref(const PlainObjectBase<Derived>& expr);
+    EIGEN_DEVICE_FUNC inline Ref(const PlainObjectBase<Derived>& expr,
+                                 typename internal::enable_if<bool(Traits::template match<Derived>::MatchAtCompileTime),Derived>::type* = 0);
   public:
 
     typedef RefBase<Ref> Base;
@@ -194,13 +199,15 @@ template<typename PlainObjectType, int Options, typename StrideType> class Ref
 
     #ifndef EIGEN_PARSED_BY_DOXYGEN
     template<typename Derived>
-    EIGEN_DEVICE_FUNC inline Ref(PlainObjectBase<Derived>& expr)
+    EIGEN_DEVICE_FUNC inline Ref(PlainObjectBase<Derived>& expr,
+                                 typename internal::enable_if<bool(Traits::template match<Derived>::MatchAtCompileTime),Derived>::type* = 0)
     {
       EIGEN_STATIC_ASSERT(bool(Traits::template match<Derived>::MatchAtCompileTime), STORAGE_LAYOUT_DOES_NOT_MATCH);
       Base::construct(expr.derived());
     }
     template<typename Derived>
-    EIGEN_DEVICE_FUNC inline Ref(const DenseBase<Derived>& expr)
+    EIGEN_DEVICE_FUNC inline Ref(const DenseBase<Derived>& expr,
+                                 typename internal::enable_if<bool(Traits::template match<Derived>::MatchAtCompileTime),Derived>::type* = 0)
     #else
     template<typename Derived>
     inline Ref(DenseBase<Derived>& expr)
@@ -227,7 +234,8 @@ template<typename TPlainObjectType, int Options, typename StrideType> class Ref<
     EIGEN_DENSE_PUBLIC_INTERFACE(Ref)
 
     template<typename Derived>
-    EIGEN_DEVICE_FUNC inline Ref(const DenseBase<Derived>& expr)
+    EIGEN_DEVICE_FUNC inline Ref(const DenseBase<Derived>& expr,
+                                 typename internal::enable_if<bool(Traits::template match<Derived>::ScalarTypeMatch),Derived>::type* = 0)
     {
 //      std::cout << match_helper<Derived>::HasDirectAccess << "," << match_helper<Derived>::OuterStrideMatch << "," << match_helper<Derived>::InnerStrideMatch << "\n";
 //      std::cout << int(StrideType::OuterStrideAtCompileTime) << " - " << int(Derived::OuterStrideAtCompileTime) << "\n";

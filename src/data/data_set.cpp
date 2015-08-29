@@ -81,7 +81,7 @@ void DataSet::WriteCSV( const char* filename ) const {
 	}
 	for( const auto& x : points ) {
 		for(uint32_t j=0;j<dimension;++j)
-			out << x(j) << ",";
+			out << x(j) << ',';
 		out << endl;
 	}
 }

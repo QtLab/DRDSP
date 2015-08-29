@@ -75,7 +75,7 @@ namespace DRDSP {
 				outBin.write((char*)&print,sizeof(uint32_t));
 				outBin.write((char*)&param,sizeof(Parameter));
 			}
-			if( textOutput ) outTxt << print << "," << param << endl;
+			if( textOutput ) outTxt << print << ',' << param << endl;
 
 			while( t <= tInterval ) {
 			
@@ -84,7 +84,7 @@ namespace DRDSP {
 				}
 				if( textOutput ) {
 					for(int i=0;i<solver.state.size();++i) {
-						outTxt << solver.state(i) << ",";
+						outTxt << solver.state(i) << ',';
 					}
 					outTxt << endl;
 				}

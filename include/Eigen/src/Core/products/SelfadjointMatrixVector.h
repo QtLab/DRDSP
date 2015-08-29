@@ -94,7 +94,7 @@ EIGEN_DONT_INLINE void selfadjoint_matrix_vector_product<Scalar,Index,StorageOrd
 
     size_t starti = FirstTriangular ? 0 : j+2;
     size_t endi   = FirstTriangular ? j : size;
-    size_t alignedStart = (starti) + internal::first_aligned(&res[starti], endi-starti);
+    size_t alignedStart = (starti) + internal::first_default_aligned(&res[starti], endi-starti);
     size_t alignedEnd = alignedStart + ((endi-alignedStart)/(PacketSize))*(PacketSize);
 
     // TODO make sure this product is a real * complex and that the rhs is properly conjugated if needed
@@ -174,7 +174,6 @@ template<typename Lhs, int LhsMode, typename Rhs>
 struct selfadjoint_product_impl<Lhs,LhsMode,false,Rhs,0,true>
 {
   typedef typename Product<Lhs,Rhs>::Scalar Scalar;
-  typedef typename Product<Lhs,Rhs>::Index Index;
   
   typedef internal::blas_traits<Lhs> LhsBlasTraits;
   typedef typename LhsBlasTraits::DirectLinearAccessType ActualLhsType;

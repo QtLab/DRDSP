@@ -60,23 +60,23 @@ namespace DRDSP {
 		void WriteCSV( const char* filename ) const {
 			ofstream out(filename);
 			out.precision(16);
-			out << dimension << "," << numRBFs << endl;
+			out << dimension << ',' << numRBFs << endl;
 			for(uint32_t i=0;i<stateDim;++i) {	
 				for(uint32_t j=0;j<stateDim;++j)
-					out << linear(i,j) << ",";
+					out << linear(i,j) << ',';
 				out << endl;
 			}
 			out << endl;
 			for( const auto& r : rbfs ) {
 				for(uint32_t i=0;i<stateDim;++i) {
-					out << r.weight[i] << ",";
+					out << r.weight[i] << ',';
 				}
 				out << endl;
 			}
 			out << endl;
 			for( const auto& r : rbfs ) {
 				for(uint32_t i=0;i<stateDim;++i) {
-					out << r.centre[i] << ",";
+					out << r.centre[i] << ',';
 				}
 				out << endl;
 			}

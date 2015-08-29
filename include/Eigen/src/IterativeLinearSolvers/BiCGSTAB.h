@@ -27,7 +27,7 @@ namespace internal {
   */
 template<typename MatrixType, typename Rhs, typename Dest, typename Preconditioner>
 bool bicgstab(const MatrixType& mat, const Rhs& rhs, Dest& x,
-              const Preconditioner& precond, int& iters,
+              const Preconditioner& precond, Index& iters,
               typename Dest::RealScalar& tol_error)
 {
   using std::sqrt;
@@ -36,9 +36,9 @@ bool bicgstab(const MatrixType& mat, const Rhs& rhs, Dest& x,
   typedef typename Dest::Scalar Scalar;
   typedef Matrix<Scalar,Dynamic,1> VectorType;
   RealScalar tol = tol_error;
-  int maxIters = iters;
+  Index maxIters = iters;
 
-  int n = mat.cols();
+  Index n = mat.cols();
   VectorType r  = rhs - mat * x;
   VectorType r0 = r;
   
@@ -59,20 +59,21 @@ bool bicgstab(const MatrixType& mat, const Rhs& rhs, Dest& x,
 
   VectorType s(n), t(n);
 
-  RealScalar tol2 = tol*tol;
+  RealScalar tol2 = tol*tol*rhs_sqnorm;
   RealScalar eps2 = NumTraits<Scalar>::epsilon()*NumTraits<Scalar>::epsilon();
-  int i = 0;
-  int restarts = 0;
+  Index i = 0;
+  Index restarts = 0;
 
-  while ( r.squaredNorm()/rhs_sqnorm > tol2 && i<maxIters )
+  while ( r.squaredNorm() > tol2 && i<maxIters )
   {
     Scalar rho_old = rho;
 
     rho = r0.dot(r);
     if (abs(rho) < eps2*r0_sqnorm)
     {
-      // The new residual vector became too orthogonal to the arbitrarily choosen direction r0
+      // The new residual vector became too orthogonal to the arbitrarily chosen direction r0
       // Let's restart with a new r0:
+      r  = rhs - mat * x;
       r0 = r;
       rho = r0_sqnorm = r.squaredNorm();
       if(restarts++ == 0)
@@ -135,15 +136,17 @@ struct traits<BiCGSTAB<_MatrixType,_Preconditioner> >
   * and setTolerance() methods. The defaults are the size of the problem for the maximal number of iterations
   * and NumTraits<Scalar>::epsilon() for the tolerance.
   * 
+  * The tolerance corresponds to the relative residual error: |Ax-b|/|b|
+  * 
+  * \b Performance: when using sparse matrices, best performance is achied for a row-major sparse matrix format.
+  * Moreover, in this case multi-threading can be exploited if the user code is compiled with OpenMP enabled.
+  * See \ref TopicMultiThreading for details.
+  * 
   * This class can be used as the direct solver classes. Here is a typical usage example:
   * \include BiCGSTAB_simple.cpp
   * 
   * By default the iterations start with x=0 as an initial guess of the solution.
-  * One can control the start using the solveWithGuess() method. Here is a step by
-  * step execution example starting with a random guess and printing the evolution
-  * of the estimated error:
-  * \include BiCGSTAB_step_by_step.cpp
-  * Note that such a step by step execution is slightly slower.
+  * One can control the start using the solveWithGuess() method.
   * 
   * \sa class SimplicialCholesky, DiagonalPreconditioner, IdentityPreconditioner
   */
@@ -159,7 +162,6 @@ class BiCGSTAB : public IterativeSolverBase<BiCGSTAB<_MatrixType,_Preconditioner
 public:
   typedef _MatrixType MatrixType;
   typedef typename MatrixType::Scalar Scalar;
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::RealScalar RealScalar;
   typedef _Preconditioner Preconditioner;
 
@@ -187,13 +189,13 @@ public:
   void _solve_with_guess_impl(const Rhs& b, Dest& x) const
   {    
     bool failed = false;
-    for(int j=0; j<b.cols(); ++j)
+    for(Index j=0; j<b.cols(); ++j)
     {
       m_iterations = Base::maxIterations();
       m_error = Base::m_tolerance;
       
       typename Dest::ColXpr xj(x,j);
-      if(!internal::bicgstab(*mp_matrix, b.col(j), xj, Base::m_preconditioner, m_iterations, m_error))
+      if(!internal::bicgstab(mp_matrix, b.col(j), xj, Base::m_preconditioner, m_iterations, m_error))
         failed = true;
     }
     m_info = failed ? NumericalIssue
@@ -207,8 +209,8 @@ public:
   template<typename Rhs,typename Dest>
   void _solve_impl(const MatrixBase<Rhs>& b, Dest& x) const
   {
-    // x.setZero();
-    x = b;
+    x.resize(this->rows(),b.cols());
+    x.setZero();
     _solve_with_guess_impl(b,x);
   }
 

@@ -105,7 +105,7 @@ const ReducedData& ReducedData::WritePointsCSV( const char* filename ) const {
 	}
 	for(uint32_t i=0;i<count;++i) {
 		for(uint32_t j=0;j<dimension;++j)
-			out << points[i](j) << ",";
+			out << points[i](j) << ',';
 		out << endl;
 	}
 	return *this;
@@ -119,7 +119,7 @@ const ReducedData& ReducedData::WriteVectorsCSV( const char* filename ) const {
 	}
 	for(uint32_t i=0;i<count;++i) {
 		for(uint32_t j=0;j<dimension;++j)
-			out << vectors[i](j) << ",";
+			out << vectors[i](j) << ',';
 		out << endl;
 	}
 	return *this;
@@ -134,7 +134,7 @@ const ReducedData& ReducedData::WriteDerivativesCSV( const char* filename ) cons
 	for(uint32_t i=0;i<count;++i) {
 		for(uint32_t j=0;j<dimension;++j)
 			for(uint32_t k=0;k<dimension;++k)
-				out << derivatives[i](j,k) << ",";
+				out << derivatives[i](j,k) << ',';
 		out << endl;
 	}
 	return *this;

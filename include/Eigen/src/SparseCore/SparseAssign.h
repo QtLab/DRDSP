@@ -16,8 +16,7 @@ template<typename Derived>
 template<typename OtherDerived>
 Derived& SparseMatrixBase<Derived>::operator=(const EigenBase<OtherDerived> &other)
 {
-  // TODO use the evaluator mechanism
-  other.derived().evalTo(derived());
+  internal::call_assignment_no_alias(derived(), other.derived());
   return derived();
 }
 
@@ -71,7 +70,6 @@ void assign_sparse_to_sparse(DstXprType &dst, const SrcXprType &src)
 {
   eigen_assert(dst.rows() == src.rows() && dst.cols() == src.cols());
   
-  typedef typename DstXprType::Index Index;
   typedef typename DstXprType::Scalar Scalar;
   typedef typename internal::evaluator<DstXprType>::type DstEvaluatorType;
   typedef typename internal::evaluator<SrcXprType>::type SrcEvaluatorType;
@@ -144,7 +142,6 @@ struct Assignment<DstXprType, SrcXprType, Functor, Sparse2Dense, Scalar>
   static void run(DstXprType &dst, const SrcXprType &src, const Functor &func)
   {
     eigen_assert(dst.rows() == src.rows() && dst.cols() == src.cols());
-    typedef typename SrcXprType::Index Index;
     
     typename internal::evaluator<SrcXprType>::type srcEval(src);
     typename internal::evaluator<DstXprType>::type dstEval(dst);
@@ -161,7 +158,6 @@ struct Assignment<DstXprType, SrcXprType, internal::assign_op<typename DstXprTyp
   static void run(DstXprType &dst, const SrcXprType &src, const internal::assign_op<typename DstXprType::Scalar> &)
   {
     eigen_assert(dst.rows() == src.rows() && dst.cols() == src.cols());
-    typedef typename SrcXprType::Index Index;
     
     dst.setZero();
     typename internal::evaluator<SrcXprType>::type srcEval(src);
@@ -185,6 +181,39 @@ struct Assignment<DstXprType, Solve<DecType,RhsType>, internal::assign_op<Scalar
   }
 };
 
+struct Diagonal2Sparse {};
+
+template<> struct AssignmentKind<SparseShape,DiagonalShape> { typedef Diagonal2Sparse Kind; };
+
+template< typename DstXprType, typename SrcXprType, typename Functor, typename Scalar>
+struct Assignment<DstXprType, SrcXprType, Functor, Diagonal2Sparse, Scalar>
+{
+  typedef typename DstXprType::StorageIndex StorageIndex;
+  typedef Array<StorageIndex,Dynamic,1> ArrayXI;
+  typedef Array<Scalar,Dynamic,1> ArrayXS;
+  template<int Options>
+  static void run(SparseMatrix<Scalar,Options,StorageIndex> &dst, const SrcXprType &src, const internal::assign_op<typename DstXprType::Scalar> &/*func*/)
+  {
+    Index size = src.diagonal().size();
+    dst.makeCompressed();
+    dst.resizeNonZeros(size);
+    Map<ArrayXI>(dst.innerIndexPtr(), size).setLinSpaced(0,StorageIndex(size)-1);
+    Map<ArrayXI>(dst.outerIndexPtr(), size+1).setLinSpaced(0,StorageIndex(size));
+    Map<ArrayXS>(dst.valuePtr(), size) = src.diagonal();
+  }
+  
+  template<typename DstDerived>
+  static void run(SparseMatrixBase<DstDerived> &dst, const SrcXprType &src, const internal::assign_op<typename DstXprType::Scalar> &/*func*/)
+  {
+    dst.diagonal() = src.diagonal();
+  }
+  
+  static void run(DstXprType &dst, const SrcXprType &src, const internal::add_assign_op<typename DstXprType::Scalar> &/*func*/)
+  { dst.diagonal() += src.diagonal(); }
+  
+  static void run(DstXprType &dst, const SrcXprType &src, const internal::sub_assign_op<typename DstXprType::Scalar> &/*func*/)
+  { dst.diagonal() -= src.diagonal(); }
+};
 } // end namespace internal
 
 } // end namespace Eigen

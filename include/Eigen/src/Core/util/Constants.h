@@ -1,7 +1,7 @@
 // This file is part of Eigen, a lightweight C++ template library
 // for linear algebra.
 //
-// Copyright (C) 2008-2009 Gael Guennebaud <gael.guennebaud@inria.fr>
+// Copyright (C) 2008-2015 Gael Guennebaud <gael.guennebaud@inria.fr>
 // Copyright (C) 2007-2009 Benoit Jacob <jacob.benoit.1@gmail.com>
 //
 // This Source Code Form is subject to the terms of the Mozilla
@@ -140,7 +140,7 @@ const unsigned int LvalueBit = 0x20;
   */
 const unsigned int DirectAccessBit = 0x40;
 
-/** \ingroup flags
+/** \deprecated \ingroup flags
   *
   * means the first coefficient packet is guaranteed to be aligned.
   * An expression cannot has the AlignedBit without the PacketAccessBit flag.
@@ -162,6 +162,19 @@ const unsigned int NestByRefBit = 0x100;
   * combined with other expressions.
   * \sa \ref RowMajorBit, \ref TopicStorageOrders */
 const unsigned int NoPreferredStorageOrderBit = 0x200;
+
+/** \ingroup flags
+  *
+  * Means that the underlying coefficients can be accessed through pointers to the sparse (un)compressed storage format,
+  * that is, the expression provides:
+  * \code
+    inline const Scalar* valuePtr() const;
+    inline const Index* innerIndexPtr() const;
+    inline const Index* outerIndexPtr() const;
+    inline const Index* innerNonZeroPtr() const;
+    \endcode
+  */
+const unsigned int CompressedAccessBit = 0x400;
 
 
 // list of flags that are inherited by default
@@ -202,12 +215,31 @@ enum {
 };
 
 /** \ingroup enums
-  * Enum for indicating whether an object is aligned or not. */
+  * Enum for indicating whether a buffer is aligned or not. */
 enum { 
-  /** Object is not correctly aligned for vectorization. */
-  Unaligned=0, 
-  /** Object is aligned for vectorization. */
-  Aligned=1 
+  Unaligned=0,        /**< Data pointer has no specific alignment. */
+  Aligned8=8,         /**< Data pointer is aligned on a 8 bytes boundary. */
+  Aligned16=16,       /**< Data pointer is aligned on a 16 bytes boundary. */
+  Aligned32=32,       /**< Data pointer is aligned on a 32 bytes boundary. */
+  Aligned64=64,       /**< Data pointer is aligned on a 64 bytes boundary. */
+  Aligned128=128,     /**< Data pointer is aligned on a 128 bytes boundary. */
+  AlignedMask=255,
+  Aligned=16,         /**< \deprecated Synonym for Aligned16. */
+#if EIGEN_MAX_ALIGN_BYTES==128
+  AlignedMax = Aligned128
+#elif EIGEN_MAX_ALIGN_BYTES==64
+  AlignedMax = Aligned64
+#elif EIGEN_MAX_ALIGN_BYTES==32
+  AlignedMax = Aligned32
+#elif EIGEN_MAX_ALIGN_BYTES==16
+  AlignedMax = Aligned16
+#elif EIGEN_MAX_ALIGN_BYTES==8
+  AlignedMax = Aligned8
+#elif EIGEN_MAX_ALIGN_BYTES==0
+  AlignedMax = Unaligned
+#else
+#error Invalid value for EIGEN_MAX_ALIGN_BYTES
+#endif
 };
 
 /** \ingroup enums
@@ -439,8 +471,8 @@ namespace Architecture
 }
 
 /** \internal \ingroup enums
-  * Enum used as template parameter in GeneralProduct. */
-enum { DefaultProduct=0, CoeffBasedProductMode, LazyCoeffBasedProductMode, LazyProduct, OuterProduct, InnerProduct, GemvProduct, GemmProduct };
+  * Enum used as template parameter in Product and product evalautors. */
+enum { DefaultProduct=0, LazyProduct, AliasFreeProduct, CoeffBasedProductMode, LazyCoeffBasedProductMode, OuterProduct, InnerProduct, GemvProduct, GemmProduct };
 
 /** \internal \ingroup enums
   * Enum used in experimental parallel implementation. */
@@ -449,8 +481,14 @@ enum Action {GetAction, SetAction};
 /** The type used to identify a dense storage. */
 struct Dense {};
 
+/** The type used to identify a general sparse storage. */
+struct Sparse {};
+
 /** The type used to identify a permutation storage. */
 struct PermutationStorage {};
+
+/** The type used to identify a permutation storage. */
+struct TranspositionsStorage {};
 
 /** The type used to identify a matrix expression */
 struct MatrixXpr {};
@@ -466,6 +504,7 @@ struct BandShape              { static std::string debugName() { return "BandSha
 struct TriangularShape        { static std::string debugName() { return "TriangularShape"; } };
 struct SelfAdjointShape       { static std::string debugName() { return "SelfAdjointShape"; } };
 struct PermutationShape       { static std::string debugName() { return "PermutationShape"; } };
+struct TranspositionsShape    { static std::string debugName() { return "TranspositionsShape"; } };
 struct SparseShape            { static std::string debugName() { return "SparseShape"; } };
 
 namespace internal {
@@ -476,6 +515,16 @@ struct IndexBased {};
 // evaluator based on iterators to access coefficients. 
 struct IteratorBased {};
 
+/** \internal
+ * Constants for comparison functors
+ */
+enum ComparisonName {
+  cmp_EQ = 0,
+  cmp_LT = 1,
+  cmp_LE = 2,
+  cmp_UNORD = 3,
+  cmp_NEQ = 4
+};
 } // end namespace internal
 
 } // end namespace Eigen

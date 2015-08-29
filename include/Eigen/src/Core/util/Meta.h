@@ -117,6 +117,10 @@ template<typename T> struct enable_if<true,T>
 { typedef T type; };
 
 #if defined(__CUDA_ARCH__)
+#if !defined(__FLT_EPSILON__)
+#define __FLT_EPSILON__ FLT_EPSILON
+#define __DBL_EPSILON__ DBL_EPSILON
+#endif
 
 namespace device {
 
@@ -124,16 +128,53 @@ template<typename T> struct numeric_limits
 {
   EIGEN_DEVICE_FUNC
   static T epsilon() { return 0; }
+  static T (max)() { assert(false && "Highest not supported for this type"); }
+  static T (min)() { assert(false && "Lowest not supported for this type"); }
 };
 template<> struct numeric_limits<float>
 {
   EIGEN_DEVICE_FUNC
   static float epsilon() { return __FLT_EPSILON__; }
+  EIGEN_DEVICE_FUNC
+  static float (max)() { return CUDART_MAX_NORMAL_F; }
+  EIGEN_DEVICE_FUNC
+  static float (min)() { return __FLT_EPSILON__; }
 };
 template<> struct numeric_limits<double>
 {
   EIGEN_DEVICE_FUNC
   static double epsilon() { return __DBL_EPSILON__; }
+  EIGEN_DEVICE_FUNC
+  static double (max)() { return CUDART_INF; }
+  EIGEN_DEVICE_FUNC
+  static double (min)() { return __DBL_EPSILON__; }
+};
+template<> struct numeric_limits<int>
+{
+  EIGEN_DEVICE_FUNC
+  static int epsilon() { return 0; }
+  EIGEN_DEVICE_FUNC
+  static int (max)() { return INT_MAX; }
+  EIGEN_DEVICE_FUNC
+  static int (min)() { return INT_MIN; }
+};
+template<> struct numeric_limits<long>
+{
+  EIGEN_DEVICE_FUNC
+  static long epsilon() { return 0; }
+  EIGEN_DEVICE_FUNC
+  static long (max)() { return LONG_MAX; }
+  EIGEN_DEVICE_FUNC
+  static long (min)() { return LONG_MIN; }
+};
+template<> struct numeric_limits<long long>
+{
+  EIGEN_DEVICE_FUNC
+  static long long epsilon() { return 0; }
+  EIGEN_DEVICE_FUNC
+  static long long (max)() { return LLONG_MAX; }
+  EIGEN_DEVICE_FUNC
+  static long long (min)() { return LLONG_MIN; }
 };
 
 }
@@ -160,7 +201,13 @@ protected:
   * upcoming next STL generation (using a templated result member).
   * If none of these members is provided, then the type of the first argument is returned. FIXME, that behavior is a pretty bad hack.
   */
-template<typename T> struct result_of {};
+#ifdef EIGEN_HAS_STD_RESULT_OF
+template<typename T> struct result_of {
+  typedef typename std::result_of<T>::type type1;
+  typedef typename remove_all<type1>::type type;
+};
+#else
+template<typename T> struct result_of { };
 
 struct has_none {int a[1];};
 struct has_std_result_type {int a[2];};
@@ -178,10 +225,10 @@ struct unary_result_of_select<Func, ArgType, sizeof(has_tr1_result)> {typedef ty
 template<typename Func, typename ArgType>
 struct result_of<Func(ArgType)> {
     template<typename T>
-    static has_std_result_type testFunctor(T const *, typename T::result_type const * = 0);
+    static has_std_result_type    testFunctor(T const *, typename T::result_type const * = 0);
     template<typename T>
-    static has_tr1_result      testFunctor(T const *, typename T::template result<T(ArgType)>::type const * = 0);
-    static has_none            testFunctor(...);
+    static has_tr1_result         testFunctor(T const *, typename T::template result<T(ArgType)>::type const * = 0);
+    static has_none               testFunctor(...);
 
     // note that the following indirection is needed for gcc-3.3
     enum {FunctorType = sizeof(testFunctor(static_cast<Func*>(0)))};
@@ -202,15 +249,16 @@ struct binary_result_of_select<Func, ArgType0, ArgType1, sizeof(has_tr1_result)>
 template<typename Func, typename ArgType0, typename ArgType1>
 struct result_of<Func(ArgType0,ArgType1)> {
     template<typename T>
-    static has_std_result_type testFunctor(T const *, typename T::result_type const * = 0);
+    static has_std_result_type    testFunctor(T const *, typename T::result_type const * = 0);
     template<typename T>
-    static has_tr1_result      testFunctor(T const *, typename T::template result<T(ArgType0,ArgType1)>::type const * = 0);
-    static has_none            testFunctor(...);
+    static has_tr1_result         testFunctor(T const *, typename T::template result<T(ArgType0,ArgType1)>::type const * = 0);
+    static has_none               testFunctor(...);
 
     // note that the following indirection is needed for gcc-3.3
     enum {FunctorType = sizeof(testFunctor(static_cast<Func*>(0)))};
     typedef typename binary_result_of_select<Func, ArgType0, ArgType1, FunctorType>::type type;
 };
+#endif
 
 /** \internal In short, it computes int(sqrt(\a Y)) with \a Y an integer.
   * Usage example: \code meta_sqrt<1023>::ret \endcode
@@ -283,6 +331,14 @@ template<typename T> EIGEN_DEVICE_FUNC   void swap(T &a, T &b) { T tmp = b; b = 
 #else
 template<typename T> EIGEN_STRONG_INLINE void swap(T &a, T &b) { std::swap(a,b); }
 #endif
+
+// Integer division with rounding up.
+// T is assumed to be an integer type with a>=0, and b>0
+template<typename T>
+T div_ceil(const T &a, const T &b)
+{
+  return (a+b-1) / b;
+}
 
 } // end namespace numext
 

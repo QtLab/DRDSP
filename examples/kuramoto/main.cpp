@@ -21,7 +21,7 @@ struct Options {
 	}
 };
 
-typedef RBF<Multiquadratic> RBFType;
+using RBFType = RBF<Multiquadratic>;
 
 int main( int argc, char** argv ) {
 

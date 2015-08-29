@@ -22,7 +22,7 @@ struct Options {
 	}
 };
 
-typedef EquiRBFZ2<ThinPlateSpline> RBFType;
+using RBFType = EquiRBFZ2<ThinPlateSpline>;
 
 void ComputeReduced( const Options& options );
 

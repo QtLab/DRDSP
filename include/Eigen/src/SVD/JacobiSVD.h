@@ -52,7 +52,6 @@ template<typename MatrixType, int QRPreconditioner, int Case>
 class qr_preconditioner_impl<MatrixType, QRPreconditioner, Case, false>
 {
 public:
-  typedef typename MatrixType::Index Index;
   void allocate(const JacobiSVD<MatrixType, QRPreconditioner>&) {}
   bool run(JacobiSVD<MatrixType, QRPreconditioner>&, const MatrixType&)
   {
@@ -66,7 +65,6 @@ template<typename MatrixType>
 class qr_preconditioner_impl<MatrixType, FullPivHouseholderQRPreconditioner, PreconditionIfMoreRowsThanCols, true>
 {
 public:
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
   enum
   {
@@ -107,7 +105,6 @@ template<typename MatrixType>
 class qr_preconditioner_impl<MatrixType, FullPivHouseholderQRPreconditioner, PreconditionIfMoreColsThanRows, true>
 {
 public:
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
   enum
   {
@@ -157,8 +154,6 @@ template<typename MatrixType>
 class qr_preconditioner_impl<MatrixType, ColPivHouseholderQRPreconditioner, PreconditionIfMoreRowsThanCols, true>
 {
 public:
-  typedef typename MatrixType::Index Index;
-
   void allocate(const JacobiSVD<MatrixType, ColPivHouseholderQRPreconditioner>& svd)
   {
     if (svd.rows() != m_qr.rows() || svd.cols() != m_qr.cols())
@@ -198,7 +193,6 @@ template<typename MatrixType>
 class qr_preconditioner_impl<MatrixType, ColPivHouseholderQRPreconditioner, PreconditionIfMoreColsThanRows, true>
 {
 public:
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
   enum
   {
@@ -257,8 +251,6 @@ template<typename MatrixType>
 class qr_preconditioner_impl<MatrixType, HouseholderQRPreconditioner, PreconditionIfMoreRowsThanCols, true>
 {
 public:
-  typedef typename MatrixType::Index Index;
-
   void allocate(const JacobiSVD<MatrixType, HouseholderQRPreconditioner>& svd)
   {
     if (svd.rows() != m_qr.rows() || svd.cols() != m_qr.cols())
@@ -297,7 +289,6 @@ template<typename MatrixType>
 class qr_preconditioner_impl<MatrixType, HouseholderQRPreconditioner, PreconditionIfMoreColsThanRows, true>
 {
 public:
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
   enum
   {
@@ -359,7 +350,6 @@ template<typename MatrixType, int QRPreconditioner>
 struct svd_precondition_2x2_block_to_be_real<MatrixType, QRPreconditioner, false>
 {
   typedef JacobiSVD<MatrixType, QRPreconditioner> SVD;
-  typedef typename SVD::Index Index;
   static void run(typename SVD::WorkMatrixType&, SVD&, Index, Index) {}
 };
 
@@ -369,7 +359,6 @@ struct svd_precondition_2x2_block_to_be_real<MatrixType, QRPreconditioner, true>
   typedef JacobiSVD<MatrixType, QRPreconditioner> SVD;
   typedef typename MatrixType::Scalar Scalar;
   typedef typename MatrixType::RealScalar RealScalar;
-  typedef typename SVD::Index Index;
   static void run(typename SVD::WorkMatrixType& work_matrix, SVD& svd, Index p, Index q)
   {
     using std::sqrt;
@@ -398,7 +387,7 @@ struct svd_precondition_2x2_block_to_be_real<MatrixType, QRPreconditioner, true>
       if(svd.computeU()) svd.m_matrixU.applyOnTheRight(p,q,rot.adjoint());
       if(work_matrix.coeff(p,q) != Scalar(0))
       {
-        Scalar z = abs(work_matrix.coeff(p,q)) / work_matrix.coeff(p,q);
+        z = abs(work_matrix.coeff(p,q)) / work_matrix.coeff(p,q);
         work_matrix.col(q) *= z;
         if(svd.computeV()) svd.m_matrixV.col(q) *= z;
       }
@@ -436,12 +425,13 @@ void real_2x2_jacobi_svd(const MatrixType& matrix, Index p, Index q,
     // If d!=0, then t/d cannot overflow because the magnitude of the
     // entries forming d are not too small compared to the ones forming t.
     RealScalar u = t / d;
-    rot1.s() = RealScalar(1) / sqrt(RealScalar(1) + numext::abs2(u));
-    rot1.c() = rot1.s() * u;
+    RealScalar tmp = sqrt(RealScalar(1) + numext::abs2(u));
+    rot1.s() = RealScalar(1) / tmp;
+    rot1.c() = u / tmp;
   }
   m.applyOnTheLeft(0,1,rot1);
   j_right->makeJacobi(m,0,1);
-  *j_left  = rot1 * j_right->transpose();
+  *j_left = rot1 * j_right->transpose();
 }
 
 template<typename _MatrixType, int QRPreconditioner> 
@@ -514,7 +504,6 @@ template<typename _MatrixType, int QRPreconditioner> class JacobiSVD
     typedef _MatrixType MatrixType;
     typedef typename MatrixType::Scalar Scalar;
     typedef typename NumTraits<typename MatrixType::Scalar>::Real RealScalar;
-    typedef typename MatrixType::Index Index;
     enum {
       RowsAtCompileTime = MatrixType::RowsAtCompileTime,
       ColsAtCompileTime = MatrixType::ColsAtCompileTime,
@@ -628,6 +617,7 @@ template<typename _MatrixType, int QRPreconditioner> class JacobiSVD
 
     internal::qr_preconditioner_impl<MatrixType, QRPreconditioner, internal::PreconditionIfMoreColsThanRows> m_qr_precond_morecols;
     internal::qr_preconditioner_impl<MatrixType, QRPreconditioner, internal::PreconditionIfMoreRowsThanCols> m_qr_precond_morerows;
+    MatrixType m_scaledMatrix;
 };
 
 template<typename MatrixType, int QRPreconditioner>
@@ -674,8 +664,9 @@ void JacobiSVD<MatrixType, QRPreconditioner>::allocate(Index rows, Index cols, u
                             : 0);
   m_workMatrix.resize(m_diagSize, m_diagSize);
   
-  if(m_cols>m_rows) m_qr_precond_morecols.allocate(*this);
-  if(m_rows>m_cols) m_qr_precond_morerows.allocate(*this);
+  if(m_cols>m_rows)   m_qr_precond_morecols.allocate(*this);
+  if(m_rows>m_cols)   m_qr_precond_morerows.allocate(*this);
+  if(m_cols!=m_cols)  m_scaledMatrix.resize(rows,cols);
 }
 
 template<typename MatrixType, int QRPreconditioner>
@@ -690,6 +681,8 @@ JacobiSVD<MatrixType, QRPreconditioner>::compute(const MatrixType& matrix, unsig
   const RealScalar precision = RealScalar(2) * NumTraits<Scalar>::epsilon();
 
   // limit for very small denormal numbers to be considered zero in order to avoid infinite loops (see bug 286)
+  // FIXME What about considerering any denormal numbers as zero, using:
+  // const RealScalar considerAsZero = (std::numeric_limits<RealScalar>::min)();
   const RealScalar considerAsZero = RealScalar(2) * std::numeric_limits<RealScalar>::denorm_min();
 
   // Scaling factor to reduce over/under-flows
@@ -698,7 +691,13 @@ JacobiSVD<MatrixType, QRPreconditioner>::compute(const MatrixType& matrix, unsig
   
   /*** step 1. The R-SVD step: we use a QR decomposition to reduce to the case of a square matrix */
 
-  if(!m_qr_precond_morecols.run(*this, matrix/scale) && !m_qr_precond_morerows.run(*this, matrix/scale))
+  if(m_rows!=m_cols)
+  {
+    m_scaledMatrix = matrix / scale;
+    m_qr_precond_morecols.run(*this, m_scaledMatrix);
+    m_qr_precond_morerows.run(*this, m_scaledMatrix);
+  }
+  else
   {
     m_workMatrix = matrix.block(0,0,m_diagSize,m_diagSize) / scale;
     if(m_computeFullU) m_matrixU.setIdentity(m_rows,m_rows);
@@ -723,8 +722,9 @@ JacobiSVD<MatrixType, QRPreconditioner>::compute(const MatrixType& matrix, unsig
         // if this 2x2 sub-matrix is not diagonal already...
         // notice that this comparison will evaluate to false if any NaN is involved, ensuring that NaN's don't
         // keep us iterating forever. Similarly, small denormal numbers are considered zero.
-        RealScalar threshold = numext::maxi(considerAsZero, precision * numext::maxi(abs(m_workMatrix.coeff(p,p)),
-                                                                       abs(m_workMatrix.coeff(q,q))));
+        RealScalar threshold = numext::maxi<RealScalar>(considerAsZero,
+                   precision * numext::maxi<RealScalar>(abs(m_workMatrix.coeff(p,p)),
+                                                        abs(m_workMatrix.coeff(q,q))));
         // We compare both values to threshold instead of calling max to be robust to NaN (See bug 791)
         if(abs(m_workMatrix.coeff(p,q))>threshold || abs(m_workMatrix.coeff(q,p)) > threshold)
         {

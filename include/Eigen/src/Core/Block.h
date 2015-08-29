@@ -55,7 +55,7 @@ struct traits<Block<XprType, BlockRows, BlockCols, InnerPanel> > : traits<XprTyp
   typedef typename traits<XprType>::Scalar Scalar;
   typedef typename traits<XprType>::StorageKind StorageKind;
   typedef typename traits<XprType>::XprKind XprKind;
-  typedef typename nested<XprType>::type XprTypeNested;
+  typedef typename ref_selector<XprType>::type XprTypeNested;
   typedef typename remove_reference<XprTypeNested>::type _XprTypeNested;
   enum{
     MatrixRows = traits<XprType>::RowsAtCompileTime,
@@ -81,14 +81,16 @@ struct traits<Block<XprType, BlockRows, BlockCols, InnerPanel> > : traits<XprTyp
     OuterStrideAtCompileTime = HasSameStorageOrderAsXprType
                              ? int(outer_stride_at_compile_time<XprType>::ret)
                              : int(inner_stride_at_compile_time<XprType>::ret),
-    // IsAligned is needed by MapBase's assertions
-    // We can sefely set it to false here. Internal alignment errors will be detected by an eigen_internal_assert in the respective evaluator
-    IsAligned = 0,
+
     // FIXME, this traits is rather specialized for dense object and it needs to be cleaned further
     FlagsLvalueBit = is_lvalue<XprType>::value ? LvalueBit : 0,
     FlagsRowMajorBit = IsRowMajor ? RowMajorBit : 0,
-    Flags = (traits<XprType>::Flags & DirectAccessBit) | FlagsLvalueBit | FlagsRowMajorBit
+    Flags = (traits<XprType>::Flags & (DirectAccessBit | (InnerPanel?CompressedAccessBit:0))) | FlagsLvalueBit | FlagsRowMajorBit,
     // FIXME DirectAccessBit should not be handled by expressions
+    // 
+    // Alignment is needed by MapBase's assertions
+    // We can sefely set it to false here. Internal alignment errors will be detected by an eigen_internal_assert in the respective evaluator
+    Alignment = 0
   };
 };
 
@@ -124,26 +126,26 @@ template<typename XprType, int BlockRows, int BlockCols, bool InnerPanel> class 
     /** Fixed-size constructor
       */
     EIGEN_DEVICE_FUNC
-    inline Block(XprType& xpr, Index a_startRow, Index a_startCol)
-      : Impl(xpr, a_startRow, a_startCol)
+    inline Block(XprType& xpr, Index startRow, Index startCol)
+      : Impl(xpr, startRow, startCol)
     {
       EIGEN_STATIC_ASSERT(RowsAtCompileTime!=Dynamic && ColsAtCompileTime!=Dynamic,THIS_METHOD_IS_ONLY_FOR_FIXED_SIZE)
-      eigen_assert(a_startRow >= 0 && BlockRows >= 1 && a_startRow + BlockRows <= xpr.rows()
-             && a_startCol >= 0 && BlockCols >= 1 && a_startCol + BlockCols <= xpr.cols());
+      eigen_assert(startRow >= 0 && BlockRows >= 1 && startRow + BlockRows <= xpr.rows()
+             && startCol >= 0 && BlockCols >= 1 && startCol + BlockCols <= xpr.cols());
     }
 
     /** Dynamic-size constructor
       */
     EIGEN_DEVICE_FUNC
     inline Block(XprType& xpr,
-          Index a_startRow, Index a_startCol,
+          Index startRow, Index startCol,
           Index blockRows, Index blockCols)
-      : Impl(xpr, a_startRow, a_startCol, blockRows, blockCols)
+      : Impl(xpr, startRow, startCol, blockRows, blockCols)
     {
       eigen_assert((RowsAtCompileTime==Dynamic || RowsAtCompileTime==blockRows)
           && (ColsAtCompileTime==Dynamic || ColsAtCompileTime==blockCols));
-      eigen_assert(a_startRow >= 0 && blockRows >= 0 && a_startRow  <= xpr.rows() - blockRows
-          && a_startCol >= 0 && blockCols >= 0 && a_startCol <= xpr.cols() - blockCols);
+      eigen_assert(startRow >= 0 && blockRows >= 0 && startRow  <= xpr.rows() - blockRows
+          && startCol >= 0 && blockCols >= 0 && startCol <= xpr.cols() - blockCols);
     }
 };
          
@@ -154,15 +156,15 @@ class BlockImpl<XprType, BlockRows, BlockCols, InnerPanel, Dense>
   : public internal::BlockImpl_dense<XprType, BlockRows, BlockCols, InnerPanel>
 {
     typedef internal::BlockImpl_dense<XprType, BlockRows, BlockCols, InnerPanel> Impl;
-    typedef typename XprType::Index Index;
+    typedef typename XprType::StorageIndex StorageIndex;
   public:
     typedef Impl Base;
     EIGEN_INHERIT_ASSIGNMENT_OPERATORS(BlockImpl)
     EIGEN_DEVICE_FUNC inline BlockImpl(XprType& xpr, Index i) : Impl(xpr,i) {}
-    EIGEN_DEVICE_FUNC inline BlockImpl(XprType& xpr, Index a_startRow, Index a_startCol) : Impl(xpr, a_startRow, a_startCol) {}
+    EIGEN_DEVICE_FUNC inline BlockImpl(XprType& xpr, Index startRow, Index startCol) : Impl(xpr, startRow, startCol) {}
     EIGEN_DEVICE_FUNC
-    inline BlockImpl(XprType& xpr, Index a_startRow, Index a_startCol, Index blockRows, Index blockCols)
-      : Impl(xpr, a_startRow, a_startCol, blockRows, blockCols) {}
+    inline BlockImpl(XprType& xpr, Index startRow, Index startCol, Index blockRows, Index blockCols)
+      : Impl(xpr, startRow, startCol, blockRows, blockCols) {}
 };
 
 namespace internal {
@@ -198,8 +200,8 @@ template<typename XprType, int BlockRows, int BlockCols, bool InnerPanel, bool H
     /** Fixed-size constructor
       */
     EIGEN_DEVICE_FUNC
-    inline BlockImpl_dense(XprType& xpr, Index a_startRow, Index a_startCol)
-      : m_xpr(xpr), m_startRow(a_startRow), m_startCol(a_startCol),
+    inline BlockImpl_dense(XprType& xpr, Index startRow, Index startCol)
+      : m_xpr(xpr), m_startRow(startRow), m_startCol(startCol),
                     m_blockRows(BlockRows), m_blockCols(BlockCols)
     {}
 
@@ -207,9 +209,9 @@ template<typename XprType, int BlockRows, int BlockCols, bool InnerPanel, bool H
       */
     EIGEN_DEVICE_FUNC
     inline BlockImpl_dense(XprType& xpr,
-          Index a_startRow, Index a_startCol,
+          Index startRow, Index startCol,
           Index blockRows, Index blockCols)
-      : m_xpr(xpr), m_startRow(a_startRow), m_startCol(a_startCol),
+      : m_xpr(xpr), m_startRow(startRow), m_startCol(startCol),
                     m_blockRows(blockRows), m_blockCols(blockCols)
     {}
 
@@ -306,13 +308,13 @@ template<typename XprType, int BlockRows, int BlockCols, bool InnerPanel, bool H
     }
       
     EIGEN_DEVICE_FUNC
-    Index startRow() const
+    StorageIndex startRow() const
     { 
       return m_startRow.value(); 
     }
       
     EIGEN_DEVICE_FUNC
-    Index startCol() const 
+    StorageIndex startCol() const
     { 
       return m_startCol.value(); 
     }
@@ -320,10 +322,10 @@ template<typename XprType, int BlockRows, int BlockCols, bool InnerPanel, bool H
   protected:
 
     const typename XprType::Nested m_xpr;
-    const internal::variable_if_dynamic<Index, XprType::RowsAtCompileTime == 1 ? 0 : Dynamic> m_startRow;
-    const internal::variable_if_dynamic<Index, XprType::ColsAtCompileTime == 1 ? 0 : Dynamic> m_startCol;
-    const internal::variable_if_dynamic<Index, RowsAtCompileTime> m_blockRows;
-    const internal::variable_if_dynamic<Index, ColsAtCompileTime> m_blockCols;
+    const internal::variable_if_dynamic<StorageIndex, XprType::RowsAtCompileTime == 1 ? 0 : Dynamic> m_startRow;
+    const internal::variable_if_dynamic<StorageIndex, XprType::ColsAtCompileTime == 1 ? 0 : Dynamic> m_startCol;
+    const internal::variable_if_dynamic<StorageIndex, RowsAtCompileTime> m_blockRows;
+    const internal::variable_if_dynamic<StorageIndex, ColsAtCompileTime> m_blockCols;
 };
 
 /** \internal Internal implementation of dense Blocks in the direct access case.*/

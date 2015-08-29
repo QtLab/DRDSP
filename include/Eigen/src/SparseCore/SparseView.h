@@ -18,7 +18,7 @@ namespace internal {
 template<typename MatrixType>
 struct traits<SparseView<MatrixType> > : traits<MatrixType>
 {
-  typedef typename MatrixType::Index Index;
+  typedef typename MatrixType::StorageIndex StorageIndex;
   typedef Sparse StorageKind;
   enum {
     Flags = int(traits<MatrixType>::Flags) & (RowMajorBit)
@@ -36,9 +36,9 @@ public:
   EIGEN_SPARSE_PUBLIC_INTERFACE(SparseView)
   typedef typename internal::remove_all<MatrixType>::type NestedExpression;
 
-  explicit SparseView(const MatrixType& mat, const Scalar& m_reference = Scalar(0),
-             RealScalar m_epsilon = NumTraits<Scalar>::dummy_precision()) : 
-    m_matrix(mat), m_reference(m_reference), m_epsilon(m_epsilon) {}
+  explicit SparseView(const MatrixType& mat, const Scalar& reference = Scalar(0),
+                      RealScalar epsilon = NumTraits<Scalar>::dummy_precision())
+    : m_matrix(mat), m_reference(reference), m_epsilon(epsilon) {}
 
   inline Index rows() const { return m_matrix.rows(); }
   inline Index cols() const { return m_matrix.cols(); }
@@ -78,7 +78,7 @@ struct unary_evaluator<SparseView<ArgType>, IteratorBased>
         typedef typename XprType::Scalar Scalar;
       public:
 
-        EIGEN_STRONG_INLINE InnerIterator(const unary_evaluator& sve, typename XprType::Index outer)
+        EIGEN_STRONG_INLINE InnerIterator(const unary_evaluator& sve, Index outer)
           : EvalIterator(sve.m_argImpl,outer), m_view(sve.m_view)
         {
           incrementToNonZero();
@@ -126,7 +126,6 @@ struct unary_evaluator<SparseView<ArgType>, IndexBased>
     typedef SparseView<ArgType> XprType;
   protected:
     enum { IsRowMajor = (XprType::Flags&RowMajorBit)==RowMajorBit };
-    typedef typename XprType::Index Index;
     typedef typename XprType::Scalar Scalar;
   public:
     
@@ -134,7 +133,7 @@ struct unary_evaluator<SparseView<ArgType>, IndexBased>
     {
       public:
 
-        EIGEN_STRONG_INLINE InnerIterator(const unary_evaluator& sve, typename XprType::Index outer)
+        EIGEN_STRONG_INLINE InnerIterator(const unary_evaluator& sve, Index outer)
           : m_sve(sve), m_inner(0), m_outer(outer), m_end(sve.m_view.innerSize())
         {
           incrementToNonZero();

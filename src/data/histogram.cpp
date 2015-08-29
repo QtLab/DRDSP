@@ -47,10 +47,10 @@ void Histogram::WriteCSV( const char* filename ) const {
 	uint32_t total = TotalFrequency();
 	for( const auto& bin : bins ) {
 		double freqDensity = bin.FrequencyDensity();
-		out << bin.Centre() << ",";
-		out << bin.frequency << ",";
-		out << (double)bin.frequency / total << ",";
-		out << freqDensity << ",";
+		out << bin.Centre() << ',';
+		out << bin.frequency << ',';
+		out << (double)bin.frequency / total << ',';
+		out << freqDensity << ',';
 		out << freqDensity / total << endl;
 	}
 }

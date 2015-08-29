@@ -25,7 +25,7 @@ template<typename Lhs, typename Rhs, int Option, typename StorageKind> class Pro
   * This class represents an expression of the product of two arbitrary matrices.
   * 
   * The other template parameters are:
-  * \tparam Option     can be DefaultProduct or LazyProduct
+  * \tparam Option     can be DefaultProduct, AliasFreeProduct, or LazyProduct
   *
   */
 
@@ -53,6 +53,18 @@ template<typename Lhs, typename Rhs, typename LhsShape>
   typedef typename Lhs::Scalar Scalar;
 };
 
+template<typename Lhs, typename Rhs, typename RhsShape>
+struct product_result_scalar<Lhs, Rhs, TranspositionsShape, RhsShape>
+{
+  typedef typename Rhs::Scalar Scalar;
+};
+
+template<typename Lhs, typename Rhs, typename LhsShape>
+  struct product_result_scalar<Lhs, Rhs, LhsShape, TranspositionsShape>
+{
+  typedef typename Lhs::Scalar Scalar;
+};
+
 template<typename Lhs, typename Rhs, int Option>
 struct traits<Product<Lhs, Rhs, Option> >
 {
@@ -67,8 +79,8 @@ struct traits<Product<Lhs, Rhs, Option> >
   typedef typename product_promote_storage_type<typename LhsTraits::StorageKind,
                                                 typename RhsTraits::StorageKind,
                                                 internal::product_type<Lhs,Rhs>::ret>::ret StorageKind;
-  typedef typename promote_index_type<typename LhsTraits::Index,
-                                      typename RhsTraits::Index>::type Index;
+  typedef typename promote_index_type<typename LhsTraits::StorageIndex,
+                                      typename RhsTraits::StorageIndex>::type StorageIndex;
   
   enum {
     RowsAtCompileTime    = LhsTraits::RowsAtCompileTime,
@@ -80,10 +92,11 @@ struct traits<Product<Lhs, Rhs, Option> >
     InnerSize = EIGEN_SIZE_MIN_PREFER_FIXED(LhsTraits::ColsAtCompileTime, RhsTraits::RowsAtCompileTime),
     
     // The storage order is somewhat arbitrary here. The correct one will be determined through the evaluator.
-    Flags = (   (MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1)
-             || ((LhsTraits::Flags&NoPreferredStorageOrderBit) && (RhsTraits::Flags&RowMajorBit))
-             || ((RhsTraits::Flags&NoPreferredStorageOrderBit) && (LhsTraits::Flags&RowMajorBit)) )
-          ? RowMajorBit : (MaxColsAtCompileTime==1 ? 0 : NoPreferredStorageOrderBit)
+    Flags = (MaxRowsAtCompileTime==1 && MaxColsAtCompileTime!=1) ? RowMajorBit
+          : (MaxColsAtCompileTime==1 && MaxRowsAtCompileTime!=1) ? 0
+          : (   ((LhsTraits::Flags&NoPreferredStorageOrderBit) && (RhsTraits::Flags&RowMajorBit))
+             || ((RhsTraits::Flags&NoPreferredStorageOrderBit) && (LhsTraits::Flags&RowMajorBit)) ) ? RowMajorBit
+          : NoPreferredStorageOrderBit
   };
 };
 
@@ -108,8 +121,8 @@ class Product : public ProductImpl<_Lhs,_Rhs,Option,
                                                         internal::product_type<Lhs,Rhs>::ret>::ret>::Base Base;
     EIGEN_GENERIC_PUBLIC_INTERFACE(Product)
 
-    typedef typename internal::nested<Lhs>::type LhsNested;
-    typedef typename internal::nested<Rhs>::type RhsNested;
+    typedef typename internal::ref_selector<Lhs>::type LhsNested;
+    typedef typename internal::ref_selector<Rhs>::type RhsNested;
     typedef typename internal::remove_all<LhsNested>::type LhsNestedCleaned;
     typedef typename internal::remove_all<RhsNested>::type RhsNestedCleaned;
 
@@ -149,7 +162,6 @@ class dense_product_base<Lhs, Rhs, Option, InnerProduct>
 public:
   using Base::derived;
   typedef typename Base::Scalar Scalar;
-  typedef typename Base::Index Index;
   
   operator const Scalar() const
   {

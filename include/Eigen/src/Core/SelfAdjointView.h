@@ -32,7 +32,7 @@ namespace internal {
 template<typename MatrixType, unsigned int UpLo>
 struct traits<SelfAdjointView<MatrixType, UpLo> > : traits<MatrixType>
 {
-  typedef typename nested<MatrixType>::type MatrixTypeNested;
+  typedef typename ref_selector<MatrixType>::type MatrixTypeNested;
   typedef typename remove_all<MatrixTypeNested>::type MatrixTypeNestedCleaned;
   typedef MatrixType ExpressionType;
   typedef typename MatrixType::PlainObject FullMatrixType;
@@ -58,8 +58,7 @@ template<typename _MatrixType, unsigned int UpLo> class SelfAdjointView
 
     /** \brief The type of coefficients in this matrix */
     typedef typename internal::traits<SelfAdjointView>::Scalar Scalar; 
-
-    typedef typename MatrixType::Index Index;
+    typedef typename MatrixType::StorageIndex StorageIndex;
 
     enum {
       Mode = internal::traits<SelfAdjointView>::Mode,
@@ -224,7 +223,6 @@ public:
   typedef typename Base::DstEvaluatorType DstEvaluatorType;
   typedef typename Base::SrcEvaluatorType SrcEvaluatorType;
   typedef typename Base::Scalar Scalar;
-  typedef typename Base::Index Index;
   typedef typename Base::AssignmentTraits AssignmentTraits;
   
   

@@ -165,7 +165,7 @@ struct redux_vec_unroller<Func, Derived, Start, 1>
     index = Start * packet_traits<typename Derived::Scalar>::size,
     outer = index / int(Derived::InnerSizeAtCompileTime),
     inner = index % int(Derived::InnerSizeAtCompileTime),
-    alignment = (Derived::Flags & AlignedBit) ? Aligned : Unaligned
+    alignment = Derived::Alignment
   };
 
   typedef typename Derived::Scalar Scalar;
@@ -173,7 +173,7 @@ struct redux_vec_unroller<Func, Derived, Start, 1>
 
   static EIGEN_STRONG_INLINE PacketScalar run(const Derived &mat, const Func&)
   {
-    return mat.template packetByOuterInner<alignment>(outer, inner);
+    return mat.template packetByOuterInner<alignment,PacketScalar>(outer, inner);
   }
 };
 
@@ -191,7 +191,6 @@ template<typename Func, typename Derived>
 struct redux_impl<Func, Derived, DefaultTraversal, NoUnrolling>
 {
   typedef typename Derived::Scalar Scalar;
-  typedef typename Derived::Index Index;
   EIGEN_DEVICE_FUNC
   static EIGEN_STRONG_INLINE Scalar run(const Derived &mat, const Func& func)
   {
@@ -217,18 +216,18 @@ struct redux_impl<Func, Derived, LinearVectorizedTraversal, NoUnrolling>
 {
   typedef typename Derived::Scalar Scalar;
   typedef typename packet_traits<Scalar>::type PacketScalar;
-  typedef typename Derived::Index Index;
 
   static Scalar run(const Derived &mat, const Func& func)
   {
     const Index size = mat.size();
     
     const Index packetSize = packet_traits<Scalar>::size;
-    const Index alignedStart = internal::first_aligned(mat);
+    const int packetAlignment = unpacket_traits<PacketScalar>::alignment;
     enum {
-      alignment = (bool(Derived::Flags & DirectAccessBit) && bool(packet_traits<Scalar>::AlignedOnScalar)) || bool(Derived::Flags & AlignedBit)
-                ? Aligned : Unaligned
+      alignment0 = (bool(Derived::Flags & DirectAccessBit) && bool(packet_traits<Scalar>::AlignedOnScalar)) ? int(packetAlignment) : int(Unaligned),
+      alignment = EIGEN_PLAIN_ENUM_MAX(alignment0, Derived::Alignment)
     };
+    const Index alignedStart = internal::first_default_aligned(mat.nestedExpression());
     const Index alignedSize2 = ((size-alignedStart)/(2*packetSize))*(2*packetSize);
     const Index alignedSize = ((size-alignedStart)/(packetSize))*(packetSize);
     const Index alignedEnd2 = alignedStart + alignedSize2;
@@ -236,19 +235,19 @@ struct redux_impl<Func, Derived, LinearVectorizedTraversal, NoUnrolling>
     Scalar res;
     if(alignedSize)
     {
-      PacketScalar packet_res0 = mat.template packet<alignment>(alignedStart);
+      PacketScalar packet_res0 = mat.template packet<alignment,PacketScalar>(alignedStart);
       if(alignedSize>packetSize) // we have at least two packets to partly unroll the loop
       {
-        PacketScalar packet_res1 = mat.template packet<alignment>(alignedStart+packetSize);
+        PacketScalar packet_res1 = mat.template packet<alignment,PacketScalar>(alignedStart+packetSize);
         for(Index index = alignedStart + 2*packetSize; index < alignedEnd2; index += 2*packetSize)
         {
-          packet_res0 = func.packetOp(packet_res0, mat.template packet<alignment>(index));
-          packet_res1 = func.packetOp(packet_res1, mat.template packet<alignment>(index+packetSize));
+          packet_res0 = func.packetOp(packet_res0, mat.template packet<alignment,PacketScalar>(index));
+          packet_res1 = func.packetOp(packet_res1, mat.template packet<alignment,PacketScalar>(index+packetSize));
         }
 
         packet_res0 = func.packetOp(packet_res0,packet_res1);
         if(alignedEnd>alignedEnd2)
-          packet_res0 = func.packetOp(packet_res0, mat.template packet<alignment>(alignedEnd2));
+          packet_res0 = func.packetOp(packet_res0, mat.template packet<alignment,PacketScalar>(alignedEnd2));
       }
       res = func.predux(packet_res0);
 
@@ -274,8 +273,7 @@ template<typename Func, typename Derived>
 struct redux_impl<Func, Derived, SliceVectorizedTraversal, NoUnrolling>
 {
   typedef typename Derived::Scalar Scalar;
-  typedef typename packet_traits<Scalar>::type PacketScalar;
-  typedef typename Derived::Index Index;
+  typedef typename packet_traits<Scalar>::type PacketType;
 
   EIGEN_DEVICE_FUNC static Scalar run(const Derived &mat, const Func& func)
   {
@@ -289,10 +287,10 @@ struct redux_impl<Func, Derived, SliceVectorizedTraversal, NoUnrolling>
     Scalar res;
     if(packetedInnerSize)
     {
-      PacketScalar packet_res = mat.template packet<Unaligned>(0,0);
+      PacketType packet_res = mat.template packet<Unaligned,PacketType>(0,0);
       for(Index j=0; j<outerSize; ++j)
         for(Index i=(j==0?packetSize:0); i<packetedInnerSize; i+=Index(packetSize))
-          packet_res = func.packetOp(packet_res, mat.template packetByOuterInner<Unaligned>(j,i));
+          packet_res = func.packetOp(packet_res, mat.template packetByOuterInner<Unaligned,PacketType>(j,i));
 
       res = func.predux(packet_res);
       for(Index j=0; j<outerSize; ++j)
@@ -342,7 +340,6 @@ public:
   typedef _XprType XprType;
   EIGEN_DEVICE_FUNC explicit redux_evaluator(const XprType &xpr) : m_evaluator(xpr), m_xpr(xpr) {}
   
-  typedef typename XprType::Index Index;
   typedef typename XprType::Scalar Scalar;
   typedef typename XprType::CoeffReturnType CoeffReturnType;
   typedef typename XprType::PacketScalar PacketScalar;
@@ -356,7 +353,8 @@ public:
     IsRowMajor = XprType::IsRowMajor,
     SizeAtCompileTime = XprType::SizeAtCompileTime,
     InnerSizeAtCompileTime = XprType::InnerSizeAtCompileTime,
-    CoeffReadCost = evaluator<XprType>::CoeffReadCost
+    CoeffReadCost = evaluator<XprType>::CoeffReadCost,
+    Alignment = evaluator<XprType>::Alignment
   };
   
   EIGEN_DEVICE_FUNC Index rows() const { return m_xpr.rows(); }
@@ -373,21 +371,23 @@ public:
   CoeffReturnType coeff(Index index) const
   { return m_evaluator.coeff(index); }
 
-  template<int LoadMode>
+  template<int LoadMode, typename PacketType>
   PacketReturnType packet(Index row, Index col) const
-  { return m_evaluator.template packet<LoadMode>(row, col); }
+  { return m_evaluator.template packet<LoadMode,PacketType>(row, col); }
 
-  template<int LoadMode>
+  template<int LoadMode, typename PacketType>
   PacketReturnType packet(Index index) const
-  { return m_evaluator.template packet<LoadMode>(index); }
+  { return m_evaluator.template packet<LoadMode,PacketType>(index); }
   
   EIGEN_DEVICE_FUNC
   CoeffReturnType coeffByOuterInner(Index outer, Index inner) const
   { return m_evaluator.coeff(IsRowMajor ? outer : inner, IsRowMajor ? inner : outer); }
   
-  template<int LoadMode>
+  template<int LoadMode, typename PacketType>
   PacketReturnType packetByOuterInner(Index outer, Index inner) const
-  { return m_evaluator.template packet<LoadMode>(IsRowMajor ? outer : inner, IsRowMajor ? inner : outer); }
+  { return m_evaluator.template packet<LoadMode,PacketType>(IsRowMajor ? outer : inner, IsRowMajor ? inner : outer); }
+  
+  const XprType & nestedExpression() const { return m_xpr; }
   
 protected:
   typename internal::evaluator<XprType>::nestedType m_evaluator;
@@ -410,7 +410,7 @@ protected:
   */
 template<typename Derived>
 template<typename Func>
-EIGEN_STRONG_INLINE typename internal::result_of<Func(typename internal::traits<Derived>::Scalar)>::type
+typename internal::traits<Derived>::Scalar
 DenseBase<Derived>::redux(const Func& func) const
 {
   eigen_assert(this->rows()>0 && this->cols()>0 && "you are using an empty matrix");

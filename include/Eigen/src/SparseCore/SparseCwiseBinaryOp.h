@@ -29,6 +29,24 @@ namespace Eigen {
 //  4 - dense op dense     product      dense
 //                         generic      dense
 
+template<typename BinaryOp, typename Lhs, typename Rhs>
+class CwiseBinaryOpImpl<BinaryOp, Lhs, Rhs, Sparse>
+  : public SparseMatrixBase<CwiseBinaryOp<BinaryOp, Lhs, Rhs> >
+{
+  public:
+    typedef CwiseBinaryOp<BinaryOp, Lhs, Rhs> Derived;
+    EIGEN_SPARSE_PUBLIC_INTERFACE(Derived)
+    CwiseBinaryOpImpl()
+    {
+      typedef typename internal::traits<Lhs>::StorageKind LhsStorageKind;
+      typedef typename internal::traits<Rhs>::StorageKind RhsStorageKind;
+      EIGEN_STATIC_ASSERT((
+                (!internal::is_same<LhsStorageKind,RhsStorageKind>::value)
+            ||  ((Lhs::Flags&RowMajorBit) == (Rhs::Flags&RowMajorBit))),
+            THE_STORAGE_ORDER_OF_BOTH_SIDES_MUST_MATCH);
+    }
+};
+
 namespace internal {
 
 template<typename BinaryOp, typename Lhs, typename Rhs, typename Derived,
@@ -56,7 +74,6 @@ public:
   class InnerIterator
   {
     typedef typename traits<XprType>::Scalar Scalar;
-    typedef typename XprType::Index Index;
 
   public:
     
@@ -122,6 +139,10 @@ public:
       m_lhsImpl(xpr.lhs()), 
       m_rhsImpl(xpr.rhs())  
   { }
+  
+  inline Index nonZerosEstimate() const {
+    return m_lhsImpl.nonZerosEstimate() + m_rhsImpl.nonZerosEstimate();
+  }
 
 protected:
   const BinaryOp m_functor;
@@ -145,7 +166,6 @@ public:
   class InnerIterator
   {
     typedef typename traits<XprType>::Scalar Scalar;
-    typedef typename XprType::Index Index;
 
   public:
     
@@ -200,6 +220,10 @@ public:
       m_lhsImpl(xpr.lhs()), 
       m_rhsImpl(xpr.rhs())  
   { }
+  
+  inline Index nonZerosEstimate() const {
+    return (std::min)(m_lhsImpl.nonZerosEstimate(), m_rhsImpl.nonZerosEstimate());
+  }
 
 protected:
   const BinaryOp m_functor;
@@ -223,7 +247,6 @@ public:
   class InnerIterator
   {
     typedef typename traits<XprType>::Scalar Scalar;
-    typedef typename XprType::Index Index;
     enum { IsRowMajor = (int(Rhs::Flags)&RowMajorBit)==RowMajorBit };
 
   public:
@@ -246,7 +269,7 @@ public:
     EIGEN_STRONG_INLINE Index col() const { return m_rhsIter.col(); }
 
     EIGEN_STRONG_INLINE operator bool() const { return m_rhsIter; }
-
+    
   protected:
     const LhsEvaluator &m_lhsEval;
     RhsIterator m_rhsIter;
@@ -265,6 +288,10 @@ public:
       m_lhsImpl(xpr.lhs()), 
       m_rhsImpl(xpr.rhs())  
   { }
+  
+  inline Index nonZerosEstimate() const {
+    return m_rhsImpl.nonZerosEstimate();
+  }
 
 protected:
   const BinaryOp m_functor;
@@ -288,7 +315,6 @@ public:
   class InnerIterator
   {
     typedef typename traits<XprType>::Scalar Scalar;
-    typedef typename XprType::Index Index;
     enum { IsRowMajor = (int(Lhs::Flags)&RowMajorBit)==RowMajorBit };
 
   public:
@@ -312,7 +338,7 @@ public:
     EIGEN_STRONG_INLINE Index col() const { return m_lhsIter.col(); }
 
     EIGEN_STRONG_INLINE operator bool() const { return m_lhsIter; }
-
+    
   protected:
     LhsIterator m_lhsIter;
     const RhsEvaluator &m_rhsEval;
@@ -331,6 +357,10 @@ public:
       m_lhsImpl(xpr.lhs()), 
       m_rhsImpl(xpr.rhs())  
   { }
+  
+  inline Index nonZerosEstimate() const {
+    return m_lhsImpl.nonZerosEstimate();
+  }
 
 protected:
   const BinaryOp m_functor;
@@ -360,6 +390,22 @@ SparseMatrixBase<Derived>::operator+=(const SparseMatrixBase<OtherDerived>& othe
   return derived() = derived() + other.derived();
 }
 
+template<typename Derived>
+template<typename OtherDerived>
+Derived& SparseMatrixBase<Derived>::operator+=(const DiagonalBase<OtherDerived>& other)
+{
+  call_assignment_no_alias(derived(), other.derived(), internal::add_assign_op<Scalar>());
+  return derived();
+}
+
+template<typename Derived>
+template<typename OtherDerived>
+Derived& SparseMatrixBase<Derived>::operator-=(const DiagonalBase<OtherDerived>& other)
+{
+  call_assignment_no_alias(derived(), other.derived(), internal::sub_assign_op<Scalar>());
+  return derived();
+}
+    
 template<typename Derived>
 template<typename OtherDerived>
 EIGEN_STRONG_INLINE const EIGEN_SPARSE_CWISE_PRODUCT_RETURN_TYPE

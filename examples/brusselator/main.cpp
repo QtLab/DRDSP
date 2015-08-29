@@ -22,7 +22,7 @@ struct Options {
 	}
 };
 
-typedef RBF<ThinPlateSpline> RBFType;
+using RBFType = RBF<ThinPlateSpline>;
 
 void ComputeReduced( const Options& options );
 void LoadProjection( const Options& options );

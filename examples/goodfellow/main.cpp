@@ -21,7 +21,7 @@ struct Options {
 	}
 };
 
-typedef EquiRBFZ2<Multiquadratic> RBFType; //
+using RBFType = EquiRBFZ2<Multiquadratic>;
 
 int main( int argc, char** argv ) {
 

@@ -19,9 +19,7 @@ template<int Side, typename TriangularType, typename Rhs> struct triangular_solv
   
 }
 
-/** \internal
-  *
-  * \class TriangularBase
+/** \class TriangularBase
   * \ingroup Core_Module
   *
   * \brief Base class for triangular part in a matrix
@@ -38,14 +36,18 @@ template<typename Derived> class TriangularBase : public EigenBase<Derived>
       MaxColsAtCompileTime = internal::traits<Derived>::MaxColsAtCompileTime,
       
       SizeAtCompileTime = (internal::size_at_compile_time<internal::traits<Derived>::RowsAtCompileTime,
-                                                   internal::traits<Derived>::ColsAtCompileTime>::ret)
-        /**< This is equal to the number of coefficients, i.e. the number of
+                                                   internal::traits<Derived>::ColsAtCompileTime>::ret),
+      /**< This is equal to the number of coefficients, i.e. the number of
           * rows times the number of columns, or to \a Dynamic if this is not
           * known at compile-time. \sa RowsAtCompileTime, ColsAtCompileTime */
+      
+      MaxSizeAtCompileTime = (internal::size_at_compile_time<internal::traits<Derived>::MaxRowsAtCompileTime,
+                                                   internal::traits<Derived>::MaxColsAtCompileTime>::ret)
+        
     };
     typedef typename internal::traits<Derived>::Scalar Scalar;
     typedef typename internal::traits<Derived>::StorageKind StorageKind;
-    typedef typename internal::traits<Derived>::Index Index;
+    typedef typename internal::traits<Derived>::StorageIndex StorageIndex;
     typedef typename internal::traits<Derived>::FullMatrixType DenseMatrixType;
     typedef DenseMatrixType DenseType;
     typedef Derived const& Nested;
@@ -63,11 +65,11 @@ template<typename Derived> class TriangularBase : public EigenBase<Derived>
     inline Index innerStride() const { return derived().innerStride(); }
     
     // dummy resize function
-    void resize(Index nbRows, Index nbCols)
+    void resize(Index rows, Index cols)
     {
-      EIGEN_UNUSED_VARIABLE(nbRows);
-      EIGEN_UNUSED_VARIABLE(nbCols);
-      eigen_assert(nbRows==rows() && nbCols==nbCols);
+      EIGEN_UNUSED_VARIABLE(rows);
+      EIGEN_UNUSED_VARIABLE(cols);
+      eigen_assert(rows==this->rows() && cols==this->cols());
     }
 
     EIGEN_DEVICE_FUNC
@@ -148,17 +150,17 @@ template<typename Derived> class TriangularBase : public EigenBase<Derived>
 /** \class TriangularView
   * \ingroup Core_Module
   *
-  * \brief Base class for triangular part in a matrix
+  * \brief Expression of a triangular part in a matrix
   *
   * \param MatrixType the type of the object in which we are taking the triangular part
   * \param Mode the kind of triangular matrix expression to construct. Can be #Upper,
   *             #Lower, #UnitUpper, #UnitLower, #StrictlyUpper, or #StrictlyLower.
   *             This is in fact a bit field; it must have either #Upper or #Lower, 
-  *             and additionnaly it may have #UnitDiag or #ZeroDiag or neither.
+  *             and additionally it may have #UnitDiag or #ZeroDiag or neither.
   *
   * This class represents a triangular part of a matrix, not necessarily square. Strictly speaking, for rectangular
   * matrices one should speak of "trapezoid" parts. This class is the return type
-  * of MatrixBase::triangularView() and most of the time this is the only way it is used.
+  * of MatrixBase::triangularView() and SparseMatrixBase::triangularView(), and most of the time this is the only way it is used.
   *
   * \sa MatrixBase::triangularView()
   */
@@ -166,7 +168,7 @@ namespace internal {
 template<typename MatrixType, unsigned int _Mode>
 struct traits<TriangularView<MatrixType, _Mode> > : traits<MatrixType>
 {
-  typedef typename nested<MatrixType>::type MatrixTypeNested;
+  typedef typename ref_selector<MatrixType>::type MatrixTypeNested;
   typedef typename remove_reference<MatrixTypeNested>::type MatrixTypeNestedNonRef;
   typedef typename remove_all<MatrixTypeNested>::type MatrixTypeNestedCleaned;
   typedef typename MatrixType::PlainObject FullMatrixType;
@@ -199,7 +201,6 @@ template<typename _MatrixType, unsigned int _Mode> class TriangularView
   public:
 
     typedef typename internal::traits<TriangularView>::StorageKind StorageKind;
-    typedef typename internal::traits<TriangularView>::Index Index;
     typedef typename internal::traits<TriangularView>::MatrixTypeNestedCleaned NestedExpression;
 
     enum {
@@ -307,6 +308,15 @@ template<typename _MatrixType, unsigned int _Mode> class TriangularView
     MatrixTypeNested m_matrix;
 };
 
+/** \ingroup Core_Module
+  *
+  * \brief Base class for a triangular part in a \b dense matrix
+  *
+  * This class is an abstract base class of class TriangularView, and objects of type TriangularViewImpl cannot be instantiated.
+  * It extends class TriangularView with additional methods which available for dense expressions only.
+  *
+  * \sa class TriangularView, MatrixBase::triangularView()
+  */
 template<typename _MatrixType, unsigned int _Mode> class TriangularViewImpl<_MatrixType,_Mode,Dense>
   : public TriangularBase<TriangularView<_MatrixType, _Mode> >
 {
@@ -325,7 +335,6 @@ template<typename _MatrixType, unsigned int _Mode> class TriangularViewImpl<_Mat
     using Base::derived;
 
     typedef typename internal::traits<TriangularViewType>::StorageKind StorageKind;
-    typedef typename internal::traits<TriangularViewType>::Index Index;
 
     enum {
       Mode = _Mode,
@@ -551,8 +560,8 @@ void TriangularBase<Derived>::evalTo(MatrixBase<DenseDerived> &other) const
   * The parameter \a Mode can have the following values: \c #Upper, \c #StrictlyUpper, \c #UnitUpper,
   * \c #Lower, \c #StrictlyLower, \c #UnitLower.
   *
-  * Example: \include MatrixBase_extract.cpp
-  * Output: \verbinclude MatrixBase_extract.out
+  * Example: \include MatrixBase_triangularView.cpp
+  * Output: \verbinclude MatrixBase_triangularView.out
   *
   * \sa class TriangularView
   */
@@ -688,7 +697,6 @@ public:
   typedef typename Base::DstEvaluatorType DstEvaluatorType;
   typedef typename Base::SrcEvaluatorType SrcEvaluatorType;
   typedef typename Base::Scalar Scalar;
-  typedef typename Base::Index Index;
   typedef typename Base::AssignmentTraits AssignmentTraits;
   
   
@@ -831,7 +839,6 @@ struct triangular_assignment_loop<Kernel, Mode, 0, SetOpposite>
 template<typename Kernel, unsigned int Mode, bool SetOpposite>
 struct triangular_assignment_loop<Kernel, Mode, Dynamic, SetOpposite>
 {
-  typedef typename Kernel::Index Index;
   typedef typename Kernel::Scalar Scalar;
   EIGEN_DEVICE_FUNC
   static inline void run(Kernel &kernel)

@@ -55,7 +55,6 @@ inline typename NumTraits<typename traits<Derived>::Scalar>::Real
 blueNorm_impl(const EigenBase<Derived>& _vec)
 {
   typedef typename Derived::RealScalar RealScalar;  
-  typedef typename Derived::Index Index;
   using std::pow;
   using std::sqrt;
   using std::abs;
@@ -158,19 +157,32 @@ inline typename NumTraits<typename internal::traits<Derived>::Scalar>::Real
 MatrixBase<Derived>::stableNorm() const
 {
   using std::sqrt;
+  using std::abs;
   const Index blockSize = 4096;
   RealScalar scale(0);
   RealScalar invScale(1);
   RealScalar ssq(0); // sum of square
+  
+  typedef typename internal::nested_eval<Derived,2>::type DerivedCopy;
+  typedef typename internal::remove_all<DerivedCopy>::type DerivedCopyClean;
+  DerivedCopy copy(derived());
+  
   enum {
-    Alignment = (int(Flags)&DirectAccessBit) || (int(Flags)&AlignedBit) ? 1 : 0
+    CanAlign = (int(Flags)&DirectAccessBit) || (int(internal::evaluator<DerivedCopyClean>::Alignment)>0) // FIXME
   };
+  typedef typename internal::conditional<CanAlign, Ref<const Matrix<Scalar,Dynamic,1,0,blockSize,1>, internal::evaluator<DerivedCopyClean>::Alignment>,
+                                                   typename DerivedCopyClean
+                                                   ::ConstSegmentReturnType>::type SegmentWrapper;
   Index n = size();
-  Index bi = internal::first_aligned(derived());
+  
+  if(n==1)
+    return abs(this->coeff(0));
+  
+  Index bi = internal::first_default_aligned(copy);
   if (bi>0)
-    internal::stable_norm_kernel(this->head(bi), ssq, scale, invScale);
+    internal::stable_norm_kernel(copy.head(bi), ssq, scale, invScale);
   for (; bi<n; bi+=blockSize)
-    internal::stable_norm_kernel(this->segment(bi,numext::mini(blockSize, n - bi)).template forceAlignedAccessIf<Alignment>(), ssq, scale, invScale);
+    internal::stable_norm_kernel(SegmentWrapper(copy.segment(bi,numext::mini(blockSize, n - bi))), ssq, scale, invScale);
   return scale * sqrt(ssq);
 }
 

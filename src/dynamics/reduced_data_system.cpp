@@ -75,19 +75,19 @@ void DRDSP::Compare( const ReducedDataSystem& reducedData, const DataSystem& rda
 		cout << "Parameter " << rdata.parameters[i] << endl;
 		cout << "Max Rel Error: " << r.maxDifference / ball.radius << endl;
 
-		out << rdata.parameters[i] << ",";
-		out << r.rmsDifference << ",";
-		out << r.maxDifference << ",";
-		out << r.maxMinDifference << ",";
-		out << ball.radius << ",";
-		out << r.rmsDifference / ball.radius << ",";
-		out << r.maxDifference / ball.radius << ",";
-		out << r.maxMinDifference / ball.radius << ",";
+		out << rdata.parameters[i] << ',';
+		out << r.rmsDifference << ',';
+		out << r.maxDifference << ',';
+		out << r.maxMinDifference << ',';
+		out << ball.radius << ',';
+		out << r.rmsDifference / ball.radius << ',';
+		out << r.maxDifference / ball.radius << ',';
+		out << r.maxMinDifference / ball.radius << ',';
 		for( const auto& x : r.differences )
-			out << x << ",";
-		out << ",";
+			out << x << ',';
+		out << ',';
 		for( const auto& x : r.differences )
-			out << x / ball.radius << ",";
+			out << x / ball.radius << ',';
 		out << endl;
 	}
 }
@@ -101,12 +101,12 @@ void DRDSP::ComparePeriods( const ReducedDataSystem& reducedData, const DataSyst
 		double err = p2 - p1;
 		double rel = err / p1;
 		double pc = rel * 100.0;
-		out << rdata.parameters[i] << ",";
-		out << p1 << ",";
-		out << p2 << ",";
-		out << err << ",";
-		out << rel << ",";
-		out << pc << ",";
+		out << rdata.parameters[i] << ',';
+		out << p1 << ',';
+		out << p2 << ',';
+		out << err << ',';
+		out << rel << ',';
+		out << pc << ',';
 		out << endl;
 	}
 }

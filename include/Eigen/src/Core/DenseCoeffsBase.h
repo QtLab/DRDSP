@@ -35,7 +35,6 @@ class DenseCoeffsBase<Derived,ReadOnlyAccessors> : public EigenBase<Derived>
 {
   public:
     typedef typename internal::traits<Derived>::StorageKind StorageKind;
-    typedef typename internal::traits<Derived>::Index Index;
     typedef typename internal::traits<Derived>::Scalar Scalar;
     typedef typename internal::packet_traits<Scalar>::type PacketScalar;
 
@@ -217,8 +216,9 @@ class DenseCoeffsBase<Derived,ReadOnlyAccessors> : public EigenBase<Derived>
     template<int LoadMode>
     EIGEN_STRONG_INLINE PacketReturnType packet(Index row, Index col) const
     {
+      typedef typename internal::packet_traits<Scalar>::type DefaultPacketType;
       eigen_internal_assert(row >= 0 && row < rows() && col >= 0 && col < cols());
-      return typename internal::evaluator<Derived>::type(derived()).template packet<LoadMode>(row,col);
+      return typename internal::evaluator<Derived>::type(derived()).template packet<LoadMode,DefaultPacketType>(row,col);
     }
 
 
@@ -243,8 +243,9 @@ class DenseCoeffsBase<Derived,ReadOnlyAccessors> : public EigenBase<Derived>
     template<int LoadMode>
     EIGEN_STRONG_INLINE PacketReturnType packet(Index index) const
     {
+      typedef typename internal::packet_traits<Scalar>::type DefaultPacketType;
       eigen_internal_assert(index >= 0 && index < size());
-      return typename internal::evaluator<Derived>::type(derived()).template packet<LoadMode>(index);
+      return typename internal::evaluator<Derived>::type(derived()).template packet<LoadMode,DefaultPacketType>(index);
     }
 
   protected:
@@ -287,7 +288,6 @@ class DenseCoeffsBase<Derived, WriteAccessors> : public DenseCoeffsBase<Derived,
     typedef DenseCoeffsBase<Derived, ReadOnlyAccessors> Base;
 
     typedef typename internal::traits<Derived>::StorageKind StorageKind;
-    typedef typename internal::traits<Derived>::Index Index;
     typedef typename internal::traits<Derived>::Scalar Scalar;
     typedef typename internal::packet_traits<Scalar>::type PacketScalar;
     typedef typename NumTraits<Scalar>::Real RealScalar;
@@ -450,7 +450,6 @@ class DenseCoeffsBase<Derived, DirectAccessors> : public DenseCoeffsBase<Derived
   public:
 
     typedef DenseCoeffsBase<Derived, ReadOnlyAccessors> Base;
-    typedef typename internal::traits<Derived>::Index Index;
     typedef typename internal::traits<Derived>::Scalar Scalar;
     typedef typename NumTraits<Scalar>::Real RealScalar;
 
@@ -525,7 +524,6 @@ class DenseCoeffsBase<Derived, DirectWriteAccessors>
   public:
 
     typedef DenseCoeffsBase<Derived, WriteAccessors> Base;
-    typedef typename internal::traits<Derived>::Index Index;
     typedef typename internal::traits<Derived>::Scalar Scalar;
     typedef typename NumTraits<Scalar>::Real RealScalar;
 
@@ -584,33 +582,42 @@ class DenseCoeffsBase<Derived, DirectWriteAccessors>
 
 namespace internal {
 
-template<typename Derived, bool JustReturnZero>
+template<int Alignment, typename Derived, bool JustReturnZero>
 struct first_aligned_impl
 {
-  static inline typename Derived::Index run(const Derived&)
+  static inline Index run(const Derived&)
   { return 0; }
 };
 
-template<typename Derived>
-struct first_aligned_impl<Derived, false>
+template<int Alignment, typename Derived>
+struct first_aligned_impl<Alignment, Derived, false>
 {
-  static inline typename Derived::Index run(const Derived& m)
+  static inline Index run(const Derived& m)
   {
-    return internal::first_aligned(&m.const_cast_derived().coeffRef(0,0), m.size());
+    return internal::first_aligned<Alignment>(&m.const_cast_derived().coeffRef(0,0), m.size());
   }
 };
 
-/** \internal \returns the index of the first element of the array that is well aligned for vectorization.
+/** \internal \returns the index of the first element of the array stored by \a m that is properly aligned with respect to \a Alignment for vectorization.
+  *
+  * \tparam Alignment requested alignment in Bytes.
   *
   * There is also the variant first_aligned(const Scalar*, Integer) defined in Memory.h. See it for more
   * documentation.
   */
-template<typename Derived>
-static inline typename Derived::Index first_aligned(const Derived& m)
+template<int Alignment, typename Derived>
+static inline Index first_aligned(const DenseBase<Derived>& m)
 {
-  return first_aligned_impl
-          <Derived, (Derived::Flags & AlignedBit) || !(Derived::Flags & DirectAccessBit)>
-          ::run(m);
+  enum { ReturnZero = (int(evaluator<Derived>::Alignment) >= Alignment) || !(Derived::Flags & DirectAccessBit) };
+  return first_aligned_impl<Alignment, Derived, ReturnZero>::run(m.derived());
+}
+
+template<typename Derived>
+static inline Index first_default_aligned(const DenseBase<Derived>& m)
+{
+  typedef typename Derived::Scalar Scalar;
+  typedef typename packet_traits<Scalar>::type DefaultPacketType;
+  return first_aligned<unpacket_traits<DefaultPacketType>::alignment>(m);
 }
 
 template<typename Derived, bool HasDirectAccess = has_direct_access<Derived>::ret>

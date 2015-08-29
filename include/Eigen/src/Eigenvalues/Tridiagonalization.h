@@ -69,7 +69,7 @@ template<typename _MatrixType> class Tridiagonalization
 
     typedef typename MatrixType::Scalar Scalar;
     typedef typename NumTraits<Scalar>::Real RealScalar;
-    typedef typename MatrixType::Index Index;
+    typedef Eigen::Index Index; ///< \deprecated since Eigen 3.3
 
     enum {
       Size = MatrixType::RowsAtCompileTime,
@@ -345,7 +345,6 @@ template<typename MatrixType, typename CoeffVectorType>
 void tridiagonalization_inplace(MatrixType& matA, CoeffVectorType& hCoeffs)
 {
   using numext::conj;
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
   typedef typename MatrixType::RealScalar RealScalar;
   Index n = matA.rows();
@@ -437,7 +436,6 @@ struct tridiagonalization_inplace_selector
 {
   typedef typename Tridiagonalization<MatrixType>::CoeffVectorType CoeffVectorType;
   typedef typename Tridiagonalization<MatrixType>::HouseholderSequenceType HouseholderSequenceType;
-  typedef typename MatrixType::Index Index;
   template<typename DiagonalType, typename SubDiagonalType>
   static void run(MatrixType& mat, DiagonalType& diag, SubDiagonalType& subdiag, bool extractQ)
   {
@@ -466,9 +464,10 @@ struct tridiagonalization_inplace_selector<MatrixType,3,false>
   static void run(MatrixType& mat, DiagonalType& diag, SubDiagonalType& subdiag, bool extractQ)
   {
     using std::sqrt;
+    const RealScalar tol = (std::numeric_limits<RealScalar>::min)();
     diag[0] = mat(0,0);
     RealScalar v1norm2 = numext::abs2(mat(2,0));
-    if(v1norm2 == RealScalar(0))
+    if(v1norm2 <= tol)
     {
       diag[1] = mat(1,1);
       diag[2] = mat(2,2);
@@ -525,7 +524,6 @@ struct tridiagonalization_inplace_selector<MatrixType,1,IsComplex>
 template<typename MatrixType> struct TridiagonalizationMatrixTReturnType
 : public ReturnByValue<TridiagonalizationMatrixTReturnType<MatrixType> >
 {
-    typedef typename MatrixType::Index Index;
   public:
     /** \brief Constructor.
       *

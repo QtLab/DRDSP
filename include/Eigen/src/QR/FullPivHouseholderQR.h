@@ -66,10 +66,11 @@ template<typename _MatrixType> class FullPivHouseholderQR
     };
     typedef typename MatrixType::Scalar Scalar;
     typedef typename MatrixType::RealScalar RealScalar;
-    typedef typename MatrixType::Index Index;
+    // FIXME should be int
+    typedef typename MatrixType::StorageIndex StorageIndex;
     typedef internal::FullPivHouseholderQRMatrixQReturnType<MatrixType> MatrixQReturnType;
     typedef typename internal::plain_diag_type<MatrixType>::type HCoeffsType;
-    typedef Matrix<Index, 1,
+    typedef Matrix<StorageIndex, 1,
                    EIGEN_SIZE_MIN_PREFER_DYNAMIC(ColsAtCompileTime,RowsAtCompileTime), RowMajor, 1,
                    EIGEN_SIZE_MIN_PREFER_FIXED(MaxColsAtCompileTime,MaxRowsAtCompileTime)> IntDiagSizeVectorType;
     typedef PermutationMatrix<ColsAtCompileTime, MaxColsAtCompileTime> PermutationType;
@@ -379,6 +380,12 @@ template<typename _MatrixType> class FullPivHouseholderQR
     #endif
 
   protected:
+    
+    static void check_template_parameters()
+    {
+      EIGEN_STATIC_ASSERT_NON_INTEGER(Scalar);
+    }
+    
     MatrixType m_qr;
     HCoeffsType m_hCoeffs;
     IntDiagSizeVectorType m_rows_transpositions;
@@ -418,6 +425,8 @@ typename MatrixType::RealScalar FullPivHouseholderQR<MatrixType>::logAbsDetermin
 template<typename MatrixType>
 FullPivHouseholderQR<MatrixType>& FullPivHouseholderQR<MatrixType>::compute(const MatrixType& matrix)
 {
+  check_template_parameters();
+  
   using std::abs;
   Index rows = matrix.rows();
   Index cols = matrix.cols();
@@ -442,13 +451,15 @@ FullPivHouseholderQR<MatrixType>& FullPivHouseholderQR<MatrixType>::compute(cons
   for (Index k = 0; k < size; ++k)
   {
     Index row_of_biggest_in_corner, col_of_biggest_in_corner;
-    RealScalar biggest_in_corner;
+    typedef internal::scalar_score_coeff_op<Scalar> Scoring;
+    typedef typename Scoring::result_type Score;
 
-    biggest_in_corner = m_qr.bottomRightCorner(rows-k, cols-k)
-                            .cwiseAbs()
-                            .maxCoeff(&row_of_biggest_in_corner, &col_of_biggest_in_corner);
+    Score score = m_qr.bottomRightCorner(rows-k, cols-k)
+                      .unaryExpr(Scoring())
+                      .maxCoeff(&row_of_biggest_in_corner, &col_of_biggest_in_corner);
     row_of_biggest_in_corner += k;
     col_of_biggest_in_corner += k;
+    RealScalar biggest_in_corner = internal::abs_knowing_score<Scalar>()(m_qr(row_of_biggest_in_corner, col_of_biggest_in_corner), score);
     if(k==0) biggest = biggest_in_corner;
 
     // if the corner is negligible, then we have less than full rank, and we can finish early
@@ -556,7 +567,6 @@ template<typename MatrixType> struct FullPivHouseholderQRMatrixQReturnType
   : public ReturnByValue<FullPivHouseholderQRMatrixQReturnType<MatrixType> >
 {
 public:
-  typedef typename MatrixType::Index Index;
   typedef typename FullPivHouseholderQR<MatrixType>::IntDiagSizeVectorType IntDiagSizeVectorType;
   typedef typename internal::plain_diag_type<MatrixType>::type HCoeffsType;
   typedef Matrix<typename MatrixType::Scalar, 1, MatrixType::RowsAtCompileTime, RowMajor, 1,

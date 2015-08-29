@@ -30,13 +30,13 @@ namespace internal {
  */
 template <int SegSizeAtCompileTime> struct LU_kernel_bmod
 {
-  template <typename BlockScalarVector, typename ScalarVector, typename IndexVector, typename Index>
+  template <typename BlockScalarVector, typename ScalarVector, typename IndexVector>
   static EIGEN_DONT_INLINE void run(const Index segsize, BlockScalarVector& dense, ScalarVector& tempv, ScalarVector& lusup, Index& luptr, const Index lda,
                                     const Index nrow, IndexVector& lsub, const Index lptr, const Index no_zeros);
 };
 
 template <int SegSizeAtCompileTime>
-template <typename BlockScalarVector, typename ScalarVector, typename IndexVector, typename Index>
+template <typename BlockScalarVector, typename ScalarVector, typename IndexVector>
 EIGEN_DONT_INLINE void LU_kernel_bmod<SegSizeAtCompileTime>::run(const Index segsize, BlockScalarVector& dense, ScalarVector& tempv, ScalarVector& lusup, Index& luptr, const Index lda,
                                                                   const Index nrow, IndexVector& lsub, const Index lptr, const Index no_zeros)
 {
@@ -56,7 +56,7 @@ EIGEN_DONT_INLINE void LU_kernel_bmod<SegSizeAtCompileTime>::run(const Index seg
   // Dense triangular solve -- start effective triangle
   luptr += lda * no_zeros + no_zeros; 
   // Form Eigen matrix and vector 
-  Map<Matrix<Scalar,SegSizeAtCompileTime,SegSizeAtCompileTime>, 0, OuterStride<> > A( &(lusup.data()[luptr]), segsize, segsize, OuterStride<>(lda) );
+  Map<Matrix<Scalar,SegSizeAtCompileTime,SegSizeAtCompileTime, ColMajor>, 0, OuterStride<> > A( &(lusup.data()[luptr]), segsize, segsize, OuterStride<>(lda) );
   Map<Matrix<Scalar,SegSizeAtCompileTime,1> > u(tempv.data(), segsize);
   
   u = A.template triangularView<UnitLower>().solve(u); 
@@ -65,9 +65,9 @@ EIGEN_DONT_INLINE void LU_kernel_bmod<SegSizeAtCompileTime>::run(const Index seg
   luptr += segsize;
   const Index PacketSize = internal::packet_traits<Scalar>::size;
   Index ldl = internal::first_multiple(nrow, PacketSize);
-  Map<Matrix<Scalar,Dynamic,SegSizeAtCompileTime>, 0, OuterStride<> > B( &(lusup.data()[luptr]), nrow, segsize, OuterStride<>(lda) );
-  Index aligned_offset = internal::first_aligned(tempv.data()+segsize, PacketSize);
-  Index aligned_with_B_offset = (PacketSize-internal::first_aligned(B.data(), PacketSize))%PacketSize;
+  Map<Matrix<Scalar,Dynamic,SegSizeAtCompileTime, ColMajor>, 0, OuterStride<> > B( &(lusup.data()[luptr]), nrow, segsize, OuterStride<>(lda) );
+  Index aligned_offset = internal::first_default_aligned(tempv.data()+segsize, PacketSize);
+  Index aligned_with_B_offset = (PacketSize-internal::first_default_aligned(B.data(), PacketSize))%PacketSize;
   Map<Matrix<Scalar,Dynamic,1>, 0, OuterStride<> > l(tempv.data()+segsize+aligned_offset+aligned_with_B_offset, nrow, OuterStride<>(ldl) );
   
   l.setZero();
@@ -91,21 +91,22 @@ EIGEN_DONT_INLINE void LU_kernel_bmod<SegSizeAtCompileTime>::run(const Index seg
 
 template <> struct LU_kernel_bmod<1>
 {
-  template <typename BlockScalarVector, typename ScalarVector, typename IndexVector, typename Index>
+  template <typename BlockScalarVector, typename ScalarVector, typename IndexVector>
   static EIGEN_DONT_INLINE void run(const Index /*segsize*/, BlockScalarVector& dense, ScalarVector& /*tempv*/, ScalarVector& lusup, Index& luptr,
                                     const Index lda, const Index nrow, IndexVector& lsub, const Index lptr, const Index no_zeros);
 };
 
 
-template <typename BlockScalarVector, typename ScalarVector, typename IndexVector, typename Index>
+template <typename BlockScalarVector, typename ScalarVector, typename IndexVector>
 EIGEN_DONT_INLINE void LU_kernel_bmod<1>::run(const Index /*segsize*/, BlockScalarVector& dense, ScalarVector& /*tempv*/, ScalarVector& lusup, Index& luptr,
                                               const Index lda, const Index nrow, IndexVector& lsub, const Index lptr, const Index no_zeros)
 {
   typedef typename ScalarVector::Scalar Scalar;
+  typedef typename IndexVector::Scalar StorageIndex;
   Scalar f = dense(lsub(lptr + no_zeros));
   luptr += lda * no_zeros + no_zeros + 1;
   const Scalar* a(lusup.data() + luptr);
-  const /*typename IndexVector::Scalar*/Index*  irow(lsub.data()+lptr + no_zeros + 1);
+  const StorageIndex*  irow(lsub.data()+lptr + no_zeros + 1);
   Index i = 0;
   for (; i+1 < nrow; i+=2)
   {

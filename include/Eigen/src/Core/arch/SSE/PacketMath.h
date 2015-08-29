@@ -22,19 +22,18 @@ namespace internal {
 #define EIGEN_ARCH_DEFAULT_NUMBER_OF_REGISTERS (2*sizeof(void*))
 #endif
 
-#ifdef EIGEN_VECTORIZE_FMA
-#ifndef EIGEN_HAS_FUSED_MADD
-#define EIGEN_HAS_FUSED_MADD 1
+#ifdef __FMA__
+#ifndef EIGEN_HAS_SINGLE_INSTRUCTION_MADD
+#define EIGEN_HAS_SINGLE_INSTRUCTION_MADD 1
 #endif
 #endif
 
-#if defined EIGEN_VECTORIZE_AVX && EIGEN_COMP_GNUC_STRICT
+#if (defined EIGEN_VECTORIZE_AVX) && EIGEN_COMP_GNUC_STRICT && (__GXX_ABI_VERSION < 1004)
 // With GCC's default ABI version, a __m128 or __m256 are the same types and therefore we cannot
 // have overloads for both types without linking error.
 // One solution is to increase ABI version using -fabi-version=4 (or greater).
-// To workaround this inconvenince, we rather wrap 128bit types into the following helper
+// Otherwise, we workaround this inconvenience by wrapping 128bit types into the following helper
 // structure:
-// TODO disable this wrapper if abi-versio>=4, but to detect that without asking the user to define a macro?
 template<typename T>
 struct eigen_packet_wrapper
 {
@@ -108,7 +107,9 @@ template<> struct packet_traits<float>  : default_packet_traits
     HasCos  = EIGEN_FAST_MATH,
     HasLog  = 1,
     HasExp  = 1,
-    HasSqrt = 1
+    HasSqrt = 1,
+    HasRsqrt = 1,
+    HasBlend = 1
   };
 };
 template<> struct packet_traits<double> : default_packet_traits
@@ -123,7 +124,9 @@ template<> struct packet_traits<double> : default_packet_traits
 
     HasDiv  = 1,
     HasExp  = 1,
-    HasSqrt = 1
+    HasSqrt = 1,
+    HasRsqrt = 1,
+    HasBlend = 1
   };
 };
 #endif
@@ -135,13 +138,15 @@ template<> struct packet_traits<int>    : default_packet_traits
     // FIXME check the Has*
     Vectorizable = 1,
     AlignedOnScalar = 1,
-    size=4
+    size=4,
+
+    HasBlend = 1
   };
 };
 
-template<> struct unpacket_traits<Packet4f> { typedef float  type; enum {size=4}; typedef Packet4f half; };
-template<> struct unpacket_traits<Packet2d> { typedef double type; enum {size=2}; typedef Packet2d half; };
-template<> struct unpacket_traits<Packet4i> { typedef int    type; enum {size=4}; typedef Packet4i half; };
+template<> struct unpacket_traits<Packet4f> { typedef float  type; enum {size=4, alignment=Aligned16}; typedef Packet4f half; };
+template<> struct unpacket_traits<Packet2d> { typedef double type; enum {size=2, alignment=Aligned16}; typedef Packet2d half; };
+template<> struct unpacket_traits<Packet4i> { typedef int    type; enum {size=4, alignment=Aligned16}; typedef Packet4i half; };
 
 #if EIGEN_COMP_MSVC==1500
 // Workaround MSVC 9 internal compiler error.
@@ -167,11 +172,9 @@ template<> EIGEN_STRONG_INLINE Packet4f pload1<Packet4f>(const float *from) {
 }
 #endif
   
-#ifndef EIGEN_VECTORIZE_AVX
-template<> EIGEN_STRONG_INLINE Packet4f plset<float>(const float& a) { return _mm_add_ps(pset1<Packet4f>(a), _mm_set_ps(3,2,1,0)); }
-template<> EIGEN_STRONG_INLINE Packet2d plset<double>(const double& a) { return _mm_add_pd(pset1<Packet2d>(a),_mm_set_pd(1,0)); }
-#endif
-template<> EIGEN_STRONG_INLINE Packet4i plset<int>(const int& a) { return _mm_add_epi32(pset1<Packet4i>(a),_mm_set_epi32(3,2,1,0)); }
+template<> EIGEN_STRONG_INLINE Packet4f plset<Packet4f>(const float& a) { return _mm_add_ps(pset1<Packet4f>(a), _mm_set_ps(3,2,1,0)); }
+template<> EIGEN_STRONG_INLINE Packet2d plset<Packet2d>(const double& a) { return _mm_add_pd(pset1<Packet2d>(a),_mm_set_pd(1,0)); }
+template<> EIGEN_STRONG_INLINE Packet4i plset<Packet4i>(const int& a) { return _mm_add_epi32(pset1<Packet4i>(a),_mm_set_epi32(3,2,1,0)); }
 
 template<> EIGEN_STRONG_INLINE Packet4f padd<Packet4f>(const Packet4f& a, const Packet4f& b) { return _mm_add_ps(a,b); }
 template<> EIGEN_STRONG_INLINE Packet2d padd<Packet2d>(const Packet2d& a, const Packet2d& b) { return _mm_add_pd(a,b); }
@@ -227,7 +230,7 @@ template<> EIGEN_STRONG_INLINE Packet4i pdiv<Packet4i>(const Packet4i& /*a*/, co
 
 // for some weird raisons, it has to be overloaded for packet of integers
 template<> EIGEN_STRONG_INLINE Packet4i pmadd(const Packet4i& a, const Packet4i& b, const Packet4i& c) { return padd(pmul(a,b), c); }
-#ifdef EIGEN_VECTORIZE_FMA
+#ifdef __FMA__
 template<> EIGEN_STRONG_INLINE Packet4f pmadd(const Packet4f& a, const Packet4f& b, const Packet4f& c) { return _mm_fmadd_ps(a,b,c); }
 template<> EIGEN_STRONG_INLINE Packet2d pmadd(const Packet2d& a, const Packet2d& b, const Packet2d& c) { return _mm_fmadd_pd(a,b,c); }
 #endif
@@ -383,32 +386,32 @@ template<> EIGEN_STRONG_INLINE void pstoreu<double>(double* to, const Packet2d& 
 template<> EIGEN_STRONG_INLINE void pstoreu<float>(float*  to, const Packet4f& from) { EIGEN_DEBUG_UNALIGNED_STORE pstoreu(reinterpret_cast<double*>(to), Packet2d(_mm_castps_pd(from))); }
 template<> EIGEN_STRONG_INLINE void pstoreu<int>(int*      to, const Packet4i& from) { EIGEN_DEBUG_UNALIGNED_STORE pstoreu(reinterpret_cast<double*>(to), Packet2d(_mm_castsi128_pd(from))); }
 
-template<> EIGEN_DEVICE_FUNC inline Packet4f pgather<float, Packet4f>(const float* from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline Packet4f pgather<float, Packet4f>(const float* from, Index stride)
 {
  return _mm_set_ps(from[3*stride], from[2*stride], from[1*stride], from[0*stride]);
 }
-template<> EIGEN_DEVICE_FUNC inline Packet2d pgather<double, Packet2d>(const double* from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline Packet2d pgather<double, Packet2d>(const double* from, Index stride)
 {
  return _mm_set_pd(from[1*stride], from[0*stride]);
 }
-template<> EIGEN_DEVICE_FUNC inline Packet4i pgather<int, Packet4i>(const int* from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline Packet4i pgather<int, Packet4i>(const int* from, Index stride)
 {
  return _mm_set_epi32(from[3*stride], from[2*stride], from[1*stride], from[0*stride]);
  }
 
-template<> EIGEN_DEVICE_FUNC inline void pscatter<float, Packet4f>(float* to, const Packet4f& from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline void pscatter<float, Packet4f>(float* to, const Packet4f& from, Index stride)
 {
   to[stride*0] = _mm_cvtss_f32(from);
   to[stride*1] = _mm_cvtss_f32(_mm_shuffle_ps(from, from, 1));
   to[stride*2] = _mm_cvtss_f32(_mm_shuffle_ps(from, from, 2));
   to[stride*3] = _mm_cvtss_f32(_mm_shuffle_ps(from, from, 3));
 }
-template<> EIGEN_DEVICE_FUNC inline void pscatter<double, Packet2d>(double* to, const Packet2d& from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline void pscatter<double, Packet2d>(double* to, const Packet2d& from, Index stride)
 {
   to[stride*0] = _mm_cvtsd_f64(from);
   to[stride*1] = _mm_cvtsd_f64(_mm_shuffle_pd(from, from, 1));
 }
-template<> EIGEN_DEVICE_FUNC inline void pscatter<int, Packet4i>(int* to, const Packet4i& from, DenseIndex stride)
+template<> EIGEN_DEVICE_FUNC inline void pscatter<int, Packet4i>(int* to, const Packet4i& from, Index stride)
 {
   to[stride*0] = _mm_cvtsi128_si32(from);
   to[stride*1] = _mm_cvtsi128_si32(_mm_shuffle_epi32(from, 1));
@@ -459,6 +462,29 @@ template<> EIGEN_STRONG_INLINE Packet2d preverse(const Packet2d& a)
 template<> EIGEN_STRONG_INLINE Packet4i preverse(const Packet4i& a)
 { return _mm_shuffle_epi32(a,0x1B); }
 
+template<size_t offset>
+struct protate_impl<offset, Packet4f>
+{
+  static Packet4f run(const Packet4f& a) {
+    return vec4f_swizzle1(a, offset, (offset + 1) % 4, (offset + 2) % 4, (offset + 3) % 4);
+  }
+};
+
+template<size_t offset>
+struct protate_impl<offset, Packet4i>
+{
+  static Packet4i run(const Packet4i& a) {
+    return vec4i_swizzle1(a, offset, (offset + 1) % 4, (offset + 2) % 4, (offset + 3) % 4);
+  }
+};
+
+template<size_t offset>
+struct protate_impl<offset, Packet2d>
+{
+  static Packet2d run(const Packet2d& a) {
+    return vec2d_swizzle1(a, offset, (offset + 1) % 2);
+  }
+};
 
 template<> EIGEN_STRONG_INLINE Packet4f pabs(const Packet4f& a)
 {
@@ -807,6 +833,37 @@ ptranspose(PacketBlock<Packet4i,4>& kernel) {
   kernel.packet[1] = _mm_unpackhi_epi64(T0, T1);
   kernel.packet[2] = _mm_unpacklo_epi64(T2, T3);
   kernel.packet[3] = _mm_unpackhi_epi64(T2, T3);
+}
+
+template<> EIGEN_STRONG_INLINE Packet4i pblend(const Selector<4>& ifPacket, const Packet4i& thenPacket, const Packet4i& elsePacket) {
+  const __m128i zero = _mm_setzero_si128();
+  const __m128i select = _mm_set_epi32(ifPacket.select[3], ifPacket.select[2], ifPacket.select[1], ifPacket.select[0]);
+  __m128i false_mask = _mm_cmpeq_epi32(select, zero);
+#ifdef EIGEN_VECTORIZE_SSE4_1
+  return _mm_blendv_epi8(thenPacket, elsePacket, false_mask);
+#else
+  return _mm_or_si128(_mm_andnot_si128(false_mask, thenPacket), _mm_and_si128(false_mask, elsePacket));
+#endif
+}
+template<> EIGEN_STRONG_INLINE Packet4f pblend(const Selector<4>& ifPacket, const Packet4f& thenPacket, const Packet4f& elsePacket) {
+  const __m128 zero = _mm_setzero_ps();
+  const __m128 select = _mm_set_ps(ifPacket.select[3], ifPacket.select[2], ifPacket.select[1], ifPacket.select[0]);
+  __m128 false_mask = _mm_cmpeq_ps(select, zero);
+#ifdef EIGEN_VECTORIZE_SSE4_1
+  return _mm_blendv_ps(thenPacket, elsePacket, false_mask);
+#else
+  return _mm_or_ps(_mm_andnot_ps(false_mask, thenPacket), _mm_and_ps(false_mask, elsePacket));
+#endif
+}
+template<> EIGEN_STRONG_INLINE Packet2d pblend(const Selector<2>& ifPacket, const Packet2d& thenPacket, const Packet2d& elsePacket) {
+  const __m128d zero = _mm_setzero_pd();
+  const __m128d select = _mm_set_pd(ifPacket.select[1], ifPacket.select[0]);
+  __m128d false_mask = _mm_cmpeq_pd(select, zero);
+#ifdef EIGEN_VECTORIZE_SSE4_1
+  return _mm_blendv_pd(thenPacket, elsePacket, false_mask);
+#else
+  return _mm_or_pd(_mm_andnot_pd(false_mask, thenPacket), _mm_and_pd(false_mask, elsePacket));
+#endif
 }
 
 } // end namespace internal

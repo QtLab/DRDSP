@@ -66,9 +66,10 @@ template<typename _MatrixType> class FullPivLU
     typedef typename MatrixType::Scalar Scalar;
     typedef typename NumTraits<typename MatrixType::Scalar>::Real RealScalar;
     typedef typename internal::traits<MatrixType>::StorageKind StorageKind;
-    typedef typename MatrixType::Index Index;
-    typedef typename internal::plain_row_type<MatrixType, Index>::type IntRowVectorType;
-    typedef typename internal::plain_col_type<MatrixType, Index>::type IntColVectorType;
+    // FIXME should be int
+    typedef typename MatrixType::StorageIndex StorageIndex;
+    typedef typename internal::plain_row_type<MatrixType, StorageIndex>::type IntRowVectorType;
+    typedef typename internal::plain_col_type<MatrixType, StorageIndex>::type IntColVectorType;
     typedef PermutationMatrix<ColsAtCompileTime, MaxColsAtCompileTime> PermutationQType;
     typedef PermutationMatrix<RowsAtCompileTime, MaxRowsAtCompileTime> PermutationPType;
     typedef typename MatrixType::PlainObject PlainObject;
@@ -389,6 +390,12 @@ template<typename _MatrixType> class FullPivLU
     #endif
 
   protected:
+    
+    static void check_template_parameters()
+    {
+      EIGEN_STATIC_ASSERT_NON_INTEGER(Scalar);
+    }
+    
     MatrixType m_lu;
     PermutationPType m_p;
     PermutationQType m_q;
@@ -433,6 +440,8 @@ FullPivLU<MatrixType>::FullPivLU(const MatrixType& matrix)
 template<typename MatrixType>
 FullPivLU<MatrixType>& FullPivLU<MatrixType>::compute(const MatrixType& matrix)
 {
+  check_template_parameters();
+  
   // the permutations are stored as int indices, so just to be sure:
   eigen_assert(matrix.rows()<=NumTraits<int>::highest() && matrix.cols()<=NumTraits<int>::highest());
   
@@ -458,14 +467,16 @@ FullPivLU<MatrixType>& FullPivLU<MatrixType>::compute(const MatrixType& matrix)
 
     // biggest coefficient in the remaining bottom-right corner (starting at row k, col k)
     Index row_of_biggest_in_corner, col_of_biggest_in_corner;
-    RealScalar biggest_in_corner;
+    typedef internal::scalar_score_coeff_op<Scalar> Scoring;
+    typedef typename Scoring::result_type Score;
+    Score biggest_in_corner;
     biggest_in_corner = m_lu.bottomRightCorner(rows-k, cols-k)
-                        .cwiseAbs()
+                        .unaryExpr(Scoring())
                         .maxCoeff(&row_of_biggest_in_corner, &col_of_biggest_in_corner);
     row_of_biggest_in_corner += k; // correct the values! since they were computed in the corner,
     col_of_biggest_in_corner += k; // need to add k to them.
 
-    if(biggest_in_corner==RealScalar(0))
+    if(biggest_in_corner==Score(0))
     {
       // before exiting, make sure to initialize the still uninitialized transpositions
       // in a sane state without destroying what we already have.
@@ -478,7 +489,8 @@ FullPivLU<MatrixType>& FullPivLU<MatrixType>::compute(const MatrixType& matrix)
       break;
     }
 
-    if(biggest_in_corner > m_maxpivot) m_maxpivot = biggest_in_corner;
+    RealScalar abs_pivot = internal::abs_knowing_score<Scalar>()(m_lu(row_of_biggest_in_corner, col_of_biggest_in_corner), biggest_in_corner);
+    if(abs_pivot > m_maxpivot) m_maxpivot = abs_pivot;
 
     // Now that we've found the pivot, we need to apply the row/col swaps to
     // bring it to the location (k,k).

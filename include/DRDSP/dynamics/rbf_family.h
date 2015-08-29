@@ -74,11 +74,11 @@ namespace DRDSP {
 				cout << "RBFFamily::WriteCSV : file error " << filename << endl;
 				return;
 			}
-			out << stateDim << "," << centres.size() << endl;
+			out << stateDim << ',' << centres.size() << endl;
 
 			for( const auto& c : centres ) {
 				for(uint32_t j=0;j<stateDim;++j) {
-					out << c[j] << ",";
+					out << c[j] << ',';
 				}
 				out << endl;
 			}

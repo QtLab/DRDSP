@@ -248,7 +248,7 @@ const ProjSecant& ProjSecant::WriteCSV( const char* filename ) const {
 	out.precision(16);
 	for(int64_t i=0;i<W.rows();++i) {
 		for(int64_t j=0;j<W.cols();++j)
-			out << W(i,j) << ",";
+			out << W(i,j) << ',';
 		out << endl;
 	}
 	return *this;

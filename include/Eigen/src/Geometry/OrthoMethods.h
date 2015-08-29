@@ -18,6 +18,10 @@ namespace Eigen {
   * \returns the cross product of \c *this and \a other
   *
   * Here is a very good explanation of cross-product: http://xkcd.com/199/
+  * 
+  * With complex numbers, the cross product is implemented as
+  * \f$ (\mathbf{a}+i\mathbf{b}) \times (\mathbf{c}+i\mathbf{d}) = (\mathbf{a} \times \mathbf{c} - \mathbf{b} \times \mathbf{d}) - i(\mathbf{a} \times \mathbf{d} - \mathbf{b} \times \mathbf{c})\f$
+  * 
   * \sa MatrixBase::cross3()
   */
 template<typename Derived>
@@ -133,7 +137,6 @@ struct unitOrthogonal_selector
   typedef typename plain_matrix_type<Derived>::type VectorType;
   typedef typename traits<Derived>::Scalar Scalar;
   typedef typename NumTraits<Scalar>::Real RealScalar;
-  typedef typename Derived::Index Index;
   typedef Matrix<Scalar,2,1> Vector2;
   EIGEN_DEVICE_FUNC
   static inline VectorType run(const Derived& src)

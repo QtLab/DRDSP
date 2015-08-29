@@ -59,7 +59,8 @@ template<typename _MatrixType, int _UpLo> class LLT
     };
     typedef typename MatrixType::Scalar Scalar;
     typedef typename NumTraits<typename MatrixType::Scalar>::Real RealScalar;
-    typedef typename MatrixType::Index Index;
+    typedef Eigen::Index Index; ///< \deprecated since Eigen 3.3
+    typedef typename MatrixType::StorageIndex StorageIndex;
 
     enum {
       PacketSize = internal::packet_traits<Scalar>::size,
@@ -169,6 +170,12 @@ template<typename _MatrixType, int _UpLo> class LLT
     #endif
 
   protected:
+    
+    static void check_template_parameters()
+    {
+      EIGEN_STATIC_ASSERT_NON_INTEGER(Scalar);
+    }
+    
     /** \internal
       * Used to compute and store L
       * The strict upper part is not used and even not initialized.
@@ -183,12 +190,11 @@ namespace internal {
 template<typename Scalar, int UpLo> struct llt_inplace;
 
 template<typename MatrixType, typename VectorType>
-static typename MatrixType::Index llt_rank_update_lower(MatrixType& mat, const VectorType& vec, const typename MatrixType::RealScalar& sigma)
+static Index llt_rank_update_lower(MatrixType& mat, const VectorType& vec, const typename MatrixType::RealScalar& sigma)
 {
   using std::sqrt;
   typedef typename MatrixType::Scalar Scalar;
   typedef typename MatrixType::RealScalar RealScalar;
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::ColXpr ColXpr;
   typedef typename internal::remove_all<ColXpr>::type ColXprCleaned;
   typedef typename ColXprCleaned::SegmentReturnType ColXprSegment;
@@ -257,10 +263,9 @@ template<typename Scalar> struct llt_inplace<Scalar, Lower>
 {
   typedef typename NumTraits<Scalar>::Real RealScalar;
   template<typename MatrixType>
-  static typename MatrixType::Index unblocked(MatrixType& mat)
+  static Index unblocked(MatrixType& mat)
   {
     using std::sqrt;
-    typedef typename MatrixType::Index Index;
     
     eigen_assert(mat.rows()==mat.cols());
     const Index size = mat.rows();
@@ -284,9 +289,8 @@ template<typename Scalar> struct llt_inplace<Scalar, Lower>
   }
 
   template<typename MatrixType>
-  static typename MatrixType::Index blocked(MatrixType& m)
+  static Index blocked(MatrixType& m)
   {
-    typedef typename MatrixType::Index Index;
     eigen_assert(m.rows()==m.cols());
     Index size = m.rows();
     if(size<32)
@@ -317,7 +321,7 @@ template<typename Scalar> struct llt_inplace<Scalar, Lower>
   }
 
   template<typename MatrixType, typename VectorType>
-  static typename MatrixType::Index rankUpdate(MatrixType& mat, const VectorType& vec, const RealScalar& sigma)
+  static Index rankUpdate(MatrixType& mat, const VectorType& vec, const RealScalar& sigma)
   {
     return Eigen::internal::llt_rank_update_lower(mat, vec, sigma);
   }
@@ -328,19 +332,19 @@ template<typename Scalar> struct llt_inplace<Scalar, Upper>
   typedef typename NumTraits<Scalar>::Real RealScalar;
 
   template<typename MatrixType>
-  static EIGEN_STRONG_INLINE typename MatrixType::Index unblocked(MatrixType& mat)
+  static EIGEN_STRONG_INLINE Index unblocked(MatrixType& mat)
   {
     Transpose<MatrixType> matt(mat);
     return llt_inplace<Scalar, Lower>::unblocked(matt);
   }
   template<typename MatrixType>
-  static EIGEN_STRONG_INLINE typename MatrixType::Index blocked(MatrixType& mat)
+  static EIGEN_STRONG_INLINE Index blocked(MatrixType& mat)
   {
     Transpose<MatrixType> matt(mat);
     return llt_inplace<Scalar, Lower>::blocked(matt);
   }
   template<typename MatrixType, typename VectorType>
-  static typename MatrixType::Index rankUpdate(MatrixType& mat, const VectorType& vec, const RealScalar& sigma)
+  static Index rankUpdate(MatrixType& mat, const VectorType& vec, const RealScalar& sigma)
   {
     Transpose<MatrixType> matt(mat);
     return llt_inplace<Scalar, Lower>::rankUpdate(matt, vec.conjugate(), sigma);
@@ -379,6 +383,8 @@ template<typename MatrixType> struct LLT_Traits<MatrixType,Upper>
 template<typename MatrixType, int _UpLo>
 LLT<MatrixType,_UpLo>& LLT<MatrixType,_UpLo>::compute(const MatrixType& a)
 {
+  check_template_parameters();
+  
   eigen_assert(a.rows()==a.cols());
   const Index size = a.rows();
   m_matrix.resize(size, size);

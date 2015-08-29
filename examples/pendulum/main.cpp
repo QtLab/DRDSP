@@ -22,7 +22,7 @@ struct Options {
 	}
 };
 
-typedef RBF<PolyharmonicSpline<4>> RBFType;
+using RBFType = RBF<PolyharmonicSpline<4>>;
 
 int main( int argc, char** argv ) {
 

@@ -37,7 +37,6 @@ template<typename Derived> class MapBase<Derived, ReadOnlyAccessors>
     };
 
     typedef typename internal::traits<Derived>::StorageKind StorageKind;
-    typedef typename internal::traits<Derived>::Index Index;
     typedef typename internal::traits<Derived>::Scalar Scalar;
     typedef typename internal::packet_traits<Scalar>::type PacketScalar;
     typedef typename NumTraits<Scalar>::Real RealScalar;
@@ -147,12 +146,12 @@ template<typename Derived> class MapBase<Derived, ReadOnlyAccessors>
     }
 
     EIGEN_DEVICE_FUNC
-    inline MapBase(PointerType dataPtr, Index nbRows, Index nbCols)
-            : m_data(dataPtr), m_rows(nbRows), m_cols(nbCols)
+    inline MapBase(PointerType dataPtr, Index rows, Index cols)
+            : m_data(dataPtr), m_rows(rows), m_cols(cols)
     {
       eigen_assert( (dataPtr == 0)
-              || (   nbRows >= 0 && (RowsAtCompileTime == Dynamic || RowsAtCompileTime == nbRows)
-                  && nbCols >= 0 && (ColsAtCompileTime == Dynamic || ColsAtCompileTime == nbCols)));
+              || (   rows >= 0 && (RowsAtCompileTime == Dynamic || RowsAtCompileTime == rows)
+                  && cols >= 0 && (ColsAtCompileTime == Dynamic || ColsAtCompileTime == cols)));
       checkSanity();
     }
 
@@ -161,7 +160,9 @@ template<typename Derived> class MapBase<Derived, ReadOnlyAccessors>
     EIGEN_DEVICE_FUNC
     void checkSanity() const
     {
-      eigen_assert(EIGEN_IMPLIES(internal::traits<Derived>::IsAligned, (size_t(m_data) % EIGEN_ALIGN_BYTES) == 0) && "data is not aligned");
+#if EIGEN_MAX_ALIGN_BYTES>0
+      eigen_assert(((size_t(m_data) % EIGEN_PLAIN_ENUM_MAX(1,internal::traits<Derived>::Alignment)) == 0) && "data is not aligned");
+#endif
     }
 
     PointerType m_data;
@@ -172,13 +173,14 @@ template<typename Derived> class MapBase<Derived, ReadOnlyAccessors>
 template<typename Derived> class MapBase<Derived, WriteAccessors>
   : public MapBase<Derived, ReadOnlyAccessors>
 {
+    typedef MapBase<Derived, ReadOnlyAccessors> ReadOnlyMapBase;
   public:
 
     typedef MapBase<Derived, ReadOnlyAccessors> Base;
 
     typedef typename Base::Scalar Scalar;
     typedef typename Base::PacketScalar PacketScalar;
-    typedef typename Base::Index Index;
+    typedef typename Base::StorageIndex StorageIndex;
     typedef typename Base::PointerType PointerType;
 
     using Base::derived;
@@ -234,16 +236,18 @@ template<typename Derived> class MapBase<Derived, WriteAccessors>
 
     EIGEN_DEVICE_FUNC explicit inline MapBase(PointerType dataPtr) : Base(dataPtr) {}
     EIGEN_DEVICE_FUNC inline MapBase(PointerType dataPtr, Index vecSize) : Base(dataPtr, vecSize) {}
-    EIGEN_DEVICE_FUNC inline MapBase(PointerType dataPtr, Index nbRows, Index nbCols) : Base(dataPtr, nbRows, nbCols) {}
+    EIGEN_DEVICE_FUNC inline MapBase(PointerType dataPtr, Index rows, Index cols) : Base(dataPtr, rows, cols) {}
 
     EIGEN_DEVICE_FUNC
     Derived& operator=(const MapBase& other)
     {
-      Base::Base::operator=(other);
+      ReadOnlyMapBase::Base::operator=(other);
       return derived();
     }
 
-    using Base::Base::operator=;
+    // In theory we could simply refer to Base:Base::operator=, but MSVC does not like Base::Base,
+    // see bugs 821 and 920.
+    using ReadOnlyMapBase::Base::operator=;
 };
 
 #undef EIGEN_STATIC_ASSERT_INDEX_BASED_ACCESS

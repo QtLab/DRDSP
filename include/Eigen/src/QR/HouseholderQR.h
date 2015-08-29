@@ -53,7 +53,8 @@ template<typename _MatrixType> class HouseholderQR
     };
     typedef typename MatrixType::Scalar Scalar;
     typedef typename MatrixType::RealScalar RealScalar;
-    typedef typename MatrixType::Index Index;
+    // FIXME should be int
+    typedef typename MatrixType::StorageIndex StorageIndex;
     typedef Matrix<Scalar, RowsAtCompileTime, RowsAtCompileTime, (MatrixType::Flags&RowMajorBit) ? RowMajor : ColMajor, MaxRowsAtCompileTime, MaxRowsAtCompileTime> MatrixQType;
     typedef typename internal::plain_diag_type<MatrixType>::type HCoeffsType;
     typedef typename internal::plain_row_type<MatrixType>::type RowVectorType;
@@ -195,6 +196,12 @@ template<typename _MatrixType> class HouseholderQR
     #endif
 
   protected:
+    
+    static void check_template_parameters()
+    {
+      EIGEN_STATIC_ASSERT_NON_INTEGER(Scalar);
+    }
+    
     MatrixType m_qr;
     HCoeffsType m_hCoeffs;
     RowVectorType m_temp;
@@ -224,7 +231,6 @@ namespace internal {
 template<typename MatrixQR, typename HCoeffs>
 void householder_qr_inplace_unblocked(MatrixQR& mat, HCoeffs& hCoeffs, typename MatrixQR::Scalar* tempData = 0)
 {
-  typedef typename MatrixQR::Index Index;
   typedef typename MatrixQR::Scalar Scalar;
   typedef typename MatrixQR::RealScalar RealScalar;
   Index rows = mat.rows();
@@ -263,11 +269,9 @@ template<typename MatrixQR, typename HCoeffs,
 struct householder_qr_inplace_blocked
 {
   // This is specialized for MKL-supported Scalar types in HouseholderQR_MKL.h
-  static void run(MatrixQR& mat, HCoeffs& hCoeffs,
-      typename MatrixQR::Index maxBlockSize=32,
+  static void run(MatrixQR& mat, HCoeffs& hCoeffs, Index maxBlockSize=32,
       typename MatrixQR::Scalar* tempData = 0)
   {
-    typedef typename MatrixQR::Index Index;
     typedef typename MatrixQR::Scalar Scalar;
     typedef Block<MatrixQR,Dynamic,Dynamic> BlockType;
 
@@ -350,6 +354,8 @@ void HouseholderQR<_MatrixType>::_solve_impl(const RhsType &rhs, DstType &dst) c
 template<typename MatrixType>
 HouseholderQR<MatrixType>& HouseholderQR<MatrixType>::compute(const MatrixType& matrix)
 {
+  check_template_parameters();
+  
   Index rows = matrix.rows();
   Index cols = matrix.cols();
   Index size = (std::min)(rows,cols);
