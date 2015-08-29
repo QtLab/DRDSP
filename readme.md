@@ -58,7 +58,7 @@ Build
 
 The `include` directory contains the header files that should be copied to your include path.
 
-The `build` directory contains project files for Visual Studio 2013, which will build a static library to `lib/` and executables for the examples to `bin/`. The static library should be linked in your build process.
+The `build` directory contains project files for Visual Studio 2015, which will build a static library to `lib/` and executables for the examples to `bin/`. The static library should be linked in your build process.
 
 At the moment there are no build files for other compilers/platforms. You will find the source for the library in `src/` if you wish to make your own.
 
